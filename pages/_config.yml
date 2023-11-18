@@ -102,8 +102,7 @@ theme: landscape
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: '',
-  repo: https://hlhehe.github.io/
+  type: ''
 
 live2d:
   enable: true

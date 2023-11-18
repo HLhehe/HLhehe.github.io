@@ -1,4 +1,4 @@
 ---
-title: {{ title }}
+title: {% raw %}{{ title }}{% endraw %}
 tags:
 ---

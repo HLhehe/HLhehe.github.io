@@ -1,5 +1,5 @@
 ---
-title: {{ title }}
-date: {{ date }}
+title: {% raw %}{{ title }}{% endraw %}
+date: {% raw %}{{ date }}{% endraw %}
 tags:
 ---
