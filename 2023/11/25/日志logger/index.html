@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>日志logger | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="日志​		1）什么是日志 ​		日志（Log）是指记录程序运行状态的信息。在程序运行过程中，它可以记录代码中变量的变化情况，跟踪代码运行时的轨迹，向文件或控制台输出代码的调试信息等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="日志logger">
+<meta property="og:url" content="https://hlhehe.github.io/2023/11/25/%E6%97%A5%E5%BF%97logger/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="日志​		1）什么是日志 ​		日志（Log）是指记录程序运行状态的信息。在程序运行过程中，它可以记录代码中变量的变化情况，跟踪代码运行时的轨迹，向文件或控制台输出代码的调试信息等。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-11-25T09:21:21.000Z">
+<meta property="article:modified_time" content="2023-11-27T12:15:06.213Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="日志">
+<meta property="article:tag" content="logger">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">This a subtitle</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://hlhehe.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-日志logger" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/11/25/%E6%97%A5%E5%BF%97logger/" class="article-date">
+  <time class="dt-published" datetime="2023-11-25T09:21:21.000Z" itemprop="datePublished">2023-11-25</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      日志logger
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h3><p>​		1）什么是日志</p>
+<p>​		日志（Log）是指记录程序运行状态的信息。在程序运行过程中，它可以记录代码中变量的变化情况，跟踪代码运行时的轨迹，向文件或控制台输出代码的调试信息等。</p>
+<span id="more"></span>
+
+<p>​		2）特点</p>
+<ol>
+<li>调试程序</li>
+<li>定位跟踪bug</li>
+<li>根据日志，查看系统运行是否出错</li>
+<li>分析用户行为，与数据统计</li>
+</ol>
+<p>​		3）日志级别	</p>
+<ul>
+<li>DEBUG 调试级别：打印非常详细的日志信息，通常用于对代码的调试</li>
+<li>INFO 信息级别：打印一般的日志信息，突出强调程序的运行过程</li>
+<li>WARNING 警告级别：打印警告日志信息，表明会出现潜在错误的情形，一般不影响软件的正常使用</li>
+<li>ERROR 错误级别：打印错误异常信息，该级别的错误可能会导致系统的一些功能无法正常使用</li>
+<li>CRITICAL 严重错误级别：一个严重的错误，这表明系统可能无法继续运</li>
+</ul>
+<p>​		4）说明</p>
+<ul>
+<li><p>上面的日志级别是从上到下依次升高的，即：DEBUG &lt; INFO &lt; WARNING &lt; ERROR &lt; CRITICAL</p>
+</li>
+<li><p>当为程序指定一个日志级别后，程序会记录所有日志级别大于或等于指定日志级别的日志信息，而不是仅仅记录指定级别的日志信息</p>
+</li>
+<li><p>开发常用级别DEBUG、INFO、WARNING、ERROR ；测试常用级别：INFO、ERROR</p>
+</li>
+</ul>
+<h3 id="logging"><a href="#logging" class="headerlink" title="logging"></a>logging</h3><p>​		Python中有一个标准库模块logging可以直接记录日志</p>
+<p>​		1）基本用法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">logging.debug(<span class="string">&quot;这是一条调试信息&quot;</span>)</span><br><span class="line">logging.info(<span class="string">&quot;这是一条普通信息&quot;</span>)</span><br><span class="line">logging.warning(<span class="string">&quot;这是一条警告信息&quot;</span>)</span><br><span class="line">logging.error(<span class="string">&quot;这是一条错误信息&quot;</span>)</span><br><span class="line">logging.critical(<span class="string">&quot;这是一条严重错误信息&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;输出</span></span><br><span class="line"><span class="string">WARNING:root:这是一条警告信息</span></span><br><span class="line"><span class="string">ERROR:root:这是一条错误信息</span></span><br><span class="line"><span class="string">CRITICAL:root:这是一条严重错误信息</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;why</span></span><br><span class="line"><span class="string">默认的日志级别为warning，故只输出warning和高级别日志</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>​		2）更改日志级别</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">logging.basicConfig(level=logging.DEBUG)</span><br><span class="line"><span class="comment">#这样就会输出debug以上的日志信息，即所有日志信息</span></span><br><span class="line"><span class="comment">#注意要再使用日志之前就更改日志级别，否则还是默认的warning级别</span></span><br></pre></td></tr></table></figure>
+
+<p>​		注意：</p>
+<ul>
+<li><p>在开发环境和测试环境中，为了尽可能详细的查看程序的运行状态来保证上线后的稳定性，可以使用DEBUG或INFO级别的日志获取</p>
+<p>详细的日志信息，这是非常耗费机器性能的。</p>
+</li>
+<li><p>在生产环境中，通常只记录程序的异常信息、错误信息等（设置成WARNING或ERROR级别），这样既可以减小服务器的I&#x2F;O压力，也</p>
+<p>可以提高获取错误日志信息的效率和方便问题的排查。</p>
+</li>
+</ul>
+<p>​		3）日志格式</p>
+<p>​		默认的日志的格式为：日志级别:Logger名称:日志内容</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#自定义日志格式</span></span><br><span class="line">logging.basicConfig(<span class="built_in">format</span>=<span class="string">&quot;%(levelname)s:%(name)s:%(message)s&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>​		format中用到的占位符字符串格式</p>
+<table>
+<thead>
+<tr>
+<th align="center">占位符</th>
+<th align="center">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">%(name)s</td>
+<td align="center">Logger的名字</td>
+</tr>
+<tr>
+<td align="center">%(levelno)s</td>
+<td align="center">数字形式的日志级别</td>
+</tr>
+<tr>
+<td align="center"><strong>%(levelname)s</strong></td>
+<td align="center">文本形式的日志级别</td>
+</tr>
+<tr>
+<td align="center">%(pathname)s</td>
+<td align="center">调用日志输出函数的模块的完整路径名，可能没有</td>
+</tr>
+<tr>
+<td align="center"><strong>%(filename)s</strong></td>
+<td align="center">调用日志输出函数的模块的文件名</td>
+</tr>
+<tr>
+<td align="center">%(module)s</td>
+<td align="center">调用日志输出函数的模块名</td>
+</tr>
+<tr>
+<td align="center">%(funcName)s</td>
+<td align="center">调用日志输出函数的函数名</td>
+</tr>
+<tr>
+<td align="center"><strong>%(lineno)d</strong></td>
+<td align="center">调用日志输出函数的语句所在的代码行</td>
+</tr>
+<tr>
+<td align="center">%(created)f</td>
+<td align="center">当前时间，用UNIX标准的表示时间的浮 点数表示</td>
+</tr>
+<tr>
+<td align="center">%(relativeCreated)d</td>
+<td align="center">输出日志信息时的，自Logger创建以来的毫秒数</td>
+</tr>
+<tr>
+<td align="center"><strong>%(asctime)s</strong></td>
+<td align="center">字符串形式的当前时间。默认格式是 “2003-07-08 16:49:45,896”</td>
+</tr>
+<tr>
+<td align="center">%(thread)d</td>
+<td align="center">线程ID。可能没有</td>
+</tr>
+<tr>
+<td align="center">%(threadName)s</td>
+<td align="center">线程名。可能没有</td>
+</tr>
+<tr>
+<td align="center">%(process)d</td>
+<td align="center">进程ID。可能没有</td>
+</tr>
+<tr>
+<td align="center"><strong>%(message)s</strong></td>
+<td align="center">用户输出的消息</td>
+</tr>
+</tbody></table>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="comment">#常用格式</span></span><br><span class="line">fmt = <span class="string">&#x27;%(asctime)s %(levelname)s [%(name)s] [%(filename)s(%(funcName)s:%(lineno)d)] - %(message)s&#x27;</span></span><br><span class="line"></span><br><span class="line">logging.basicConfig(level=logging.INFO, <span class="built_in">format</span>=fmt)</span><br><span class="line"><span class="comment">#注意，若写多条basicConfig只生效一条</span></span><br><span class="line"><span class="comment">#故将日志级别，格式，输出写在一条语句中</span></span><br><span class="line"></span><br><span class="line">logging.debug(<span class="string">&quot;调试&quot;</span>)</span><br><span class="line">logging.info(<span class="string">&quot;信息&quot;</span>)</span><br><span class="line">logging.warning(<span class="string">&quot;警告&quot;</span>)</span><br><span class="line">logging.error(<span class="string">&quot;错误&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>​		4）日志输出</p>
+<p>​		默认情况下Python的logging模块将日志打印到了标准输出中（控制台）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#将日志输出到文件中</span></span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">fmt = <span class="string">&#x27;%(asctime)s %(levelname)s [%(name)s] [%(filename)s(%(funcName)s:%(lineno)d)] - %(message)s&#x27;</span></span><br><span class="line">logging.basicConfig(filename=<span class="string">&quot;a.log&quot;</span>, level=logging.INFO, <span class="built_in">format</span>=fmt)</span><br><span class="line"><span class="comment">#同时指定日志级别，日志格式，日志输出</span></span><br><span class="line"><span class="comment">#这种方式写入文件，中文乱码</span></span><br><span class="line"></span><br><span class="line">logging.debug(<span class="string">&quot;调试&quot;</span>)</span><br><span class="line">logging.info(<span class="string">&quot;信息&quot;</span>)</span><br><span class="line">logging.warning(<span class="string">&quot;警告&quot;</span>)</span><br><span class="line">logging.error(<span class="string">&quot;错误&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>​		注意：通过以上操作，可以进行基本的日志操作。但是如何将日志文件同时输出到文件和控制台呢？将警告日志输出到控制台，错误日志输出到文件中该如何操作呢？日志文件过大如何处理呢？</p>
+<h3 id="logger-高阶"><a href="#logger-高阶" class="headerlink" title="logger 高阶"></a>logger 高阶</h3><p>​		1）logger 4大模块</p>
+<ul>
+<li>日志器———Logger———使用日志的入口</li>
+<li>处理器———Handler———日志的输出，即输出到控制台还是文件中</li>
+<li>格式器 ———Formatter ———决定日志记录的最终输出格式</li>
+<li>过滤器 ———Filter——— 提供了更细粒度的控制工具来决定输出哪条日志记录，丢弃哪条日志记录</li>
+</ul>
+<p>​		2）模块间的关系</p>
+<ul>
+<li>日志器（logger）需要通过处理器（handler）将日志信息输出到目标位置，如：文件、sys.stdout、网络等</li>
+<li>不同的处理器（handler）可以将日志输出到不同的位置</li>
+<li>日志器（logger）可以设置多个处理器（handler）将同一条日志记录输出到不同的位置</li>
+<li>每个处理器（handler）都可以设置自己的格式器（formatter）实现同一条日志以不同的格式输出到不同的地方。</li>
+<li>每个处理器（handler）都可以设置自己的过滤器（filter）实现日志过滤，从而只保留感兴趣的日志</li>
+</ul>
+<p>​		简单点说就是：日志器（logger）是入口，真正干活儿的是处理器（handler），处理器（handler）还可以通过过滤器（filter）和格式器（formatter）对要输出的日志内容做过滤和格式化等处理操作。</p>
+<h4 id="Logger-类"><a href="#Logger-类" class="headerlink" title="Logger 类"></a>Logger 类</h4><p>​		1）使用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">logger = logging.getLogger()</span><br><span class="line">logger = logging.getLogger(<span class="string">&quot;myLogger&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>​		logging.getLogger()方法有一个可选参数name，该参数表示将要返回的日志器的名称标识，如果不提供该参数，则返回root日志器</p>
+<p>对象。 若以相同的name参数值多次调用getLogger()方法，将会返回指向同一个logger对象的引用（类似单例的感觉，<strong>就是采用相同的名字多次调用返回的是同一个对象</strong>）。</p>
+<p>​		2）方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">logger.debug()</span><br><span class="line">logger.info()</span><br><span class="line">logger.warning()    <span class="comment">#输出日志</span></span><br><span class="line">logger.error()</span><br><span class="line">logger.critical()</span><br><span class="line"></span><br><span class="line">logger.setLevel()   <span class="comment">#设置日志器将会处理的日志消息的最低级别</span></span><br><span class="line">logger.addHandler() <span class="comment">#为该logger对象添加一个handler对象</span></span><br><span class="line">logger.addFilter()  <span class="comment">#为该logger对象添加一个filter对象</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Handler-类"><a href="#Handler-类" class="headerlink" title="Handler 类"></a>Handler 类</h4><p>​	Handler对象的作用是将消息分发到handler指定的位置，比如：<strong>控制台、文件、网络、邮件</strong>等。 Logger对象可以通过addHandler()方</p>
+<p>法为自己添加<strong>多个</strong>handler对象。</p>
+<p>​		1）使用</p>
+<p>​	在程序中不应该直接实例化和使用Handler实例，因为Handler是一个基类，它只定义了Handler应该有的接口。 应该使用Handler实</p>
+<p>现类来创建对象，logging中内置的常用的Handler包括：</p>
+<ul>
+<li><strong>logging.StreamHandler</strong>       		  将日志消息发送到输出到Stream，如std.out, std.err或任何file-like对象,控制台输出。</li>
+<li>logging.FileHandler              		    将日志消息发送到磁盘文件，默认情况下文件大小会无限增长</li>
+<li><strong>logging.handlers.RotatingFileHandler</strong> 			  将日志消息发送到磁盘文件，并支持日志文件按大小切割</li>
+<li><strong>logging.hanlders.TimedRotatingFileHandler</strong>   将日志消息发送到磁盘文件，并支持日志文件按时间切割</li>
+<li>logging.handlers.HTTPHandler 							   将日志消息以GET或POST的方式发送给一个HTTP服务器</li>
+<li>logging.handlers.SMTPHandler						 	   将日志消息发送给一个指定的email地址</li>
+</ul>
+<p>​		2）方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">handler.setLevel() <span class="comment">#设置handler将会处理的日志消息的最低严重级别</span></span><br><span class="line">handler.setFormatter() <span class="comment">#为handler设置一个格式器对象</span></span><br><span class="line">handler.addFilter() <span class="comment">#为handler添加一个过滤器对象</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Formatter-类"><a href="#Formatter-类" class="headerlink" title="Formatter 类"></a>Formatter 类</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#使用</span></span><br><span class="line">formatter = logging.Formatter(fmt=<span class="literal">None</span>, datefmt=<span class="literal">None</span>, style=<span class="string">&#x27;%&#x27;</span>)</span><br><span class="line"><span class="comment">#fmt：指定消息格式化字符串，如果不指定该参数则默认使用message的原始值</span></span><br><span class="line"><span class="comment">#datefmt：指定日期格式字符串，如果不指定该参数则默认使用&quot;%Y-%m-%d %H:%M:%S&quot;</span></span><br><span class="line"><span class="comment">#style：Python 3.2新增的参数，可取值为 &#x27;%&#x27;, &#x27;&#123;&#x27;和 &#x27;$&#x27;，如果不指定该参数则默认使用&#x27;%&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>​		Filter 类使用较少，可自行查阅</p>
+<h3 id="logger-应用"><a href="#logger-应用" class="headerlink" title="logger 应用"></a>logger 应用</h3><p>​		1）将日志同时输出到控制台和文件中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"></span><br><span class="line">logger = logging.getLogger()  <span class="comment">#初始化日志文件</span></span><br><span class="line"><span class="comment">#自定义格式</span></span><br><span class="line">fmt = <span class="string">&#x27;%(asctime)s %(levelname)s [%(name)s] [%(filename)s(%(funcName)s:%(lineno)d)] - %(message)s&#x27;</span></span><br><span class="line">formatter = logging.Formatter(fmt) <span class="comment">#定义格式器</span></span><br><span class="line"></span><br><span class="line">sh = logging.StreamHandler() <span class="comment">#指定输出的handler，输出到控制台</span></span><br><span class="line">sh.setFormatter(formatter) <span class="comment">#将格式器加入到控制器中</span></span><br><span class="line">logger.addHandler(sh)  <span class="comment">#添加控制器</span></span><br><span class="line"></span><br><span class="line">fh = logging.FileHandler(<span class="string">&quot;./b.log&quot;</span>,encoding=<span class="string">&quot;utf-8&quot;</span>)  <span class="comment">#输出到文件的控制器,设置utf-8格式，中文不乱码</span></span><br><span class="line">fh.setFormatter(formatter)</span><br><span class="line"></span><br><span class="line">logger.addHandler(fh)</span><br></pre></td></tr></table></figure>
+
+<p>​		2）每日生成一个文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">fh = logging.handlers.TimedRotatingFileHandler(filename, when=<span class="string">&#x27;h&#x27;</span>, interval=<span class="number">1</span>, backupCount=<span class="number">0</span>)</span><br><span class="line"><span class="comment">#使用按找时间片分隔文件的控制器实现类</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">将日志信息记录到文件中，以特定的时间间隔切换日志文件。</span></span><br><span class="line"><span class="string">filename: 日志文件名</span></span><br><span class="line"><span class="string">when: 时间单位，可选参数</span></span><br><span class="line"><span class="string">	S - Seconds</span></span><br><span class="line"><span class="string">	M - Minutes</span></span><br><span class="line"><span class="string">	H - Hours</span></span><br><span class="line"><span class="string">	D - Days，按照日期</span></span><br><span class="line"><span class="string">	midnight - 每晚12点，天</span></span><br><span class="line"><span class="string">	W&#123;0-6&#125; -  0 - Monday，周几</span></span><br><span class="line"><span class="string">interval: 时间间隔，就代表几个when</span></span><br><span class="line"><span class="string">backupCount: 日志文件备份数量。如果backupCount大于0，那么当生成新的日志文件时，将只保留backupCount个文件，删除最老的文件。</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging.handlers <span class="comment">#使用高级的处理器必须导这个包，不然报错</span></span><br><span class="line"></span><br><span class="line">logger = logging.getLogger()</span><br><span class="line">logger.setLevel(logging.DEBUG)<span class="comment">#总的日志级别</span></span><br><span class="line"><span class="comment"># 日志格式</span></span><br><span class="line">fmt = <span class="string">&quot;%(asctime)s %(levelname)s [%(filename)s(%(funcName)s:%(lineno)d)] - %(message)s&quot;</span></span><br><span class="line">formatter = logging.Formatter(fmt)</span><br><span class="line"><span class="comment"># 输出到文件，每日一个文件</span></span><br><span class="line">fh = logging.handlers.TimedRotatingFileHandler(<span class="string">&quot;./a.log&quot;</span>, when=<span class="string">&#x27;MIDNIGHT&#x27;</span>, interval=<span class="number">1</span>, backupCount=<span class="number">31</span>,encoding=<span class="string">&quot;utf-8&quot;</span>)<span class="comment">#注意都设置utf-8格式</span></span><br><span class="line"><span class="comment">#每天分隔一个文件，保留31个</span></span><br><span class="line">fh.setFormatter(formatter)</span><br><span class="line">fh.setLevel(logging.INFO)<span class="comment">#可以文件中记录的日志级别</span></span><br><span class="line"><span class="comment">#控制器的级别应该大于等于日志器的级别，否则为日志器的级别</span></span><br><span class="line"><span class="comment">#日志器默认为warning</span></span><br><span class="line">logger.addHandler(fh)</span><br><span class="line"></span><br><span class="line">logger.debug(<span class="string">&quot;我真帅&quot;</span>)</span><br><span class="line">logger.info(<span class="string">&quot;我真棒&quot;</span>)</span><br><span class="line"><span class="comment">#文件中只会存储我真棒</span></span><br></pre></td></tr></table></figure>
+
+<p>​		3）单例模式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging.handlers <span class="comment">#使用高级的处理器必须导这个包，不然报错</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GetLogger</span>:</span><br><span class="line">    logger=<span class="literal">None</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">getLogger</span>(<span class="params">cls</span>):</span><br><span class="line">        <span class="keyword">if</span> cls.logger <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            cls.logger = logging.getLogger()</span><br><span class="line">            cls.logger.setLevel(logging.DEBUG)</span><br><span class="line">			<span class="comment"># 日志格式</span></span><br><span class="line">            fmt = <span class="string">&quot;%(asctime)s %(levelname)s [%(filename)s(%(funcName)s:%(lineno)d)] - %(message)s&quot;</span></span><br><span class="line">            formatter = logging.Formatter(fmt)</span><br><span class="line">   			 <span class="comment"># 输出到文件，每日一个文件</span></span><br><span class="line">            fh = logging.handlers.TimedRotatingFileHandler(<span class="string">&quot;./a.log&quot;</span>, when=<span class="string">&#x27;MIDNIGHT&#x27;</span>, interval=<span class="number">1</span>, backupCount=<span class="number">31</span>)   <span class="comment">#每天分隔一个文件，保留31个</span></span><br><span class="line">            fh.setFormatter(formatter)</span><br><span class="line">            fh.setLevel(logging.INFO)<span class="comment">#可以设置记录的日志级别</span></span><br><span class="line">            cls.logger.addHandler(fh)</span><br><span class="line">            sh = logging.StreamHandler() <span class="comment">#指定输出的handler，输出到控制台</span></span><br><span class="line">			sh.setFormatter(formatter) <span class="comment">#将格式器加入到控制器中</span></span><br><span class="line">			cls.logger.addHandler(sh)  <span class="comment">#添加控制器</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> cls.logger</span><br><span class="line">    </span><br><span class="line"><span class="comment">#单例很重要，奥里给</span></span><br></pre></td></tr></table></figure>
+
+<p>​		4）yml文件</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="number">1</span></span><br><span class="line"><span class="attr">disable_existing_loggers:</span> <span class="literal">false</span></span><br><span class="line"><span class="attr">formatters:</span></span><br><span class="line">  <span class="attr">simpleFormatter:</span></span><br><span class="line">    <span class="attr">format:</span> <span class="string">&#x27;%(asctime)s %(levelname)s [%(filename)s(%(funcName)s:%(lineno)d)] - %(message)s&#x27;</span></span><br><span class="line"><span class="attr">handlers:</span></span><br><span class="line">  <span class="attr">consoleHandler:</span></span><br><span class="line">    <span class="attr">class:</span> <span class="string">logging.StreamHandler</span></span><br><span class="line">    <span class="attr">level:</span> <span class="string">DEBUG</span></span><br><span class="line">    <span class="attr">formatter:</span> <span class="string">simpleFormatter</span></span><br><span class="line">    <span class="attr">stream:</span> <span class="string">ext://sys.stdout</span></span><br><span class="line">  <span class="attr">fileHandler:</span></span><br><span class="line">    <span class="attr">class:</span> <span class="string">logging.handlers.RotatingFileHandler</span></span><br><span class="line">    <span class="attr">level:</span> <span class="string">DEBUG</span></span><br><span class="line">    <span class="attr">formatter:</span> <span class="string">simpleFormatter</span></span><br><span class="line">    <span class="attr">filename:</span> <span class="string">sample.log</span></span><br><span class="line">    <span class="attr">maxBytes:</span> <span class="number">80</span></span><br><span class="line">    <span class="attr">backupCount:</span> <span class="number">3</span></span><br><span class="line"><span class="attr">loggers:</span></span><br><span class="line">  <span class="attr">sampleLogger:</span></span><br><span class="line">    <span class="attr">level:</span> <span class="string">DEBUG</span></span><br><span class="line">    <span class="attr">handlers:</span> [<span class="string">fileHandler</span>, <span class="string">consoleHandler</span>]</span><br><span class="line">    <span class="attr">propagate:</span> <span class="literal">no</span></span><br><span class="line"><span class="attr">root:</span></span><br><span class="line">  <span class="attr">level:</span> <span class="string">INFO</span></span><br><span class="line">  <span class="attr">handlers:</span> [<span class="string">consoleHandler</span>]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging.config</span><br><span class="line"><span class="keyword">import</span> yaml</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;./logconf/log.yaml&#x27;</span>, <span class="string">&#x27;r&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    config = yaml.safe_load(f.read())</span><br><span class="line">    logging.config.dictConfig(config)</span><br><span class="line"></span><br><span class="line">logger_r = logging.getLogger()  <span class="comment">#使用root日志</span></span><br><span class="line">logger_s = logging.getLogger(<span class="string">&#x27;sampleLogger&#x27;</span>) <span class="comment">#使用指定的日志，sampleLogger</span></span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://hlhehe.github.io/2023/11/25/%E6%97%A5%E5%BF%97logger/" data-id="clpgvp6al000dtguf4kuzciym" data-title="日志logger" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/logger/" rel="tag">logger</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/11/26/Faker/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Faker生成测试伪数据
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/11/21/pytest%E5%9F%BA%E7%A1%80/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">pytest单元测试框架（基础篇）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/faker/" rel="tag">faker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logger/" rel="tag">logger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag">测试数据</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/faker/" style="font-size: 10px;">faker</a> <a href="/tags/logger/" style="font-size: 10px;">logger</a> <a href="/tags/pytest/" style="font-size: 15px;">pytest</a> <a href="/tags/%E6%97%A5%E5%BF%97/" style="font-size: 10px;">日志</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 20px;">测试</a> <a href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" style="font-size: 10px;">测试数据</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">November 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/11/27/pytest%E8%BF%9B%E9%98%B6/">pytest单元测试框架（进阶篇）</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/26/Faker/">Faker生成测试伪数据</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/25/%E6%97%A5%E5%BF%97logger/">日志logger</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/21/pytest%E5%9F%BA%E7%A1%80/">pytest单元测试框架（基础篇）</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/20/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/">性能测试</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+        <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a></br>
+All website licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></br>
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

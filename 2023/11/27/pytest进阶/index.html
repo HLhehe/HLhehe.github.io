@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>pytest单元测试框架（进阶篇） | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="测试夹具​		1）什么是夹具？ ​		在自动化测试过程中，为测试用例提前准备的一个运行环境，这个测试环境被称为测试夹具。测试夹具的本质是一个函数，在测试用例方法执行之前的称为前置条件，测试用例方法执行之后的称为后置条件。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pytest单元测试框架（进阶篇）">
+<meta property="og:url" content="https://hlhehe.github.io/2023/11/27/pytest%E8%BF%9B%E9%98%B6/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="测试夹具​		1）什么是夹具？ ​		在自动化测试过程中，为测试用例提前准备的一个运行环境，这个测试环境被称为测试夹具。测试夹具的本质是一个函数，在测试用例方法执行之前的称为前置条件，测试用例方法执行之后的称为后置条件。">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-11-27T09:21:21.000Z">
+<meta property="article:modified_time" content="2023-11-27T12:13:45.312Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="测试">
+<meta property="article:tag" content="pytest">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">This a subtitle</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://hlhehe.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-pytest进阶" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/11/27/pytest%E8%BF%9B%E9%98%B6/" class="article-date">
+  <time class="dt-published" datetime="2023-11-27T09:21:21.000Z" itemprop="datePublished">2023-11-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      pytest单元测试框架（进阶篇）
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="测试夹具"><a href="#测试夹具" class="headerlink" title="测试夹具"></a>测试夹具</h2><p>​		1）什么是夹具？</p>
+<p>​		在自动化测试过程中，为测试用例提前准备的一个运行环境，这个测试环境被称为测试夹具。测试夹具的本质是一个函数，在测试用例方法执行之前的称为前置条件，测试用例方法执行之后的称为后置条件。</p>
+<span id="more"></span>
+
+<p>​		2）为什么需要夹具</p>
+<p>​		比如在进行web ui测试时，需要打开浏览器（前置条件），关闭浏览器（后置条件）；比如在进行接口自动化测试时，接口关联的参数值写入yaml文件，测试之前需要清空yaml文件（前置条件）；比如测试时需要记录日志，日志对象的生成（前置条件），日志对象的销毁（后置条件）。</p>
+<p>​		2）常用的pytest夹具</p>
+<ul>
+<li>setup&#x2F;teardown，setup_class&#x2F;teardown_class</li>
+<li>@pytest.fixture()</li>
+<li>conftest.py和@pytest.fixture()结合</li>
+</ul>
+<h3 id="setup-teardown，setup-class-teardown-class"><a href="#setup-teardown，setup-class-teardown-class" class="headerlink" title="setup&#x2F;teardown，setup_class&#x2F;teardown_class"></a>setup&#x2F;teardown，setup_class&#x2F;teardown_class</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line"></span><br><span class="line">    age=<span class="number">19</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">99</span></span>)</span></span><br><span class="line">   <span class="comment"># @pytest.mark.skipif(age&gt;18,reason=&quot;年龄已经大于18，不用测啦&quot;)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAge</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myage&quot;</span>)</span><br><span class="line">        </span><br><span class="line">   <span class="comment"># @pytest.mark.skip(reason=&quot;不想测试这个啦&quot;)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAddr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myaddr&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">setup</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;开始进行测试用例---作用范围为单个方法&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">teardown</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;测试用例结束---作用范围单个方法&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">setup_class</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;开始进行测试用例，对TestName类&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">teardown_class</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;结束对TestName类的测试&quot;</span>)</span><br><span class="line">        </span><br><span class="line">  </span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;输出</span></span><br><span class="line"><span class="string">testcase/test_01.py:: TestName : :testAge开始进行测试用例，对TestName类</span></span><br><span class="line"><span class="string">开始进行测试用例---作用范围为单个方法</span></span><br><span class="line"><span class="string">myage</span></span><br><span class="line"><span class="string">PASSED测试用例结束---作用范围单个方法</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">testcase/test_01.py : :TestName : :testName 开始进行测试用例---作用范围为单个方法</span></span><br><span class="line"><span class="string">hello , pytest</span></span><br><span class="line"><span class="string">PASSED测试用例结束---作用范围单个方法</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">testcase/test_01.py : :TestName : :testAddr开始进行测试用例---作用范围为单个方法</span></span><br><span class="line"><span class="string">myaddr</span></span><br><span class="line"><span class="string">PASSED测试用例结束---作用范围单个方法</span></span><br><span class="line"><span class="string">结束对TestName类的测试</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment">#不建议使用此方法，抛出了警告信息（已过时），且此方法针对所有的测试用例都必须执行该方法，不能选择一部分执行。</span></span><br><span class="line"><span class="comment">#@pytest.fixture()装饰器模式可以对部分方法的前后置方法</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="pytest-fixture"><a href="#pytest-fixture" class="headerlink" title="@pytest.fixture()"></a>@pytest.fixture()</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#上代码</span></span><br><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@pytest.fixture(<span class="params">scope=<span class="string">&#x27;function&#x27;</span>, params=[<span class="string">&#x27;成龙&#x27;</span>, <span class="string">&#x27;甄子丹&#x27;</span>, <span class="string">&#x27;菜10&#x27;</span>]</span>)</span></span><br><span class="line"><span class="comment">#这参数有什么作用呢？引出后面的数据驱动DDT</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">my_fixture</span>(<span class="params">request</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;前置函数&#x27;</span>)</span><br><span class="line">    <span class="keyword">yield</span> request.param</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&#x27;后置函数&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestPytest</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_Pytest</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;test01&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_02</span>(<span class="params">self,my_fixture</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;test02&quot;</span>)</span><br><span class="line">        <span class="comment">#print(my_fixture)  //返回成龙，甄子丹，菜10</span></span><br><span class="line"></span><br><span class="line"> <span class="string">&quot;&quot;&quot;输出</span></span><br><span class="line"><span class="string">test_Pytest.py::TestPytest::test_Pytest test01 PASSED test_Pytest.py::TestPytest::test_02[成龙] 前置函数</span></span><br><span class="line"><span class="string">test02 PASSED后置函数</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">test_Pytest.py::TestPytest::test_02[甄子丹] 前置函数</span></span><br><span class="line"><span class="string">test02 PASSED后置函数</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">test_Pytest.py::TestPytest::test_02[菜10] 前置函数</span></span><br><span class="line"><span class="string">test02 PASSED后置函数</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@pytest.fixture(<span class="params">scope=<span class="string">&quot;&quot;</span>,params=<span class="string">&quot;&quot;</span>,autouse=<span class="string">&quot;&quot;</span>,ids=<span class="string">&quot;&quot;</span>,name=<span class="string">&quot;&quot;</span></span>)</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">(1)scope表示的是被@pytest.fixture标记的方法的作用域。function(默认)，class，module，package/session.</span></span><br><span class="line"><span class="string">		session 会话级别：每个session只运行一次，session级别的fixture需要定义到conftest.py中</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">		module 模块级别：模块里所有的用例执行前执行一次module级别的fixture，即单个py文件执行一次模块级别</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">		class 类级别 ：每个类执行前都会执行一次class级别的fixture</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">		function ：此模式是默认的模式，函数级别的，每个测试用例执行前都会执行一次function级别的fixture</span></span><br><span class="line"><span class="string">(2)params：参数化（支持，列表[]，元祖()，字典列表[&#123;&#125;,&#123;&#125;,&#123;&#125;]，字典元祖(&#123;&#125;,&#123;&#125;,&#123;&#125;)，循环执行，每次取下一个</span></span><br><span class="line"><span class="string">(3)autouse=True：自动使用，默认False</span></span><br><span class="line"><span class="string">(4)ids：当使用params参数化时，给每一个值设置一个变量名。意义不大。</span></span><br><span class="line"><span class="string">(5)name：给表示的是被@pytest.fixture标记的方法取一个别名。意义不大</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">yield前面是前置函数，yield后面是后置函数，且yield能将后面的结果return给对应的用例函数</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">问题：使用时，每个类或者模块里都需要定义对应的函数，才能被调用执行。代码复用性不强</span></span><br><span class="line"><span class="string">如何在一个地方定义夹具函数，所有的用例函数都能调用到呢？</span></span><br><span class="line"><span class="string">有请我们的conftest.py文件</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="conftest-py结合-pytest-fixture"><a href="#conftest-py结合-pytest-fixture" class="headerlink" title="conftest.py结合@pytest.fixture()"></a>conftest.py结合@pytest.fixture()</h3><p>​		通过使用conftest.py文件和@pytest.fixture结合，实现全局的夹具配置</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">conftest.py文件是单独存放的一个夹具配置文件，名称是不能更改。</span></span><br><span class="line"><span class="string">可以在不同的py文件中使用同一个fixture函数。</span></span><br><span class="line"><span class="string">原则上conftest.py需要和运行的用例放到统一层(一般放在根目录下即可）。并且不需要做任何的imprt导入的操作。</span></span><br><span class="line"><span class="string">写法与@pytest.fiuture无异，只不过将定义的函数都放在conftest.py文件中</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>setup&#x2F;teardown，setup_class&#x2F;teardown_class 它是作用于所有用例或者所有的类 </p>
+<p>@pytest.fixtrue() 它的作用是既可以部分也可以全部前后置。 </p>
+<p>conftest.py和@pytest.fixtrue()结合使用，作用于全局的前后置。</p>
+<h2 id="allure报告"><a href="#allure报告" class="headerlink" title="allure报告"></a>allure报告</h2><p>​		1）下载</p>
+<p>​		<a target="_blank" rel="noopener" href="https://github.com/allure-framework/allure2/releases">Releases · allure-framework&#x2F;allure2 (github.com)</a></p>
+<p>​		2）配置bin</p>
+<p>​		找到安装的allure文件夹的bin路径，将其加入path中即可。</p>
+<p>​		3）使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pytest [测试文件] --alluredir=./result <span class="comment">#--alluredir用于指定存储测试结果的路径</span></span><br><span class="line">allure serve ./result  <span class="comment">#生成页面报告</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="数据驱动DDT"><a href="#数据驱动DDT" class="headerlink" title="数据驱动DDT"></a>数据驱动DDT</h3><p>​		DDT即data-driver test，数据驱动测试。 以数据来驱动整个测试用例的执行（即测试数据决定测试结果）,核心使用@pytest.mark.parametrize</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"><span class="keyword">import</span> yaml</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Test_Demo</span>():</span><br><span class="line">    <span class="comment">#前面可以为String，list，元组，逗号分隔</span></span><br><span class="line">    <span class="comment"># @pytest.mark.parametrize(&quot;a, b, result&quot;, [(1, 1, 2), (2, 8, 10)])</span></span><br><span class="line">    <span class="comment"># @pytest.mark.parametrize((&quot;a, b, result&quot;), data)</span></span><br><span class="line"><span class="meta">    @pytest.mark.parametrize(<span class="params">[<span class="string">&quot;a&quot;</span>,<span class="string">&quot;b&quot;</span>,<span class="string">&quot;result&quot;</span>],yaml.safe_load(<span class="params"><span class="built_in">open</span>(<span class="params"><span class="string">&quot;./data.yaml&quot;</span></span>)</span>)</span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_case1</span>(<span class="params">self, a, b, result</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;\n开始执行测试用例1&quot;</span>)</span><br><span class="line">        <span class="keyword">assert</span> a + b == result</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://hlhehe.github.io/2023/11/27/pytest%E8%BF%9B%E9%98%B6/" data-id="clpgvp6a80001tguff81cgdck" data-title="pytest单元测试框架（进阶篇）" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pytest/" rel="tag">pytest</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/11/26/Faker/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Faker生成测试伪数据</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/faker/" rel="tag">faker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logger/" rel="tag">logger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag">测试数据</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/faker/" style="font-size: 10px;">faker</a> <a href="/tags/logger/" style="font-size: 10px;">logger</a> <a href="/tags/pytest/" style="font-size: 15px;">pytest</a> <a href="/tags/%E6%97%A5%E5%BF%97/" style="font-size: 10px;">日志</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 20px;">测试</a> <a href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" style="font-size: 10px;">测试数据</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">November 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/11/27/pytest%E8%BF%9B%E9%98%B6/">pytest单元测试框架（进阶篇）</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/26/Faker/">Faker生成测试伪数据</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/25/%E6%97%A5%E5%BF%97logger/">日志logger</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/21/pytest%E5%9F%BA%E7%A1%80/">pytest单元测试框架（基础篇）</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/20/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/">性能测试</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+        <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a></br>
+All website licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></br>
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
