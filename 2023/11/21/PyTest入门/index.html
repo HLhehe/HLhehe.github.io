@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>pytest单元测试框架（基础篇） | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="单元测试框架​		1）什么是单元测试框架 ​		单元测试框架是指在软件开发的过程种，针对软件的最小单位（函数、方法）进行正确性测试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pytest单元测试框架（基础篇）">
+<meta property="og:url" content="https://hlhehe.github.io/2023/11/21/PyTest%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="单元测试框架​		1）什么是单元测试框架 ​		单元测试框架是指在软件开发的过程种，针对软件的最小单位（函数、方法）进行正确性测试">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2023-11-21T09:21:21.000Z">
+<meta property="article:modified_time" content="2023-11-27T09:05:21.384Z">
+<meta property="article:author" content="John Doe">
+<meta property="article:tag" content="测试">
+<meta property="article:tag" content="pytest">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<meta name="generator" content="Hexo 7.0.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">This a subtitle</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
+        
+        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://hlhehe.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-PyTest入门" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2023/11/21/PyTest%E5%85%A5%E9%97%A8/" class="article-date">
+  <time class="dt-published" datetime="2023-11-21T09:21:21.000Z" itemprop="datePublished">2023-11-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      pytest单元测试框架（基础篇）
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h3 id="单元测试框架"><a href="#单元测试框架" class="headerlink" title="单元测试框架"></a>单元测试框架</h3><p>​		1）什么是单元测试框架</p>
+<p>​		单元测试框架是指在软件开发的过程种，针对软件的最小单位（函数、方法）进行正确性测试</p>
+<span id="more"></span>
+
+<p>​		2）常见的单元测试框架</p>
+<p>​		基于java的：junit和testng</p>
+<p>​		基于python的：unittest和<strong>pytest</strong></p>
+<p>​		3）单元测试流程</p>
+<p>​		1.测试发现：从多个文件中找到需要被测试的测试用例</p>
+<p>​		2.测试执行：按照一定的顺序执行测试用例，并生成结果</p>
+<p>​		3.测试判断：通过assert断言来自动判断结果与预期是否相符</p>
+<p>​		4.测试报告：生成这次测试的测试报告，包括耗时、通过率等</p>
+<h2 id="pytest"><a href="#pytest" class="headerlink" title="pytest"></a>pytest</h2><p>​		1）简介</p>
+<p>​		pytest是python的一种单元测试框架，与python自带的测试框架unittest类似，但比其更易上手，也更加的灵活。因此使用面也广于unittest。</p>
+<ul>
+<li>pytest比unittest更加成熟，同时支持unittest编写的测试用例</li>
+<li>pytest可以和selenium，request，appium等测试框架相结合，实现web ui自动化，web 接口自动化，app ui自动化</li>
+<li>pytest可以实现测试用例的跳过以及失败用例重试</li>
+<li>pytest支持参数化数据驱动方式</li>
+<li>pytest可以和Jenkins持续集成</li>
+<li>pytest具有很多第三方插件，且支持自定义扩展</li>
+</ul>
+<p>​				pytest</p>
+<p>​				pytest-xdist： 测试用例的分布式执行，即并发执行。可缩短总的用例的执行时间</p>
+<p>​				pytest-ordering： 可以指定测试用例的执行顺序，默认是从上到下依次执行</p>
+<p>​				pytest-rerunfailures： 用例失败后进行再次执行（多用于ui测试）</p>
+<p>​				pytest-html： 生成html格式的测试报告（不够美观）</p>
+<p>​				allure-pytest： 生成比上面美观的测试报告，且可进行测试报告的自定义</p>
+<p>​		2）安装</p>
+<p>​		新建python项目———在本地虚拟终端中执行以下命令即可。（注意：使用以上插件也需要安装到本地环境中，语法类似）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install pytest   <span class="comment">#安装命令</span></span><br><span class="line"></span><br><span class="line">pytest --version     <span class="comment">#检查命令</span></span><br></pre></td></tr></table></figure>
+
+<p>​		3）使用pytest</p>
+<p>​		pytest的默认测试用例发现规则</p>
+<ul>
+<li><p>模块名（简单理解为一个py文件）以test_ 开头或 _test结尾</p>
+</li>
+<li><p>测试类以Test开头，并且不包含init()方法</p>
+</li>
+<li><p>测试方法以test开头</p>
+<p>4）运行pytest</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    pytest.main()</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="pytest运行方式"><a href="#pytest运行方式" class="headerlink" title="pytest运行方式"></a>pytest运行方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">参数详解:</span><br><span class="line">-s:输出调试信心，包括<span class="built_in">print</span>打印的信息</span><br><span class="line">-v:显示更详细的信息</span><br><span class="line">-vs:两个连用，效用就是两个相加</span><br><span class="line">-n NUM: 支持多线程或分布式运行测试用例，使用NUM个线程。需要导入pytest-xdist插件</span><br><span class="line">--<span class="built_in">return</span> NUM:失败用例重跑NUM次，失败用例总共运行NUM+1次</span><br><span class="line">-x:有一个用例失败报错，则停止测试，默认是不停止测试</span><br><span class="line">--maxfail=NUM:出现NUM个失败用例就停止测试</span><br><span class="line">-k String:根据String字符串匹配对应的测试用例</span><br><span class="line">--html 文件路径/文件名：生成html格式的测试报告</span><br></pre></td></tr></table></figure>
+
+<p>​		1）主函数方式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#文件夹与python package的区别：python package下包含一个_init_.py文件</span></span><br><span class="line"><span class="comment"># ./  :表示当前文件路径下</span></span><br><span class="line"><span class="comment"># ../  :表示当前文件路径的父路径，即向上一层</span></span><br><span class="line">pytest.main()    <span class="comment">#运行所有的按条件写的测试用例</span></span><br><span class="line">pytest.main(<span class="string">&#x27;-vs&#x27;</span>,<span class="string">&#x27;./tasecase&#x27;</span>)   <span class="comment">#运行tasecase文件夹下的测试用例</span></span><br><span class="line">pytest.main(<span class="string">&#x27;-x&#x27;</span>,<span class="string">&#x27;test01.py&#x27;</span>)    <span class="comment">#运行test01模块下的测试用例,且出现错误就停止测试</span></span><br><span class="line">pytest.mian(<span class="string">&#x27;-n 2&#x27;</span>,<span class="string">&#x27;./tesecase/test01.py::TestName::testName&#x27;</span>)   <span class="comment">#运行testcase文件夹下test01模块里TsetName类里的testName方法,且使用两个线程</span></span><br></pre></td></tr></table></figure>
+
+<p>​		2）命令行模式</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#即在安装pytest的本地虚拟环境中运行</span></span><br><span class="line">pytest     <span class="comment">#运行所有满足条件的测试用例</span></span><br><span class="line">pytest -vs ./testcase   <span class="comment">#运行tasecase文件夹下的测试用例</span></span><br><span class="line">pytest -x ./testcase/test01.py    <span class="comment">#运行test01模块下的测试用例,且出现错误就停止测试</span></span><br><span class="line">pytest -n 2 ./tesecase/test01.py::TestName::testName    <span class="comment">#运行testcase文件夹下test01模块里TsetName类里的testName方法,且使用两个线程</span></span><br></pre></td></tr></table></figure>
+
+<p>​		3）全局配置模式</p>
+<p>​		通过读取pytest.ini文件得到对应的配置信息，最后在命令行输入pytest即可运行（名字不可变，只能为pytest.ini）</p>
+<ul>
+<li>文件位置：放在项目的根目录，即最外层即可</li>
+<li>编码格式：必须为ANSI格式，可使用notpad++修改格式</li>
+<li>运行规则：不论是主函数方式还是命令行方式，都会优先读取该配置文件</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#模板，前面的参数是不可变的，后面根据实际情况填写</span></span><br><span class="line"></span><br><span class="line">[<span class="string">pytest</span>]</span><br><span class="line"><span class="string">addopts</span> <span class="string">=</span> <span class="string">-vs</span> <span class="comment">#命令行的参数，用空格分隔</span></span><br><span class="line"><span class="string">testpaths</span> <span class="string">=</span> <span class="string">./testcase</span> <span class="comment">#测试用例的路径</span></span><br><span class="line"><span class="string">python_files</span> <span class="string">=</span> <span class="string">test_*.py</span> <span class="comment">#模块名的规则，可以更改默认规则</span></span><br><span class="line"><span class="string">python_classes</span> <span class="string">=</span> <span class="string">Test*</span> <span class="comment">#类名的规则</span></span><br><span class="line"><span class="string">python_functions</span> <span class="string">=</span> <span class="string">test</span> <span class="comment">#方法名的规则</span></span><br><span class="line"><span class="string">markers</span> <span class="string">=</span></span><br><span class="line">  <span class="string">smoke:冒烟用例</span>          <span class="comment">#设置独有的标记</span></span><br><span class="line">  <span class="string">usermanage:用户管理模块</span></span><br><span class="line">  <span class="string">productmanage:商品管理模块</span></span><br></pre></td></tr></table></figure>
+
+<p>​		4）改变执行顺序</p>
+<p>​		pytest默认的执行顺序是从上到下，改变默认执行顺序，使用mark标记。（需要引入pytest-ordering插件）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">99</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAge</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myage&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">100</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAddr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myaddr&quot;</span>)</span><br><span class="line">        </span><br><span class="line">   <span class="comment">#优先执行带注释的用例，且order值越小，优先执行</span></span><br></pre></td></tr></table></figure>
+
+<p>​		5）分组执行</p>
+<p>​		在实际的测试场景中，需要对一类的用例进行优先测试，如，冒烟测试、用户管理模块测试、商品管理模块测试等。（还记得上面pytest.ini文件中得makers标记吗？就是用来自定自己的分组的）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@pytest.mark.somke</span></span><br><span class="line"><span class="comment">#在对应的方法上添加注解即可</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#执行</span></span><br><span class="line">pytest -m <span class="string">&quot;smoke&quot;</span> <span class="comment">#执行smoke模块测试用例</span></span><br><span class="line">pytest -m <span class="string">&quot;smoke or usermanage or productmanage&quot;</span>  <span class="comment">#执行这三个模块的测试用例</span></span><br></pre></td></tr></table></figure>
+
+<p>​		6）跳过测试用例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line"></span><br><span class="line">    age=<span class="number">18</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">99</span></span>)</span></span><br><span class="line"><span class="meta">    @pytest.mark.skipif(<span class="params">age&gt;<span class="number">18</span>,reason=<span class="string">&quot;年龄已经大于18，不用测啦&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAge</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myage&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.skip(<span class="params">reas=<span class="string">&quot;不想测试这个啦&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAddr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myaddr&quot;</span>)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;  输出</span></span><br><span class="line"><span class="string">testcase/test_01.py::TestName::testAge myage PASSED testcase/test_01.py::TestName::testName hello,pytest PASSED testcase/test_01.py::TestName::testAddr SKIPPED (不想测试这个啦)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27; 当age=19时，输出</span></span><br><span class="line"><span class="string">testcase/test_01.py::TestName::testAge SKIPPED (年龄已经大于18，不用测啦) testcase/test_01.py::TestName::testName hello,pytest PASSED testcase/test_01.py::TestName::testAddr SKIPPED (不想测试这个啦)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://hlhehe.github.io/2023/11/21/PyTest%E5%85%A5%E9%97%A8/" data-id="clpgooqqx0000iouf0gsa5nlq" data-title="pytest单元测试框架（基础篇）" class="article-share-link"><span class="fa fa-share">Share</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pytest/" rel="tag">pytest</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2023/11/20/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">性能测试</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/pytest/" style="font-size: 10px;">pytest</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 20px;">测试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">November 2023</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2023/11/21/PyTest%E5%85%A5%E9%97%A8/">pytest单元测试框架（基础篇）</a>
+          </li>
+        
+          <li>
+            <a href="/2023/11/20/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/">性能测试</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+        <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a></br>
+All website licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></br>
+      
+      &copy; 2023 John Doe<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
