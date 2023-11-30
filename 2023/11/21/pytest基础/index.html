@@ -1,109 +1,206 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  
-  
-  <title>pytest单元测试框架（基础篇） | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="单元测试框架​		1）什么是单元测试框架 ​		单元测试框架是指在软件开发的过程种，针对软件的最小单位（函数、方法）进行正确性测试">
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hlhehe.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="单元测试框架​		1）什么是单元测试框架 ​		单元测试框架是指在软件开发的过程种，针对软件的最小单位（函数、方法）进行正确性测试">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pytest单元测试框架（基础篇）">
 <meta property="og:url" content="https://hlhehe.github.io/2023/11/21/pytest%E5%9F%BA%E7%A1%80/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Honor">
 <meta property="og:description" content="单元测试框架​		1）什么是单元测试框架 ​		单元测试框架是指在软件开发的过程种，针对软件的最小单位（函数、方法）进行正确性测试">
-<meta property="og:locale" content="en_US">
+<meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-11-21T09:21:21.000Z">
-<meta property="article:modified_time" content="2023-11-27T12:22:18.647Z">
-<meta property="article:author" content="John Doe">
+<meta property="article:modified_time" content="2023-11-30T02:34:14.670Z">
+<meta property="article:author" content="荷包蛋-溏心">
 <meta property="article:tag" content="测试">
 <meta property="article:tag" content="pytest">
 <meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-    
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
 
-  
-  
-<link rel="stylesheet" href="/css/style.css">
 
-  
-    
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+<link rel="canonical" href="https://hlhehe.github.io/2023/11/21/pytest%E5%9F%BA%E7%A1%80/">
 
-  
-  
-<meta name="generator" content="Hexo 7.0.0"></head>
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">This a subtitle</a>
-        </h2>
-      
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hlhehe.github.io/2023/11/21/pytest%E5%9F%BA%E7%A1%80/","path":"2023/11/21/pytest基础/","title":"pytest单元测试框架（基础篇）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>pytest单元测试框架（基础篇） | Honor</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Honor</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">荷包蛋的成长之路</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
         
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-        
-          <a class="nav-icon" href="/atom.xml" title="RSS Feed"><span class="fa fa-rss"></span></a>
-        
-        <a class="nav-icon nav-search-btn" title="Search"><span class="fa fa-search"></span></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://hlhehe.github.io"></form>
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6"><span class="nav-number">1.</span> <span class="nav-text">单元测试框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pytest"><span class="nav-number">2.</span> <span class="nav-text">pytest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#pytest%E8%BF%90%E8%A1%8C%E6%96%B9%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">pytest运行方式</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">荷包蛋-溏心</p>
+  <div class="site-description" itemprop="description">哪有赌徒天天输，哪有小孩天天哭</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
       </div>
     </div>
-  </div>
-</header>
 
-      <div class="outer">
-        <section id="main"><article id="post-pytest基础" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2023/11/21/pytest%E5%9F%BA%E7%A1%80/" class="article-date">
-  <time class="dt-published" datetime="2023-11-21T09:21:21.000Z" itemprop="datePublished">2023-11-21</time>
-</a>
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="p-name article-title" itemprop="headline name">
-      pytest单元测试框架（基础篇）
-    </h1>
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
   
 
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hlhehe.github.io/2023/11/21/pytest%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="荷包蛋-溏心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Honor">
+      <meta itemprop="description" content="哪有赌徒天天输，哪有小孩天天哭">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="pytest单元测试框架（基础篇） | Honor">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          pytest单元测试框架（基础篇）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-11-21 17:21:21" itemprop="dateCreated datePublished" datetime="2023-11-21T17:21:21+08:00">2023-11-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-11-30 10:34:14" itemprop="dateModified" datetime="2023-11-30T10:34:14+08:00">2023-11-30</time>
+    </span>
+
+  
+</div>
+
+        </div>
       </header>
+
     
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h3 id="单元测试框架"><a href="#单元测试框架" class="headerlink" title="单元测试框架"></a>单元测试框架</h3><p>​		1）什么是单元测试框架</p>
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="单元测试框架"><a href="#单元测试框架" class="headerlink" title="单元测试框架"></a>单元测试框架</h2><p>​		1）什么是单元测试框架</p>
 <p>​		单元测试框架是指在软件开发的过程种，针对软件的最小单位（函数、方法）进行正确性测试</p>
 <span id="more"></span>
 
@@ -118,19 +215,28 @@
 <h2 id="pytest"><a href="#pytest" class="headerlink" title="pytest"></a>pytest</h2><p>​		1）简介</p>
 <p>​		pytest是python的一种单元测试框架，与python自带的测试框架unittest类似，但比其更易上手，也更加的灵活。因此使用面也广于unittest。</p>
 <ul>
-<li>pytest比unittest更加成熟，同时支持unittest编写的测试用例</li>
-<li>pytest可以和selenium，request，appium等测试框架相结合，实现web ui自动化，web 接口自动化，app ui自动化</li>
-<li>pytest可以实现测试用例的跳过以及失败用例重试</li>
-<li>pytest支持参数化数据驱动方式</li>
-<li>pytest可以和Jenkins持续集成</li>
-<li>pytest具有很多第三方插件，且支持自定义扩展</li>
+<li><p>pytest比unittest更加成熟，同时支持unittest编写的测试用例</p>
+</li>
+<li><p>pytest可以和selenium，request，appium等测试框架相结合，实现web ui自动化，web 接口自动化，app ui自动化</p>
+</li>
+<li><p>pytest可以实现测试用例的跳过以及失败用例重试</p>
+</li>
+<li><p>pytest支持参数化数据驱动方式</p>
+</li>
+<li><p>pytest可以和Jenkins持续集成</p>
+</li>
+<li><p>pytest具有很多第三方插件，且支持自定义扩展</p>
+<ul>
+<li><p>pytest：单元测试框架</p>
+<p>pytest-xdist： 测试用例的分布式执行，即并发执行。可缩短总的用例的执行时间</p>
+<p>pytest-ordering： 可以指定测试用例的执行顺序，默认是从上到下依次执行</p>
+<p>pytest-rerunfailures： 用例失败后进行再次执行（多用于ui测试）</p>
+<p>pytest-html： 生成html格式的测试报告（不够美观）</p>
+<p>allure-pytest： 生成比上面美观的测试报告，且可进行测试报告的自定义</p>
+</li>
 </ul>
-<p>​				pytest</p>
-<p>​				pytest-xdist： 测试用例的分布式执行，即并发执行。可缩短总的用例的执行时间</p>
-<p>​				pytest-ordering： 可以指定测试用例的执行顺序，默认是从上到下依次执行</p>
-<p>​				pytest-rerunfailures： 用例失败后进行再次执行（多用于ui测试）</p>
-<p>​				pytest-html： 生成html格式的测试报告（不够美观）</p>
-<p>​				allure-pytest： 生成比上面美观的测试报告，且可进行测试报告的自定义</p>
+</li>
+</ul>
 <p>​		2）安装</p>
 <p>​		新建python项目———在本地虚拟终端中执行以下命令即可。（注意：使用以上插件也需要安装到本地环境中，语法类似）</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pip install pytest   <span class="comment">#安装命令</span></span><br><span class="line"></span><br><span class="line">pytest --version     <span class="comment">#检查命令</span></span><br></pre></td></tr></table></figure>
@@ -144,8 +250,10 @@
 </li>
 <li><p>测试方法以test开头</p>
 <p>4）运行pytest</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    pytest.main()</span><br></pre></td></tr></table></figure></li>
+</li>
 </ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">         <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> <span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">     pytest.main()</span><br></pre></td></tr></table></figure>
+
 <h2 id="pytest运行方式"><a href="#pytest运行方式" class="headerlink" title="pytest运行方式"></a>pytest运行方式</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">参数详解:</span><br><span class="line">-s:输出调试信心，包括<span class="built_in">print</span>打印的信息</span><br><span class="line">-v:显示更详细的信息</span><br><span class="line">-vs:两个连用，效用就是两个相加</span><br><span class="line">-n NUM: 支持多线程或分布式运行测试用例，使用NUM个线程。需要导入pytest-xdist插件</span><br><span class="line">--<span class="built_in">return</span> NUM:失败用例重跑NUM次，失败用例总共运行NUM+1次</span><br><span class="line">-x:有一个用例失败报错，则停止测试，默认是不停止测试</span><br><span class="line">--maxfail=NUM:出现NUM个失败用例就停止测试</span><br><span class="line">-k String:根据String字符串匹配对应的测试用例</span><br><span class="line">--html 文件路径/文件名：生成html格式的测试报告</span><br></pre></td></tr></table></figure>
 
 <p>​		1）主函数方式</p>
@@ -183,153 +291,94 @@
 
 
 
-      
     </div>
-    <footer class="article-footer">
-      <a data-url="https://hlhehe.github.io/2023/11/21/pytest%E5%9F%BA%E7%A1%80/" data-id="clpgvq0sv00005gufb8t21i3i" data-title="pytest单元测试框架（基础篇）" class="article-share-link"><span class="fa fa-share">Share</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/pytest/" rel="tag">pytest</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li></ul>
 
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag"># 测试</a>
+              <a href="/tags/pytest/" rel="tag"># pytest</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/11/20/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="prev" title="性能测试">
+                  <i class="fa fa-angle-left"></i> 性能测试
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/11/25/%E6%97%A5%E5%BF%97logger/" rel="next" title="日志logger">
+                  日志logger <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
     </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">荷包蛋-溏心</span>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2023/11/25/%E6%97%A5%E5%BF%97logger/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          日志logger
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2023/11/20/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">性能测试</div>
-    </a>
-  
-</nav>
-
-  
-</article>
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/faker/" rel="tag">faker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logger/" rel="tag">logger</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag">测试数据</a></li></ul>
-    </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
   </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/faker/" style="font-size: 10px;">faker</a> <a href="/tags/logger/" style="font-size: 10px;">logger</a> <a href="/tags/pytest/" style="font-size: 15px;">pytest</a> <a href="/tags/%E6%97%A5%E5%BF%97/" style="font-size: 10px;">日志</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 20px;">测试</a> <a href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" style="font-size: 10px;">测试数据</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2023/11/">November 2023</a></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2023/11/27/pytest%E8%BF%9B%E9%98%B6/">pytest单元测试框架（进阶篇）</a>
-          </li>
-        
-          <li>
-            <a href="/2023/11/26/Faker/">Faker生成测试伪数据</a>
-          </li>
-        
-          <li>
-            <a href="/2023/11/25/%E6%97%A5%E5%BF%97logger/">日志logger</a>
-          </li>
-        
-          <li>
-            <a href="/2023/11/21/pytest%E5%9F%BA%E7%A1%80/">pytest单元测试框架（基础篇）</a>
-          </li>
-        
-          <li>
-            <a href="/2023/11/20/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/">性能测试</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-        
-      </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      
-        <a rel="license noopener" target="_blank" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a></br>
-All website licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank">CC BY-NC-ND 4.0</a></br>
-      
-      &copy; 2023 John Doe<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
 
     </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-    
-
-
-<script src="/js/jquery-3.6.4.min.js"></script>
-
-
+  </footer>
 
   
-<script src="/fancybox/jquery.fancybox.min.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
   </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
 </body>
 </html>
