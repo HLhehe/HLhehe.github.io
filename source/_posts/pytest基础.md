@@ -35,23 +35,28 @@ tags: ['测试',pytest]
 ​		pytest是python的一种单元测试框架，与python自带的测试框架unittest类似，但比其更易上手，也更加的灵活。因此使用面也广于unittest。
 
 - pytest比unittest更加成熟，同时支持unittest编写的测试用例
+
 - pytest可以和selenium，request，appium等测试框架相结合，实现web ui自动化，web 接口自动化，app ui自动化
+
 - pytest可以实现测试用例的跳过以及失败用例重试
+
 - pytest支持参数化数据驱动方式
+
 - pytest可以和Jenkins持续集成
+
 - pytest具有很多第三方插件，且支持自定义扩展
 
-​				pytest
-
-​				pytest-xdist： 测试用例的分布式执行，即并发执行。可缩短总的用例的执行时间
-
-​				pytest-ordering： 可以指定测试用例的执行顺序，默认是从上到下依次执行
-
-​				pytest-rerunfailures： 用例失败后进行再次执行（多用于ui测试）
-
-​				pytest-html： 生成html格式的测试报告（不够美观）
-
-​				allure-pytest： 生成比上面美观的测试报告，且可进行测试报告的自定义
+	- pytest：单元测试框架
+	
+	  pytest-xdist： 测试用例的分布式执行，即并发执行。可缩短总的用例的执行时间
+	
+	  pytest-ordering： 可以指定测试用例的执行顺序，默认是从上到下依次执行
+	
+	  pytest-rerunfailures： 用例失败后进行再次执行（多用于ui测试）
+	
+	  pytest-html： 生成html格式的测试报告（不够美观）
+	
+	  allure-pytest： 生成比上面美观的测试报告，且可进行测试报告的自定义
 
 ​		2）安装
 
@@ -75,8 +80,8 @@ pytest --version     #检查命令
 
     4）运行pytest
 
-    ```python
-    import pytest
+```python
+   import pytest
     
     class TestName():
         def testName(self):
@@ -85,7 +90,7 @@ pytest --version     #检查命令
     
     if __name__ == '__main__':
         pytest.main()
-    ```
+```
 
 ## pytest运行方式
 
