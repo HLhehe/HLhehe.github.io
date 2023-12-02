@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hlhehe.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="token鉴权Token也称为动态密钥，是在加入频道时用于校验用户权限的一组字符串；鉴权是指在用户访问你的系统前，对其进行身份校验。用户在使用声网服务，如加入通话或登录信令系统时，声网会使用 Token 对其鉴权">
+<meta property="og:type" content="article">
+<meta property="og:title" content="token鉴权---JWT令牌">
+<meta property="og:url" content="https://hlhehe.github.io/2023/12/02/token%E9%89%B4%E6%9D%83---JWT%E4%BB%A4%E7%89%8C/index.html">
+<meta property="og:site_name" content="Honor">
+<meta property="og:description" content="token鉴权Token也称为动态密钥，是在加入频道时用于校验用户权限的一组字符串；鉴权是指在用户访问你的系统前，对其进行身份校验。用户在使用声网服务，如加入通话或登录信令系统时，声网会使用 Token 对其鉴权">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-12-02T09:21:21.000Z">
+<meta property="article:modified_time" content="2023-12-02T10:58:47.308Z">
+<meta property="article:author" content="荷包蛋-溏心">
+<meta property="article:tag" content="开发">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="JWT">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hlhehe.github.io/2023/12/02/token%E9%89%B4%E6%9D%83---JWT%E4%BB%A4%E7%89%8C/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hlhehe.github.io/2023/12/02/token%E9%89%B4%E6%9D%83---JWT%E4%BB%A4%E7%89%8C/","path":"2023/12/02/token鉴权---JWT令牌/","title":"token鉴权---JWT令牌"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>token鉴权---JWT令牌 | Honor</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Honor</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">荷包蛋的成长之路</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">14</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">10</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#token%E9%89%B4%E6%9D%83"><span class="nav-number">1.</span> <span class="nav-text">token鉴权</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E7%90%86"><span class="nav-number">1.1.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE"><span class="nav-number">1.2.</span> <span class="nav-text">存储位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%A0%E8%BE%93%E6%96%B9%E5%BC%8F"><span class="nav-number">1.3.</span> <span class="nav-text">传输方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">1.4.</span> <span class="nav-text">优缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E7%B1%BB"><span class="nav-number">1.5.</span> <span class="nav-text">分类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JWT"><span class="nav-number">2.</span> <span class="nav-text">JWT</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%84%E6%88%90"><span class="nav-number">2.1.</span> <span class="nav-text">组成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jwt-%E7%94%9F%E6%88%90"><span class="nav-number">2.2.</span> <span class="nav-text">jwt 生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jwt%E8%A7%A3%E6%9E%90"><span class="nav-number">2.3.</span> <span class="nav-text">jwt解析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">2.4.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="荷包蛋-溏心"
+      src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+  <p class="site-author-name" itemprop="name">荷包蛋-溏心</p>
+  <div class="site-description" itemprop="description">哪有赌徒天天输，哪有小孩天天哭</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">10</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Hlhehe" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Hlhehe" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3113390285@qq.com" title="E-Mail → mailto:3113390285@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hlhehe.github.io/2023/12/02/token%E9%89%B4%E6%9D%83---JWT%E4%BB%A4%E7%89%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+      <meta itemprop="name" content="荷包蛋-溏心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Honor">
+      <meta itemprop="description" content="哪有赌徒天天输，哪有小孩天天哭">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="token鉴权---JWT令牌 | Honor">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          token鉴权---JWT令牌
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-12-02 17:21:21 / 修改时间：18:58:47" itemprop="dateCreated datePublished" datetime="2023-12-02T17:21:21+08:00">2023-12-02</time>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.4k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="token鉴权"><a href="#token鉴权" class="headerlink" title="token鉴权"></a>token鉴权</h2><p>Token也称为动态密钥，是在加入频道时用于校验用户权限的一组字符串；鉴权是指在用户访问你的系统前，对其进行身份校验。用户在使用声网服务，如加入通话或登录信令系统时，声网会使用 Token 对其鉴权<span id="more"></span></p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><ol>
+<li>客户端向服务端发送用户名和密码等凭据，请求访问某个资源。</li>
+<li>服务端收到凭据后，进行身份验证，验证通过后生成一个Token。</li>
+<li>服务端将生成的Token返回给客户端。</li>
+<li>客户端在之后的每个请求中都携带这个Token。</li>
+<li>服务端接收到请求后，从请求中获取Token。</li>
+<li>服务端对Token进行验证，验证通过后允许客户端访问相应资源。</li>
+</ol>
+<h3 id="存储位置"><a href="#存储位置" class="headerlink" title="存储位置"></a>存储位置</h3><p><strong>在 Cookie中存储 Token</strong><br>将 Token 存储到 Cookie中，是一种常见的方式。相较于其他方式，这种方式<strong>比较简单，易于实现</strong>。通常情况下， 服务器将Token作为响应的一部分发送给客户端浏览器，浏览器接收到响应之后，将其存储到Cookie中，并在后续的请求中自动将其发送给服务器端。Token 存储在Cookie中的好处是，<strong>这样可以使 Token 跨越不同的页面和路径，同时也可以让 Token 的过期时间变得更加灵活</strong>。但是，使用 Cookie 和 Token 会<strong>带来相应的安全问题</strong>。由于Token是明文存储在浏览器中， 因此可以通过 XSS 攻击或者窃取浏览器中的Cookie等方式直接获取Handle。因此，如果使用 Cookie 存储 Token，则需要谨慎对待。</p>
+<p><strong>在 localStorage 中存储 Token</strong><br>相较于 Cookie，localStorage 本身就是一种用于存储数据的方案。 将 Token 存储到 localStorage 中的好处是，<strong>使其更加稳定，即使浏览器被关闭也不会丢失，同时也不会被传入请求中。</strong>使用 localStorage 存储数据的优点是：通过JavaScript编写，使用简单方便，<strong>需要在客户端进行存储，也减少了服务器的压力</strong>，同时也<strong>保证了数据的安全性。</strong>不过需要注意的是，虽然localStorage是将数据保存在浏览器中，但也需要注意浏览器的兼容性问题。</p>
+<p><strong>在 sessionStorage 中存储 Token</strong><br>sessionStorage是一种基于键值对存储的机制。将Token存储到sessionStorage中与localStorage类似，都将数据<strong>存储在浏览器中</strong>。它的<strong>存储时间只在一个会话期内有效；如果客户关闭了浏览器或者打开了一个新的浏览器窗口，则会话期将结束，数据也将被删除，避免了因为Token漏洞导致的信息泄露问题。</strong></p>
+<p><strong>在服务器端进行存储</strong><br>将Token存储在服务器端，则可以<strong>实现更高的安全性</strong>，因为所有的数据都存储在服务器端，即使数据泄露，攻击者也无法直接访问数据。但是，这种方法也有一定的缺点，<strong>因为将数据存储在服务器上会增加服务器的负载和存储成本，同时也会影响Token的访问速度。</strong></p>
+<p><strong>在数据库中存储 Token</strong><br>将Token存储在数据库中的好处是，可以通过对数据库进行<strong>相应的加密措施，来实现更高的数据安全性</strong>。同时，还可以借助<strong>数据库的备份和恢复功能，提供更好的数据可用性，使服务器不会因Token认证中断而崩溃</strong>。</p>
+<h3 id="传输方式"><a href="#传输方式" class="headerlink" title="传输方式"></a>传输方式</h3><p>Token的传递方式通常有以下四种：</p>
+<ul>
+<li>HTTP header：Token以HTTP header的形式传递，可以避免安全风险。</li>
+<li>查询参数：Token以查询参数的形式传递，存在安全风险。</li>
+<li>请求体：Token以请求体的形式传递，可以避免安全风险。</li>
+<li>HTTPS协议：HTTPS协议会使用SSL进行身份验证和数据传输加密，避免了Token传递中的安全风险。</li>
+</ul>
+<p>为了避免Token泄漏和被盗用，需要选择最安全的传递方式，并在传递过程中对Token进行加密传输。</p>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li><strong>支持跨域访问</strong>：cookie 是不支持跨域的，而 Token 可以放在请求头中传输</li>
+<li><strong>无状态</strong>：Token 自身包含了用户登录的信息，无需在服务器端存储 session</li>
+<li><strong>移动端支持更好</strong>：当客户端不是浏览器时，cookie 不被支持，采用 Token 无疑更好</li>
+<li><strong>无需考虑 CRSF</strong>：不使用 cookie，也就无需考虑 CRSF 的防御</li>
+</ul>
+<hr>
+<ul>
+<li><strong>占带宽</strong>：正常情况下要比 session_id 更大，需要消耗更多流量，挤占更多带宽，假如你的网站每月有 10 万次的浏览器，就意味着要多开销几十兆的流量。听起来并不多，但日积月累也是不小一笔开销。实际上，许多人会在 JWT 中存储的信息会更多。</li>
+<li>无法在服务端注销，那么就很难解决劫持问题</li>
+<li><strong>安全性</strong>：Token中保存了用户的身份验证信息，如果Token被获取，那么持有者就可以使用Token来访问受保护的资源。因此，在Token的传输、存储以及使用过程中需要注意安全问题。</li>
+</ul>
+<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>常见的Token分为基于session的token和基于jwt令牌的Token。基于session的token类似于session id。下面重点讲述jwt令牌。</p>
+<h2 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h2><p>JWT（JSON Web Token）是一种用于在网络应用间传递信息的开放标准（RFC 7519）。它以 JSON 格式存储被加密后的信息，通常用于验证和身份认证。</p>
+<h3 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h3><p>JWT令牌由三部分组成，每部分中间使用点（.）分隔，比如：xxxxx.yyyyy.zzzzz</p>
+<ol>
+<li>Header</li>
+</ol>
+<p>头部包括令牌的类型（即JWT）及使用的哈希算法（如HMAC SHA256或RSA）</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#例如</span><br><span class="line">   <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;alg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;typ&quot;</span><span class="punctuation">:</span> <span class="string">&quot;JWT&quot;</span></span><br><span class="line">   <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Payload</li>
+</ol>
+<p>第二部分是负载，内容也是一个json对象，它是存放有效信息的地方，它可以存放jwt提供的现成字段，比如：iss（签发者）,exp（过期时间戳）, sub（面向的用户）等，也可自定义字段。此部分不建议存放敏感信息，因为此部分可以解码还原原始内容。大多存放用户的账号信息，只存储账号，不存储密码。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#例如 </span><br><span class="line"> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;荷包蛋&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;admin&quot;</span><span class="punctuation">:</span> HL</span><br><span class="line">  <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>Signature</li>
+</ol>
+<p>此部分用于防止jwt内容被篡改。这个部分使用base64url将前两部分进行编码，编码后使用点（.）连接组成字符串，最后使用header中声明签名算法进行签名。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">HMACSHA256(</span><br><span class="line">base64UrlEncode(header) + &quot;.&quot; +           #第一部分</span><br><span class="line">base64UrlEncode(payload),                 #第二部分</span><br><span class="line">secret)                                   #使用的签名密钥</span><br></pre></td></tr></table></figure>
+
+<h3 id="jwt-生成"><a href="#jwt-生成" class="headerlink" title="jwt 生成"></a>jwt 生成</h3><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--引入maven依赖   --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.jsonwebtoken<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jjwt<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.9.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> io.jsonwebtoken.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JWTcreat</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">SECRET</span> <span class="operator">=</span> <span class="string">&quot;3113390285&quot;</span>;<span class="comment">//使用的密钥</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">EXPIRATION_TIME</span> <span class="operator">=</span> <span class="number">3600000</span>;<span class="comment">//秒</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">createJwtToken</span><span class="params">()</span> &#123;</span><br><span class="line">        Map&lt;String, Object&gt; claims = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        claims.put(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;荷包蛋HL&quot;</span>);</span><br><span class="line">        claims.put(<span class="string">&quot;root&quot;</span>,<span class="string">&quot;HL&quot;</span>);</span><br><span class="line">        <span class="type">long</span> <span class="variable">timeMillis</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="type">Date</span> <span class="variable">expirationDate</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>(timeMillis + EXPIRATION_TIME);</span><br><span class="line">        <span class="keyword">return</span> Jwts.builder()</span><br><span class="line">                .setClaims(claims)<span class="comment">//设置数据</span></span><br><span class="line">                .setIssuedAt(<span class="keyword">new</span> <span class="title class_">Date</span>())<span class="comment">//创建时间</span></span><br><span class="line">                .setExpiration(expirationDate)<span class="comment">//过期时间</span></span><br><span class="line">                .signWith(SignatureAlgorithm.HS512, SECRET)</span><br><span class="line">                .compact();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println( JWTcreat.createJwtToken());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//输出</span></span><br><span class="line"><span class="comment">//eyJhbGciOiJIUzUxMiJ9.eyJyb290IjoiSEwiLCJuYW1lIjoi6I235YyF6JuLSEwiLCJleHAiOjE3MDE1MTY2MzIsImlhdCI6MTcwMTUxMzAzMn0.1jRKb3cyoQTcdUdHJpJ7i7payam1H039_e6dSJvwekJTwphZXO45nfRvqb-HmsURB5rbgxVKQ8RfDcGF-hk9Gw</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Jwts.builder()                                      创建一个 JwtBuilder 对象</li>
+<li>JwtBuilder.setClaims()                      设置 JWT 的声明（claims）</li>
+<li>JwtBuilder.setIssuer()                       设置 JWT 的发行者（issuer）</li>
+<li>JwtBuilder.setSubject()                     设置 JWT 的主题（subject）</li>
+<li>JwtBuilder.setAudience()                 设置 JWT 的受众（audience）</li>
+<li>JwtBuilder.setIssuedAt()                   设置 JWT 的签发时间（issuedAt）</li>
+<li>JwtBuilder.setExpiration()                设置 JWT 的过期时间（expiration）</li>
+<li>JwtBuilder.signWith()                        设置 JWT 的签名算法和密钥</li>
+<li>JwtBuilder.compact()                        生成 JWT 字符串</li>
+<li>compact()                                           用于将 JWT 编码为紧凑的字符串形式。即将 JWT 编码为没有空格、没有等号、没有加号、没有斜杠的紧凑字符串形式，以便在 URL 中传输</li>
+</ul>
+<h3 id="jwt解析"><a href="#jwt解析" class="headerlink" title="jwt解析"></a>jwt解析</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Claims <span class="title function_">parseToken</span><span class="params">(String token)</span> &#123;</span><br><span class="line">       <span class="keyword">return</span> Jwts.parser()</span><br><span class="line">               .setSigningKey(SECRET)<span class="comment">//上面设置的密钥</span></span><br><span class="line">               .parseClaimsJws(token)</span><br><span class="line">               .getBody();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Jwts.parser()                            创建一个 JwtParser 对象</li>
+<li>JwtParser.setSigningKey()     设置 JWT 的签名密钥</li>
+<li>JwtParser.parseClaimsJws()  解析 JWT 字符串并返回一个 Claims 对象，包含了 JWT 中所有的声明（claims）</li>
+<li>getBody():                                用于从 JWT 中获取载荷（payload）信息。调用此方法将返回一个 Claims 对象，其中包含了 JWT 载荷中的所有声明信息，可以通过 get 方法获取对应的声明值</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">signWith 方法接受两个参数，分别是签名算法和密钥</span><br><span class="line">签名算法的类型必须要和 JWT 头部中的 “alg” 字段一致，否则验证时会提示签名无效,因此，在使用JWT进行签名时，必须要明确指定签名算法</span><br><span class="line">签名算法是由 SignatureAlgorithm 枚举类提供的，它定义了一系列的签名算法，包括 HMAC 和 RSA</span><br><span class="line"></span><br><span class="line">在 signWith 方法中: 如果为对称算法，则密钥应该是一个 byte[] 数组或 String 类型的字符串;</span><br><span class="line">如果为非对称算法，则密钥应该是一个 Key 类型的对象，例如 RSAPrivateKey 或 RSAPublicKey</span><br><span class="line"></span><br><span class="line">SignatureAlgorithm.HS512 算法，属于 HMAC-SHA512 对称加密算法</span><br><span class="line">SignatureAlgorithm.HS256 算法，属于 HMAC-SHA256 对称加密算法</span><br><span class="line">SignatureAlgorithm.RS256 算法，属于 RSA-SHA256 非对称加密算法</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">CSRF全称为Cross Site Request Forgery，跨域请求伪造。这是一种很常见的Web攻击方式，如下为一个简单的攻击流程。</span><br><span class="line">1）用户C打开浏览器，访问受信任网站A，输入用户名和密码请求登录网站A；</span><br><span class="line">2）在用户信息通过验证后，网站A产生Cookie信息并返回给浏览器，此时用户登录网站A成功，可以正常发送请求到网站A；</span><br><span class="line">3）用户未退出网站A之前，在同一浏览器中，打开一个TAB页访问网站B；</span><br><span class="line">4）网站B接收到用户请求后，返回一些攻击性代码，并发出一个请求要求访问第三方站点A；</span><br><span class="line">5）浏览器在接收到这些攻击性代码后，根据网站B的请求，在用户不知情的情况下携带Cookie信息，向网站A发出请求。网站A并不知道该请求其实是由B发起的，所以会根据用户C的Cookie信息以C的权限处理该请求，导致来自网站B的恶意代码被执行。</span><br></pre></td></tr></table></figure>
+
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>荷包蛋-溏心
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://hlhehe.github.io/2023/12/02/token%E9%89%B4%E6%9D%83---JWT%E4%BB%A4%E7%89%8C/" title="token鉴权---JWT令牌">https://hlhehe.github.io/2023/12/02/token鉴权---JWT令牌/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E5%BC%80%E5%8F%91/" rel="tag"><i class="fa fa-tag"></i> 开发</a>
+              <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+              <a href="/tags/JWT/" rel="tag"><i class="fa fa-tag"></i> JWT</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/" rel="prev" title="接口自动化测试---基础">
+                  <i class="fa fa-angle-left"></i> 接口自动化测试---基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2023/12/02/2023-12-01-%E6%8E%A5%E5%8F%A3%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95---%E8%BF%9B%E9%98%B6/" rel="next" title="接口自动化测试---进阶">
+                  接口自动化测试---进阶 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">荷包蛋-溏心</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">62k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">56 分钟</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>

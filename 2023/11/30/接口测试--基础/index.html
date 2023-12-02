@@ -32,10 +32,10 @@
 <meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130192119149.png">
 <meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130193147639.png">
 <meta property="article:published_time" content="2023-11-30T09:21:21.000Z">
-<meta property="article:modified_time" content="2023-12-02T01:41:16.090Z">
+<meta property="article:modified_time" content="2023-12-02T11:16:28.154Z">
 <meta property="article:author" content="荷包蛋-溏心">
-<meta property="article:tag" content="测试">
 <meta property="article:tag" content="接口测试">
+<meta property="article:tag" content="测试">
 <meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130192119149.png">
@@ -97,7 +97,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">12</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">9</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">14</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">10</span></a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -163,13 +163,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -247,7 +247,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-12-02 09:41:16" itemprop="dateModified" datetime="2023-12-02T09:41:16+08:00">2023-12-02</time>
+      <time title="修改时间：2023-12-02 19:16:28" itemprop="dateModified" datetime="2023-12-02T19:16:28+08:00">2023-12-02</time>
     </span>
 
   
@@ -340,14 +340,11 @@
 </li>
 </ul>
 <h4 id="HTTP响应"><a href="#HTTP响应" class="headerlink" title="HTTP响应"></a>HTTP响应</h4><ul>
-<li><p>状态行 <img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130193147639.png" alt="image-20231130193147639" style="zoom:67%;" /><br>-  位置：响应数据第一行 </p>
-<ul>
-<li><p>作用：描述服务器处理结果 </p>
-</li>
-<li><p>内容: 状态行由协议版本号、<strong>状态码</strong>、状态消息组成</p>
-</li>
-<li><p>状态码：表示此次请求的响应状态，详细见最后的状态码表。</p>
-<ul>
+<li>状态行 <img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130193147639.png" alt="image-20231130193147639" style="zoom:67%;" /><ul>
+<li>位置：响应数据第一行 </li>
+<li>作用：描述服务器处理结果 </li>
+<li>内容: 状态行由协议版本号、<strong>状态码</strong>、状态消息组成</li>
+<li>状态码：表示此次请求的响应状态，详细见最后的状态码表。<ul>
 <li>1XX：指示信息</li>
 <li><strong>2XX</strong>：成功 </li>
 <li>3XX：重定向 </li>
@@ -357,16 +354,14 @@
 </li>
 </ul>
 </li>
-<li><p>响应头</p>
-<ul>
+<li>响应头<ul>
 <li>位置：第二行开始到空白行之间 </li>
 <li>作用：描述客户端端要使用的一些附加信息 </li>
 <li>特点: 响应头由键值对组成，每行一对</li>
 <li>也有Content-Type与Content-Length，表明返回的数据类型与长度</li>
 </ul>
 </li>
-<li><p>响应体</p>
-<ul>
+<li>响应体<ul>
 <li>位置：响应数据空白行之后</li>
 <li>作用：服务器返回的数据实体 </li>
 <li>特点：有图片、json、xml、html等多种类型</li>
@@ -410,6 +405,7 @@
 <li>500 INTERNAL SERVER ERROR 服务器发生错误，用户将无法判断发出的请求是否成功 </li>
 <li>503 Server Unavailable 服务器当前不能处理客户端的请求，一段时间后可能恢复正常</li>
 </ul>
+<a href="/2023/12/02/2023-12-01-%E6%8E%A5%E5%8F%A3%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95---%E8%BF%9B%E9%98%B6/" title="接口自动化测试---进阶">接口自动化测试---进阶</a>
 
     </div>
 
@@ -436,8 +432,8 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 测试</a>
               <a href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 接口测试</a>
+              <a href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 测试</a>
               <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
           </div>
 
@@ -450,8 +446,8 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2023/12/02/2023-12-01-%E6%8E%A5%E5%8F%A3%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95---%E8%BF%9B%E9%98%B6/" rel="next" title="接口自动化测试---进阶">
-                  接口自动化测试---进阶 <i class="fa fa-angle-right"></i>
+                <a href="/2023/12/02/token%E9%89%B4%E6%9D%83---JWT%E4%BB%A4%E7%89%8C/" rel="next" title="token鉴权---JWT令牌">
+                  token鉴权---JWT令牌 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -484,14 +480,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">56k</span>
+    <span title="站点总字数">62k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">51 分钟</span>
+    <span title="站点阅读时长">56 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">

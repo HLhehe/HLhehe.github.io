@@ -22,18 +22,18 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"hlhehe.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="接口鉴权判断当前接口是否有访问的权限。（未登录不能访问一些接口信息等）">
+    <meta name="description" content="接口自动化测试---基础  接口鉴权判断当前接口是否有访问的权限。（未登录不能访问一些接口信息等）">
 <meta property="og:type" content="article">
 <meta property="og:title" content="接口自动化测试---进阶">
 <meta property="og:url" content="https://hlhehe.github.io/2023/12/02/2023-12-01-%E6%8E%A5%E5%8F%A3%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95---%E8%BF%9B%E9%98%B6/index.html">
 <meta property="og:site_name" content="Honor">
-<meta property="og:description" content="接口鉴权判断当前接口是否有访问的权限。（未登录不能访问一些接口信息等）">
+<meta property="og:description" content="接口自动化测试---基础  接口鉴权判断当前接口是否有访问的权限。（未登录不能访问一些接口信息等）">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-12-02T09:21:21.000Z">
-<meta property="article:modified_time" content="2023-12-02T07:08:28.421Z">
+<meta property="article:modified_time" content="2023-12-02T11:20:49.871Z">
 <meta property="article:author" content="荷包蛋-溏心">
-<meta property="article:tag" content="测试">
 <meta property="article:tag" content="接口测试">
+<meta property="article:tag" content="测试">
 <meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
 
@@ -94,7 +94,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">12</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">9</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">14</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">10</span></a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -160,13 +160,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">10</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -238,7 +238,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-12-02 17:21:21 / 修改时间：15:08:28" itemprop="dateCreated datePublished" datetime="2023-12-02T17:21:21+08:00">2023-12-02</time>
+      <time title="创建时间：2023-12-02 17:21:21 / 修改时间：19:20:49" itemprop="dateCreated datePublished" datetime="2023-12-02T17:21:21+08:00">2023-12-02</time>
     </span>
 
   
@@ -255,7 +255,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>8.2k</span>
+      <span>8.1k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -272,7 +272,9 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="接口鉴权"><a href="#接口鉴权" class="headerlink" title="接口鉴权"></a>接口鉴权</h2><p>判断当前接口是否有访问的权限。（未登录不能访问一些接口信息等）<span id="more"></span></p>
+    <div class="post-body" itemprop="articleBody"><a href="/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/" title="接口自动化测试---基础">接口自动化测试---基础</a>
+
+<h2 id="接口鉴权"><a href="#接口鉴权" class="headerlink" title="接口鉴权"></a>接口鉴权</h2><p>判断当前接口是否有访问的权限。（未登录不能访问一些接口信息等）<span id="more"></span></p>
 <h3 id="Cookie鉴权"><a href="#Cookie鉴权" class="headerlink" title="Cookie鉴权"></a>Cookie鉴权</h3><p>服务端在响应客户端请求的时候，会向客户端推送一个 Cookie，这个 Cookie 记录服务端上面的一些信息，客户端在后续的请求中携带这个 Cookie，服务端可以根据这个 Cookie 判断该请求的上下文关系。</p>
 <p>特点：</p>
 <ul>
@@ -286,26 +288,20 @@
 <h3 id="Session鉴权"><a href="#Session鉴权" class="headerlink" title="Session鉴权"></a>Session鉴权</h3><p>Session机制是在Cookie的基础上实现的，服务器会生成一个唯一的Session ID，并将这个ID存储在Cookie中发送给客户端。当客户端发送请求时，服务器会验证这个Session ID是否有效，如果有效，则允许访问资源。</p>
 <p>特点：</p>
 <ul>
-<li><p>安全性较高：Session机制可以避免Cookie伪造带来的安全问题，对于非法用户访问也可以做出相应的控制。</p>
-</li>
-<li><p>可靠性高: <strong>服务器端存储Session数据</strong>，保证了Session数据的可靠性，避免了Cookie被篡改带来的问题。</p>
-</li>
-<li><p>维护负担大：由于Session存储在服务器端，需要服务器端定期清理过期的Session数据，从而增加了服务器的负担。</p>
-</li>
-<li><p>扩展性差：在分布式系统中，Session机制需要额外的处理来确保多台服务器之间的Session共享，从而降低了扩展性。</p>
-</li>
-<li><p>依赖 Cookie，用户可以在浏览器端禁用 Cookie</p>
-</li>
-<li><p>不支持跨端兼容 app 等</p>
-</li>
+<li>安全性较高：Session机制可以避免Cookie伪造带来的安全问题，对于非法用户访问也可以做出相应的控制。</li>
+<li>可靠性高: <strong>服务器端存储Session数据</strong>，保证了Session数据的可靠性，避免了Cookie被篡改带来的问题。</li>
+<li>维护负担大：由于Session存储在服务器端，需要服务器端定期清理过期的Session数据，从而增加了服务器的负担。</li>
+<li>扩展性差：在分布式系统中，Session机制需要额外的处理来确保多台服务器之间的Session共享，从而降低了扩展性。</li>
+<li>依赖 Cookie，用户可以在浏览器端禁用 Cookie</li>
+<li>不支持跨端兼容 app 等</li>
 </ul>
-<h3 id="Token鉴权"><a href="#Token鉴权" class="headerlink" title="Token鉴权"></a>Token鉴权</h3><p>服务端不保存 sessionId。Token机制在认证成功后，服务端会签发一个令牌(Token)，以后每次请求都要带上这个Token，服务端通过校验这个Token来判断当前的请求是否合法。（后面会专门出一个token令牌的生成博客，奥里给）。</p>
+<h3 id="Token鉴权"><a href="#Token鉴权" class="headerlink" title="Token鉴权"></a>Token鉴权</h3><p>服务端不保存 sessionId。Token机制在认证成功后，服务端会签发一个令牌(Token)，以后每次请求都要带上这个Token，服务端通过校验这个Token来判断当前的请求是否合法。</p>
 <p>特点：</p>
 <ul>
 <li>跨平台支持：Token机制不依赖于浏览器和Cookie，支持各种客户端平台，如iOS、Android等。</li>
 <li>扩展性好：Token机制实现了无状态化，避免了Session的负担，更容易扩展。</li>
 <li>安全性需要考虑：Token机制需要考虑密钥的安全性，如果密钥泄露，则会导致令牌被伪造，从而导致鉴权失效。</li>
-<li>兼容性差：虽然Token机制可以支持跨域访问，但是它需要额外的处理来确保在不同的请求之间传递Token，从而影响了API的易用性。（详细见下文）-——————以后这搞个跳转连接，哈哈哈</li>
+<li>兼容性差：虽然Token机制可以支持跨域访问，但是它需要额外的处理来确保在不同的请求之间传递Token，从而影响了API的易用性。详情请点击<a href="/2023/12/02/token%E9%89%B4%E6%9D%83---JWT%E4%BB%A4%E7%89%8C/" title="token鉴权---JWT令牌">token鉴权---JWT令牌</a></li>
 </ul>
 <h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p>登录接口</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests,jsonpath</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span> </span><br><span class="line">&#125;<span class="comment">#请求参数</span></span><br><span class="line"></span><br><span class="line">data = &#123; <span class="comment">#date数据，即请求体数据，请求方式为post</span></span><br><span class="line">    <span class="string">&quot;accounts&quot;</span>:<span class="string">&quot;huace_xm&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pwd&quot;</span>:<span class="number">123456</span>,</span><br><span class="line">    <span class="string">&quot;type&quot;</span>:<span class="string">&quot;username&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">rs = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/user/login&quot;</span>,<span class="comment">#请求路径</span></span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,<span class="comment">#路径参数</span></span><br><span class="line">                 data=data) <span class="comment"># 这就是发请求 ,括号里填四要素 --怎么确定接口地址？四要素是什么？</span></span><br><span class="line"><span class="comment"># print(rs.text)</span></span><br><span class="line"><span class="comment"># 拿出来做成一个变量？</span></span><br><span class="line"><span class="built_in">print</span>(rs.json())</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;输出，登陆成功</span></span><br><span class="line"><span class="string">&#123;&#x27;msg&#x27;: &#x27;登录成功&#x27;, &#x27;code&#x27;: 0, &#x27;data&#x27;: &#123;&#x27;id&#x27;: &#x27;19898&#x27;, &#x27;username&#x27;: &#x27;huace_xm&#x27;, &#x27;nickname&#x27;: &#x27;&#x27;, &#x27;mobile&#x27;: &#x27;&#x27;, &#x27;email&#x27;: &#x27;&#x27;, &#x27;avatar&#x27;: &#x27;http://shop-xo.hctestedu.com/static/index/default/images/default-user-avatar.jpg&#x27;, &#x27;alipay_openid&#x27;: &#x27;&#x27;, &#x27;weixin_openid&#x27;: &#x27;&#x27;, &#x27;weixin_unionid&#x27;: &#x27;&#x27;, &#x27;weixin_web_openid&#x27;: &#x27;&#x27;, &#x27;baidu_openid&#x27;: &#x27;&#x27;, &#x27;toutiao_openid&#x27;: &#x27;&#x27;, &#x27;qq_openid&#x27;: &#x27;&#x27;, &#x27;qq_unionid&#x27;: &#x27;&#x27;, &#x27;integral&#x27;: &#x27;0&#x27;, &#x27;locking_integral&#x27;: &#x27;0&#x27;, &#x27;referrer&#x27;: &#x27;0&#x27;, &#x27;add_time&#x27;: &#x27;1669790543&#x27;, &#x27;add_time_text&#x27;: &#x27;2022-11-30 14:42:23&#x27;, &#x27;mobile_security&#x27;: &#x27;&#x27;, &#x27;email_security&#x27;: &#x27;&#x27;, &#x27;user_name_view&#x27;: &#x27;huace_xm&#x27;, &#x27;is_mandatory_bind_mobile&#x27;: 0, &#x27;token&#x27;: &#x27;88c06b3b23dd615cab4a0221d69ea637&#x27;&#125;&#125;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
@@ -318,7 +314,6 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#说明</span></span><br><span class="line"><span class="comment">#使用jsonpath需要导入对应的包，同时还需要在虚拟环境中下载安装</span></span><br><span class="line">pip install jsonpath  <span class="comment">#安装</span></span><br><span class="line">jsonpath --version   <span class="comment">#检查</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">jsonpath语法：jsonpath只能提取json对象中的参数</span></span><br><span class="line"><span class="string">$表示最外层大括号</span></span><br><span class="line"><span class="string">.表示进一层</span></span><br><span class="line"><span class="string">提取token的准确语法为：$.data.token</span></span><br><span class="line"><span class="string">模糊语法为：$..token，注意结果为列表，需要再准确取值</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment">#并不是所有的token都是放在路径参数里面的，这个主要由前后端开发师共同决定</span></span><br><span class="line"><span class="comment">#可以放在请求头中，路径参数中，也可放在请求体中（不能是get，delect方式，没有请求体）</span></span><br></pre></td></tr></table></figure>
 
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#正则表达式提取</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">out=<span class="string">&#x27;&#x27;&#x27;&#123;&#x27;msg&#x27;: &#x27;登录成功&#x27;,</span></span><br><span class="line"><span class="string">&#x27;code&#x27;: 0, </span></span><br><span class="line"><span class="string">&#x27;data&#x27;: &#123;&#x27;id&#x27;: &#x27;19898&#x27;,  &#x27;token&#x27;: &#x27;54e66bcb250f172f92feee1440a79277&#x27;&#125;&#125;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">path=<span class="string">r&#x27;&#x27;&#x27;&#x27;token&#x27;: &#x27;(.+?)&#x27;&#125;&#125;&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="built_in">print</span>(re.findall(path,out))</span><br><span class="line"><span class="comment">#将你想提取的值用(.+?)替换即可，别的直接复制粘贴</span></span><br></pre></td></tr></table></figure>
-
 
 
 <h2 id="接口关联"><a href="#接口关联" class="headerlink" title="接口关联"></a>接口关联</h2><p>与接口鉴权类似。一个接口的参数需要使用上一个接口的一些参数。例如上一个接口生成了对应的订单 id，下个接口查询订单时需要使用到订单 id，故需要将其提取出来再传递给下个接口使用，提取方法类似上述。或者为了满足增删改查时<strong>业务闭环</strong>，执行一圈后数据库没有产生垃圾数据，也需要接口关联。</p>
@@ -370,8 +365,8 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 测试</a>
               <a href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 接口测试</a>
+              <a href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 测试</a>
               <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
           </div>
 
@@ -379,8 +374,8 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/" rel="prev" title="接口自动化测试---基础">
-                  <i class="fa fa-angle-left"></i> 接口自动化测试---基础
+                <a href="/2023/12/02/token%E9%89%B4%E6%9D%83---JWT%E4%BB%A4%E7%89%8C/" rel="prev" title="token鉴权---JWT令牌">
+                  <i class="fa fa-angle-left"></i> token鉴权---JWT令牌
                 </a>
             </div>
             <div class="post-nav-item">
@@ -415,14 +410,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">56k</span>
+    <span title="站点总字数">62k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">51 分钟</span>
+    <span title="站点阅读时长">56 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">

@@ -1,6 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>接口自动化测试---进阶</title>
+    <url>/2023/12/02/2023-12-01-%E6%8E%A5%E5%8F%A3%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95---%E8%BF%9B%E9%98%B6/</url>
+    <content><![CDATA[<a href="/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/" title="接口自动化测试---基础">接口自动化测试---基础</a>
+
+<h2 id="接口鉴权"><a href="#接口鉴权" class="headerlink" title="接口鉴权"></a>接口鉴权</h2><p>判断当前接口是否有访问的权限。（未登录不能访问一些接口信息等）<span id="more"></span></p>
+<h3 id="Cookie鉴权"><a href="#Cookie鉴权" class="headerlink" title="Cookie鉴权"></a>Cookie鉴权</h3><p>服务端在响应客户端请求的时候，会向客户端推送一个 Cookie，这个 Cookie 记录服务端上面的一些信息，客户端在后续的请求中携带这个 Cookie，服务端可以根据这个 Cookie 判断该请求的上下文关系。</p>
+<p>特点：</p>
+<ul>
+<li><strong>Cookie存储在客户端，使得可以跨页面访问</strong>，比较方便。但可随意篡改，不安全</li>
+<li>Cookie机制实现简单，只需要服务器端向客户端发送Set-Cookie即可完成鉴权，不需要过多的复杂设置。</li>
+<li>它的内容会随着 http 交互传接，影响性能，所以 Cookie 可存储的数据不能过大，最大为 4kb</li>
+<li>一个浏览器对于一个网站只能存不超过 20 个 Cookie，而浏览器一般只允许存放 300 个 Cookie</li>
+<li>移动端对 Cookie 支持不友好</li>
+<li>一般情况下存储的是纯文本，对象需要序列化之后才可以存储，解析需要反序列化</li>
+</ul>
+<h3 id="Session鉴权"><a href="#Session鉴权" class="headerlink" title="Session鉴权"></a>Session鉴权</h3><p>Session机制是在Cookie的基础上实现的，服务器会生成一个唯一的Session ID，并将这个ID存储在Cookie中发送给客户端。当客户端发送请求时，服务器会验证这个Session ID是否有效，如果有效，则允许访问资源。</p>
+<p>特点：</p>
+<ul>
+<li>安全性较高：Session机制可以避免Cookie伪造带来的安全问题，对于非法用户访问也可以做出相应的控制。</li>
+<li>可靠性高: <strong>服务器端存储Session数据</strong>，保证了Session数据的可靠性，避免了Cookie被篡改带来的问题。</li>
+<li>维护负担大：由于Session存储在服务器端，需要服务器端定期清理过期的Session数据，从而增加了服务器的负担。</li>
+<li>扩展性差：在分布式系统中，Session机制需要额外的处理来确保多台服务器之间的Session共享，从而降低了扩展性。</li>
+<li>依赖 Cookie，用户可以在浏览器端禁用 Cookie</li>
+<li>不支持跨端兼容 app 等</li>
+</ul>
+<h3 id="Token鉴权"><a href="#Token鉴权" class="headerlink" title="Token鉴权"></a>Token鉴权</h3><p>服务端不保存 sessionId。Token机制在认证成功后，服务端会签发一个令牌(Token)，以后每次请求都要带上这个Token，服务端通过校验这个Token来判断当前的请求是否合法。</p>
+<p>特点：</p>
+<ul>
+<li>跨平台支持：Token机制不依赖于浏览器和Cookie，支持各种客户端平台，如iOS、Android等。</li>
+<li>扩展性好：Token机制实现了无状态化，避免了Session的负担，更容易扩展。</li>
+<li>安全性需要考虑：Token机制需要考虑密钥的安全性，如果密钥泄露，则会导致令牌被伪造，从而导致鉴权失效。</li>
+<li>兼容性差：虽然Token机制可以支持跨域访问，但是它需要额外的处理来确保在不同的请求之间传递Token，从而影响了API的易用性。详情请点击<a href="/2023/12/02/token%E9%89%B4%E6%9D%83---JWT%E4%BB%A4%E7%89%8C/" title="token鉴权---JWT令牌">token鉴权---JWT令牌</a></li>
+</ul>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p>登录接口</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests,jsonpath</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span> </span><br><span class="line">&#125;<span class="comment">#请求参数</span></span><br><span class="line"></span><br><span class="line">data = &#123; <span class="comment">#date数据，即请求体数据，请求方式为post</span></span><br><span class="line">    <span class="string">&quot;accounts&quot;</span>:<span class="string">&quot;huace_xm&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pwd&quot;</span>:<span class="number">123456</span>,</span><br><span class="line">    <span class="string">&quot;type&quot;</span>:<span class="string">&quot;username&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">rs = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/user/login&quot;</span>,<span class="comment">#请求路径</span></span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,<span class="comment">#路径参数</span></span><br><span class="line">                 data=data) <span class="comment"># 这就是发请求 ,括号里填四要素 --怎么确定接口地址？四要素是什么？</span></span><br><span class="line"><span class="comment"># print(rs.text)</span></span><br><span class="line"><span class="comment"># 拿出来做成一个变量？</span></span><br><span class="line"><span class="built_in">print</span>(rs.json())</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;输出，登陆成功</span></span><br><span class="line"><span class="string">&#123;&#x27;msg&#x27;: &#x27;登录成功&#x27;, &#x27;code&#x27;: 0, &#x27;data&#x27;: &#123;&#x27;id&#x27;: &#x27;19898&#x27;, &#x27;username&#x27;: &#x27;huace_xm&#x27;, &#x27;nickname&#x27;: &#x27;&#x27;, &#x27;mobile&#x27;: &#x27;&#x27;, &#x27;email&#x27;: &#x27;&#x27;, &#x27;avatar&#x27;: &#x27;http://shop-xo.hctestedu.com/static/index/default/images/default-user-avatar.jpg&#x27;, &#x27;alipay_openid&#x27;: &#x27;&#x27;, &#x27;weixin_openid&#x27;: &#x27;&#x27;, &#x27;weixin_unionid&#x27;: &#x27;&#x27;, &#x27;weixin_web_openid&#x27;: &#x27;&#x27;, &#x27;baidu_openid&#x27;: &#x27;&#x27;, &#x27;toutiao_openid&#x27;: &#x27;&#x27;, &#x27;qq_openid&#x27;: &#x27;&#x27;, &#x27;qq_unionid&#x27;: &#x27;&#x27;, &#x27;integral&#x27;: &#x27;0&#x27;, &#x27;locking_integral&#x27;: &#x27;0&#x27;, &#x27;referrer&#x27;: &#x27;0&#x27;, &#x27;add_time&#x27;: &#x27;1669790543&#x27;, &#x27;add_time_text&#x27;: &#x27;2022-11-30 14:42:23&#x27;, &#x27;mobile_security&#x27;: &#x27;&#x27;, &#x27;email_security&#x27;: &#x27;&#x27;, &#x27;user_name_view&#x27;: &#x27;huace_xm&#x27;, &#x27;is_mandatory_bind_mobile&#x27;: 0, &#x27;token&#x27;: &#x27;88c06b3b23dd615cab4a0221d69ea637&#x27;&#125;&#125;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>收藏商品：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests,jsonpath</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span> </span><br><span class="line">&#125;</span><br><span class="line">data2 = &#123;</span><br><span class="line">    <span class="string">&quot;id&quot;</span>: <span class="string">&quot;12&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">rs1 = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/goods/favor&quot;</span>,</span><br><span class="line">                       <span class="comment">#请求路径</span></span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,</span><br><span class="line">                 data=data2) <span class="comment"># 这就是发请求 ,括号里填四要素 --怎么确定接口地址？四要素是什么？</span></span><br><span class="line"><span class="built_in">print</span>(rs1.json())</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;输出</span></span><br><span class="line"><span class="string">&#123;&#x27;msg&#x27;: &#x27;登录失效，请重新登录&#x27;, &#x27;code&#x27;: -400, &#x27;data&#x27;: &#x27;&#x27;&#125;</span></span><br><span class="line"><span class="string">未进行接口鉴权，导致不能收藏商品</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#进行接口鉴权</span></span><br><span class="line"><span class="keyword">import</span> requests,jsonpath</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">&quot;accounts&quot;</span>:<span class="string">&quot;huace_xm&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pwd&quot;</span>:<span class="number">123456</span>,</span><br><span class="line">    <span class="string">&quot;type&quot;</span>:<span class="string">&quot;username&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">rs = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/user/login&quot;</span>,</span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,</span><br><span class="line">                 data=data) <span class="comment"># 这就是发请求 ,括号里填四要素 --怎么确定接口地址？四要素是什么？</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(rs.json())</span><br><span class="line"><span class="comment">#仔细观看登录成功后。返会的结果中含有token项</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#print(rs.json()[&quot;data&quot;][&quot;token&quot;])</span></span><br><span class="line">token = rs.json()[<span class="string">&quot;data&quot;</span>][<span class="string">&quot;token&quot;</span>]<span class="comment">#直接准确提出出token的值</span></span><br><span class="line">token1 = jsonpath.jsonpath(rs.json(),<span class="string">&quot;$..token&quot;</span>)</span><br><span class="line"><span class="comment">#不知道token的值具体在哪时，使用$..token</span></span><br><span class="line"><span class="comment">#肯定会提取出含有token的值，结果为一个列表。</span></span><br><span class="line"></span><br><span class="line">data2 = &#123;</span><br><span class="line">    <span class="string">&quot;id&quot;</span>: <span class="string">&quot;12&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">rs1 = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/goods/favor?token=&quot;</span>+token1[<span class="number">0</span>],<span class="comment">#传入对应的token</span></span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,</span><br><span class="line">                 data=data2) <span class="comment"># 这就是发请求 ,括号里填四要素 --怎么确定接口地址？四要素是什么？</span></span><br><span class="line"><span class="built_in">print</span>(rs1.json())</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;输出</span></span><br><span class="line"><span class="string">&#123;&#x27;msg&#x27;: &#x27;取消成功&#x27;, &#x27;code&#x27;: 0, &#x27;data&#x27;: &#123;&#x27;text&#x27;: &#x27;收藏&#x27;, &#x27;status&#x27;: 0, &#x27;count&#x27;: 49&#125;&#125;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#说明</span></span><br><span class="line"><span class="comment">#使用jsonpath需要导入对应的包，同时还需要在虚拟环境中下载安装</span></span><br><span class="line">pip install jsonpath  <span class="comment">#安装</span></span><br><span class="line">jsonpath --version   <span class="comment">#检查</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">jsonpath语法：jsonpath只能提取json对象中的参数</span></span><br><span class="line"><span class="string">$表示最外层大括号</span></span><br><span class="line"><span class="string">.表示进一层</span></span><br><span class="line"><span class="string">提取token的准确语法为：$.data.token</span></span><br><span class="line"><span class="string">模糊语法为：$..token，注意结果为列表，需要再准确取值</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment">#并不是所有的token都是放在路径参数里面的，这个主要由前后端开发师共同决定</span></span><br><span class="line"><span class="comment">#可以放在请求头中，路径参数中，也可放在请求体中（不能是get，delect方式，没有请求体）</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#正则表达式提取</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">out=<span class="string">&#x27;&#x27;&#x27;&#123;&#x27;msg&#x27;: &#x27;登录成功&#x27;,</span></span><br><span class="line"><span class="string">&#x27;code&#x27;: 0, </span></span><br><span class="line"><span class="string">&#x27;data&#x27;: &#123;&#x27;id&#x27;: &#x27;19898&#x27;,  &#x27;token&#x27;: &#x27;54e66bcb250f172f92feee1440a79277&#x27;&#125;&#125;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">path=<span class="string">r&#x27;&#x27;&#x27;&#x27;token&#x27;: &#x27;(.+?)&#x27;&#125;&#125;&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="built_in">print</span>(re.findall(path,out))</span><br><span class="line"><span class="comment">#将你想提取的值用(.+?)替换即可，别的直接复制粘贴</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="接口关联"><a href="#接口关联" class="headerlink" title="接口关联"></a>接口关联</h2><p>与接口鉴权类似。一个接口的参数需要使用上一个接口的一些参数。例如上一个接口生成了对应的订单 id，下个接口查询订单时需要使用到订单 id，故需要将其提取出来再传递给下个接口使用，提取方法类似上述。或者为了满足增删改查时<strong>业务闭环</strong>，执行一圈后数据库没有产生垃圾数据，也需要接口关联。</p>
+<p>还是jsonpath与re的使用，即正则表达式的提取和json提取。</p>
+<h2 id="接口加密"><a href="#接口加密" class="headerlink" title="接口加密"></a>接口加密</h2><p>系统明文传输的数据会被不明身份的人用抓包工具抓取，从而威胁系统和数据的<strong>安全性</strong>。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#一般是对传输的数据进行加密，加密的方式有很多，具体看实际场景。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">测试时，若采用常规的方法进行加密，则可去对应的网站找取加密的密文，再传入接口中进行测试</span></span><br><span class="line"><span class="string">或者找开发要去加密的算法代码，进行调用后再传入对应的参数</span></span><br><span class="line"><span class="string">自己懂的，就自行编写对应的加密算法，加密后再传参</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="上传文件"><a href="#上传文件" class="headerlink" title="上传文件"></a>上传文件</h2><p>某些接口传入的数据是文件类型，再测试时需要先读出文件的信息，再将信息作为参数进行传参。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">url = <span class="string">&#x27;http://httpbin.org/post&#x27;</span>  <span class="comment"># 上传文件接口</span></span><br><span class="line">files = &#123;</span><br><span class="line">    <span class="string">&#x27;file&#x27;</span>: <span class="built_in">open</span>(<span class="string">&#x27;../file/test.png&#x27;</span>, <span class="string">&#x27;rb&#x27;</span>),  <span class="comment"># 文件路径          </span></span><br><span class="line"> &#125;  <span class="comment"># =&gt; 打开上传文件并且加入文件相关参数</span></span><br><span class="line"> <span class="comment">#file是前端指定的需要传递的参数名。</span></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;test&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"> <span class="comment">#即先将文件读为二进制文件再进行传参</span></span><br><span class="line"><span class="comment">#传递的参数也是</span></span><br><span class="line"> <span class="comment"># data传入请求参数dict,files传入待上传文件参数dict</span></span><br><span class="line">r = requests.post(url, data=data, files=files)</span><br><span class="line"><span class="built_in">print</span>(r.json())</span><br></pre></td></tr></table></figure>
+
+<h2 id="cookie关联"><a href="#cookie关联" class="headerlink" title="cookie关联"></a>cookie关联</h2><p>有些接口之间是存在着cookie关联的，即需要发送某些cookie信息才能进行访问该接口，类似cookie鉴权。</p>
+<p>一种方式是在请求参数的时候，直接传入对应的cookie信息。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_login</span>(<span class="params">username,password</span>):</span><br><span class="line">    host=<span class="string">&#x27;http://localhost&#x27;</span></span><br><span class="line">    url=<span class="string">f&#x27;<span class="subst">&#123;host&#125;</span>/api/bbb/ccc&#x27;</span></span><br><span class="line">    payload=&#123;<span class="string">&#x27;username&#x27;</span>:username,</span><br><span class="line">             <span class="string">&#x27;password&#x27;</span>:password</span><br><span class="line">             &#125;</span><br><span class="line">    reps=requests.post(url,data=payload)</span><br><span class="line">    <span class="keyword">return</span> reps.cookies</span><br><span class="line"></span><br><span class="line">user_cookie= test_login(<span class="string">&#x27;test&#x27;</span>,<span class="string">&#x27;12345678&#x27;</span>) <span class="comment">#调用函数获取返回值并赋值给user_cookie</span></span><br><span class="line">reps=requests.post(api_url,data=payload,cookies=user_cookie)<span class="comment">#直接在请求中加上cookies=user_cookie</span></span><br></pre></td></tr></table></figure>
+
+<p>另一种方式是发送请求时，直接使用session的request方法。会自动关联所有请求的cookie信息。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#先生成对应的session对象</span></span><br><span class="line">sess=requests.session();</span><br><span class="line"><span class="comment">#操作</span></span><br><span class="line"><span class="comment">#sess.request(url,param,data,**kwargs)</span></span><br><span class="line"><span class="comment">#可以使用对应的夹具函数，完成对session的初始化，同时使用单例模式，保证session的唯一性</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="总结–简单封装"><a href="#总结–简单封装" class="headerlink" title="总结–简单封装"></a>总结–简单封装</h2><h3 id="统一方法封装"><a href="#统一方法封装" class="headerlink" title="统一方法封装"></a>统一方法封装</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RequestUtil</span>:</span><br><span class="line">    sess=requests.session();</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">send_requests</span>(<span class="params">self,**kwargs</span>):</span><br><span class="line">        res=RequestUtil.sess.request(**kwargs)</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line"><span class="comment">#可以进行统一的日志请求处理</span></span><br><span class="line"><span class="comment">#所有的请求调用的入口信息，统一的日志管理，不用在每个方法进行日志打印</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="接口关联封装"><a href="#接口关联封装" class="headerlink" title="接口关联封装"></a>接口关联封装</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#将提取的参数可写入yaml文件中，方便后续的使用（写入地方由自己定，看自己具体的需求）</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> yaml</span><br><span class="line"></span><br><span class="line"><span class="comment">#写入,追加的方式</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">write_Yaml</span>(<span class="params">data</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(os.getcwd()+<span class="string">&quot;/yaml1.yaml&quot;</span>,encoding=<span class="string">&quot;utf-8&quot;</span>,mode=<span class="string">&quot;a+&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="comment">#对应的yaml文件路径 ，编码格式，打开方式：追加</span></span><br><span class="line">        yaml.dump(data,stream=f,allow_unicode=<span class="literal">True</span>) <span class="comment">#写入yaml文件，写入对象为f，允许编码（不乱码）</span></span><br><span class="line"><span class="comment">#读取yaml文件</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">read_Yaml</span>(<span class="params">key</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(os.getcwd()+<span class="string">&quot;/yaml1.yaml&quot;</span>,encoding=<span class="string">&quot;utf-8&quot;</span>,mode=<span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="comment">#全部读取文件</span></span><br><span class="line">        value=yaml.load(f,yaml.FullLoader)</span><br><span class="line">        <span class="keyword">return</span> value[key]<span class="comment">#返回key为key的value值</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#清空， 覆盖的方式</span></span><br><span class="line"><span class="comment">#在所有用例执行之前清空yaml文件</span></span><br><span class="line"><span class="comment">#夹具函数，在一次session之前，清空yaml文件</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">clear_Yaml</span>():</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(os.getcwd()+<span class="string">&quot;/yaml1.yaml&quot;</span>,encoding=<span class="string">&quot;utf-8&quot;</span>,mode=<span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.truncate();<span class="comment">#清空yaml文件，防止产生废物数据</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="yaml数据驱动"><a href="#yaml数据驱动" class="headerlink" title="yaml数据驱动"></a>yaml数据驱动</h3><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="bullet">-</span></span><br><span class="line">	<span class="attr">feature:</span> <span class="string">模块名</span></span><br><span class="line">	<span class="attr">story:</span> <span class="string">接口</span></span><br><span class="line">	<span class="attr">title:</span> <span class="string">用例标题</span></span><br><span class="line">	<span class="attr">request:</span> </span><br><span class="line">		<span class="attr">method:</span> <span class="string">请求方式</span></span><br><span class="line">		<span class="attr">url:</span> <span class="string">请求url</span></span><br><span class="line">		<span class="attr">headers:</span> <span class="string">请求头</span></span><br><span class="line">		<span class="attr">params:</span> <span class="string">请求参数</span></span><br><span class="line">		<span class="attr">json:</span> <span class="string">json参数</span></span><br><span class="line">	<span class="comment">#extract: 提取的数据</span></span><br><span class="line">	<span class="attr">vilidate:</span> <span class="string">请求断言</span>	</span><br><span class="line"><span class="comment">#需要的参数按需求自己添加	</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#读取yaml文件</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">read_Yaml_Testcase</span>(<span class="params">path</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(path, encoding=<span class="string">&quot;utf-8&quot;</span>, mode=<span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        value = yaml.load(f, yaml.FullLoader)</span><br><span class="line">        <span class="keyword">return</span> value</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>接口测试</tag>
+        <tag>测试</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Faker生成测试伪数据</title>
     <url>/2023/11/26/Faker/</url>
     <content><![CDATA[<h3 id="测试数据"><a href="#测试数据" class="headerlink" title="测试数据"></a>测试数据</h3><p>​		1）测试数据的来源</p>
@@ -36,9 +113,108 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#将数据先封装成对应的列表list，然后使用装饰器传入即可</span></span><br><span class="line"><span class="comment">#或者直接将对应的值改成faker生成的数据</span></span><br><span class="line"><span class="keyword">from</span> faker <span class="keyword">import</span> Faker</span><br><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line">out=[]</span><br><span class="line">faker=Faker(locale=<span class="string">&quot;zh_Cn&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">    <span class="built_in">list</span>=[]</span><br><span class="line">    <span class="built_in">list</span>.append(faker.name())</span><br><span class="line">    <span class="built_in">list</span>.append(faker.random_int(<span class="built_in">min</span>=<span class="number">0</span>,<span class="built_in">max</span>=<span class="number">100</span>))</span><br><span class="line">    out.append(<span class="built_in">list</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestDDT</span>:</span><br><span class="line"><span class="meta">    @pytest.mark.parametrize(<span class="params"><span class="string">&#x27;name,age&#x27;</span>,out</span>) //数据驱动</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testFaker</span>(<span class="params">self,name,age</span>):</span><br><span class="line">        <span class="built_in">print</span>(name,age)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 ]]></content>
       <tags>
-        <tag>faker</tag>
         <tag>测试</tag>
+        <tag>faker</tag>
         <tag>测试数据</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>pytest单元测试框架（基础篇）</title>
+    <url>/2023/11/21/pytest%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h2 id="单元测试框架"><a href="#单元测试框架" class="headerlink" title="单元测试框架"></a>单元测试框架</h2><p>​		1）什么是单元测试框架</p>
+<p>​		单元测试框架是指在软件开发的过程种，针对软件的最小单位（函数、方法）进行正确性测试</p>
+<span id="more"></span>
+
+<p>​		2）常见的单元测试框架</p>
+<p>​		基于java的：junit和testng</p>
+<p>​		基于python的：unittest和<strong>pytest</strong></p>
+<p>​		3）单元测试流程</p>
+<p>​		1.测试发现：从多个文件中找到需要被测试的测试用例</p>
+<p>​		2.测试执行：按照一定的顺序执行测试用例，并生成结果</p>
+<p>​		3.测试判断：通过assert断言来自动判断结果与预期是否相符</p>
+<p>​		4.测试报告：生成这次测试的测试报告，包括耗时、通过率等</p>
+<h2 id="pytest"><a href="#pytest" class="headerlink" title="pytest"></a>pytest</h2><p>​		1）简介</p>
+<p>​		pytest是python的一种单元测试框架，与python自带的测试框架unittest类似，但比其更易上手，也更加的灵活。因此使用面也广于unittest。</p>
+<ul>
+<li><p>pytest比unittest更加成熟，同时支持unittest编写的测试用例</p>
+</li>
+<li><p>pytest可以和selenium，request，appium等测试框架相结合，实现web ui自动化，web 接口自动化，app ui自动化</p>
+</li>
+<li><p>pytest可以实现测试用例的跳过以及失败用例重试</p>
+</li>
+<li><p>pytest支持参数化数据驱动方式</p>
+</li>
+<li><p>pytest可以和Jenkins持续集成</p>
+</li>
+<li><p>pytest具有很多第三方插件，且支持自定义扩展</p>
+<ul>
+<li><p>pytest：单元测试框架</p>
+<p>pytest-xdist： 测试用例的分布式执行，即并发执行。可缩短总的用例的执行时间</p>
+<p>pytest-ordering： 可以指定测试用例的执行顺序，默认是从上到下依次执行</p>
+<p>pytest-rerunfailures： 用例失败后进行再次执行（多用于ui测试）</p>
+<p>pytest-html： 生成html格式的测试报告（不够美观）</p>
+<p>allure-pytest： 生成比上面美观的测试报告，且可进行测试报告的自定义</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>​		2）安装</p>
+<p>​		新建python项目———在本地虚拟终端中执行以下命令即可。（注意：使用以上插件也需要安装到本地环境中，语法类似）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip install pytest   <span class="comment">#安装命令</span></span><br><span class="line"></span><br><span class="line">pytest --version     <span class="comment">#检查命令</span></span><br></pre></td></tr></table></figure>
+
+<p>​		3）使用pytest</p>
+<p>​		pytest的默认测试用例发现规则</p>
+<ul>
+<li><p>模块名（简单理解为一个py文件）以test_ 开头或 _test结尾</p>
+</li>
+<li><p>测试类以Test开头，并且不包含init()方法</p>
+</li>
+<li><p>测试方法以test开头</p>
+<p>4）运行pytest</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">         <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> <span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">     pytest.main()</span><br></pre></td></tr></table></figure>
+
+<h2 id="pytest运行方式"><a href="#pytest运行方式" class="headerlink" title="pytest运行方式"></a>pytest运行方式</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">参数详解:</span><br><span class="line">-s:输出调试信心，包括<span class="built_in">print</span>打印的信息</span><br><span class="line">-v:显示更详细的信息</span><br><span class="line">-vs:两个连用，效用就是两个相加</span><br><span class="line">-n NUM: 支持多线程或分布式运行测试用例，使用NUM个线程。需要导入pytest-xdist插件</span><br><span class="line">--<span class="built_in">return</span> NUM:失败用例重跑NUM次，失败用例总共运行NUM+1次</span><br><span class="line">-x:有一个用例失败报错，则停止测试，默认是不停止测试</span><br><span class="line">--maxfail=NUM:出现NUM个失败用例就停止测试</span><br><span class="line">-k String:根据String字符串匹配对应的测试用例</span><br><span class="line">--html 文件路径/文件名：生成html格式的测试报告</span><br></pre></td></tr></table></figure>
+
+<p>​		1）主函数方式</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#文件夹与python package的区别：python package下包含一个_init_.py文件</span></span><br><span class="line"><span class="comment"># ./  :表示当前文件路径下</span></span><br><span class="line"><span class="comment"># ../  :表示当前文件路径的父路径，即向上一层</span></span><br><span class="line">pytest.main()    <span class="comment">#运行所有的按条件写的测试用例</span></span><br><span class="line">pytest.main(<span class="string">&#x27;-vs&#x27;</span>,<span class="string">&#x27;./tasecase&#x27;</span>)   <span class="comment">#运行tasecase文件夹下的测试用例</span></span><br><span class="line">pytest.main(<span class="string">&#x27;-x&#x27;</span>,<span class="string">&#x27;test01.py&#x27;</span>)    <span class="comment">#运行test01模块下的测试用例,且出现错误就停止测试</span></span><br><span class="line">pytest.mian(<span class="string">&#x27;-n 2&#x27;</span>,<span class="string">&#x27;./tesecase/test01.py::TestName::testName&#x27;</span>)   <span class="comment">#运行testcase文件夹下test01模块里TsetName类里的testName方法,且使用两个线程</span></span><br></pre></td></tr></table></figure>
+
+<p>​		2）命令行模式</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#即在安装pytest的本地虚拟环境中运行</span></span><br><span class="line">pytest     <span class="comment">#运行所有满足条件的测试用例</span></span><br><span class="line">pytest -vs ./testcase   <span class="comment">#运行tasecase文件夹下的测试用例</span></span><br><span class="line">pytest -x ./testcase/test01.py    <span class="comment">#运行test01模块下的测试用例,且出现错误就停止测试</span></span><br><span class="line">pytest -n 2 ./tesecase/test01.py::TestName::testName    <span class="comment">#运行testcase文件夹下test01模块里TsetName类里的testName方法,且使用两个线程</span></span><br></pre></td></tr></table></figure>
+
+<p>​		3）全局配置模式</p>
+<p>​		通过读取pytest.ini文件得到对应的配置信息，最后在命令行输入pytest即可运行（名字不可变，只能为pytest.ini）</p>
+<ul>
+<li>文件位置：放在项目的根目录，即最外层即可</li>
+<li>编码格式：必须为ANSI格式，可使用notpad++修改格式</li>
+<li>运行规则：不论是主函数方式还是命令行方式，都会优先读取该配置文件</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#模板，前面的参数是不可变的，后面根据实际情况填写</span></span><br><span class="line"></span><br><span class="line">[<span class="string">pytest</span>]</span><br><span class="line"><span class="string">addopts</span> <span class="string">=</span> <span class="string">-vs</span> <span class="comment">#命令行的参数，用空格分隔</span></span><br><span class="line"><span class="string">testpaths</span> <span class="string">=</span> <span class="string">./testcase</span> <span class="comment">#测试用例的路径</span></span><br><span class="line"><span class="string">python_files</span> <span class="string">=</span> <span class="string">test_*.py</span> <span class="comment">#模块名的规则，可以更改默认规则</span></span><br><span class="line"><span class="string">python_classes</span> <span class="string">=</span> <span class="string">Test*</span> <span class="comment">#类名的规则</span></span><br><span class="line"><span class="string">python_functions</span> <span class="string">=</span> <span class="string">test</span> <span class="comment">#方法名的规则</span></span><br><span class="line"><span class="string">markers</span> <span class="string">=</span></span><br><span class="line">  <span class="string">smoke:冒烟用例</span>          <span class="comment">#设置独有的标记</span></span><br><span class="line">  <span class="string">usermanage:用户管理模块</span></span><br><span class="line">  <span class="string">productmanage:商品管理模块</span></span><br></pre></td></tr></table></figure>
+
+<p>​		4）改变执行顺序</p>
+<p>​		pytest默认的执行顺序是从上到下，改变默认执行顺序，使用mark标记。（需要引入pytest-ordering插件）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">99</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAge</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myage&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">100</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAddr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myaddr&quot;</span>)</span><br><span class="line">        </span><br><span class="line">   <span class="comment">#优先执行带注释的用例，且order值越小，优先执行</span></span><br></pre></td></tr></table></figure>
+
+<p>​		5）分组执行</p>
+<p>​		在实际的测试场景中，需要对一类的用例进行优先测试，如，冒烟测试、用户管理模块测试、商品管理模块测试等。（还记得上面pytest.ini文件中得makers标记吗？就是用来自定自己的分组的）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@pytest.mark.somke</span></span><br><span class="line"><span class="comment">#在对应的方法上添加注解即可</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#执行</span></span><br><span class="line">pytest -m <span class="string">&quot;smoke&quot;</span> <span class="comment">#执行smoke模块测试用例</span></span><br><span class="line">pytest -m <span class="string">&quot;smoke or usermanage or productmanage&quot;</span>  <span class="comment">#执行这三个模块的测试用例</span></span><br></pre></td></tr></table></figure>
+
+<p>​		6）跳过测试用例</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line"></span><br><span class="line">    age=<span class="number">18</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">99</span></span>)</span></span><br><span class="line"><span class="meta">    @pytest.mark.skipif(<span class="params">age&gt;<span class="number">18</span>,reason=<span class="string">&quot;年龄已经大于18，不用测啦&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAge</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myage&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.skip(<span class="params">reas=<span class="string">&quot;不想测试这个啦&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAddr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myaddr&quot;</span>)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;  输出</span></span><br><span class="line"><span class="string">testcase/test_01.py::TestName::testAge myage PASSED testcase/test_01.py::TestName::testName hello,pytest PASSED testcase/test_01.py::TestName::testAddr SKIPPED (不想测试这个啦)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27; 当age=19时，输出</span></span><br><span class="line"><span class="string">testcase/test_01.py::TestName::testAge SKIPPED (年龄已经大于18，不用测啦) testcase/test_01.py::TestName::testName hello,pytest PASSED testcase/test_01.py::TestName::testAddr SKIPPED (不想测试这个啦)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<a href="/2023/11/27/pytest%E8%BF%9B%E9%98%B6/" title="pytest单元测试框架（进阶篇）">pytest单元测试框架（进阶篇）</a>
+
+
+
+
+
+]]></content>
+      <tags>
+        <tag>测试</tag>
+        <tag>pytest</tag>
       </tags>
   </entry>
   <entry>
@@ -139,108 +315,11 @@
       </tags>
   </entry>
   <entry>
-    <title>pytest单元测试框架（基础篇）</title>
-    <url>/2023/11/21/pytest%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h2 id="单元测试框架"><a href="#单元测试框架" class="headerlink" title="单元测试框架"></a>单元测试框架</h2><p>​		1）什么是单元测试框架</p>
-<p>​		单元测试框架是指在软件开发的过程种，针对软件的最小单位（函数、方法）进行正确性测试</p>
-<span id="more"></span>
-
-<p>​		2）常见的单元测试框架</p>
-<p>​		基于java的：junit和testng</p>
-<p>​		基于python的：unittest和<strong>pytest</strong></p>
-<p>​		3）单元测试流程</p>
-<p>​		1.测试发现：从多个文件中找到需要被测试的测试用例</p>
-<p>​		2.测试执行：按照一定的顺序执行测试用例，并生成结果</p>
-<p>​		3.测试判断：通过assert断言来自动判断结果与预期是否相符</p>
-<p>​		4.测试报告：生成这次测试的测试报告，包括耗时、通过率等</p>
-<h2 id="pytest"><a href="#pytest" class="headerlink" title="pytest"></a>pytest</h2><p>​		1）简介</p>
-<p>​		pytest是python的一种单元测试框架，与python自带的测试框架unittest类似，但比其更易上手，也更加的灵活。因此使用面也广于unittest。</p>
-<ul>
-<li><p>pytest比unittest更加成熟，同时支持unittest编写的测试用例</p>
-</li>
-<li><p>pytest可以和selenium，request，appium等测试框架相结合，实现web ui自动化，web 接口自动化，app ui自动化</p>
-</li>
-<li><p>pytest可以实现测试用例的跳过以及失败用例重试</p>
-</li>
-<li><p>pytest支持参数化数据驱动方式</p>
-</li>
-<li><p>pytest可以和Jenkins持续集成</p>
-</li>
-<li><p>pytest具有很多第三方插件，且支持自定义扩展</p>
-<ul>
-<li><p>pytest：单元测试框架</p>
-<p>pytest-xdist： 测试用例的分布式执行，即并发执行。可缩短总的用例的执行时间</p>
-<p>pytest-ordering： 可以指定测试用例的执行顺序，默认是从上到下依次执行</p>
-<p>pytest-rerunfailures： 用例失败后进行再次执行（多用于ui测试）</p>
-<p>pytest-html： 生成html格式的测试报告（不够美观）</p>
-<p>allure-pytest： 生成比上面美观的测试报告，且可进行测试报告的自定义</p>
-</li>
-</ul>
-</li>
-</ul>
-<p>​		2）安装</p>
-<p>​		新建python项目———在本地虚拟终端中执行以下命令即可。（注意：使用以上插件也需要安装到本地环境中，语法类似）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip install pytest   <span class="comment">#安装命令</span></span><br><span class="line"></span><br><span class="line">pytest --version     <span class="comment">#检查命令</span></span><br></pre></td></tr></table></figure>
-
-<p>​		3）使用pytest</p>
-<p>​		pytest的默认测试用例发现规则</p>
-<ul>
-<li><p>模块名（简单理解为一个py文件）以test_ 开头或 _test结尾</p>
-</li>
-<li><p>测试类以Test开头，并且不包含init()方法</p>
-</li>
-<li><p>测试方法以test开头</p>
-<p>4）运行pytest</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">         <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> <span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">     pytest.main()</span><br></pre></td></tr></table></figure>
-
-<h2 id="pytest运行方式"><a href="#pytest运行方式" class="headerlink" title="pytest运行方式"></a>pytest运行方式</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">参数详解:</span><br><span class="line">-s:输出调试信心，包括<span class="built_in">print</span>打印的信息</span><br><span class="line">-v:显示更详细的信息</span><br><span class="line">-vs:两个连用，效用就是两个相加</span><br><span class="line">-n NUM: 支持多线程或分布式运行测试用例，使用NUM个线程。需要导入pytest-xdist插件</span><br><span class="line">--<span class="built_in">return</span> NUM:失败用例重跑NUM次，失败用例总共运行NUM+1次</span><br><span class="line">-x:有一个用例失败报错，则停止测试，默认是不停止测试</span><br><span class="line">--maxfail=NUM:出现NUM个失败用例就停止测试</span><br><span class="line">-k String:根据String字符串匹配对应的测试用例</span><br><span class="line">--html 文件路径/文件名：生成html格式的测试报告</span><br></pre></td></tr></table></figure>
-
-<p>​		1）主函数方式</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#文件夹与python package的区别：python package下包含一个_init_.py文件</span></span><br><span class="line"><span class="comment"># ./  :表示当前文件路径下</span></span><br><span class="line"><span class="comment"># ../  :表示当前文件路径的父路径，即向上一层</span></span><br><span class="line">pytest.main()    <span class="comment">#运行所有的按条件写的测试用例</span></span><br><span class="line">pytest.main(<span class="string">&#x27;-vs&#x27;</span>,<span class="string">&#x27;./tasecase&#x27;</span>)   <span class="comment">#运行tasecase文件夹下的测试用例</span></span><br><span class="line">pytest.main(<span class="string">&#x27;-x&#x27;</span>,<span class="string">&#x27;test01.py&#x27;</span>)    <span class="comment">#运行test01模块下的测试用例,且出现错误就停止测试</span></span><br><span class="line">pytest.mian(<span class="string">&#x27;-n 2&#x27;</span>,<span class="string">&#x27;./tesecase/test01.py::TestName::testName&#x27;</span>)   <span class="comment">#运行testcase文件夹下test01模块里TsetName类里的testName方法,且使用两个线程</span></span><br></pre></td></tr></table></figure>
-
-<p>​		2）命令行模式</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#即在安装pytest的本地虚拟环境中运行</span></span><br><span class="line">pytest     <span class="comment">#运行所有满足条件的测试用例</span></span><br><span class="line">pytest -vs ./testcase   <span class="comment">#运行tasecase文件夹下的测试用例</span></span><br><span class="line">pytest -x ./testcase/test01.py    <span class="comment">#运行test01模块下的测试用例,且出现错误就停止测试</span></span><br><span class="line">pytest -n 2 ./tesecase/test01.py::TestName::testName    <span class="comment">#运行testcase文件夹下test01模块里TsetName类里的testName方法,且使用两个线程</span></span><br></pre></td></tr></table></figure>
-
-<p>​		3）全局配置模式</p>
-<p>​		通过读取pytest.ini文件得到对应的配置信息，最后在命令行输入pytest即可运行（名字不可变，只能为pytest.ini）</p>
-<ul>
-<li>文件位置：放在项目的根目录，即最外层即可</li>
-<li>编码格式：必须为ANSI格式，可使用notpad++修改格式</li>
-<li>运行规则：不论是主函数方式还是命令行方式，都会优先读取该配置文件</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#模板，前面的参数是不可变的，后面根据实际情况填写</span></span><br><span class="line"></span><br><span class="line">[<span class="string">pytest</span>]</span><br><span class="line"><span class="string">addopts</span> <span class="string">=</span> <span class="string">-vs</span> <span class="comment">#命令行的参数，用空格分隔</span></span><br><span class="line"><span class="string">testpaths</span> <span class="string">=</span> <span class="string">./testcase</span> <span class="comment">#测试用例的路径</span></span><br><span class="line"><span class="string">python_files</span> <span class="string">=</span> <span class="string">test_*.py</span> <span class="comment">#模块名的规则，可以更改默认规则</span></span><br><span class="line"><span class="string">python_classes</span> <span class="string">=</span> <span class="string">Test*</span> <span class="comment">#类名的规则</span></span><br><span class="line"><span class="string">python_functions</span> <span class="string">=</span> <span class="string">test</span> <span class="comment">#方法名的规则</span></span><br><span class="line"><span class="string">markers</span> <span class="string">=</span></span><br><span class="line">  <span class="string">smoke:冒烟用例</span>          <span class="comment">#设置独有的标记</span></span><br><span class="line">  <span class="string">usermanage:用户管理模块</span></span><br><span class="line">  <span class="string">productmanage:商品管理模块</span></span><br></pre></td></tr></table></figure>
-
-<p>​		4）改变执行顺序</p>
-<p>​		pytest默认的执行顺序是从上到下，改变默认执行顺序，使用mark标记。（需要引入pytest-ordering插件）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">99</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAge</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myage&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">100</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAddr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myaddr&quot;</span>)</span><br><span class="line">        </span><br><span class="line">   <span class="comment">#优先执行带注释的用例，且order值越小，优先执行</span></span><br></pre></td></tr></table></figure>
-
-<p>​		5）分组执行</p>
-<p>​		在实际的测试场景中，需要对一类的用例进行优先测试，如，冒烟测试、用户管理模块测试、商品管理模块测试等。（还记得上面pytest.ini文件中得makers标记吗？就是用来自定自己的分组的）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@pytest.mark.somke</span></span><br><span class="line"><span class="comment">#在对应的方法上添加注解即可</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#执行</span></span><br><span class="line">pytest -m <span class="string">&quot;smoke&quot;</span> <span class="comment">#执行smoke模块测试用例</span></span><br><span class="line">pytest -m <span class="string">&quot;smoke or usermanage or productmanage&quot;</span>  <span class="comment">#执行这三个模块的测试用例</span></span><br></pre></td></tr></table></figure>
-
-<p>​		6）跳过测试用例</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line"></span><br><span class="line">    age=<span class="number">18</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">99</span></span>)</span></span><br><span class="line"><span class="meta">    @pytest.mark.skipif(<span class="params">age&gt;<span class="number">18</span>,reason=<span class="string">&quot;年龄已经大于18，不用测啦&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAge</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myage&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.skip(<span class="params">reas=<span class="string">&quot;不想测试这个啦&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAddr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myaddr&quot;</span>)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;  输出</span></span><br><span class="line"><span class="string">testcase/test_01.py::TestName::testAge myage PASSED testcase/test_01.py::TestName::testName hello,pytest PASSED testcase/test_01.py::TestName::testAddr SKIPPED (不想测试这个啦)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27; 当age=19时，输出</span></span><br><span class="line"><span class="string">testcase/test_01.py::TestName::testAge SKIPPED (年龄已经大于18，不用测啦) testcase/test_01.py::TestName::testName hello,pytest PASSED testcase/test_01.py::TestName::testAddr SKIPPED (不想测试这个啦)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-
-
-
-
-
-
-]]></content>
-      <tags>
-        <tag>测试</tag>
-        <tag>pytest</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>pytest单元测试框架（进阶篇）</title>
     <url>/2023/11/27/pytest%E8%BF%9B%E9%98%B6/</url>
-    <content><![CDATA[<h2 id="测试夹具"><a href="#测试夹具" class="headerlink" title="测试夹具"></a>测试夹具</h2><p>​		1）什么是夹具？</p>
+    <content><![CDATA[<a href="/2023/11/21/pytest%E5%9F%BA%E7%A1%80/" title="pytest单元测试框架（基础篇）">pytest单元测试框架（基础篇）</a>
+
+<h2 id="测试夹具"><a href="#测试夹具" class="headerlink" title="测试夹具"></a>测试夹具</h2><p>​		1）什么是夹具？</p>
 <p>​		在自动化测试过程中，为测试用例提前准备的一个运行环境，这个测试环境被称为测试夹具。测试夹具的本质是一个函数，在测试用例方法执行之前的称为前置条件，测试用例方法执行之后的称为后置条件。</p>
 <span id="more"></span>
 
@@ -284,6 +363,99 @@
       <tags>
         <tag>测试</tag>
         <tag>pytest</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>token鉴权---JWT令牌</title>
+    <url>/2023/12/02/token%E9%89%B4%E6%9D%83---JWT%E4%BB%A4%E7%89%8C/</url>
+    <content><![CDATA[<h2 id="token鉴权"><a href="#token鉴权" class="headerlink" title="token鉴权"></a>token鉴权</h2><p>Token也称为动态密钥，是在加入频道时用于校验用户权限的一组字符串；鉴权是指在用户访问你的系统前，对其进行身份校验。用户在使用声网服务，如加入通话或登录信令系统时，声网会使用 Token 对其鉴权<span id="more"></span></p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><ol>
+<li>客户端向服务端发送用户名和密码等凭据，请求访问某个资源。</li>
+<li>服务端收到凭据后，进行身份验证，验证通过后生成一个Token。</li>
+<li>服务端将生成的Token返回给客户端。</li>
+<li>客户端在之后的每个请求中都携带这个Token。</li>
+<li>服务端接收到请求后，从请求中获取Token。</li>
+<li>服务端对Token进行验证，验证通过后允许客户端访问相应资源。</li>
+</ol>
+<h3 id="存储位置"><a href="#存储位置" class="headerlink" title="存储位置"></a>存储位置</h3><p><strong>在 Cookie中存储 Token</strong><br>将 Token 存储到 Cookie中，是一种常见的方式。相较于其他方式，这种方式<strong>比较简单，易于实现</strong>。通常情况下， 服务器将Token作为响应的一部分发送给客户端浏览器，浏览器接收到响应之后，将其存储到Cookie中，并在后续的请求中自动将其发送给服务器端。Token 存储在Cookie中的好处是，<strong>这样可以使 Token 跨越不同的页面和路径，同时也可以让 Token 的过期时间变得更加灵活</strong>。但是，使用 Cookie 和 Token 会<strong>带来相应的安全问题</strong>。由于Token是明文存储在浏览器中， 因此可以通过 XSS 攻击或者窃取浏览器中的Cookie等方式直接获取Handle。因此，如果使用 Cookie 存储 Token，则需要谨慎对待。</p>
+<p><strong>在 localStorage 中存储 Token</strong><br>相较于 Cookie，localStorage 本身就是一种用于存储数据的方案。 将 Token 存储到 localStorage 中的好处是，<strong>使其更加稳定，即使浏览器被关闭也不会丢失，同时也不会被传入请求中。</strong>使用 localStorage 存储数据的优点是：通过JavaScript编写，使用简单方便，<strong>需要在客户端进行存储，也减少了服务器的压力</strong>，同时也<strong>保证了数据的安全性。</strong>不过需要注意的是，虽然localStorage是将数据保存在浏览器中，但也需要注意浏览器的兼容性问题。</p>
+<p><strong>在 sessionStorage 中存储 Token</strong><br>sessionStorage是一种基于键值对存储的机制。将Token存储到sessionStorage中与localStorage类似，都将数据<strong>存储在浏览器中</strong>。它的<strong>存储时间只在一个会话期内有效；如果客户关闭了浏览器或者打开了一个新的浏览器窗口，则会话期将结束，数据也将被删除，避免了因为Token漏洞导致的信息泄露问题。</strong></p>
+<p><strong>在服务器端进行存储</strong><br>将Token存储在服务器端，则可以<strong>实现更高的安全性</strong>，因为所有的数据都存储在服务器端，即使数据泄露，攻击者也无法直接访问数据。但是，这种方法也有一定的缺点，<strong>因为将数据存储在服务器上会增加服务器的负载和存储成本，同时也会影响Token的访问速度。</strong></p>
+<p><strong>在数据库中存储 Token</strong><br>将Token存储在数据库中的好处是，可以通过对数据库进行<strong>相应的加密措施，来实现更高的数据安全性</strong>。同时，还可以借助<strong>数据库的备份和恢复功能，提供更好的数据可用性，使服务器不会因Token认证中断而崩溃</strong>。</p>
+<h3 id="传输方式"><a href="#传输方式" class="headerlink" title="传输方式"></a>传输方式</h3><p>Token的传递方式通常有以下四种：</p>
+<ul>
+<li>HTTP header：Token以HTTP header的形式传递，可以避免安全风险。</li>
+<li>查询参数：Token以查询参数的形式传递，存在安全风险。</li>
+<li>请求体：Token以请求体的形式传递，可以避免安全风险。</li>
+<li>HTTPS协议：HTTPS协议会使用SSL进行身份验证和数据传输加密，避免了Token传递中的安全风险。</li>
+</ul>
+<p>为了避免Token泄漏和被盗用，需要选择最安全的传递方式，并在传递过程中对Token进行加密传输。</p>
+<h3 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h3><ul>
+<li><strong>支持跨域访问</strong>：cookie 是不支持跨域的，而 Token 可以放在请求头中传输</li>
+<li><strong>无状态</strong>：Token 自身包含了用户登录的信息，无需在服务器端存储 session</li>
+<li><strong>移动端支持更好</strong>：当客户端不是浏览器时，cookie 不被支持，采用 Token 无疑更好</li>
+<li><strong>无需考虑 CRSF</strong>：不使用 cookie，也就无需考虑 CRSF 的防御</li>
+</ul>
+<hr>
+<ul>
+<li><strong>占带宽</strong>：正常情况下要比 session_id 更大，需要消耗更多流量，挤占更多带宽，假如你的网站每月有 10 万次的浏览器，就意味着要多开销几十兆的流量。听起来并不多，但日积月累也是不小一笔开销。实际上，许多人会在 JWT 中存储的信息会更多。</li>
+<li>无法在服务端注销，那么就很难解决劫持问题</li>
+<li><strong>安全性</strong>：Token中保存了用户的身份验证信息，如果Token被获取，那么持有者就可以使用Token来访问受保护的资源。因此，在Token的传输、存储以及使用过程中需要注意安全问题。</li>
+</ul>
+<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p>常见的Token分为基于session的token和基于jwt令牌的Token。基于session的token类似于session id。下面重点讲述jwt令牌。</p>
+<h2 id="JWT"><a href="#JWT" class="headerlink" title="JWT"></a>JWT</h2><p>JWT（JSON Web Token）是一种用于在网络应用间传递信息的开放标准（RFC 7519）。它以 JSON 格式存储被加密后的信息，通常用于验证和身份认证。</p>
+<h3 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h3><p>JWT令牌由三部分组成，每部分中间使用点（.）分隔，比如：xxxxx.yyyyy.zzzzz</p>
+<ol>
+<li>Header</li>
+</ol>
+<p>头部包括令牌的类型（即JWT）及使用的哈希算法（如HMAC SHA256或RSA）</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">#例如</span><br><span class="line">   <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;alg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;typ&quot;</span><span class="punctuation">:</span> <span class="string">&quot;JWT&quot;</span></span><br><span class="line">   <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>Payload</li>
+</ol>
+<p>第二部分是负载，内容也是一个json对象，它是存放有效信息的地方，它可以存放jwt提供的现成字段，比如：iss（签发者）,exp（过期时间戳）, sub（面向的用户）等，也可自定义字段。此部分不建议存放敏感信息，因为此部分可以解码还原原始内容。大多存放用户的账号信息，只存储账号，不存储密码。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line">#例如 </span><br><span class="line"> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;荷包蛋&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;admin&quot;</span><span class="punctuation">:</span> HL</span><br><span class="line">  <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>Signature</li>
+</ol>
+<p>此部分用于防止jwt内容被篡改。这个部分使用base64url将前两部分进行编码，编码后使用点（.）连接组成字符串，最后使用header中声明签名算法进行签名。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">HMACSHA256(</span><br><span class="line">base64UrlEncode(header) + &quot;.&quot; +           #第一部分</span><br><span class="line">base64UrlEncode(payload),                 #第二部分</span><br><span class="line">secret)                                   #使用的签名密钥</span><br></pre></td></tr></table></figure>
+
+<h3 id="jwt-生成"><a href="#jwt-生成" class="headerlink" title="jwt 生成"></a>jwt 生成</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="comment">&lt;!--引入maven依赖   --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.jsonwebtoken<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jjwt<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.9.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> io.jsonwebtoken.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Date;</span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JWTcreat</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">SECRET</span> <span class="operator">=</span> <span class="string">&quot;3113390285&quot;</span>;<span class="comment">//使用的密钥</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">EXPIRATION_TIME</span> <span class="operator">=</span> <span class="number">3600000</span>;<span class="comment">//秒</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">createJwtToken</span><span class="params">()</span> &#123;</span><br><span class="line">        Map&lt;String, Object&gt; claims = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line">        claims.put(<span class="string">&quot;name&quot;</span>, <span class="string">&quot;荷包蛋HL&quot;</span>);</span><br><span class="line">        claims.put(<span class="string">&quot;root&quot;</span>,<span class="string">&quot;HL&quot;</span>);</span><br><span class="line">        <span class="type">long</span> <span class="variable">timeMillis</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="type">Date</span> <span class="variable">expirationDate</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Date</span>(timeMillis + EXPIRATION_TIME);</span><br><span class="line">        <span class="keyword">return</span> Jwts.builder()</span><br><span class="line">                .setClaims(claims)<span class="comment">//设置数据</span></span><br><span class="line">                .setIssuedAt(<span class="keyword">new</span> <span class="title class_">Date</span>())<span class="comment">//创建时间</span></span><br><span class="line">                .setExpiration(expirationDate)<span class="comment">//过期时间</span></span><br><span class="line">                .signWith(SignatureAlgorithm.HS512, SECRET)</span><br><span class="line">                .compact();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println( JWTcreat.createJwtToken());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//输出</span></span><br><span class="line"><span class="comment">//eyJhbGciOiJIUzUxMiJ9.eyJyb290IjoiSEwiLCJuYW1lIjoi6I235YyF6JuLSEwiLCJleHAiOjE3MDE1MTY2MzIsImlhdCI6MTcwMTUxMzAzMn0.1jRKb3cyoQTcdUdHJpJ7i7payam1H039_e6dSJvwekJTwphZXO45nfRvqb-HmsURB5rbgxVKQ8RfDcGF-hk9Gw</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Jwts.builder()                                      创建一个 JwtBuilder 对象</li>
+<li>JwtBuilder.setClaims()                      设置 JWT 的声明（claims）</li>
+<li>JwtBuilder.setIssuer()                       设置 JWT 的发行者（issuer）</li>
+<li>JwtBuilder.setSubject()                     设置 JWT 的主题（subject）</li>
+<li>JwtBuilder.setAudience()                 设置 JWT 的受众（audience）</li>
+<li>JwtBuilder.setIssuedAt()                   设置 JWT 的签发时间（issuedAt）</li>
+<li>JwtBuilder.setExpiration()                设置 JWT 的过期时间（expiration）</li>
+<li>JwtBuilder.signWith()                        设置 JWT 的签名算法和密钥</li>
+<li>JwtBuilder.compact()                        生成 JWT 字符串</li>
+<li>compact()                                           用于将 JWT 编码为紧凑的字符串形式。即将 JWT 编码为没有空格、没有等号、没有加号、没有斜杠的紧凑字符串形式，以便在 URL 中传输</li>
+</ul>
+<h3 id="jwt解析"><a href="#jwt解析" class="headerlink" title="jwt解析"></a>jwt解析</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Claims <span class="title function_">parseToken</span><span class="params">(String token)</span> &#123;</span><br><span class="line">       <span class="keyword">return</span> Jwts.parser()</span><br><span class="line">               .setSigningKey(SECRET)<span class="comment">//上面设置的密钥</span></span><br><span class="line">               .parseClaimsJws(token)</span><br><span class="line">               .getBody();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Jwts.parser()                            创建一个 JwtParser 对象</li>
+<li>JwtParser.setSigningKey()     设置 JWT 的签名密钥</li>
+<li>JwtParser.parseClaimsJws()  解析 JWT 字符串并返回一个 Claims 对象，包含了 JWT 中所有的声明（claims）</li>
+<li>getBody():                                用于从 JWT 中获取载荷（payload）信息。调用此方法将返回一个 Claims 对象，其中包含了 JWT 载荷中的所有声明信息，可以通过 get 方法获取对应的声明值</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">signWith 方法接受两个参数，分别是签名算法和密钥</span><br><span class="line">签名算法的类型必须要和 JWT 头部中的 “alg” 字段一致，否则验证时会提示签名无效,因此，在使用JWT进行签名时，必须要明确指定签名算法</span><br><span class="line">签名算法是由 SignatureAlgorithm 枚举类提供的，它定义了一系列的签名算法，包括 HMAC 和 RSA</span><br><span class="line"></span><br><span class="line">在 signWith 方法中: 如果为对称算法，则密钥应该是一个 byte[] 数组或 String 类型的字符串;</span><br><span class="line">如果为非对称算法，则密钥应该是一个 Key 类型的对象，例如 RSAPrivateKey 或 RSAPublicKey</span><br><span class="line"></span><br><span class="line">SignatureAlgorithm.HS512 算法，属于 HMAC-SHA512 对称加密算法</span><br><span class="line">SignatureAlgorithm.HS256 算法，属于 HMAC-SHA256 对称加密算法</span><br><span class="line">SignatureAlgorithm.RS256 算法，属于 RSA-SHA256 非对称加密算法</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">CSRF全称为Cross Site Request Forgery，跨域请求伪造。这是一种很常见的Web攻击方式，如下为一个简单的攻击流程。</span><br><span class="line">1）用户C打开浏览器，访问受信任网站A，输入用户名和密码请求登录网站A；</span><br><span class="line">2）在用户信息通过验证后，网站A产生Cookie信息并返回给浏览器，此时用户登录网站A成功，可以正常发送请求到网站A；</span><br><span class="line">3）用户未退出网站A之前，在同一浏览器中，打开一个TAB页访问网站B；</span><br><span class="line">4）网站B接收到用户请求后，返回一些攻击性代码，并发出一个请求要求访问第三方站点A；</span><br><span class="line">5）浏览器在接收到这些攻击性代码后，根据网站B的请求，在用户不知情的情况下携带Cookie信息，向网站A发出请求。网站A并不知道该请求其实是由B发起的，所以会根据用户C的Cookie信息以C的权限处理该请求，导致来自网站B的恶意代码被执行。</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <tags>
+        <tag>开发</tag>
+        <tag>java</tag>
+        <tag>JWT</tag>
       </tags>
   </entry>
   <entry>
@@ -397,6 +569,141 @@
 ]]></content>
       <tags>
         <tag>测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>接口自动化测试---基础</title>
+    <url>/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h2 id="接口测试基础"><a href="#接口测试基础" class="headerlink" title="接口测试基础"></a>接口测试基础</h2><p>接口：系统之间数据交互的通道。</p>
+<p>接口测试：基于不同的输入参数，校验接口响应数据与预期数据是否一致。<span id="more"></span></p>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><ul>
+<li>接口文档解析——一般都有对应得接口信息。如没有，则自行获取。对于web接口，可以采用开发者模式F12得到相应的接口信息。对于app接口，则采用抓包的方式获取接口信息，如Fidder</li>
+<li>设计测试用例</li>
+<li>脚本开发</li>
+<li>执行脚本</li>
+<li>缺陷跟踪</li>
+<li>测试报告</li>
+</ul>
+<h3 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h3><p>URL：是互联网上标准资源得地址，一般称为统一资源定位符</p>
+<p>组成：协议::&#x2F;&#x2F;hostname[:port]&#x2F;path&#x2F;[?查询参数1&amp;查询参数2]，即协议，服务器地址，端口号，资源路径，参数</p>
+<h3 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h3><p>HTTP：超文本传输协议，基于请求与响应的应用层协议</p>
+<ul>
+<li>HTTP请求（请求行，请求头，请求体）</li>
+<li>HTTP响应（响应行，响应头，响应体）</li>
+</ul>
+<h4 id="HTTP请求"><a href="#HTTP请求" class="headerlink" title="HTTP请求"></a>HTTP请求</h4><ul>
+<li><p>请求行：<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130192119149.png" alt="image-20231130192119149"></p>
+<ul>
+<li><p>位置：第一行</p>
+</li>
+<li><p>作用：说明请求方法、访问的资源、协议版本</p>
+</li>
+<li><p>常用方法</p>
+<ul>
+<li>Get</li>
+<li>Post</li>
+<li>Put</li>
+<li>Delect</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>请求头</p>
+<ul>
+<li>位置：第二行到空白行之间</li>
+<li>作用：通知服务端请求信息</li>
+<li>特点：由键值对组成，每行一对</li>
+<li>Content-Type：请求体数据类型<ul>
+<li>text&#x2F;html：HTML格式</li>
+<li>image&#x2F;jpeg：jpg图片格式</li>
+<li><strong>application&#x2F;json</strong>：JSON数据格式</li>
+<li><strong>application&#x2F;x-www-form-urlencoded</strong>：表单默认的提交数据格式</li>
+<li>multipart&#x2F;form-data：表单中进行文件上传</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>请求体：<strong>（可以没有对应的请求体内容）</strong></p>
+<ul>
+<li>位置：空白行之后的内容</li>
+<li>作用：传输数据实体 </li>
+<li>注意：请求体常在<strong>POST、PUT</strong>方法中使用 </li>
+<li>常配合的请求头：<strong>Content-Type</strong>和<strong>Content-Length</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="HTTP响应"><a href="#HTTP响应" class="headerlink" title="HTTP响应"></a>HTTP响应</h4><ul>
+<li>状态行 <img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130193147639.png" alt="image-20231130193147639" style="zoom:67%;" /><ul>
+<li>位置：响应数据第一行 </li>
+<li>作用：描述服务器处理结果 </li>
+<li>内容: 状态行由协议版本号、<strong>状态码</strong>、状态消息组成</li>
+<li>状态码：表示此次请求的响应状态，详细见最后的状态码表。<ul>
+<li>1XX：指示信息</li>
+<li><strong>2XX</strong>：成功 </li>
+<li>3XX：重定向 </li>
+<li><strong>4XX</strong>：客户端错误 </li>
+<li><strong>5XX</strong>：服务端错误</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>响应头<ul>
+<li>位置：第二行开始到空白行之间 </li>
+<li>作用：描述客户端端要使用的一些附加信息 </li>
+<li>特点: 响应头由键值对组成，每行一对</li>
+<li>也有Content-Type与Content-Length，表明返回的数据类型与长度</li>
+</ul>
+</li>
+<li>响应体<ul>
+<li>位置：响应数据空白行之后</li>
+<li>作用：服务器返回的数据实体 </li>
+<li>特点：有图片、json、xml、html等多种类型</li>
+</ul>
+</li>
+</ul>
+<p>使用工具进行接口自动化测试将使用新的文章记录。</p>
+<h2 id="接口自动化测试"><a href="#接口自动化测试" class="headerlink" title="接口自动化测试"></a>接口自动化测试</h2><ul>
+<li>选取自动化测试用例 </li>
+<li>搭建自动化测试环境 </li>
+<li>搭建自动化测试框架 </li>
+<li>代码实现自动化 </li>
+<li>输出测试报告 </li>
+<li>实现持续集成</li>
+</ul>
+<h3 id="Requests库"><a href="#Requests库" class="headerlink" title="Requests库"></a>Requests库</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install requests  <span class="comment">#安装</span></span><br><span class="line">request --version 	<span class="comment">#验证</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Requests发送请求"><a href="#Requests发送请求" class="headerlink" title="Requests发送请求"></a>Requests发送请求</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">requests.请求方法（url，params=<span class="literal">None</span>，data=<span class="literal">None</span>，json=<span class="literal">None</span>，headers=<span class="literal">None</span>，files=<span class="literal">None</span>）<span class="comment">#必须传入对应的url地址，其余参数非必须</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;说明：</span></span><br><span class="line"><span class="string">常见的请求方法： get/post/put/delete</span></span><br><span class="line"><span class="string">url：请求的url地址</span></span><br><span class="line"><span class="string">params：请求查询参数</span></span><br><span class="line"><span class="string">data：请求体为form表单参数</span></span><br><span class="line"><span class="string">json：请求体为json参数</span></span><br><span class="line"><span class="string">headers：请求头参数</span></span><br><span class="line"><span class="string">Files：文件参数</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Response响应"><a href="#Response响应" class="headerlink" title="Response响应"></a>Response响应</h4><ul>
+<li>response.status_code ：状态码 </li>
+<li>response.json() ：JSON形式的响应内容</li>
+<li>response.text ：文本形式的响应内容 </li>
+<li>response.url ：请求url </li>
+<li>response.encoding：查看响应头部字符编码 </li>
+<li>response.headers ：头信息 </li>
+<li>response.cookies ：cookie信息</li>
+</ul>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">&quot;accounts&quot;</span>:<span class="string">&quot;huace_xm&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pwd&quot;</span>:<span class="number">123456</span>,</span><br><span class="line">    <span class="string">&quot;type&quot;</span>:<span class="string">&quot;username&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">rs5 = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/region/index&quot;</span>,</span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,</span><br><span class="line">                 data=data)</span><br><span class="line"><span class="built_in">print</span>(rs5.json())</span><br><span class="line"><span class="comment">#使用对应的方法，参数，调用对应的方法或者request方法，得到响应结果</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="响应码"><a href="#响应码" class="headerlink" title="响应码"></a>响应码</h2><ul>
+<li>200 OK 服务器成功返回用户请求的数据 </li>
+<li>201 CREATED 用户新建或修改数据成功 </li>
+<li>204 NO CONTENT 用户删除数据成功 </li>
+<li>301 Moved Permanently 被请求的资源已永久移动到新位置 </li>
+<li>302 Move Temporarily 被请求的资源临时性移动到新位置 </li>
+<li>400 Bad Request 客户端请求有语法错误，不能被服务器所理解 </li>
+<li>401 Unauthorized 未授权的（未登录） </li>
+<li>403 Forbidden 表示用户得到授权，但是访问是被禁止的 </li>
+<li>404 Not Found 请求资源不存在 </li>
+<li>500 INTERNAL SERVER ERROR 服务器发生错误，用户将无法判断发出的请求是否成功 </li>
+<li>503 Server Unavailable 服务器当前不能处理客户端的请求，一段时间后可能恢复正常</li>
+</ul>
+<a href="/2023/12/02/2023-12-01-%E6%8E%A5%E5%8F%A3%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95---%E8%BF%9B%E9%98%B6/" title="接口自动化测试---进阶">接口自动化测试---进阶</a>
+]]></content>
+      <tags>
+        <tag>接口测试</tag>
+        <tag>测试</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>
@@ -589,227 +896,6 @@
       <tags>
         <tag>日志</tag>
         <tag>logger</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>接口自动化测试---基础</title>
-    <url>/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h2 id="接口测试基础"><a href="#接口测试基础" class="headerlink" title="接口测试基础"></a>接口测试基础</h2><p>接口：系统之间数据交互的通道。</p>
-<p>接口测试：基于不同的输入参数，校验接口响应数据与预期数据是否一致。<span id="more"></span></p>
-<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><ul>
-<li>接口文档解析——一般都有对应得接口信息。如没有，则自行获取。对于web接口，可以采用开发者模式F12得到相应的接口信息。对于app接口，则采用抓包的方式获取接口信息，如Fidder</li>
-<li>设计测试用例</li>
-<li>脚本开发</li>
-<li>执行脚本</li>
-<li>缺陷跟踪</li>
-<li>测试报告</li>
-</ul>
-<h3 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h3><p>URL：是互联网上标准资源得地址，一般称为统一资源定位符</p>
-<p>组成：协议::&#x2F;&#x2F;hostname[:port]&#x2F;path&#x2F;[?查询参数1&amp;查询参数2]，即协议，服务器地址，端口号，资源路径，参数</p>
-<h3 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h3><p>HTTP：超文本传输协议，基于请求与响应的应用层协议</p>
-<ul>
-<li>HTTP请求（请求行，请求头，请求体）</li>
-<li>HTTP响应（响应行，响应头，响应体）</li>
-</ul>
-<h4 id="HTTP请求"><a href="#HTTP请求" class="headerlink" title="HTTP请求"></a>HTTP请求</h4><ul>
-<li><p>请求行：<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130192119149.png" alt="image-20231130192119149"></p>
-<ul>
-<li><p>位置：第一行</p>
-</li>
-<li><p>作用：说明请求方法、访问的资源、协议版本</p>
-</li>
-<li><p>常用方法</p>
-<ul>
-<li>Get</li>
-<li>Post</li>
-<li>Put</li>
-<li>Delect</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>请求头</p>
-<ul>
-<li>位置：第二行到空白行之间</li>
-<li>作用：通知服务端请求信息</li>
-<li>特点：由键值对组成，每行一对</li>
-<li>Content-Type：请求体数据类型<ul>
-<li>text&#x2F;html：HTML格式</li>
-<li>image&#x2F;jpeg：jpg图片格式</li>
-<li><strong>application&#x2F;json</strong>：JSON数据格式</li>
-<li><strong>application&#x2F;x-www-form-urlencoded</strong>：表单默认的提交数据格式</li>
-<li>multipart&#x2F;form-data：表单中进行文件上传</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>请求体：<strong>（可以没有对应的请求体内容）</strong></p>
-<ul>
-<li>位置：空白行之后的内容</li>
-<li>作用：传输数据实体 </li>
-<li>注意：请求体常在<strong>POST、PUT</strong>方法中使用 </li>
-<li>常配合的请求头：<strong>Content-Type</strong>和<strong>Content-Length</strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="HTTP响应"><a href="#HTTP响应" class="headerlink" title="HTTP响应"></a>HTTP响应</h4><ul>
-<li><p>状态行 <img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130193147639.png" alt="image-20231130193147639" style="zoom:67%;" /><br>-  位置：响应数据第一行 </p>
-<ul>
-<li><p>作用：描述服务器处理结果 </p>
-</li>
-<li><p>内容: 状态行由协议版本号、<strong>状态码</strong>、状态消息组成</p>
-</li>
-<li><p>状态码：表示此次请求的响应状态，详细见最后的状态码表。</p>
-<ul>
-<li>1XX：指示信息</li>
-<li><strong>2XX</strong>：成功 </li>
-<li>3XX：重定向 </li>
-<li><strong>4XX</strong>：客户端错误 </li>
-<li><strong>5XX</strong>：服务端错误</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>响应头</p>
-<ul>
-<li>位置：第二行开始到空白行之间 </li>
-<li>作用：描述客户端端要使用的一些附加信息 </li>
-<li>特点: 响应头由键值对组成，每行一对</li>
-<li>也有Content-Type与Content-Length，表明返回的数据类型与长度</li>
-</ul>
-</li>
-<li><p>响应体</p>
-<ul>
-<li>位置：响应数据空白行之后</li>
-<li>作用：服务器返回的数据实体 </li>
-<li>特点：有图片、json、xml、html等多种类型</li>
-</ul>
-</li>
-</ul>
-<p>使用工具进行接口自动化测试将使用新的文章记录。</p>
-<h2 id="接口自动化测试"><a href="#接口自动化测试" class="headerlink" title="接口自动化测试"></a>接口自动化测试</h2><ul>
-<li>选取自动化测试用例 </li>
-<li>搭建自动化测试环境 </li>
-<li>搭建自动化测试框架 </li>
-<li>代码实现自动化 </li>
-<li>输出测试报告 </li>
-<li>实现持续集成</li>
-</ul>
-<h3 id="Requests库"><a href="#Requests库" class="headerlink" title="Requests库"></a>Requests库</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install requests  <span class="comment">#安装</span></span><br><span class="line">request --version 	<span class="comment">#验证</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="Requests发送请求"><a href="#Requests发送请求" class="headerlink" title="Requests发送请求"></a>Requests发送请求</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">requests.请求方法（url，params=<span class="literal">None</span>，data=<span class="literal">None</span>，json=<span class="literal">None</span>，headers=<span class="literal">None</span>，files=<span class="literal">None</span>）<span class="comment">#必须传入对应的url地址，其余参数非必须</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;说明：</span></span><br><span class="line"><span class="string">常见的请求方法： get/post/put/delete</span></span><br><span class="line"><span class="string">url：请求的url地址</span></span><br><span class="line"><span class="string">params：请求查询参数</span></span><br><span class="line"><span class="string">data：请求体为form表单参数</span></span><br><span class="line"><span class="string">json：请求体为json参数</span></span><br><span class="line"><span class="string">headers：请求头参数</span></span><br><span class="line"><span class="string">Files：文件参数</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="Response响应"><a href="#Response响应" class="headerlink" title="Response响应"></a>Response响应</h4><ul>
-<li>response.status_code ：状态码 </li>
-<li>response.json() ：JSON形式的响应内容</li>
-<li>response.text ：文本形式的响应内容 </li>
-<li>response.url ：请求url </li>
-<li>response.encoding：查看响应头部字符编码 </li>
-<li>response.headers ：头信息 </li>
-<li>response.cookies ：cookie信息</li>
-</ul>
-<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">&quot;accounts&quot;</span>:<span class="string">&quot;huace_xm&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pwd&quot;</span>:<span class="number">123456</span>,</span><br><span class="line">    <span class="string">&quot;type&quot;</span>:<span class="string">&quot;username&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">rs5 = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/region/index&quot;</span>,</span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,</span><br><span class="line">                 data=data)</span><br><span class="line"><span class="built_in">print</span>(rs5.json())</span><br><span class="line"><span class="comment">#使用对应的方法，参数，调用对应的方法或者request方法，得到响应结果</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="响应码"><a href="#响应码" class="headerlink" title="响应码"></a>响应码</h2><ul>
-<li>200 OK 服务器成功返回用户请求的数据 </li>
-<li>201 CREATED 用户新建或修改数据成功 </li>
-<li>204 NO CONTENT 用户删除数据成功 </li>
-<li>301 Moved Permanently 被请求的资源已永久移动到新位置 </li>
-<li>302 Move Temporarily 被请求的资源临时性移动到新位置 </li>
-<li>400 Bad Request 客户端请求有语法错误，不能被服务器所理解 </li>
-<li>401 Unauthorized 未授权的（未登录） </li>
-<li>403 Forbidden 表示用户得到授权，但是访问是被禁止的 </li>
-<li>404 Not Found 请求资源不存在 </li>
-<li>500 INTERNAL SERVER ERROR 服务器发生错误，用户将无法判断发出的请求是否成功 </li>
-<li>503 Server Unavailable 服务器当前不能处理客户端的请求，一段时间后可能恢复正常</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>测试</tag>
-        <tag>接口测试</tag>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>接口自动化测试---进阶</title>
-    <url>/2023/12/02/2023-12-01-%E6%8E%A5%E5%8F%A3%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95---%E8%BF%9B%E9%98%B6/</url>
-    <content><![CDATA[<h2 id="接口鉴权"><a href="#接口鉴权" class="headerlink" title="接口鉴权"></a>接口鉴权</h2><p>判断当前接口是否有访问的权限。（未登录不能访问一些接口信息等）<span id="more"></span></p>
-<h3 id="Cookie鉴权"><a href="#Cookie鉴权" class="headerlink" title="Cookie鉴权"></a>Cookie鉴权</h3><p>服务端在响应客户端请求的时候，会向客户端推送一个 Cookie，这个 Cookie 记录服务端上面的一些信息，客户端在后续的请求中携带这个 Cookie，服务端可以根据这个 Cookie 判断该请求的上下文关系。</p>
-<p>特点：</p>
-<ul>
-<li><strong>Cookie存储在客户端，使得可以跨页面访问</strong>，比较方便。但可随意篡改，不安全</li>
-<li>Cookie机制实现简单，只需要服务器端向客户端发送Set-Cookie即可完成鉴权，不需要过多的复杂设置。</li>
-<li>它的内容会随着 http 交互传接，影响性能，所以 Cookie 可存储的数据不能过大，最大为 4kb</li>
-<li>一个浏览器对于一个网站只能存不超过 20 个 Cookie，而浏览器一般只允许存放 300 个 Cookie</li>
-<li>移动端对 Cookie 支持不友好</li>
-<li>一般情况下存储的是纯文本，对象需要序列化之后才可以存储，解析需要反序列化</li>
-</ul>
-<h3 id="Session鉴权"><a href="#Session鉴权" class="headerlink" title="Session鉴权"></a>Session鉴权</h3><p>Session机制是在Cookie的基础上实现的，服务器会生成一个唯一的Session ID，并将这个ID存储在Cookie中发送给客户端。当客户端发送请求时，服务器会验证这个Session ID是否有效，如果有效，则允许访问资源。</p>
-<p>特点：</p>
-<ul>
-<li><p>安全性较高：Session机制可以避免Cookie伪造带来的安全问题，对于非法用户访问也可以做出相应的控制。</p>
-</li>
-<li><p>可靠性高: <strong>服务器端存储Session数据</strong>，保证了Session数据的可靠性，避免了Cookie被篡改带来的问题。</p>
-</li>
-<li><p>维护负担大：由于Session存储在服务器端，需要服务器端定期清理过期的Session数据，从而增加了服务器的负担。</p>
-</li>
-<li><p>扩展性差：在分布式系统中，Session机制需要额外的处理来确保多台服务器之间的Session共享，从而降低了扩展性。</p>
-</li>
-<li><p>依赖 Cookie，用户可以在浏览器端禁用 Cookie</p>
-</li>
-<li><p>不支持跨端兼容 app 等</p>
-</li>
-</ul>
-<h3 id="Token鉴权"><a href="#Token鉴权" class="headerlink" title="Token鉴权"></a>Token鉴权</h3><p>服务端不保存 sessionId。Token机制在认证成功后，服务端会签发一个令牌(Token)，以后每次请求都要带上这个Token，服务端通过校验这个Token来判断当前的请求是否合法。（后面会专门出一个token令牌的生成博客，奥里给）。</p>
-<p>特点：</p>
-<ul>
-<li>跨平台支持：Token机制不依赖于浏览器和Cookie，支持各种客户端平台，如iOS、Android等。</li>
-<li>扩展性好：Token机制实现了无状态化，避免了Session的负担，更容易扩展。</li>
-<li>安全性需要考虑：Token机制需要考虑密钥的安全性，如果密钥泄露，则会导致令牌被伪造，从而导致鉴权失效。</li>
-<li>兼容性差：虽然Token机制可以支持跨域访问，但是它需要额外的处理来确保在不同的请求之间传递Token，从而影响了API的易用性。（详细见下文）-——————以后这搞个跳转连接，哈哈哈</li>
-</ul>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p>登录接口</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests,jsonpath</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span> </span><br><span class="line">&#125;<span class="comment">#请求参数</span></span><br><span class="line"></span><br><span class="line">data = &#123; <span class="comment">#date数据，即请求体数据，请求方式为post</span></span><br><span class="line">    <span class="string">&quot;accounts&quot;</span>:<span class="string">&quot;huace_xm&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pwd&quot;</span>:<span class="number">123456</span>,</span><br><span class="line">    <span class="string">&quot;type&quot;</span>:<span class="string">&quot;username&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">rs = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/user/login&quot;</span>,<span class="comment">#请求路径</span></span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,<span class="comment">#路径参数</span></span><br><span class="line">                 data=data) <span class="comment"># 这就是发请求 ,括号里填四要素 --怎么确定接口地址？四要素是什么？</span></span><br><span class="line"><span class="comment"># print(rs.text)</span></span><br><span class="line"><span class="comment"># 拿出来做成一个变量？</span></span><br><span class="line"><span class="built_in">print</span>(rs.json())</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;输出，登陆成功</span></span><br><span class="line"><span class="string">&#123;&#x27;msg&#x27;: &#x27;登录成功&#x27;, &#x27;code&#x27;: 0, &#x27;data&#x27;: &#123;&#x27;id&#x27;: &#x27;19898&#x27;, &#x27;username&#x27;: &#x27;huace_xm&#x27;, &#x27;nickname&#x27;: &#x27;&#x27;, &#x27;mobile&#x27;: &#x27;&#x27;, &#x27;email&#x27;: &#x27;&#x27;, &#x27;avatar&#x27;: &#x27;http://shop-xo.hctestedu.com/static/index/default/images/default-user-avatar.jpg&#x27;, &#x27;alipay_openid&#x27;: &#x27;&#x27;, &#x27;weixin_openid&#x27;: &#x27;&#x27;, &#x27;weixin_unionid&#x27;: &#x27;&#x27;, &#x27;weixin_web_openid&#x27;: &#x27;&#x27;, &#x27;baidu_openid&#x27;: &#x27;&#x27;, &#x27;toutiao_openid&#x27;: &#x27;&#x27;, &#x27;qq_openid&#x27;: &#x27;&#x27;, &#x27;qq_unionid&#x27;: &#x27;&#x27;, &#x27;integral&#x27;: &#x27;0&#x27;, &#x27;locking_integral&#x27;: &#x27;0&#x27;, &#x27;referrer&#x27;: &#x27;0&#x27;, &#x27;add_time&#x27;: &#x27;1669790543&#x27;, &#x27;add_time_text&#x27;: &#x27;2022-11-30 14:42:23&#x27;, &#x27;mobile_security&#x27;: &#x27;&#x27;, &#x27;email_security&#x27;: &#x27;&#x27;, &#x27;user_name_view&#x27;: &#x27;huace_xm&#x27;, &#x27;is_mandatory_bind_mobile&#x27;: 0, &#x27;token&#x27;: &#x27;88c06b3b23dd615cab4a0221d69ea637&#x27;&#125;&#125;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<p>收藏商品：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests,jsonpath</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span> </span><br><span class="line">&#125;</span><br><span class="line">data2 = &#123;</span><br><span class="line">    <span class="string">&quot;id&quot;</span>: <span class="string">&quot;12&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">rs1 = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/goods/favor&quot;</span>,</span><br><span class="line">                       <span class="comment">#请求路径</span></span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,</span><br><span class="line">                 data=data2) <span class="comment"># 这就是发请求 ,括号里填四要素 --怎么确定接口地址？四要素是什么？</span></span><br><span class="line"><span class="built_in">print</span>(rs1.json())</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;输出</span></span><br><span class="line"><span class="string">&#123;&#x27;msg&#x27;: &#x27;登录失效，请重新登录&#x27;, &#x27;code&#x27;: -400, &#x27;data&#x27;: &#x27;&#x27;&#125;</span></span><br><span class="line"><span class="string">未进行接口鉴权，导致不能收藏商品</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#进行接口鉴权</span></span><br><span class="line"><span class="keyword">import</span> requests,jsonpath</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">&quot;accounts&quot;</span>:<span class="string">&quot;huace_xm&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pwd&quot;</span>:<span class="number">123456</span>,</span><br><span class="line">    <span class="string">&quot;type&quot;</span>:<span class="string">&quot;username&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">rs = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/user/login&quot;</span>,</span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,</span><br><span class="line">                 data=data) <span class="comment"># 这就是发请求 ,括号里填四要素 --怎么确定接口地址？四要素是什么？</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(rs.json())</span><br><span class="line"><span class="comment">#仔细观看登录成功后。返会的结果中含有token项</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#print(rs.json()[&quot;data&quot;][&quot;token&quot;])</span></span><br><span class="line">token = rs.json()[<span class="string">&quot;data&quot;</span>][<span class="string">&quot;token&quot;</span>]<span class="comment">#直接准确提出出token的值</span></span><br><span class="line">token1 = jsonpath.jsonpath(rs.json(),<span class="string">&quot;$..token&quot;</span>)</span><br><span class="line"><span class="comment">#不知道token的值具体在哪时，使用$..token</span></span><br><span class="line"><span class="comment">#肯定会提取出含有token的值，结果为一个列表。</span></span><br><span class="line"></span><br><span class="line">data2 = &#123;</span><br><span class="line">    <span class="string">&quot;id&quot;</span>: <span class="string">&quot;12&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">rs1 = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/goods/favor?token=&quot;</span>+token1[<span class="number">0</span>],<span class="comment">#传入对应的token</span></span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,</span><br><span class="line">                 data=data2) <span class="comment"># 这就是发请求 ,括号里填四要素 --怎么确定接口地址？四要素是什么？</span></span><br><span class="line"><span class="built_in">print</span>(rs1.json())</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;输出</span></span><br><span class="line"><span class="string">&#123;&#x27;msg&#x27;: &#x27;取消成功&#x27;, &#x27;code&#x27;: 0, &#x27;data&#x27;: &#123;&#x27;text&#x27;: &#x27;收藏&#x27;, &#x27;status&#x27;: 0, &#x27;count&#x27;: 49&#125;&#125;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#说明</span></span><br><span class="line"><span class="comment">#使用jsonpath需要导入对应的包，同时还需要在虚拟环境中下载安装</span></span><br><span class="line">pip install jsonpath  <span class="comment">#安装</span></span><br><span class="line">jsonpath --version   <span class="comment">#检查</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">jsonpath语法：jsonpath只能提取json对象中的参数</span></span><br><span class="line"><span class="string">$表示最外层大括号</span></span><br><span class="line"><span class="string">.表示进一层</span></span><br><span class="line"><span class="string">提取token的准确语法为：$.data.token</span></span><br><span class="line"><span class="string">模糊语法为：$..token，注意结果为列表，需要再准确取值</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment">#并不是所有的token都是放在路径参数里面的，这个主要由前后端开发师共同决定</span></span><br><span class="line"><span class="comment">#可以放在请求头中，路径参数中，也可放在请求体中（不能是get，delect方式，没有请求体）</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#正则表达式提取</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">out=<span class="string">&#x27;&#x27;&#x27;&#123;&#x27;msg&#x27;: &#x27;登录成功&#x27;,</span></span><br><span class="line"><span class="string">&#x27;code&#x27;: 0, </span></span><br><span class="line"><span class="string">&#x27;data&#x27;: &#123;&#x27;id&#x27;: &#x27;19898&#x27;,  &#x27;token&#x27;: &#x27;54e66bcb250f172f92feee1440a79277&#x27;&#125;&#125;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">path=<span class="string">r&#x27;&#x27;&#x27;&#x27;token&#x27;: &#x27;(.+?)&#x27;&#125;&#125;&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="built_in">print</span>(re.findall(path,out))</span><br><span class="line"><span class="comment">#将你想提取的值用(.+?)替换即可，别的直接复制粘贴</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="接口关联"><a href="#接口关联" class="headerlink" title="接口关联"></a>接口关联</h2><p>与接口鉴权类似。一个接口的参数需要使用上一个接口的一些参数。例如上一个接口生成了对应的订单 id，下个接口查询订单时需要使用到订单 id，故需要将其提取出来再传递给下个接口使用，提取方法类似上述。或者为了满足增删改查时<strong>业务闭环</strong>，执行一圈后数据库没有产生垃圾数据，也需要接口关联。</p>
-<p>还是jsonpath与re的使用，即正则表达式的提取和json提取。</p>
-<h2 id="接口加密"><a href="#接口加密" class="headerlink" title="接口加密"></a>接口加密</h2><p>系统明文传输的数据会被不明身份的人用抓包工具抓取，从而威胁系统和数据的<strong>安全性</strong>。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#一般是对传输的数据进行加密，加密的方式有很多，具体看实际场景。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">测试时，若采用常规的方法进行加密，则可去对应的网站找取加密的密文，再传入接口中进行测试</span></span><br><span class="line"><span class="string">或者找开发要去加密的算法代码，进行调用后再传入对应的参数</span></span><br><span class="line"><span class="string">自己懂的，就自行编写对应的加密算法，加密后再传参</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="上传文件"><a href="#上传文件" class="headerlink" title="上传文件"></a>上传文件</h2><p>某些接口传入的数据是文件类型，再测试时需要先读出文件的信息，再将信息作为参数进行传参。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">url = <span class="string">&#x27;http://httpbin.org/post&#x27;</span>  <span class="comment"># 上传文件接口</span></span><br><span class="line">files = &#123;</span><br><span class="line">    <span class="string">&#x27;file&#x27;</span>: <span class="built_in">open</span>(<span class="string">&#x27;../file/test.png&#x27;</span>, <span class="string">&#x27;rb&#x27;</span>),  <span class="comment"># 文件路径          </span></span><br><span class="line"> &#125;  <span class="comment"># =&gt; 打开上传文件并且加入文件相关参数</span></span><br><span class="line"> <span class="comment">#file是前端指定的需要传递的参数名。</span></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;test&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"> <span class="comment">#即先将文件读为二进制文件再进行传参</span></span><br><span class="line"><span class="comment">#传递的参数也是</span></span><br><span class="line"> <span class="comment"># data传入请求参数dict,files传入待上传文件参数dict</span></span><br><span class="line">r = requests.post(url, data=data, files=files)</span><br><span class="line"><span class="built_in">print</span>(r.json())</span><br></pre></td></tr></table></figure>
-
-<h2 id="cookie关联"><a href="#cookie关联" class="headerlink" title="cookie关联"></a>cookie关联</h2><p>有些接口之间是存在着cookie关联的，即需要发送某些cookie信息才能进行访问该接口，类似cookie鉴权。</p>
-<p>一种方式是在请求参数的时候，直接传入对应的cookie信息。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_login</span>(<span class="params">username,password</span>):</span><br><span class="line">    host=<span class="string">&#x27;http://localhost&#x27;</span></span><br><span class="line">    url=<span class="string">f&#x27;<span class="subst">&#123;host&#125;</span>/api/bbb/ccc&#x27;</span></span><br><span class="line">    payload=&#123;<span class="string">&#x27;username&#x27;</span>:username,</span><br><span class="line">             <span class="string">&#x27;password&#x27;</span>:password</span><br><span class="line">             &#125;</span><br><span class="line">    reps=requests.post(url,data=payload)</span><br><span class="line">    <span class="keyword">return</span> reps.cookies</span><br><span class="line"></span><br><span class="line">user_cookie= test_login(<span class="string">&#x27;test&#x27;</span>,<span class="string">&#x27;12345678&#x27;</span>) <span class="comment">#调用函数获取返回值并赋值给user_cookie</span></span><br><span class="line">reps=requests.post(api_url,data=payload,cookies=user_cookie)<span class="comment">#直接在请求中加上cookies=user_cookie</span></span><br></pre></td></tr></table></figure>
-
-<p>另一种方式是发送请求时，直接使用session的request方法。会自动关联所有请求的cookie信息。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#先生成对应的session对象</span></span><br><span class="line">sess=requests.session();</span><br><span class="line"><span class="comment">#操作</span></span><br><span class="line"><span class="comment">#sess.request(url,param,data,**kwargs)</span></span><br><span class="line"><span class="comment">#可以使用对应的夹具函数，完成对session的初始化，同时使用单例模式，保证session的唯一性</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="总结–简单封装"><a href="#总结–简单封装" class="headerlink" title="总结–简单封装"></a>总结–简单封装</h2><h3 id="统一方法封装"><a href="#统一方法封装" class="headerlink" title="统一方法封装"></a>统一方法封装</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RequestUtil</span>:</span><br><span class="line">    sess=requests.session();</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">send_requests</span>(<span class="params">self,**kwargs</span>):</span><br><span class="line">        res=RequestUtil.sess.request(**kwargs)</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line"><span class="comment">#可以进行统一的日志请求处理</span></span><br><span class="line"><span class="comment">#所有的请求调用的入口信息，统一的日志管理，不用在每个方法进行日志打印</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="接口关联封装"><a href="#接口关联封装" class="headerlink" title="接口关联封装"></a>接口关联封装</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#将提取的参数可写入yaml文件中，方便后续的使用（写入地方由自己定，看自己具体的需求）</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> yaml</span><br><span class="line"></span><br><span class="line"><span class="comment">#写入,追加的方式</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">write_Yaml</span>(<span class="params">data</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(os.getcwd()+<span class="string">&quot;/yaml1.yaml&quot;</span>,encoding=<span class="string">&quot;utf-8&quot;</span>,mode=<span class="string">&quot;a+&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="comment">#对应的yaml文件路径 ，编码格式，打开方式：追加</span></span><br><span class="line">        yaml.dump(data,stream=f,allow_unicode=<span class="literal">True</span>) <span class="comment">#写入yaml文件，写入对象为f，允许编码（不乱码）</span></span><br><span class="line"><span class="comment">#读取yaml文件</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">read_Yaml</span>(<span class="params">key</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(os.getcwd()+<span class="string">&quot;/yaml1.yaml&quot;</span>,encoding=<span class="string">&quot;utf-8&quot;</span>,mode=<span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="comment">#全部读取文件</span></span><br><span class="line">        value=yaml.load(f,yaml.FullLoader)</span><br><span class="line">        <span class="keyword">return</span> value[key]<span class="comment">#返回key为key的value值</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#清空， 覆盖的方式</span></span><br><span class="line"><span class="comment">#在所有用例执行之前清空yaml文件</span></span><br><span class="line"><span class="comment">#夹具函数，在一次session之前，清空yaml文件</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">clear_Yaml</span>():</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(os.getcwd()+<span class="string">&quot;/yaml1.yaml&quot;</span>,encoding=<span class="string">&quot;utf-8&quot;</span>,mode=<span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.truncate();<span class="comment">#清空yaml文件，防止产生废物数据</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="yaml数据驱动"><a href="#yaml数据驱动" class="headerlink" title="yaml数据驱动"></a>yaml数据驱动</h3><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="bullet">-</span></span><br><span class="line">	<span class="attr">feature:</span> <span class="string">模块名</span></span><br><span class="line">	<span class="attr">story:</span> <span class="string">接口</span></span><br><span class="line">	<span class="attr">title:</span> <span class="string">用例标题</span></span><br><span class="line">	<span class="attr">request:</span> </span><br><span class="line">		<span class="attr">method:</span> <span class="string">请求方式</span></span><br><span class="line">		<span class="attr">url:</span> <span class="string">请求url</span></span><br><span class="line">		<span class="attr">headers:</span> <span class="string">请求头</span></span><br><span class="line">		<span class="attr">params:</span> <span class="string">请求参数</span></span><br><span class="line">		<span class="attr">json:</span> <span class="string">json参数</span></span><br><span class="line">	<span class="comment">#extract: 提取的数据</span></span><br><span class="line">	<span class="attr">vilidate:</span> <span class="string">请求断言</span>	</span><br><span class="line"><span class="comment">#需要的参数按需求自己添加	</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#读取yaml文件</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">read_Yaml_Testcase</span>(<span class="params">path</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(path, encoding=<span class="string">&quot;utf-8&quot;</span>, mode=<span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        value = yaml.load(f, yaml.FullLoader)</span><br><span class="line">        <span class="keyword">return</span> value</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>测试</tag>
-        <tag>接口测试</tag>
-        <tag>python</tag>
       </tags>
   </entry>
 </search>
