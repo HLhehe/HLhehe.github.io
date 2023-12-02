@@ -287,6 +287,39 @@
       </tags>
   </entry>
   <entry>
+    <title>力扣--394</title>
+    <url>/2023/11/29/%E5%8A%9B%E6%89%A3%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98--394%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E7%A0%81/</url>
+    <content><![CDATA[<h2 id="力扣每日一题–394字符串解码"><a href="#力扣每日一题–394字符串解码" class="headerlink" title="力扣每日一题–394字符串解码"></a>力扣每日一题–394字符串解码</h2><h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p>给定一个经过编码的字符串，返回它解码后的字符串。</p>
+<p>编码规则为: <code>k[encoded_string]</code>，表示其中方括号内部的 <code>encoded_string</code> 正好重复 <code>k</code> 次。注意 <code>k</code> 保证为正整数。你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 <code>k</code> ，例如不会出现像 <code>3a</code> 或 <code>2[4]</code> 的输入。<span id="more"></span></p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;3[a]2[bc]&quot;</span><br><span class="line">输出：&quot;aaabcbc&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;3[a2[c]]&quot;</span><br><span class="line">输出：&quot;accaccacc&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 3：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;2[abc]3[cd]ef&quot;</span><br><span class="line">输出：&quot;abcabccdcdcdef&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 4：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;abc3[cd]xyz&quot;</span><br><span class="line">输出：&quot;abccdcdcdxyz&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h3><p>首先分析，出现的数字倍数可能不只是小于10的，完全可能是成百上千的，于是对于数字需要一直遍历，才能得出对应的数字意义。</p>
+<p>其次，可能[ ]里面还包含有[ ]，故对[ ]的结果，应当存储起来，后续可能会再用到。</p>
+<p>最后，经过分析，采用栈解答此问题。对于数字，一直遍历出对应得数字，得到值后放入栈中。对于字母和 [ ，直接放入栈中。当遍历到 ] 时，直接将其出栈到 [ 。之后再出栈，得到对应的倍数（ [ 之后出栈的数必定是对应的倍数）。将其按照倍数进行填充，结果再次入栈。直到原字符串遍历完毕。最后遍历栈，得出最后结果。（若使用传统的栈，则最后将整个栈翻转再遍历得出最后的结果）</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="type">int</span> index;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">decodeString</span><span class="params">(String s)</span> &#123;</span><br><span class="line">        <span class="comment">//数字需要重复判断，才能确定是数字啦</span></span><br><span class="line">        <span class="comment">//数字和左括号直接入栈，遇见右括号的时候，出栈</span></span><br><span class="line">        index=<span class="number">0</span>;</span><br><span class="line">        LinkedList&lt;String&gt; list=<span class="keyword">new</span> <span class="title class_">LinkedList</span>();<span class="comment">//栈</span></span><br><span class="line">        <span class="keyword">while</span>(index&lt;s.length())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(Character.isDigit(s.charAt(index)))</span><br><span class="line">          &#123;</span><br><span class="line">              String s1=getDigit(s);</span><br><span class="line">              <span class="comment">//list.addLast(s1);</span></span><br><span class="line">              list.push(s1);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">else</span> <span class="keyword">if</span>(s.charAt(index)==<span class="string">&#x27;[&#x27;</span>||Character.isLetter(s.charAt(index)))</span><br><span class="line">          <span class="comment">//list.addLast(s.charAt(index++)+&quot;&quot;);</span></span><br><span class="line">          list.push(s.charAt(index++)+<span class="string">&quot;&quot;</span>);</span><br><span class="line">          <span class="keyword">else</span>  <span class="comment">//出栈</span></span><br><span class="line">          &#123;</span><br><span class="line">              StringBuilder out=<span class="keyword">new</span> <span class="title class_">StringBuilder</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line">             LinkedList&lt;String&gt; temp=<span class="keyword">new</span> <span class="title class_">LinkedList</span>();</span><br><span class="line">          <span class="comment">//  while(list.peekLast()!=&quot;[&quot;)</span></span><br><span class="line">         <span class="comment">//  while( !&quot;[&quot;.equals(list.peekLast()))</span></span><br><span class="line">         <span class="keyword">while</span>(!<span class="string">&quot;[&quot;</span>.equals(list.peek()))</span><br><span class="line">           <span class="comment">//String不是重写==了吗？不就是调用</span></span><br><span class="line">           <span class="comment">//好像搞反了，别人重写的是equals，，==始终就是比的地址，对象的话，歪日</span></span><br><span class="line">           <span class="comment">//垃圾了垃圾了</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//temp.addLast(list.pop());</span></span><br><span class="line">                temp.push(list.pop());</span><br><span class="line">            &#125;</span><br><span class="line">           <span class="comment">// list.removeLast();</span></span><br><span class="line">           list.pop();</span><br><span class="line">            <span class="type">int</span> f=Integer.parseInt(list.pop());</span><br><span class="line">           <span class="comment">// Collections.reverse(temp);</span></span><br><span class="line">            String k=toString(temp);</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;f;i++)</span><br><span class="line">            out.append(k);</span><br><span class="line">            <span class="comment">//list.addLast(out.toString());</span></span><br><span class="line">            list.push(out.toString());</span><br><span class="line">            index++;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        Collections.reverse(list);</span><br><span class="line">        <span class="keyword">return</span> toString(list);  </span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">(LinkedList&lt;String&gt; temp)</span></span><br><span class="line">    &#123;</span><br><span class="line">      StringBuilder out=<span class="keyword">new</span> <span class="title class_">StringBuilder</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line">      <span class="keyword">for</span>(String c:temp)</span><br><span class="line">      out.append(c);</span><br><span class="line">      <span class="keyword">return</span> out.toString();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getDigit</span><span class="params">(String t)</span></span><br><span class="line">    &#123;</span><br><span class="line">        StringBuilder out=<span class="keyword">new</span> <span class="title class_">StringBuilder</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line">        <span class="keyword">while</span>(Character.isDigit(t.charAt(index)))</span><br><span class="line">           out.append(t.charAt(index++));</span><br><span class="line">        <span class="keyword">return</span> out.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="感悟"><a href="#感悟" class="headerlink" title="感悟"></a>感悟</h2><p>为什么写这道题呢？是因为自己中间犯了些小错误。也对LinkedList有了些新的认识。</p>
+<h3 id="LInkedList"><a href="#LInkedList" class="headerlink" title="LInkedList"></a>LInkedList</h3><p>​		采用双向链表结构，使用效率高于ArrayList。常用于栈和队列的使用。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//用作栈</span></span><br><span class="line">push()<span class="comment">//向list的首部插入数据，对应addFirst()方法</span></span><br><span class="line">pop()<span class="comment">//删除list的首部的数据，并将它返回，对应removeFirst()方法</span></span><br><span class="line">peek()<span class="comment">//得到list的首部数据，但是不删除它，对应peekFirst()方法</span></span><br><span class="line"><span class="comment">/*使用这三个函数也可以得到一个栈的操作</span></span><br><span class="line"><span class="comment">addLast()</span></span><br><span class="line"><span class="comment">removeLast()</span></span><br><span class="line"><span class="comment">peekLast()</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//用作队列</span></span><br><span class="line">offer()<span class="comment">//向list的尾部插入数据，对应addLast()方法</span></span><br><span class="line">poll()<span class="comment">//删除list的首部数据，并将其返回，对应removeFirst()方法</span></span><br><span class="line">peek()<span class="comment">//得到list的首部数据，但是不删除它，对应peekFirst()方法</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">比较：这么一看，栈和队列的删除方法其实是一个东西对吧。不是指删除的内容是一样的，但是对应的操作都是删除list首部的元素。</span></span><br><span class="line"><span class="comment">ps:我之前一直以为栈的操作对应的就是addFirst()和removeFirst(),队列的操作就是addLast()和removeLast(),丢，这么一看，被自己蠢哭了。addLast()和removeLast()对应的还是栈的操作了，先进后出。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">    </span><br><span class="line"> <span class="comment">//用作List</span></span><br><span class="line">add()<span class="comment">//向list尾部插入数据</span></span><br><span class="line">remove()<span class="comment">//删除list尾部数据</span></span><br></pre></td></tr></table></figure>
+
+<p>建议以后使用LinkedList时，<strong>都采用addFist(),removeLast()等这种方法操作list。而不使用push，poll()等方法</strong>。自己决定插入和删除的位置，更加的灵活多变，也更强大。</p>
+]]></content>
+      <tags>
+        <tag>java</tag>
+        <tag>力扣</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>性能测试</title>
     <url>/2023/11/20/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/</url>
     <content><![CDATA[<h2 id="性能测试"><a href="#性能测试" class="headerlink" title="性能测试"></a>性能测试</h2><h3 id="为什么进行性能测试"><a href="#为什么进行性能测试" class="headerlink" title="为什么进行性能测试"></a>为什么进行性能测试</h3><p>​		满足真实的业务场景（活动场景），支持大量的用户，满足商用需求。</p>
@@ -364,39 +397,6 @@
 ]]></content>
       <tags>
         <tag>测试</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>力扣--394</title>
-    <url>/2023/11/29/%E5%8A%9B%E6%89%A3%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98--394%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E7%A0%81/</url>
-    <content><![CDATA[<h2 id="力扣每日一题–394字符串解码"><a href="#力扣每日一题–394字符串解码" class="headerlink" title="力扣每日一题–394字符串解码"></a>力扣每日一题–394字符串解码</h2><h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p>给定一个经过编码的字符串，返回它解码后的字符串。</p>
-<p>编码规则为: <code>k[encoded_string]</code>，表示其中方括号内部的 <code>encoded_string</code> 正好重复 <code>k</code> 次。注意 <code>k</code> 保证为正整数。你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 <code>k</code> ，例如不会出现像 <code>3a</code> 或 <code>2[4]</code> 的输入。<span id="more"></span></p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;3[a]2[bc]&quot;</span><br><span class="line">输出：&quot;aaabcbc&quot;</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;3[a2[c]]&quot;</span><br><span class="line">输出：&quot;accaccacc&quot;</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 3：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;2[abc]3[cd]ef&quot;</span><br><span class="line">输出：&quot;abcabccdcdcdef&quot;</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 4：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：s = &quot;abc3[cd]xyz&quot;</span><br><span class="line">输出：&quot;abccdcdcdxyz&quot;</span><br></pre></td></tr></table></figure>
-
-<h3 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h3><p>首先分析，出现的数字倍数可能不只是小于10的，完全可能是成百上千的，于是对于数字需要一直遍历，才能得出对应的数字意义。</p>
-<p>其次，可能[ ]里面还包含有[ ]，故对[ ]的结果，应当存储起来，后续可能会再用到。</p>
-<p>最后，经过分析，采用栈解答此问题。对于数字，一直遍历出对应得数字，得到值后放入栈中。对于字母和 [ ，直接放入栈中。当遍历到 ] 时，直接将其出栈到 [ 。之后再出栈，得到对应的倍数（ [ 之后出栈的数必定是对应的倍数）。将其按照倍数进行填充，结果再次入栈。直到原字符串遍历完毕。最后遍历栈，得出最后结果。（若使用传统的栈，则最后将整个栈翻转再遍历得出最后的结果）</p>
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="type">int</span> index;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">decodeString</span><span class="params">(String s)</span> &#123;</span><br><span class="line">        <span class="comment">//数字需要重复判断，才能确定是数字啦</span></span><br><span class="line">        <span class="comment">//数字和左括号直接入栈，遇见右括号的时候，出栈</span></span><br><span class="line">        index=<span class="number">0</span>;</span><br><span class="line">        LinkedList&lt;String&gt; list=<span class="keyword">new</span> <span class="title class_">LinkedList</span>();<span class="comment">//栈</span></span><br><span class="line">        <span class="keyword">while</span>(index&lt;s.length())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(Character.isDigit(s.charAt(index)))</span><br><span class="line">          &#123;</span><br><span class="line">              String s1=getDigit(s);</span><br><span class="line">              <span class="comment">//list.addLast(s1);</span></span><br><span class="line">              list.push(s1);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">else</span> <span class="keyword">if</span>(s.charAt(index)==<span class="string">&#x27;[&#x27;</span>||Character.isLetter(s.charAt(index)))</span><br><span class="line">          <span class="comment">//list.addLast(s.charAt(index++)+&quot;&quot;);</span></span><br><span class="line">          list.push(s.charAt(index++)+<span class="string">&quot;&quot;</span>);</span><br><span class="line">          <span class="keyword">else</span>  <span class="comment">//出栈</span></span><br><span class="line">          &#123;</span><br><span class="line">              StringBuilder out=<span class="keyword">new</span> <span class="title class_">StringBuilder</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line">             LinkedList&lt;String&gt; temp=<span class="keyword">new</span> <span class="title class_">LinkedList</span>();</span><br><span class="line">          <span class="comment">//  while(list.peekLast()!=&quot;[&quot;)</span></span><br><span class="line">         <span class="comment">//  while( !&quot;[&quot;.equals(list.peekLast()))</span></span><br><span class="line">         <span class="keyword">while</span>(!<span class="string">&quot;[&quot;</span>.equals(list.peek()))</span><br><span class="line">           <span class="comment">//String不是重写==了吗？不就是调用</span></span><br><span class="line">           <span class="comment">//好像搞反了，别人重写的是equals，，==始终就是比的地址，对象的话，歪日</span></span><br><span class="line">           <span class="comment">//垃圾了垃圾了</span></span><br><span class="line">            &#123;</span><br><span class="line">                <span class="comment">//temp.addLast(list.pop());</span></span><br><span class="line">                temp.push(list.pop());</span><br><span class="line">            &#125;</span><br><span class="line">           <span class="comment">// list.removeLast();</span></span><br><span class="line">           list.pop();</span><br><span class="line">            <span class="type">int</span> f=Integer.parseInt(list.pop());</span><br><span class="line">           <span class="comment">// Collections.reverse(temp);</span></span><br><span class="line">            String k=toString(temp);</span><br><span class="line">            <span class="keyword">for</span>(<span class="type">int</span> i=<span class="number">0</span>;i&lt;f;i++)</span><br><span class="line">            out.append(k);</span><br><span class="line">            <span class="comment">//list.addLast(out.toString());</span></span><br><span class="line">            list.push(out.toString());</span><br><span class="line">            index++;</span><br><span class="line">          &#125;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">        Collections.reverse(list);</span><br><span class="line">        <span class="keyword">return</span> toString(list);  </span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">(LinkedList&lt;String&gt; temp)</span></span><br><span class="line">    &#123;</span><br><span class="line">      StringBuilder out=<span class="keyword">new</span> <span class="title class_">StringBuilder</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line">      <span class="keyword">for</span>(String c:temp)</span><br><span class="line">      out.append(c);</span><br><span class="line">      <span class="keyword">return</span> out.toString();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getDigit</span><span class="params">(String t)</span></span><br><span class="line">    &#123;</span><br><span class="line">        StringBuilder out=<span class="keyword">new</span> <span class="title class_">StringBuilder</span>(<span class="string">&quot;&quot;</span>);</span><br><span class="line">        <span class="keyword">while</span>(Character.isDigit(t.charAt(index)))</span><br><span class="line">           out.append(t.charAt(index++));</span><br><span class="line">        <span class="keyword">return</span> out.toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="感悟"><a href="#感悟" class="headerlink" title="感悟"></a>感悟</h2><p>为什么写这道题呢？是因为自己中间犯了些小错误。也对LinkedList有了些新的认识。</p>
-<h3 id="LInkedList"><a href="#LInkedList" class="headerlink" title="LInkedList"></a>LInkedList</h3><p>​		采用双向链表结构，使用效率高于ArrayList。常用于栈和队列的使用。</p>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//用作栈</span></span><br><span class="line">push()<span class="comment">//向list的首部插入数据，对应addFirst()方法</span></span><br><span class="line">pop()<span class="comment">//删除list的首部的数据，并将它返回，对应removeFirst()方法</span></span><br><span class="line">peek()<span class="comment">//得到list的首部数据，但是不删除它，对应peekFirst()方法</span></span><br><span class="line"><span class="comment">/*使用这三个函数也可以得到一个栈的操作</span></span><br><span class="line"><span class="comment">addLast()</span></span><br><span class="line"><span class="comment">removeLast()</span></span><br><span class="line"><span class="comment">peekLast()</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">//用作队列</span></span><br><span class="line">offer()<span class="comment">//向list的尾部插入数据，对应addLast()方法</span></span><br><span class="line">poll()<span class="comment">//删除list的首部数据，并将其返回，对应removeFirst()方法</span></span><br><span class="line">peek()<span class="comment">//得到list的首部数据，但是不删除它，对应peekFirst()方法</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">比较：这么一看，栈和队列的删除方法其实是一个东西对吧。不是指删除的内容是一样的，但是对应的操作都是删除list首部的元素。</span></span><br><span class="line"><span class="comment">ps:我之前一直以为栈的操作对应的就是addFirst()和removeFirst(),队列的操作就是addLast()和removeLast(),丢，这么一看，被自己蠢哭了。addLast()和removeLast()对应的还是栈的操作了，先进后出。</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line">    </span><br><span class="line"> <span class="comment">//用作List</span></span><br><span class="line">add()<span class="comment">//向list尾部插入数据</span></span><br><span class="line">remove()<span class="comment">//删除list尾部数据</span></span><br></pre></td></tr></table></figure>
-
-<p>建议以后使用LinkedList时，<strong>都采用addFist(),removeLast()等这种方法操作list。而不使用push，poll()等方法</strong>。自己决定插入和删除的位置，更加的灵活多变，也更强大。</p>
-]]></content>
-      <tags>
-        <tag>java</tag>
-        <tag>力扣</tag>
       </tags>
   </entry>
   <entry>
@@ -589,6 +589,227 @@
       <tags>
         <tag>日志</tag>
         <tag>logger</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>接口自动化测试---基础</title>
+    <url>/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h2 id="接口测试基础"><a href="#接口测试基础" class="headerlink" title="接口测试基础"></a>接口测试基础</h2><p>接口：系统之间数据交互的通道。</p>
+<p>接口测试：基于不同的输入参数，校验接口响应数据与预期数据是否一致。<span id="more"></span></p>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><ul>
+<li>接口文档解析——一般都有对应得接口信息。如没有，则自行获取。对于web接口，可以采用开发者模式F12得到相应的接口信息。对于app接口，则采用抓包的方式获取接口信息，如Fidder</li>
+<li>设计测试用例</li>
+<li>脚本开发</li>
+<li>执行脚本</li>
+<li>缺陷跟踪</li>
+<li>测试报告</li>
+</ul>
+<h3 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h3><p>URL：是互联网上标准资源得地址，一般称为统一资源定位符</p>
+<p>组成：协议::&#x2F;&#x2F;hostname[:port]&#x2F;path&#x2F;[?查询参数1&amp;查询参数2]，即协议，服务器地址，端口号，资源路径，参数</p>
+<h3 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h3><p>HTTP：超文本传输协议，基于请求与响应的应用层协议</p>
+<ul>
+<li>HTTP请求（请求行，请求头，请求体）</li>
+<li>HTTP响应（响应行，响应头，响应体）</li>
+</ul>
+<h4 id="HTTP请求"><a href="#HTTP请求" class="headerlink" title="HTTP请求"></a>HTTP请求</h4><ul>
+<li><p>请求行：<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130192119149.png" alt="image-20231130192119149"></p>
+<ul>
+<li><p>位置：第一行</p>
+</li>
+<li><p>作用：说明请求方法、访问的资源、协议版本</p>
+</li>
+<li><p>常用方法</p>
+<ul>
+<li>Get</li>
+<li>Post</li>
+<li>Put</li>
+<li>Delect</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>请求头</p>
+<ul>
+<li>位置：第二行到空白行之间</li>
+<li>作用：通知服务端请求信息</li>
+<li>特点：由键值对组成，每行一对</li>
+<li>Content-Type：请求体数据类型<ul>
+<li>text&#x2F;html：HTML格式</li>
+<li>image&#x2F;jpeg：jpg图片格式</li>
+<li><strong>application&#x2F;json</strong>：JSON数据格式</li>
+<li><strong>application&#x2F;x-www-form-urlencoded</strong>：表单默认的提交数据格式</li>
+<li>multipart&#x2F;form-data：表单中进行文件上传</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>请求体：<strong>（可以没有对应的请求体内容）</strong></p>
+<ul>
+<li>位置：空白行之后的内容</li>
+<li>作用：传输数据实体 </li>
+<li>注意：请求体常在<strong>POST、PUT</strong>方法中使用 </li>
+<li>常配合的请求头：<strong>Content-Type</strong>和<strong>Content-Length</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="HTTP响应"><a href="#HTTP响应" class="headerlink" title="HTTP响应"></a>HTTP响应</h4><ul>
+<li><p>状态行 <img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130193147639.png" alt="image-20231130193147639" style="zoom:67%;" /><br>-  位置：响应数据第一行 </p>
+<ul>
+<li><p>作用：描述服务器处理结果 </p>
+</li>
+<li><p>内容: 状态行由协议版本号、<strong>状态码</strong>、状态消息组成</p>
+</li>
+<li><p>状态码：表示此次请求的响应状态，详细见最后的状态码表。</p>
+<ul>
+<li>1XX：指示信息</li>
+<li><strong>2XX</strong>：成功 </li>
+<li>3XX：重定向 </li>
+<li><strong>4XX</strong>：客户端错误 </li>
+<li><strong>5XX</strong>：服务端错误</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>响应头</p>
+<ul>
+<li>位置：第二行开始到空白行之间 </li>
+<li>作用：描述客户端端要使用的一些附加信息 </li>
+<li>特点: 响应头由键值对组成，每行一对</li>
+<li>也有Content-Type与Content-Length，表明返回的数据类型与长度</li>
+</ul>
+</li>
+<li><p>响应体</p>
+<ul>
+<li>位置：响应数据空白行之后</li>
+<li>作用：服务器返回的数据实体 </li>
+<li>特点：有图片、json、xml、html等多种类型</li>
+</ul>
+</li>
+</ul>
+<p>使用工具进行接口自动化测试将使用新的文章记录。</p>
+<h2 id="接口自动化测试"><a href="#接口自动化测试" class="headerlink" title="接口自动化测试"></a>接口自动化测试</h2><ul>
+<li>选取自动化测试用例 </li>
+<li>搭建自动化测试环境 </li>
+<li>搭建自动化测试框架 </li>
+<li>代码实现自动化 </li>
+<li>输出测试报告 </li>
+<li>实现持续集成</li>
+</ul>
+<h3 id="Requests库"><a href="#Requests库" class="headerlink" title="Requests库"></a>Requests库</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install requests  <span class="comment">#安装</span></span><br><span class="line">request --version 	<span class="comment">#验证</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Requests发送请求"><a href="#Requests发送请求" class="headerlink" title="Requests发送请求"></a>Requests发送请求</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">requests.请求方法（url，params=<span class="literal">None</span>，data=<span class="literal">None</span>，json=<span class="literal">None</span>，headers=<span class="literal">None</span>，files=<span class="literal">None</span>）<span class="comment">#必须传入对应的url地址，其余参数非必须</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;说明：</span></span><br><span class="line"><span class="string">常见的请求方法： get/post/put/delete</span></span><br><span class="line"><span class="string">url：请求的url地址</span></span><br><span class="line"><span class="string">params：请求查询参数</span></span><br><span class="line"><span class="string">data：请求体为form表单参数</span></span><br><span class="line"><span class="string">json：请求体为json参数</span></span><br><span class="line"><span class="string">headers：请求头参数</span></span><br><span class="line"><span class="string">Files：文件参数</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Response响应"><a href="#Response响应" class="headerlink" title="Response响应"></a>Response响应</h4><ul>
+<li>response.status_code ：状态码 </li>
+<li>response.json() ：JSON形式的响应内容</li>
+<li>response.text ：文本形式的响应内容 </li>
+<li>response.url ：请求url </li>
+<li>response.encoding：查看响应头部字符编码 </li>
+<li>response.headers ：头信息 </li>
+<li>response.cookies ：cookie信息</li>
+</ul>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">&quot;accounts&quot;</span>:<span class="string">&quot;huace_xm&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pwd&quot;</span>:<span class="number">123456</span>,</span><br><span class="line">    <span class="string">&quot;type&quot;</span>:<span class="string">&quot;username&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">rs5 = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/region/index&quot;</span>,</span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,</span><br><span class="line">                 data=data)</span><br><span class="line"><span class="built_in">print</span>(rs5.json())</span><br><span class="line"><span class="comment">#使用对应的方法，参数，调用对应的方法或者request方法，得到响应结果</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="响应码"><a href="#响应码" class="headerlink" title="响应码"></a>响应码</h2><ul>
+<li>200 OK 服务器成功返回用户请求的数据 </li>
+<li>201 CREATED 用户新建或修改数据成功 </li>
+<li>204 NO CONTENT 用户删除数据成功 </li>
+<li>301 Moved Permanently 被请求的资源已永久移动到新位置 </li>
+<li>302 Move Temporarily 被请求的资源临时性移动到新位置 </li>
+<li>400 Bad Request 客户端请求有语法错误，不能被服务器所理解 </li>
+<li>401 Unauthorized 未授权的（未登录） </li>
+<li>403 Forbidden 表示用户得到授权，但是访问是被禁止的 </li>
+<li>404 Not Found 请求资源不存在 </li>
+<li>500 INTERNAL SERVER ERROR 服务器发生错误，用户将无法判断发出的请求是否成功 </li>
+<li>503 Server Unavailable 服务器当前不能处理客户端的请求，一段时间后可能恢复正常</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>测试</tag>
+        <tag>接口测试</tag>
+        <tag>python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>接口自动化测试---进阶</title>
+    <url>/2023/12/02/2023-12-01-%E6%8E%A5%E5%8F%A3%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95---%E8%BF%9B%E9%98%B6/</url>
+    <content><![CDATA[<h2 id="接口鉴权"><a href="#接口鉴权" class="headerlink" title="接口鉴权"></a>接口鉴权</h2><p>判断当前接口是否有访问的权限。（未登录不能访问一些接口信息等）<span id="more"></span></p>
+<h3 id="Cookie鉴权"><a href="#Cookie鉴权" class="headerlink" title="Cookie鉴权"></a>Cookie鉴权</h3><p>服务端在响应客户端请求的时候，会向客户端推送一个 Cookie，这个 Cookie 记录服务端上面的一些信息，客户端在后续的请求中携带这个 Cookie，服务端可以根据这个 Cookie 判断该请求的上下文关系。</p>
+<p>特点：</p>
+<ul>
+<li><strong>Cookie存储在客户端，使得可以跨页面访问</strong>，比较方便。但可随意篡改，不安全</li>
+<li>Cookie机制实现简单，只需要服务器端向客户端发送Set-Cookie即可完成鉴权，不需要过多的复杂设置。</li>
+<li>它的内容会随着 http 交互传接，影响性能，所以 Cookie 可存储的数据不能过大，最大为 4kb</li>
+<li>一个浏览器对于一个网站只能存不超过 20 个 Cookie，而浏览器一般只允许存放 300 个 Cookie</li>
+<li>移动端对 Cookie 支持不友好</li>
+<li>一般情况下存储的是纯文本，对象需要序列化之后才可以存储，解析需要反序列化</li>
+</ul>
+<h3 id="Session鉴权"><a href="#Session鉴权" class="headerlink" title="Session鉴权"></a>Session鉴权</h3><p>Session机制是在Cookie的基础上实现的，服务器会生成一个唯一的Session ID，并将这个ID存储在Cookie中发送给客户端。当客户端发送请求时，服务器会验证这个Session ID是否有效，如果有效，则允许访问资源。</p>
+<p>特点：</p>
+<ul>
+<li><p>安全性较高：Session机制可以避免Cookie伪造带来的安全问题，对于非法用户访问也可以做出相应的控制。</p>
+</li>
+<li><p>可靠性高: <strong>服务器端存储Session数据</strong>，保证了Session数据的可靠性，避免了Cookie被篡改带来的问题。</p>
+</li>
+<li><p>维护负担大：由于Session存储在服务器端，需要服务器端定期清理过期的Session数据，从而增加了服务器的负担。</p>
+</li>
+<li><p>扩展性差：在分布式系统中，Session机制需要额外的处理来确保多台服务器之间的Session共享，从而降低了扩展性。</p>
+</li>
+<li><p>依赖 Cookie，用户可以在浏览器端禁用 Cookie</p>
+</li>
+<li><p>不支持跨端兼容 app 等</p>
+</li>
+</ul>
+<h3 id="Token鉴权"><a href="#Token鉴权" class="headerlink" title="Token鉴权"></a>Token鉴权</h3><p>服务端不保存 sessionId。Token机制在认证成功后，服务端会签发一个令牌(Token)，以后每次请求都要带上这个Token，服务端通过校验这个Token来判断当前的请求是否合法。（后面会专门出一个token令牌的生成博客，奥里给）。</p>
+<p>特点：</p>
+<ul>
+<li>跨平台支持：Token机制不依赖于浏览器和Cookie，支持各种客户端平台，如iOS、Android等。</li>
+<li>扩展性好：Token机制实现了无状态化，避免了Session的负担，更容易扩展。</li>
+<li>安全性需要考虑：Token机制需要考虑密钥的安全性，如果密钥泄露，则会导致令牌被伪造，从而导致鉴权失效。</li>
+<li>兼容性差：虽然Token机制可以支持跨域访问，但是它需要额外的处理来确保在不同的请求之间传递Token，从而影响了API的易用性。（详细见下文）-——————以后这搞个跳转连接，哈哈哈</li>
+</ul>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><p>登录接口</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests,jsonpath</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span> </span><br><span class="line">&#125;<span class="comment">#请求参数</span></span><br><span class="line"></span><br><span class="line">data = &#123; <span class="comment">#date数据，即请求体数据，请求方式为post</span></span><br><span class="line">    <span class="string">&quot;accounts&quot;</span>:<span class="string">&quot;huace_xm&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pwd&quot;</span>:<span class="number">123456</span>,</span><br><span class="line">    <span class="string">&quot;type&quot;</span>:<span class="string">&quot;username&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">rs = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/user/login&quot;</span>,<span class="comment">#请求路径</span></span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,<span class="comment">#路径参数</span></span><br><span class="line">                 data=data) <span class="comment"># 这就是发请求 ,括号里填四要素 --怎么确定接口地址？四要素是什么？</span></span><br><span class="line"><span class="comment"># print(rs.text)</span></span><br><span class="line"><span class="comment"># 拿出来做成一个变量？</span></span><br><span class="line"><span class="built_in">print</span>(rs.json())</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;输出，登陆成功</span></span><br><span class="line"><span class="string">&#123;&#x27;msg&#x27;: &#x27;登录成功&#x27;, &#x27;code&#x27;: 0, &#x27;data&#x27;: &#123;&#x27;id&#x27;: &#x27;19898&#x27;, &#x27;username&#x27;: &#x27;huace_xm&#x27;, &#x27;nickname&#x27;: &#x27;&#x27;, &#x27;mobile&#x27;: &#x27;&#x27;, &#x27;email&#x27;: &#x27;&#x27;, &#x27;avatar&#x27;: &#x27;http://shop-xo.hctestedu.com/static/index/default/images/default-user-avatar.jpg&#x27;, &#x27;alipay_openid&#x27;: &#x27;&#x27;, &#x27;weixin_openid&#x27;: &#x27;&#x27;, &#x27;weixin_unionid&#x27;: &#x27;&#x27;, &#x27;weixin_web_openid&#x27;: &#x27;&#x27;, &#x27;baidu_openid&#x27;: &#x27;&#x27;, &#x27;toutiao_openid&#x27;: &#x27;&#x27;, &#x27;qq_openid&#x27;: &#x27;&#x27;, &#x27;qq_unionid&#x27;: &#x27;&#x27;, &#x27;integral&#x27;: &#x27;0&#x27;, &#x27;locking_integral&#x27;: &#x27;0&#x27;, &#x27;referrer&#x27;: &#x27;0&#x27;, &#x27;add_time&#x27;: &#x27;1669790543&#x27;, &#x27;add_time_text&#x27;: &#x27;2022-11-30 14:42:23&#x27;, &#x27;mobile_security&#x27;: &#x27;&#x27;, &#x27;email_security&#x27;: &#x27;&#x27;, &#x27;user_name_view&#x27;: &#x27;huace_xm&#x27;, &#x27;is_mandatory_bind_mobile&#x27;: 0, &#x27;token&#x27;: &#x27;88c06b3b23dd615cab4a0221d69ea637&#x27;&#125;&#125;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>收藏商品：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests,jsonpath</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span> </span><br><span class="line">&#125;</span><br><span class="line">data2 = &#123;</span><br><span class="line">    <span class="string">&quot;id&quot;</span>: <span class="string">&quot;12&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">rs1 = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/goods/favor&quot;</span>,</span><br><span class="line">                       <span class="comment">#请求路径</span></span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,</span><br><span class="line">                 data=data2) <span class="comment"># 这就是发请求 ,括号里填四要素 --怎么确定接口地址？四要素是什么？</span></span><br><span class="line"><span class="built_in">print</span>(rs1.json())</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;输出</span></span><br><span class="line"><span class="string">&#123;&#x27;msg&#x27;: &#x27;登录失效，请重新登录&#x27;, &#x27;code&#x27;: -400, &#x27;data&#x27;: &#x27;&#x27;&#125;</span></span><br><span class="line"><span class="string">未进行接口鉴权，导致不能收藏商品</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#进行接口鉴权</span></span><br><span class="line"><span class="keyword">import</span> requests,jsonpath</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">&quot;accounts&quot;</span>:<span class="string">&quot;huace_xm&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pwd&quot;</span>:<span class="number">123456</span>,</span><br><span class="line">    <span class="string">&quot;type&quot;</span>:<span class="string">&quot;username&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">rs = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/user/login&quot;</span>,</span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,</span><br><span class="line">                 data=data) <span class="comment"># 这就是发请求 ,括号里填四要素 --怎么确定接口地址？四要素是什么？</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(rs.json())</span><br><span class="line"><span class="comment">#仔细观看登录成功后。返会的结果中含有token项</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#print(rs.json()[&quot;data&quot;][&quot;token&quot;])</span></span><br><span class="line">token = rs.json()[<span class="string">&quot;data&quot;</span>][<span class="string">&quot;token&quot;</span>]<span class="comment">#直接准确提出出token的值</span></span><br><span class="line">token1 = jsonpath.jsonpath(rs.json(),<span class="string">&quot;$..token&quot;</span>)</span><br><span class="line"><span class="comment">#不知道token的值具体在哪时，使用$..token</span></span><br><span class="line"><span class="comment">#肯定会提取出含有token的值，结果为一个列表。</span></span><br><span class="line"></span><br><span class="line">data2 = &#123;</span><br><span class="line">    <span class="string">&quot;id&quot;</span>: <span class="string">&quot;12&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">rs1 = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/goods/favor?token=&quot;</span>+token1[<span class="number">0</span>],<span class="comment">#传入对应的token</span></span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,</span><br><span class="line">                 data=data2) <span class="comment"># 这就是发请求 ,括号里填四要素 --怎么确定接口地址？四要素是什么？</span></span><br><span class="line"><span class="built_in">print</span>(rs1.json())</span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;输出</span></span><br><span class="line"><span class="string">&#123;&#x27;msg&#x27;: &#x27;取消成功&#x27;, &#x27;code&#x27;: 0, &#x27;data&#x27;: &#123;&#x27;text&#x27;: &#x27;收藏&#x27;, &#x27;status&#x27;: 0, &#x27;count&#x27;: 49&#125;&#125;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#说明</span></span><br><span class="line"><span class="comment">#使用jsonpath需要导入对应的包，同时还需要在虚拟环境中下载安装</span></span><br><span class="line">pip install jsonpath  <span class="comment">#安装</span></span><br><span class="line">jsonpath --version   <span class="comment">#检查</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">jsonpath语法：jsonpath只能提取json对象中的参数</span></span><br><span class="line"><span class="string">$表示最外层大括号</span></span><br><span class="line"><span class="string">.表示进一层</span></span><br><span class="line"><span class="string">提取token的准确语法为：$.data.token</span></span><br><span class="line"><span class="string">模糊语法为：$..token，注意结果为列表，需要再准确取值</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="comment">#并不是所有的token都是放在路径参数里面的，这个主要由前后端开发师共同决定</span></span><br><span class="line"><span class="comment">#可以放在请求头中，路径参数中，也可放在请求体中（不能是get，delect方式，没有请求体）</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#正则表达式提取</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line">out=<span class="string">&#x27;&#x27;&#x27;&#123;&#x27;msg&#x27;: &#x27;登录成功&#x27;,</span></span><br><span class="line"><span class="string">&#x27;code&#x27;: 0, </span></span><br><span class="line"><span class="string">&#x27;data&#x27;: &#123;&#x27;id&#x27;: &#x27;19898&#x27;,  &#x27;token&#x27;: &#x27;54e66bcb250f172f92feee1440a79277&#x27;&#125;&#125;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">path=<span class="string">r&#x27;&#x27;&#x27;&#x27;token&#x27;: &#x27;(.+?)&#x27;&#125;&#125;&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="built_in">print</span>(re.findall(path,out))</span><br><span class="line"><span class="comment">#将你想提取的值用(.+?)替换即可，别的直接复制粘贴</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="接口关联"><a href="#接口关联" class="headerlink" title="接口关联"></a>接口关联</h2><p>与接口鉴权类似。一个接口的参数需要使用上一个接口的一些参数。例如上一个接口生成了对应的订单 id，下个接口查询订单时需要使用到订单 id，故需要将其提取出来再传递给下个接口使用，提取方法类似上述。或者为了满足增删改查时<strong>业务闭环</strong>，执行一圈后数据库没有产生垃圾数据，也需要接口关联。</p>
+<p>还是jsonpath与re的使用，即正则表达式的提取和json提取。</p>
+<h2 id="接口加密"><a href="#接口加密" class="headerlink" title="接口加密"></a>接口加密</h2><p>系统明文传输的数据会被不明身份的人用抓包工具抓取，从而威胁系统和数据的<strong>安全性</strong>。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#一般是对传输的数据进行加密，加密的方式有很多，具体看实际场景。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">测试时，若采用常规的方法进行加密，则可去对应的网站找取加密的密文，再传入接口中进行测试</span></span><br><span class="line"><span class="string">或者找开发要去加密的算法代码，进行调用后再传入对应的参数</span></span><br><span class="line"><span class="string">自己懂的，就自行编写对应的加密算法，加密后再传参</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="上传文件"><a href="#上传文件" class="headerlink" title="上传文件"></a>上传文件</h2><p>某些接口传入的数据是文件类型，再测试时需要先读出文件的信息，再将信息作为参数进行传参。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">url = <span class="string">&#x27;http://httpbin.org/post&#x27;</span>  <span class="comment"># 上传文件接口</span></span><br><span class="line">files = &#123;</span><br><span class="line">    <span class="string">&#x27;file&#x27;</span>: <span class="built_in">open</span>(<span class="string">&#x27;../file/test.png&#x27;</span>, <span class="string">&#x27;rb&#x27;</span>),  <span class="comment"># 文件路径          </span></span><br><span class="line"> &#125;  <span class="comment"># =&gt; 打开上传文件并且加入文件相关参数</span></span><br><span class="line"> <span class="comment">#file是前端指定的需要传递的参数名。</span></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">&quot;name&quot;</span>: <span class="string">&quot;test&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"> <span class="comment">#即先将文件读为二进制文件再进行传参</span></span><br><span class="line"><span class="comment">#传递的参数也是</span></span><br><span class="line"> <span class="comment"># data传入请求参数dict,files传入待上传文件参数dict</span></span><br><span class="line">r = requests.post(url, data=data, files=files)</span><br><span class="line"><span class="built_in">print</span>(r.json())</span><br></pre></td></tr></table></figure>
+
+<h2 id="cookie关联"><a href="#cookie关联" class="headerlink" title="cookie关联"></a>cookie关联</h2><p>有些接口之间是存在着cookie关联的，即需要发送某些cookie信息才能进行访问该接口，类似cookie鉴权。</p>
+<p>一种方式是在请求参数的时候，直接传入对应的cookie信息。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">test_login</span>(<span class="params">username,password</span>):</span><br><span class="line">    host=<span class="string">&#x27;http://localhost&#x27;</span></span><br><span class="line">    url=<span class="string">f&#x27;<span class="subst">&#123;host&#125;</span>/api/bbb/ccc&#x27;</span></span><br><span class="line">    payload=&#123;<span class="string">&#x27;username&#x27;</span>:username,</span><br><span class="line">             <span class="string">&#x27;password&#x27;</span>:password</span><br><span class="line">             &#125;</span><br><span class="line">    reps=requests.post(url,data=payload)</span><br><span class="line">    <span class="keyword">return</span> reps.cookies</span><br><span class="line"></span><br><span class="line">user_cookie= test_login(<span class="string">&#x27;test&#x27;</span>,<span class="string">&#x27;12345678&#x27;</span>) <span class="comment">#调用函数获取返回值并赋值给user_cookie</span></span><br><span class="line">reps=requests.post(api_url,data=payload,cookies=user_cookie)<span class="comment">#直接在请求中加上cookies=user_cookie</span></span><br></pre></td></tr></table></figure>
+
+<p>另一种方式是发送请求时，直接使用session的request方法。会自动关联所有请求的cookie信息。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#先生成对应的session对象</span></span><br><span class="line">sess=requests.session();</span><br><span class="line"><span class="comment">#操作</span></span><br><span class="line"><span class="comment">#sess.request(url,param,data,**kwargs)</span></span><br><span class="line"><span class="comment">#可以使用对应的夹具函数，完成对session的初始化，同时使用单例模式，保证session的唯一性</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="总结–简单封装"><a href="#总结–简单封装" class="headerlink" title="总结–简单封装"></a>总结–简单封装</h2><h3 id="统一方法封装"><a href="#统一方法封装" class="headerlink" title="统一方法封装"></a>统一方法封装</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RequestUtil</span>:</span><br><span class="line">    sess=requests.session();</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">send_requests</span>(<span class="params">self,**kwargs</span>):</span><br><span class="line">        res=RequestUtil.sess.request(**kwargs)</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line"></span><br><span class="line"><span class="comment">#可以进行统一的日志请求处理</span></span><br><span class="line"><span class="comment">#所有的请求调用的入口信息，统一的日志管理，不用在每个方法进行日志打印</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="接口关联封装"><a href="#接口关联封装" class="headerlink" title="接口关联封装"></a>接口关联封装</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#将提取的参数可写入yaml文件中，方便后续的使用（写入地方由自己定，看自己具体的需求）</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> yaml</span><br><span class="line"></span><br><span class="line"><span class="comment">#写入,追加的方式</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">write_Yaml</span>(<span class="params">data</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(os.getcwd()+<span class="string">&quot;/yaml1.yaml&quot;</span>,encoding=<span class="string">&quot;utf-8&quot;</span>,mode=<span class="string">&quot;a+&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="comment">#对应的yaml文件路径 ，编码格式，打开方式：追加</span></span><br><span class="line">        yaml.dump(data,stream=f,allow_unicode=<span class="literal">True</span>) <span class="comment">#写入yaml文件，写入对象为f，允许编码（不乱码）</span></span><br><span class="line"><span class="comment">#读取yaml文件</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">read_Yaml</span>(<span class="params">key</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(os.getcwd()+<span class="string">&quot;/yaml1.yaml&quot;</span>,encoding=<span class="string">&quot;utf-8&quot;</span>,mode=<span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        <span class="comment">#全部读取文件</span></span><br><span class="line">        value=yaml.load(f,yaml.FullLoader)</span><br><span class="line">        <span class="keyword">return</span> value[key]<span class="comment">#返回key为key的value值</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#清空， 覆盖的方式</span></span><br><span class="line"><span class="comment">#在所有用例执行之前清空yaml文件</span></span><br><span class="line"><span class="comment">#夹具函数，在一次session之前，清空yaml文件</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">clear_Yaml</span>():</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(os.getcwd()+<span class="string">&quot;/yaml1.yaml&quot;</span>,encoding=<span class="string">&quot;utf-8&quot;</span>,mode=<span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.truncate();<span class="comment">#清空yaml文件，防止产生废物数据</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="yaml数据驱动"><a href="#yaml数据驱动" class="headerlink" title="yaml数据驱动"></a>yaml数据驱动</h3><figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="bullet">-</span></span><br><span class="line">	<span class="attr">feature:</span> <span class="string">模块名</span></span><br><span class="line">	<span class="attr">story:</span> <span class="string">接口</span></span><br><span class="line">	<span class="attr">title:</span> <span class="string">用例标题</span></span><br><span class="line">	<span class="attr">request:</span> </span><br><span class="line">		<span class="attr">method:</span> <span class="string">请求方式</span></span><br><span class="line">		<span class="attr">url:</span> <span class="string">请求url</span></span><br><span class="line">		<span class="attr">headers:</span> <span class="string">请求头</span></span><br><span class="line">		<span class="attr">params:</span> <span class="string">请求参数</span></span><br><span class="line">		<span class="attr">json:</span> <span class="string">json参数</span></span><br><span class="line">	<span class="comment">#extract: 提取的数据</span></span><br><span class="line">	<span class="attr">vilidate:</span> <span class="string">请求断言</span>	</span><br><span class="line"><span class="comment">#需要的参数按需求自己添加	</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#读取yaml文件</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">read_Yaml_Testcase</span>(<span class="params">path</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(path, encoding=<span class="string">&quot;utf-8&quot;</span>, mode=<span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">        value = yaml.load(f, yaml.FullLoader)</span><br><span class="line">        <span class="keyword">return</span> value</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>测试</tag>
+        <tag>接口测试</tag>
+        <tag>python</tag>
       </tags>
   </entry>
 </search>
