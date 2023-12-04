@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hlhehe.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Selenium上面介绍了Selenium中的元素定位以及元素的相关操作（详情请点击 Selenium元素定位和操作 ）。接下来将继续介绍Selenium中的API方法。 浏览器操作脚本启动浏览器窗口大小默认不是全屏？如何刷新页面？ 通过调用Selenium的API来实现浏览器的操作。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Selenium API">
+<meta property="og:url" content="https://hlhehe.github.io/2023/12/04/Selenium-API/index.html">
+<meta property="og:site_name" content="Honor">
+<meta property="og:description" content="Selenium上面介绍了Selenium中的元素定位以及元素的相关操作（详情请点击 Selenium元素定位和操作 ）。接下来将继续介绍Selenium中的API方法。 浏览器操作脚本启动浏览器窗口大小默认不是全屏？如何刷新页面？ 通过调用Selenium的API来实现浏览器的操作。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-12-04T09:21:21.000Z">
+<meta property="article:modified_time" content="2023-12-04T01:55:53.936Z">
+<meta property="article:author" content="荷包蛋-溏心">
+<meta property="article:tag" content="测试">
+<meta property="article:tag" content="爬虫">
+<meta property="article:tag" content="Selenium">
+<meta property="article:tag" content="UI测试">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hlhehe.github.io/2023/12/04/Selenium-API/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hlhehe.github.io/2023/12/04/Selenium-API/","path":"2023/12/04/Selenium-API/","title":"Selenium API"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Selenium API | Honor</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Honor</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">荷包蛋的成长之路</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">18</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">12</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Selenium"><span class="nav-number">1.</span> <span class="nav-text">Selenium</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E6%93%8D%E4%BD%9C"><span class="nav-number">1.1.</span> <span class="nav-text">浏览器操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%BC%A0%E6%A0%87%E6%93%8D%E4%BD%9C"><span class="nav-number">1.2.</span> <span class="nav-text">鼠标操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%AE%E7%9B%98%E6%93%8D%E4%BD%9C"><span class="nav-number">1.3.</span> <span class="nav-text">键盘操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%83%E7%B4%A0%E7%AD%89%E5%BE%85"><span class="nav-number">1.4.</span> <span class="nav-text">元素等待</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%90%E5%BC%8F%E7%AD%89%E5%BE%85"><span class="nav-number">1.4.1.</span> <span class="nav-text">隐式等待</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%98%BE%E7%A4%BA%E7%AD%89%E5%BE%85"><span class="nav-number">1.4.2.</span> <span class="nav-text">显示等待</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.4.3.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8B%E6%8B%89%E6%A1%86%E6%93%8D%E4%BD%9C"><span class="nav-number">1.5.</span> <span class="nav-text">下拉框操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%B9%E5%87%BA%E6%A1%86%E6%93%8D%E4%BD%9C"><span class="nav-number">1.6.</span> <span class="nav-text">弹出框操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%BB%9A%E5%8A%A8%E6%9D%A1%E6%93%8D%E4%BD%9C"><span class="nav-number">1.7.</span> <span class="nav-text">滚动条操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Frame%E5%88%87%E6%8D%A2"><span class="nav-number">1.8.</span> <span class="nav-text">Frame切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E7%AA%97%E5%8F%A3%E5%88%87%E6%8D%A2"><span class="nav-number">1.9.</span> <span class="nav-text">多窗口切换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AA%97%E5%8F%A3%E6%88%AA%E5%9B%BE"><span class="nav-number">1.10.</span> <span class="nav-text">窗口截图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie%E6%93%8D%E4%BD%9C"><span class="nav-number">1.11.</span> <span class="nav-text">Cookie操作</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="荷包蛋-溏心"
+      src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+  <p class="site-author-name" itemprop="name">荷包蛋-溏心</p>
+  <div class="site-description" itemprop="description">哪有赌徒天天输，哪有小孩天天哭</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Hlhehe" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Hlhehe" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3113390285@qq.com" title="E-Mail → mailto:3113390285@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hlhehe.github.io/2023/12/04/Selenium-API/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+      <meta itemprop="name" content="荷包蛋-溏心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Honor">
+      <meta itemprop="description" content="哪有赌徒天天输，哪有小孩天天哭">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Selenium API | Honor">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Selenium API
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-12-04 17:21:21 / 修改时间：09:55:53" itemprop="dateCreated datePublished" datetime="2023-12-04T17:21:21+08:00">2023-12-04</time>
+    </span>
+
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>8.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Selenium"><a href="#Selenium" class="headerlink" title="Selenium"></a>Selenium</h2><p>上面介绍了Selenium中的元素定位以及元素的相关操作（详情请点击 <a href="/2023/12/03/Selenium%E5%85%83%E7%B4%A0%E5%AE%9A%E4%BD%8D%E5%92%8C%E6%93%8D%E4%BD%9C/" title="Selenium元素定位和操作">Selenium元素定位和操作</a> ）。接下来将继续介绍Selenium中的API方法。</p>
+<h3 id="浏览器操作"><a href="#浏览器操作" class="headerlink" title="浏览器操作"></a>浏览器操作</h3><p>脚本启动浏览器窗口大小默认不是全屏？如何刷新页面？</p>
+<p>通过调用Selenium的API来实现浏览器的操作。<span id="more"></span></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">maximize_window() 最大化浏览器窗口 --&gt; 模拟浏览器最大化按钮</span><br><span class="line">set_window_size(width, height) 设置浏览器窗口大小 --&gt; 设置浏览器宽、高(像素点)</span><br><span class="line">set_window_position(x, y) 设置浏览器窗口位置 --&gt; 设置浏览器位置</span><br><span class="line">back() 后退 --&gt; 模拟浏览器后退按钮</span><br><span class="line">forward() 前进 --&gt; 模拟浏览器前进按钮</span><br><span class="line">refresh() 刷新 --&gt; 模拟浏览器F5刷新</span><br><span class="line">close() 关闭当前窗口 --&gt; 模拟点击浏览器关闭按钮</span><br><span class="line">quit() 关闭浏览器驱动对象 --&gt; 关闭所有程序启动的窗口</span><br><span class="line">title 获取页面title</span><br><span class="line">current_url 获取当前页面URL</span><br><span class="line">注意： </span><br><span class="line">	driver.title 和 driver.current_url 没有括号，应用场景：一般为判断上步操作是否执行成功。</span><br><span class="line">driver.maximize_window() # 一般为我的前置代码，在获取driver后，直接编写最大化浏览器</span><br><span class="line">driver.refresh() 应用场景，在后面的cookie章节会使用到。</span><br><span class="line">driver.close()与driver.quit()区别：</span><br><span class="line">	close():关闭当前主窗口</span><br><span class="line">	quit():关闭由driver对象启动的所有窗口</span><br><span class="line">	提示：如果当前只有1个窗口，close与quit没有任何区别。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#示例</span></span><br><span class="line"><span class="comment"># 最大化浏览器</span></span><br><span class="line">driver.maximize_window()</span><br><span class="line"><span class="comment"># 刷新</span></span><br><span class="line">driver.refresh()</span><br><span class="line"><span class="comment"># 后退</span></span><br><span class="line">driver.back()</span><br><span class="line"><span class="comment"># 前进</span></span><br><span class="line">driver.forward()</span><br><span class="line"><span class="comment"># 设置浏览器大小</span></span><br><span class="line">driver.set_window_size(<span class="number">300</span>,<span class="number">300</span>)</span><br><span class="line"><span class="comment"># 设置浏览器位置</span></span><br><span class="line">driver.set_window_position(<span class="number">300</span>,<span class="number">200</span>)</span><br><span class="line"><span class="comment"># 关闭浏览器单个窗口</span></span><br><span class="line">driver.close()</span><br><span class="line"><span class="comment"># 关闭浏览器所有窗口</span></span><br><span class="line">driver.quit()</span><br><span class="line"><span class="comment"># 获取title</span></span><br><span class="line">title = driver.title</span><br><span class="line"><span class="comment"># 获取当前页面url</span></span><br><span class="line">url = driver.current_url</span><br></pre></td></tr></table></figure>
+
+<h3 id="鼠标操作"><a href="#鼠标操作" class="headerlink" title="鼠标操作"></a>鼠标操作</h3><p>现在Web产品中存在丰富的鼠标交互方式，作为一个Web自动化测试框架，需要应对这些鼠标操作的应用场景。常见的鼠标操作有：点击、右击、双击、悬停、拖拽等，对于这些鼠标操作Selenium都封装了相应的操作方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">说明：在Selenium中将操作鼠标的方法封装在ActionChains类中</span><br><span class="line">导包：from selenium.webdriver.common.action_chains import ActionChains</span><br><span class="line">实例化对象：action = ActionChains(driver)</span><br><span class="line">方法：</span><br><span class="line"> 	context_click(element) 右击 --&gt; 模拟鼠标右键点击效果</span><br><span class="line"> 	double_click(element) 双击 --&gt; 模拟鼠标双击效果</span><br><span class="line"> 	drag_and_drop(source, target) 拖动 --&gt; 模拟鼠标拖动效果</span><br><span class="line"> 	move_to_element(element) 悬停 --&gt; 模拟鼠标悬停效果</span><br><span class="line"> 	perform() 执行 --&gt; 此方法用来执行以上所有鼠标操作，操作上诉方法后，还需调用此方法猜能生效</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">鼠标执行-perform()</span><br><span class="line">说明：在ActionChains类中所有提供的鼠标事件方法，在调用的时候所有的行为都存储在ActionChains对象中，而perform()方法就是真正去执行所有的鼠标事件。</span><br><span class="line">强调：必须调用perform()方法才能执行鼠标事件</span><br><span class="line"></span><br><span class="line">鼠标右键-context_click()</span><br><span class="line">说明：对于点击鼠标右键，如果弹出的是浏览器默认的菜单，Selenium没有提供操作菜单选项的方法；如果是自定义的右键菜单，则可以通过元素定位来操作菜单中的选项。</span><br><span class="line"></span><br><span class="line">鼠标双击-double_click()</span><br><span class="line">说明：模拟双击鼠标左键操作</span><br><span class="line"></span><br><span class="line">鼠标拖动-drag_and_drop()</span><br><span class="line">说明：模拟鼠标拖动动作，选定拖动源元素释放到目标元素</span><br><span class="line">	源元素 source = driver.find_element_by_id(xxx)</span><br><span class="line">	目标元素 target = driver.find_element_by_id(xxx)</span><br><span class="line">	调用方法 action.drag_and_drop(source, target).perform()</span><br><span class="line"></span><br><span class="line">鼠标悬停-move_to_element()</span><br><span class="line">说明: 模拟鼠标悬停在指定的的元素上</span><br><span class="line"></span><br><span class="line">再次说明，最后调用perform()方法才能真正执行对应的鼠标方法。</span><br><span class="line">selenium框架中虽然提供了，右击鼠标方法，但是没有提供选择右击菜单方法，可以通过发送快捷键的方式解决(经测试，谷歌浏览器不支持)。</span><br></pre></td></tr></table></figure>
+
+<h3 id="键盘操作"><a href="#键盘操作" class="headerlink" title="键盘操作"></a>键盘操作</h3><p>如何实现复制、粘贴的操作？模拟键盘上一些按键或者组合键的输入 如：Ctrl+C 、Ctrl+V？Selenium中把键盘的按键都封装在Keys类中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">导包：from selenium.webdriver.common.keys import Keys</span><br><span class="line">方法：</span><br><span class="line">	send_keys(Keys.BACK_SPACE) 删除键(BackSpace)</span><br><span class="line"> 	send_keys(Keys.SPACE) 空格键(Space)</span><br><span class="line"> 	send_keys(Keys.TAB) 制表键(Tab)</span><br><span class="line">	send_keys(Keys.ESCAPE) 回退键(Esc)</span><br><span class="line">	send_keys(Keys.ENTER) 回车键(Enter)</span><br><span class="line">	send_keys(Keys.CONTROL,&#x27;a&#x27;) 全选(Ctrl+A)</span><br><span class="line">	send_keys(Keys.CONTROL,&#x27;c&#x27;) 复制(Ctrl+C)</span><br><span class="line">别的组合键与上面类似。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 定位用户名</span></span><br><span class="line">element = driver.find_element_by_id(<span class="string">&quot;HonorHL&quot;</span>)</span><br><span class="line"><span class="comment"># 输入用户名</span></span><br><span class="line">element.send_keys(<span class="string">&quot;荷包蛋HL&quot;</span>)</span><br><span class="line"><span class="comment"># 删除1</span></span><br><span class="line">element.send_keys(Keys.BACK_SPACE)</span><br><span class="line"><span class="comment"># 全选</span></span><br><span class="line">element.send_keys(Keys.CONTROL, <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line"><span class="comment"># 复制</span></span><br><span class="line">element.send_keys(Keys.CONTROL, <span class="string">&#x27;c&#x27;</span>)</span><br><span class="line"><span class="comment"># 粘贴</span></span><br><span class="line">driver.find_element_by_id(<span class="string">&#x27;HL&#x27;</span>).send_keys(Keys.CONTROL, <span class="string">&#x27;v&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="元素等待"><a href="#元素等待" class="headerlink" title="元素等待"></a>元素等待</h3><p>在定位页面元素时如果未找到，会在指定时间内一直等待的过程。</p>
+<p>为什么需要元素等待？网络速度慢，电脑配置低，服务器处理请求慢。即在有的时候，元素定位操作代码没有问题，可就是定位不到元素，可能的原因是页面没有加载完成就在执行元素定位，故定位不到元素。</p>
+<p>与sleep()的区别：不论是否找到元素，sleep都会等待设定的时间长度，而元素等待再定位到元素时就不会继续等待了。</p>
+<h4 id="隐式等待"><a href="#隐式等待" class="headerlink" title="隐式等待"></a>隐式等待</h4><p>定位元素时，如果能定位到元素则直接返回该元素，不触发等待； 如果不能定位到该元素，则间隔一段时间后再去定位元素； 如果在达到最大时长时还没有找到指定元素，则抛出元素不存在的异常 NoSuchElementException 。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">方法：driver.implicitly_wait(timeout)    (timeout：为等待最大时长，单位：秒)</span><br><span class="line">说明：隐式等待为全局设置（只需要设置一次，就会作用于所有元素），查找时间间隔为0.5秒</span><br></pre></td></tr></table></figure>
+
+<h4 id="显示等待"><a href="#显示等待" class="headerlink" title="显示等待"></a>显示等待</h4><p>定位指定元素时，如果能定位到元素则直接返回该元素，不触发等待； 如果不能定位到该元素，则间隔一段时间后再去定位元素； 如果在达到最大时长时还没有找到指定元素，则抛出超时异常 TimeoutException 。（与隐式抛出的异常对象不同）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">在Selenium中把显式等待的相关方法封装在WebDriverWait类中</span><br><span class="line">导包：from selenium.webdriver.support.wait import WebDriverWait</span><br><span class="line"></span><br><span class="line">WebDriverWait(driver, timeout, poll_frequency=0.5)</span><br><span class="line"> 	driver：浏览器驱动对象</span><br><span class="line"> 	timeout：超时的时长，单位：秒</span><br><span class="line"> 	poll_frequency：检测间隔时间，默认为0.5秒</span><br><span class="line"> 	</span><br><span class="line">调用方法 until(method)：直到...时</span><br><span class="line">	 method：函数名称，该函数用来实现对元素的定位</span><br><span class="line"> 	一般使用匿名函数来实现：lambda x: x.find_element_by_id(&quot;userA&quot;)</span><br><span class="line"> 	</span><br><span class="line">例如：	element = WebDriverWait(driver, 10, 1).until(lambda x: x.find_element_by_id(&quot;HL&quot;))</span><br><span class="line">每隔1秒就去页面查找id为HL的元素，定位到元素后，则不再等待，继续操作，若未查找到，在10秒内每隔一秒就再去检查该元素，超时后就抛出异常。</span><br><span class="line"></span><br><span class="line">显示等待作用于一个元素，且可以自定义查找的时间间隔。</span><br></pre></td></tr></table></figure>
+
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
+<li>作用域：隐式为全局元素，显式等待为单个元素有效</li>
+<li>使用方法：隐式等待直接通过驱动对象调用，而显式等待方法封装在WebDriverWait类中</li>
+<li>达到最大超时时长后抛出的异常不同：隐式为NoSuchElementException，显式等待为TimeoutException</li>
+</ul>
+<h3 id="下拉框操作"><a href="#下拉框操作" class="headerlink" title="下拉框操作"></a>下拉框操作</h3><p>下拉框就是HTML中<select>元素，可以使用前面学习的元素定位操作，定位到下拉框，再对其进行相应的操作。当选中某个下拉框时，需要先定位到该select元素的子元素option下拉框，再执行点击操作，操作较为繁琐。故Selenium为下拉框封装了Select类。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">说明：Select类是Selenium为操作select标签特殊封装的。</span><br><span class="line">导包：from selenium.webdriver.support.select import Select</span><br><span class="line"></span><br><span class="line">实例化对象：</span><br><span class="line">	select = Select(element)</span><br><span class="line">		element: &lt;select&gt;标签对应的元素，通过元素定位方式获取，例如：driver.find_element_by_id(&quot;selectHL&quot;)</span><br><span class="line">注意：只需定位到对应的select元素，而不用定位到其子元素option。</span><br><span class="line"></span><br><span class="line">方法：选择对应的下拉框</span><br><span class="line">	select.select_by_index(index) --&gt; 根据option索引来定位，从0开始</span><br><span class="line">	select.select_by_value(value) --&gt; 根据option属性 value值来定位</span><br><span class="line">	select.select_by_visible_text(text) --&gt; 根据option显示文本来定位</span><br><span class="line"></span><br><span class="line">注意：调用Select类下面的方法，是通过索引、value属性值、显示文本去控制，而不需要click事件</span><br></pre></td></tr></table></figure>
+
+<h3 id="弹出框操作"><a href="#弹出框操作" class="headerlink" title="弹出框操作"></a>弹出框操作</h3><p>网页中常用的弹出框有三种</p>
+<ul>
+<li>alert 警告框</li>
+<li>confirm 确认框</li>
+<li>prompt 提示框</li>
+</ul>
+<p>当网页弹出对应的弹出框时，再对页面进行相应的点击，赋值操作就没有执行了。故只有将其关闭后，接下来的语句才能正常执行。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">说明：Selenium中对处理弹出框的操作，有专用的处理方法；并且处理的方法都一样</span><br><span class="line">获取弹出框对象： alert = driver.switch_to.alert</span><br><span class="line">调用：</span><br><span class="line">	alert.text --&gt; 返回alert/confirm/prompt中的文字信息</span><br><span class="line">	alert.accept() --&gt; 接受对话框选项</span><br><span class="line">	alert.dismiss() --&gt; 取消对话框选项</span><br><span class="line">注意：</span><br><span class="line">	可能有的弹出框的页面显示上没有取消/确定按钮，但仍能调用对应的接受和取消的方法。底层的弹出框是含有上述的方法的。且三种弹出框的处理方式都是一样的。</span><br><span class="line">	注意分辨前端人员自己编写的弹出框（使用div等模拟），而不是使用浏览器自带的弹出框。此类采用传统的方法，使用Selenium定位到该元素，再执行关闭操作。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 点击弹出框按钮（弹出警告框）</span></span><br><span class="line">driver.find_element_by_id(<span class="string">&quot;alertHL&quot;</span>).click()</span><br><span class="line"><span class="comment"># 获取警告框</span></span><br><span class="line">alert = driver.switch_to.alert</span><br><span class="line"><span class="comment"># 打印警告框文本</span></span><br><span class="line"><span class="built_in">print</span>(alert.text)</span><br><span class="line"><span class="comment"># 接受警告框</span></span><br><span class="line">alert.accept()</span><br><span class="line"><span class="comment"># 取消警告框</span></span><br><span class="line"><span class="comment"># alert.dismiss()</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="滚动条操作"><a href="#滚动条操作" class="headerlink" title="滚动条操作"></a>滚动条操作</h3><p>滚动条：一种可控制页面显示范围的组件</p>
+<p>在HTML页面中，由于前端技术框架的原因，页面元素为动态显示，元素根据滚动条的下拉而被加载。页面注册同意条款，需要滚动条到最底层，才能点击同意。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">说明：selenium中并没有直接提供操作滚动条的方法，但是它提供了可执行JavaScript脚本的方法，所以我们可以通过JavaScript脚本来达到操作滚动条的目的。</span><br><span class="line">设置JavaScript脚本控制滚动条</span><br><span class="line">	js = &quot;window.scrollTo(0,1000)&quot;</span><br><span class="line">		(0:左边距；1000：上边距；单位：像素)</span><br><span class="line">		</span><br><span class="line">selenium调用执行JavaScript脚本的方法</span><br><span class="line">	driver.execute_script(js)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 最底层</span></span><br><span class="line">js1 = <span class="string">&quot;window.scrollTo(0,10000)&quot;</span></span><br><span class="line">driver.execute_script(js1)</span><br><span class="line"><span class="comment"># 最顶层</span></span><br><span class="line">js2 = <span class="string">&quot;window.scrollTo(0,0)&quot;</span></span><br><span class="line">driver.execute_script(js2)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Frame切换"><a href="#Frame切换" class="headerlink" title="Frame切换"></a>Frame切换</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">frame：HTML页面中的一种框架，主要作用是在当前页面中指定区域显示另一页面元素；</span><br><span class="line">形式一：[了解]</span><br><span class="line">	&lt;frameset cols=&quot;25%,75%&quot;&gt;</span><br><span class="line">		&lt;frame src=&quot;frame_a.htm&quot;&gt;  引用a.html</span><br><span class="line">		&lt;frame src=&quot;frame_b.htm&quot;&gt;</span><br><span class="line">	&lt;/frameset&gt;</span><br><span class="line">形式二：</span><br><span class="line">&lt;iframe name=&quot;iframe_a&quot; src=&quot;iframeHL.htm&quot; width=&quot;200&quot; height=&quot;200&quot;&gt;&lt;/iframe&gt;</span><br></pre></td></tr></table></figure>
+
+<p>若此时的页面中，有对应的Frame别的页面信息，是定位不到对应的Frame页面的元素的，故就需要切换到该Frame页面才能定位到对应的元素。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">说明：在Selenium中封装了如何切换frame框架的方法</span><br><span class="line">方法：</span><br><span class="line">	driver.switch_to.frame(frame_reference) --&gt; 切换到指定frame的方法</span><br><span class="line">		frame_reference：可以为frame框架的name、id或者定位到的frame元素</span><br><span class="line">		</span><br><span class="line">	driver.switch_to.default_content() --&gt; 恢复默认页面方法,回到主页面。在frame中操作其他页面，必须先回到默认页面，才能进一步操作。不能从Frame a页面切换到Frame b页面。只能a到主页面，主页面再到b页面。</span><br></pre></td></tr></table></figure>
+
+<h3 id="多窗口切换"><a href="#多窗口切换" class="headerlink" title="多窗口切换"></a>多窗口切换</h3><p>在HTML页面中，当点击超链接或者按钮时，有的会在新的窗口打开页面。</p>
+<p>与Frame类似，当打开某个连接，浏览器打开新页面时，无法定位到新页面内容，也就无法对新页面进行操作。故需要进行窗口切换。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">说明：在Selenium中封装了获取当前窗口句柄、获取所有窗口句柄和切换到指定句柄窗口的方法；句柄：英文handle，窗口的唯一识别码。</span><br><span class="line">方法：</span><br><span class="line"> 	driver.current_window_handle --&gt; 获取当前窗口句柄</span><br><span class="line"> 	driver.window_handles --&gt; 获取所有窗口句柄</span><br><span class="line"> 	driver.switch_to.window(handle) --&gt; 切换指定句柄窗口</span><br><span class="line"> 注意：通过获取所有的句柄以及当前窗口的句柄，来判断去要切换的句柄。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#获取所有的窗口句柄</span></span><br><span class="line">window_handles = driver.window_handles</span><br><span class="line"><span class="comment">#当只有两个窗口时，当前所在的窗口句柄下标为0，要切换的窗口句柄下标为1</span></span><br><span class="line">driver.switch_to.window(window_handles[<span class="number">1</span>])</span><br><span class="line"><span class="comment">#切回主窗口</span></span><br><span class="line">driver.switch_to.window(window_handles[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+
+<h3 id="窗口截图"><a href="#窗口截图" class="headerlink" title="窗口截图"></a>窗口截图</h3><p>自动化脚本是由程序去执行的，因此有时候打印的错误信息并不是十分明确。如果在执行出错的时候对当前窗口截图保存，那么通过图片就可以非常直观地看到出错的原因。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">说明：在Selenium中，提供了截图方法，我们只需要调用即可</span><br><span class="line">方法：driver.get_screenshot_as_file(imgpath)   </span><br><span class="line">		imgpath：图片保存路径</span><br><span class="line">		</span><br><span class="line">例如：driver.get_screenshot_as_file(&quot;./img/HL.jpg&quot;)    存放到当前目录下的img文件夹下，命名为HL.jpg图片。可以通过时间戳的方式，生成对应的图片名，防止图片被覆盖。</span><br><span class="line">     driver.get_screenshot_as_file(&quot;../image/%s.png&quot;%(time.strftime(&quot;%Y_%m_%d %H_%M_%S&quot;)))</span><br><span class="line">	 		strftime:将时间转为字符串函数</span><br><span class="line">	        注意：%Y_%m_%d %H_%M_%S：代表，年 月 日 时 分 秒</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">driver.get_screenshot_as_file(<span class="string">&quot;../image/%s.png&quot;</span>%(time.strftime(<span class="string">&quot;%Y_%m_%d %H_%M_%S&quot;</span>)))</span><br><span class="line"><span class="comment"># %s：占位符，使用%后面的字符串代替</span></span><br><span class="line"><span class="comment"># strftime:将时间转为字符串函数</span></span><br><span class="line"><span class="comment"># %Y_%m_%d %H_%M_%S：代表，年 月 日 时 分 秒</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Cookie操作"><a href="#Cookie操作" class="headerlink" title="Cookie操作"></a>Cookie操作</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Cookie是由Web服务器生成的，并且保存在用户浏览器上的小文本文件，它可以包含用户相关的信息。</span><br><span class="line">Cookie数据格式：键值对组成（python中的字典）</span><br><span class="line">Cookie产生：客户端请求服务器，如果服务器需要记录该用户状态，就向客户端浏览器颁发一个Cookie数据</span><br><span class="line">Cookie使用：当浏览器再次请求该网站时，浏览器把请求的数据和Cookie数据一同提交给服务器，服务器检查该Cookie，以此来辨认用户状态。</span><br></pre></td></tr></table></figure>
+
+<p>更多鉴权内容请点击 （ <a href="/2023/12/02/token%E9%89%B4%E6%9D%83---JWT%E4%BB%A4%E7%89%8C/" title="token鉴权---JWT令牌">token鉴权---JWT令牌</a> ）</p>
+<p>实现会话跟踪，记录用户登录状态，实现记住密码和自动登录的功能。</p>
+<p>某些场景下，可使用cookie鉴权的方式，跳过繁琐的登录验证过程。如复杂的图片验证码验证。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">说明：Selenium中对cookie操作提供相应的方法</span><br><span class="line">方法：</span><br><span class="line">	get_cookie(name) --&gt; 获取指定cookie</span><br><span class="line">		name:为cookie的名称</span><br><span class="line">		</span><br><span class="line">	get_cookies() --&gt; 获取本网站所有本地cookies</span><br><span class="line">	add_cookie(cookie_dict) --&gt; 添加cookie</span><br><span class="line">		cookie_dict：一个字典对象，必选的键包括：&quot;name&quot; and &quot;value&quot;</span><br><span class="line">注意：对cookie操作后，必须刷新当前页面才能生效。driver.refresh()</span><br></pre></td></tr></table></figure>
+
+
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>荷包蛋-溏心
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://hlhehe.github.io/2023/12/04/Selenium-API/" title="Selenium API">https://hlhehe.github.io/2023/12/04/Selenium-API/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 测试</a>
+              <a href="/tags/%E7%88%AC%E8%99%AB/" rel="tag"><i class="fa fa-tag"></i> 爬虫</a>
+              <a href="/tags/Selenium/" rel="tag"><i class="fa fa-tag"></i> Selenium</a>
+              <a href="/tags/UI%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> UI测试</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/12/03/Selenium%E5%85%83%E7%B4%A0%E5%AE%9A%E4%BD%8D%E5%92%8C%E6%93%8D%E4%BD%9C/" rel="prev" title="Selenium元素定位和操作">
+                  <i class="fa fa-angle-left"></i> Selenium元素定位和操作
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">荷包蛋-溏心</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">76k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:09</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+</html>
