@@ -119,6 +119,93 @@
       </tags>
   </entry>
   <entry>
+    <title>Selenium API</title>
+    <url>/2023/12/04/Selenium-API/</url>
+    <content><![CDATA[<h2 id="Selenium"><a href="#Selenium" class="headerlink" title="Selenium"></a>Selenium</h2><p>上面介绍了Selenium中的元素定位以及元素的相关操作（详情请点击 <a href="/2023/12/03/Selenium%E5%85%83%E7%B4%A0%E5%AE%9A%E4%BD%8D%E5%92%8C%E6%93%8D%E4%BD%9C/" title="Selenium元素定位和操作">Selenium元素定位和操作</a> ）。接下来将继续介绍Selenium中的API方法。</p>
+<h3 id="浏览器操作"><a href="#浏览器操作" class="headerlink" title="浏览器操作"></a>浏览器操作</h3><p>脚本启动浏览器窗口大小默认不是全屏？如何刷新页面？</p>
+<p>通过调用Selenium的API来实现浏览器的操作。<span id="more"></span></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">maximize_window() 最大化浏览器窗口 --&gt; 模拟浏览器最大化按钮</span><br><span class="line">set_window_size(width, height) 设置浏览器窗口大小 --&gt; 设置浏览器宽、高(像素点)</span><br><span class="line">set_window_position(x, y) 设置浏览器窗口位置 --&gt; 设置浏览器位置</span><br><span class="line">back() 后退 --&gt; 模拟浏览器后退按钮</span><br><span class="line">forward() 前进 --&gt; 模拟浏览器前进按钮</span><br><span class="line">refresh() 刷新 --&gt; 模拟浏览器F5刷新</span><br><span class="line">close() 关闭当前窗口 --&gt; 模拟点击浏览器关闭按钮</span><br><span class="line">quit() 关闭浏览器驱动对象 --&gt; 关闭所有程序启动的窗口</span><br><span class="line">title 获取页面title</span><br><span class="line">current_url 获取当前页面URL</span><br><span class="line">注意： </span><br><span class="line">	driver.title 和 driver.current_url 没有括号，应用场景：一般为判断上步操作是否执行成功。</span><br><span class="line">driver.maximize_window() # 一般为我的前置代码，在获取driver后，直接编写最大化浏览器</span><br><span class="line">driver.refresh() 应用场景，在后面的cookie章节会使用到。</span><br><span class="line">driver.close()与driver.quit()区别：</span><br><span class="line">	close():关闭当前主窗口</span><br><span class="line">	quit():关闭由driver对象启动的所有窗口</span><br><span class="line">	提示：如果当前只有1个窗口，close与quit没有任何区别。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#示例</span></span><br><span class="line"><span class="comment"># 最大化浏览器</span></span><br><span class="line">driver.maximize_window()</span><br><span class="line"><span class="comment"># 刷新</span></span><br><span class="line">driver.refresh()</span><br><span class="line"><span class="comment"># 后退</span></span><br><span class="line">driver.back()</span><br><span class="line"><span class="comment"># 前进</span></span><br><span class="line">driver.forward()</span><br><span class="line"><span class="comment"># 设置浏览器大小</span></span><br><span class="line">driver.set_window_size(<span class="number">300</span>,<span class="number">300</span>)</span><br><span class="line"><span class="comment"># 设置浏览器位置</span></span><br><span class="line">driver.set_window_position(<span class="number">300</span>,<span class="number">200</span>)</span><br><span class="line"><span class="comment"># 关闭浏览器单个窗口</span></span><br><span class="line">driver.close()</span><br><span class="line"><span class="comment"># 关闭浏览器所有窗口</span></span><br><span class="line">driver.quit()</span><br><span class="line"><span class="comment"># 获取title</span></span><br><span class="line">title = driver.title</span><br><span class="line"><span class="comment"># 获取当前页面url</span></span><br><span class="line">url = driver.current_url</span><br></pre></td></tr></table></figure>
+
+<h3 id="鼠标操作"><a href="#鼠标操作" class="headerlink" title="鼠标操作"></a>鼠标操作</h3><p>现在Web产品中存在丰富的鼠标交互方式，作为一个Web自动化测试框架，需要应对这些鼠标操作的应用场景。常见的鼠标操作有：点击、右击、双击、悬停、拖拽等，对于这些鼠标操作Selenium都封装了相应的操作方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：在Selenium中将操作鼠标的方法封装在ActionChains类中</span><br><span class="line">导包：from selenium.webdriver.common.action_chains import ActionChains</span><br><span class="line">实例化对象：action = ActionChains(driver)</span><br><span class="line">方法：</span><br><span class="line"> 	context_click(element) 右击 --&gt; 模拟鼠标右键点击效果</span><br><span class="line"> 	double_click(element) 双击 --&gt; 模拟鼠标双击效果</span><br><span class="line"> 	drag_and_drop(source, target) 拖动 --&gt; 模拟鼠标拖动效果</span><br><span class="line"> 	move_to_element(element) 悬停 --&gt; 模拟鼠标悬停效果</span><br><span class="line"> 	perform() 执行 --&gt; 此方法用来执行以上所有鼠标操作，操作上诉方法后，还需调用此方法猜能生效</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">鼠标执行-perform()</span><br><span class="line">说明：在ActionChains类中所有提供的鼠标事件方法，在调用的时候所有的行为都存储在ActionChains对象中，而perform()方法就是真正去执行所有的鼠标事件。</span><br><span class="line">强调：必须调用perform()方法才能执行鼠标事件</span><br><span class="line"></span><br><span class="line">鼠标右键-context_click()</span><br><span class="line">说明：对于点击鼠标右键，如果弹出的是浏览器默认的菜单，Selenium没有提供操作菜单选项的方法；如果是自定义的右键菜单，则可以通过元素定位来操作菜单中的选项。</span><br><span class="line"></span><br><span class="line">鼠标双击-double_click()</span><br><span class="line">说明：模拟双击鼠标左键操作</span><br><span class="line"></span><br><span class="line">鼠标拖动-drag_and_drop()</span><br><span class="line">说明：模拟鼠标拖动动作，选定拖动源元素释放到目标元素</span><br><span class="line">	源元素 source = driver.find_element_by_id(xxx)</span><br><span class="line">	目标元素 target = driver.find_element_by_id(xxx)</span><br><span class="line">	调用方法 action.drag_and_drop(source, target).perform()</span><br><span class="line"></span><br><span class="line">鼠标悬停-move_to_element()</span><br><span class="line">说明: 模拟鼠标悬停在指定的的元素上</span><br><span class="line"></span><br><span class="line">再次说明，最后调用perform()方法才能真正执行对应的鼠标方法。</span><br><span class="line">selenium框架中虽然提供了，右击鼠标方法，但是没有提供选择右击菜单方法，可以通过发送快捷键的方式解决(经测试，谷歌浏览器不支持)。</span><br></pre></td></tr></table></figure>
+
+<h3 id="键盘操作"><a href="#键盘操作" class="headerlink" title="键盘操作"></a>键盘操作</h3><p>如何实现复制、粘贴的操作？模拟键盘上一些按键或者组合键的输入 如：Ctrl+C 、Ctrl+V？Selenium中把键盘的按键都封装在Keys类中。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">导包：from selenium.webdriver.common.keys import Keys</span><br><span class="line">方法：</span><br><span class="line">	send_keys(Keys.BACK_SPACE) 删除键(BackSpace)</span><br><span class="line"> 	send_keys(Keys.SPACE) 空格键(Space)</span><br><span class="line"> 	send_keys(Keys.TAB) 制表键(Tab)</span><br><span class="line">	send_keys(Keys.ESCAPE) 回退键(Esc)</span><br><span class="line">	send_keys(Keys.ENTER) 回车键(Enter)</span><br><span class="line">	send_keys(Keys.CONTROL,&#x27;a&#x27;) 全选(Ctrl+A)</span><br><span class="line">	send_keys(Keys.CONTROL,&#x27;c&#x27;) 复制(Ctrl+C)</span><br><span class="line">别的组合键与上面类似。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 定位用户名</span></span><br><span class="line">element = driver.find_element_by_id(<span class="string">&quot;HonorHL&quot;</span>)</span><br><span class="line"><span class="comment"># 输入用户名</span></span><br><span class="line">element.send_keys(<span class="string">&quot;荷包蛋HL&quot;</span>)</span><br><span class="line"><span class="comment"># 删除1</span></span><br><span class="line">element.send_keys(Keys.BACK_SPACE)</span><br><span class="line"><span class="comment"># 全选</span></span><br><span class="line">element.send_keys(Keys.CONTROL, <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line"><span class="comment"># 复制</span></span><br><span class="line">element.send_keys(Keys.CONTROL, <span class="string">&#x27;c&#x27;</span>)</span><br><span class="line"><span class="comment"># 粘贴</span></span><br><span class="line">driver.find_element_by_id(<span class="string">&#x27;HL&#x27;</span>).send_keys(Keys.CONTROL, <span class="string">&#x27;v&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="元素等待"><a href="#元素等待" class="headerlink" title="元素等待"></a>元素等待</h3><p>在定位页面元素时如果未找到，会在指定时间内一直等待的过程。</p>
+<p>为什么需要元素等待？网络速度慢，电脑配置低，服务器处理请求慢。即在有的时候，元素定位操作代码没有问题，可就是定位不到元素，可能的原因是页面没有加载完成就在执行元素定位，故定位不到元素。</p>
+<p>与sleep()的区别：不论是否找到元素，sleep都会等待设定的时间长度，而元素等待再定位到元素时就不会继续等待了。</p>
+<h4 id="隐式等待"><a href="#隐式等待" class="headerlink" title="隐式等待"></a>隐式等待</h4><p>定位元素时，如果能定位到元素则直接返回该元素，不触发等待； 如果不能定位到该元素，则间隔一段时间后再去定位元素； 如果在达到最大时长时还没有找到指定元素，则抛出元素不存在的异常 NoSuchElementException 。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">方法：driver.implicitly_wait(timeout)    (timeout：为等待最大时长，单位：秒)</span><br><span class="line">说明：隐式等待为全局设置（只需要设置一次，就会作用于所有元素），查找时间间隔为0.5秒</span><br></pre></td></tr></table></figure>
+
+<h4 id="显示等待"><a href="#显示等待" class="headerlink" title="显示等待"></a>显示等待</h4><p>定位指定元素时，如果能定位到元素则直接返回该元素，不触发等待； 如果不能定位到该元素，则间隔一段时间后再去定位元素； 如果在达到最大时长时还没有找到指定元素，则抛出超时异常 TimeoutException 。（与隐式抛出的异常对象不同）</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">在Selenium中把显式等待的相关方法封装在WebDriverWait类中</span><br><span class="line">导包：from selenium.webdriver.support.wait import WebDriverWait</span><br><span class="line"></span><br><span class="line">WebDriverWait(driver, timeout, poll_frequency=0.5)</span><br><span class="line"> 	driver：浏览器驱动对象</span><br><span class="line"> 	timeout：超时的时长，单位：秒</span><br><span class="line"> 	poll_frequency：检测间隔时间，默认为0.5秒</span><br><span class="line"> 	</span><br><span class="line">调用方法 until(method)：直到...时</span><br><span class="line">	 method：函数名称，该函数用来实现对元素的定位</span><br><span class="line"> 	一般使用匿名函数来实现：lambda x: x.find_element_by_id(&quot;userA&quot;)</span><br><span class="line"> 	</span><br><span class="line">例如：	element = WebDriverWait(driver, 10, 1).until(lambda x: x.find_element_by_id(&quot;HL&quot;))</span><br><span class="line">每隔1秒就去页面查找id为HL的元素，定位到元素后，则不再等待，继续操作，若未查找到，在10秒内每隔一秒就再去检查该元素，超时后就抛出异常。</span><br><span class="line"></span><br><span class="line">显示等待作用于一个元素，且可以自定义查找的时间间隔。</span><br></pre></td></tr></table></figure>
+
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
+<li>作用域：隐式为全局元素，显式等待为单个元素有效</li>
+<li>使用方法：隐式等待直接通过驱动对象调用，而显式等待方法封装在WebDriverWait类中</li>
+<li>达到最大超时时长后抛出的异常不同：隐式为NoSuchElementException，显式等待为TimeoutException</li>
+</ul>
+<h3 id="下拉框操作"><a href="#下拉框操作" class="headerlink" title="下拉框操作"></a>下拉框操作</h3><p>下拉框就是HTML中select元素，可以使用前面学习的元素定位操作，定位到下拉框，再对其进行相应的操作。当选中某个下拉框时，需要先定位到该select元素的子元素option下拉框，再执行点击操作，操作较为繁琐。故Selenium为下拉框封装了Select类。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：Select类是Selenium为操作select标签特殊封装的。</span><br><span class="line">导包：from selenium.webdriver.support.select import Select</span><br><span class="line"></span><br><span class="line">实例化对象：</span><br><span class="line">	select = Select(element)</span><br><span class="line">		element: &lt;select&gt;标签对应的元素，通过元素定位方式获取，例如：driver.find_element_by_id(&quot;selectHL&quot;)</span><br><span class="line">注意：只需定位到对应的select元素，而不用定位到其子元素option。</span><br><span class="line"></span><br><span class="line">方法：选择对应的下拉框</span><br><span class="line">	select.select_by_index(index) --&gt; 根据option索引来定位，从0开始</span><br><span class="line">	select.select_by_value(value) --&gt; 根据option属性 value值来定位</span><br><span class="line">	select.select_by_visible_text(text) --&gt; 根据option显示文本来定位</span><br><span class="line"></span><br><span class="line">注意：调用Select类下面的方法，是通过索引、value属性值、显示文本去控制，而不需要click事件</span><br></pre></td></tr></table></figure>
+
+<h3 id="弹出框操作"><a href="#弹出框操作" class="headerlink" title="弹出框操作"></a>弹出框操作</h3><p>网页中常用的弹出框有三种</p>
+<ul>
+<li>alert 警告框</li>
+<li>confirm 确认框</li>
+<li>prompt 提示框</li>
+</ul>
+<p>当网页弹出对应的弹出框时，再对页面进行相应的点击，赋值操作就没有执行了。故只有将其关闭后，接下来的语句才能正常执行。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：Selenium中对处理弹出框的操作，有专用的处理方法；并且处理的方法都一样</span><br><span class="line">获取弹出框对象： alert = driver.switch_to.alert</span><br><span class="line">调用：</span><br><span class="line">	alert.text --&gt; 返回alert/confirm/prompt中的文字信息</span><br><span class="line">	alert.accept() --&gt; 接受对话框选项</span><br><span class="line">	alert.dismiss() --&gt; 取消对话框选项</span><br><span class="line">注意：</span><br><span class="line">	可能有的弹出框的页面显示上没有取消/确定按钮，但仍能调用对应的接受和取消的方法。底层的弹出框是含有上述的方法的。且三种弹出框的处理方式都是一样的。</span><br><span class="line">	注意分辨前端人员自己编写的弹出框（使用div等模拟），而不是使用浏览器自带的弹出框。此类采用传统的方法，使用Selenium定位到该元素，再执行关闭操作。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 点击弹出框按钮（弹出警告框）</span></span><br><span class="line">driver.find_element_by_id(<span class="string">&quot;alertHL&quot;</span>).click()</span><br><span class="line"><span class="comment"># 获取警告框</span></span><br><span class="line">alert = driver.switch_to.alert</span><br><span class="line"><span class="comment"># 打印警告框文本</span></span><br><span class="line"><span class="built_in">print</span>(alert.text)</span><br><span class="line"><span class="comment"># 接受警告框</span></span><br><span class="line">alert.accept()</span><br><span class="line"><span class="comment"># 取消警告框</span></span><br><span class="line"><span class="comment"># alert.dismiss()</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="滚动条操作"><a href="#滚动条操作" class="headerlink" title="滚动条操作"></a>滚动条操作</h3><p>滚动条：一种可控制页面显示范围的组件</p>
+<p>在HTML页面中，由于前端技术框架的原因，页面元素为动态显示，元素根据滚动条的下拉而被加载。页面注册同意条款，需要滚动条到最底层，才能点击同意。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：selenium中并没有直接提供操作滚动条的方法，但是它提供了可执行JavaScript脚本的方法，所以我们可以通过JavaScript脚本来达到操作滚动条的目的。</span><br><span class="line">设置JavaScript脚本控制滚动条</span><br><span class="line">	js = &quot;window.scrollTo(0,1000)&quot;</span><br><span class="line">		(0:左边距；1000：上边距；单位：像素)</span><br><span class="line">		</span><br><span class="line">selenium调用执行JavaScript脚本的方法</span><br><span class="line">	driver.execute_script(js)</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 最底层</span></span><br><span class="line">js1 = <span class="string">&quot;window.scrollTo(0,10000)&quot;</span></span><br><span class="line">driver.execute_script(js1)</span><br><span class="line"><span class="comment"># 最顶层</span></span><br><span class="line">js2 = <span class="string">&quot;window.scrollTo(0,0)&quot;</span></span><br><span class="line">driver.execute_script(js2)</span><br></pre></td></tr></table></figure>
+
+<h3 id="Frame切换"><a href="#Frame切换" class="headerlink" title="Frame切换"></a>Frame切换</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">frame：HTML页面中的一种框架，主要作用是在当前页面中指定区域显示另一页面元素；</span><br><span class="line">形式一：[了解]</span><br><span class="line">	&lt;frameset cols=&quot;25%,75%&quot;&gt;</span><br><span class="line">		&lt;frame src=&quot;frame_a.htm&quot;&gt;  引用a.html</span><br><span class="line">		&lt;frame src=&quot;frame_b.htm&quot;&gt;</span><br><span class="line">	&lt;/frameset&gt;</span><br><span class="line">形式二：</span><br><span class="line">&lt;iframe name=&quot;iframe_a&quot; src=&quot;iframeHL.htm&quot; width=&quot;200&quot; height=&quot;200&quot;&gt;&lt;/iframe&gt;</span><br></pre></td></tr></table></figure>
+
+<p>若此时的页面中，有对应的Frame别的页面信息，是定位不到对应的Frame页面的元素的，故就需要切换到该Frame页面才能定位到对应的元素。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：在Selenium中封装了如何切换frame框架的方法</span><br><span class="line">方法：</span><br><span class="line">	driver.switch_to.frame(frame_reference) --&gt; 切换到指定frame的方法</span><br><span class="line">		frame_reference：可以为frame框架的name、id或者定位到的frame元素</span><br><span class="line">		</span><br><span class="line">	driver.switch_to.default_content() --&gt; 恢复默认页面方法,回到主页面。在frame中操作其他页面，必须先回到默认页面，才能进一步操作。不能从Frame a页面切换到Frame b页面。只能a到主页面，主页面再到b页面。</span><br></pre></td></tr></table></figure>
+
+<h3 id="多窗口切换"><a href="#多窗口切换" class="headerlink" title="多窗口切换"></a>多窗口切换</h3><p>在HTML页面中，当点击超链接或者按钮时，有的会在新的窗口打开页面。</p>
+<p>与Frame类似，当打开某个连接，浏览器打开新页面时，无法定位到新页面内容，也就无法对新页面进行操作。故需要进行窗口切换。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：在Selenium中封装了获取当前窗口句柄、获取所有窗口句柄和切换到指定句柄窗口的方法；句柄：英文handle，窗口的唯一识别码。</span><br><span class="line">方法：</span><br><span class="line"> 	driver.current_window_handle --&gt; 获取当前窗口句柄</span><br><span class="line"> 	driver.window_handles --&gt; 获取所有窗口句柄</span><br><span class="line"> 	driver.switch_to.window(handle) --&gt; 切换指定句柄窗口</span><br><span class="line"> 注意：通过获取所有的句柄以及当前窗口的句柄，来判断去要切换的句柄。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#获取所有的窗口句柄</span></span><br><span class="line">window_handles = driver.window_handles</span><br><span class="line"><span class="comment">#当只有两个窗口时，当前所在的窗口句柄下标为0，要切换的窗口句柄下标为1</span></span><br><span class="line">driver.switch_to.window(window_handles[<span class="number">1</span>])</span><br><span class="line"><span class="comment">#切回主窗口</span></span><br><span class="line">driver.switch_to.window(window_handles[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+
+<h3 id="窗口截图"><a href="#窗口截图" class="headerlink" title="窗口截图"></a>窗口截图</h3><p>自动化脚本是由程序去执行的，因此有时候打印的错误信息并不是十分明确。如果在执行出错的时候对当前窗口截图保存，那么通过图片就可以非常直观地看到出错的原因。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：在Selenium中，提供了截图方法，我们只需要调用即可</span><br><span class="line">方法：driver.get_screenshot_as_file(imgpath)   </span><br><span class="line">		imgpath：图片保存路径</span><br><span class="line">		</span><br><span class="line">例如：driver.get_screenshot_as_file(&quot;./img/HL.jpg&quot;)    存放到当前目录下的img文件夹下，命名为HL.jpg图片。可以通过时间戳的方式，生成对应的图片名，防止图片被覆盖。</span><br><span class="line">     driver.get_screenshot_as_file(&quot;../image/%s.png&quot;%(time.strftime(&quot;%Y_%m_%d %H_%M_%S&quot;)))</span><br><span class="line">	 		strftime:将时间转为字符串函数</span><br><span class="line">	        注意：%Y_%m_%d %H_%M_%S：代表，年 月 日 时 分 秒</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">driver.get_screenshot_as_file(<span class="string">&quot;../image/%s.png&quot;</span>%(time.strftime(<span class="string">&quot;%Y_%m_%d %H_%M_%S&quot;</span>)))</span><br><span class="line"><span class="comment"># %s：占位符，使用%后面的字符串代替</span></span><br><span class="line"><span class="comment"># strftime:将时间转为字符串函数</span></span><br><span class="line"><span class="comment"># %Y_%m_%d %H_%M_%S：代表，年 月 日 时 分 秒</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="Cookie操作"><a href="#Cookie操作" class="headerlink" title="Cookie操作"></a>Cookie操作</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Cookie是由Web服务器生成的，并且保存在用户浏览器上的小文本文件，它可以包含用户相关的信息。</span><br><span class="line">Cookie数据格式：键值对组成（python中的字典）</span><br><span class="line">Cookie产生：客户端请求服务器，如果服务器需要记录该用户状态，就向客户端浏览器颁发一个Cookie数据</span><br><span class="line">Cookie使用：当浏览器再次请求该网站时，浏览器把请求的数据和Cookie数据一同提交给服务器，服务器检查该Cookie，以此来辨认用户状态。</span><br></pre></td></tr></table></figure>
+
+<p>更多鉴权内容请点击 （ <a href="/2023/12/02/token%E9%89%B4%E6%9D%83---JWT%E4%BB%A4%E7%89%8C/" title="token鉴权---JWT令牌">token鉴权---JWT令牌</a> ）</p>
+<p>实现会话跟踪，记录用户登录状态，实现记住密码和自动登录的功能。</p>
+<p>某些场景下，可使用cookie鉴权的方式，跳过繁琐的登录验证过程。如复杂的图片验证码验证。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：Selenium中对cookie操作提供相应的方法</span><br><span class="line">方法：</span><br><span class="line">	get_cookie(name) --&gt; 获取指定cookie</span><br><span class="line">		name:为cookie的名称</span><br><span class="line">		</span><br><span class="line">	get_cookies() --&gt; 获取本网站所有本地cookies</span><br><span class="line">	add_cookie(cookie_dict) --&gt; 添加cookie</span><br><span class="line">		cookie_dict：一个字典对象，必选的键包括：&quot;name&quot; and &quot;value&quot;</span><br><span class="line">注意：对cookie操作后，必须刷新当前页面才能生效。driver.refresh()</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <tags>
+        <tag>测试</tag>
+        <tag>UI测试</tag>
+        <tag>爬虫</tag>
+        <tag>Selenium</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Fidder抓包</title>
     <url>/2023/11/28/Fidder/</url>
     <content><![CDATA[<h3 id="Fidder"><a href="#Fidder" class="headerlink" title="Fidder"></a>Fidder</h3><p>Fiddler是位于客户端和服务器端的HTTP代理，也是目前最常用的http抓包工具之一 。 它能够记录客户端和服务器之间的所有 HTTP请求，可以针对特定的HTTP请求，分析请求数据、设置断点、调试web应用、修改请求的数据，甚至可以修改服务器返回的数据<span id="more"></span></p>
@@ -216,90 +303,102 @@
       </tags>
   </entry>
   <entry>
-    <title>Selenium API</title>
-    <url>/2023/12/04/Selenium-API/</url>
-    <content><![CDATA[<h2 id="Selenium"><a href="#Selenium" class="headerlink" title="Selenium"></a>Selenium</h2><p>上面介绍了Selenium中的元素定位以及元素的相关操作（详情请点击 <a href="/2023/12/03/Selenium%E5%85%83%E7%B4%A0%E5%AE%9A%E4%BD%8D%E5%92%8C%E6%93%8D%E4%BD%9C/" title="Selenium元素定位和操作">Selenium元素定位和操作</a> ）。接下来将继续介绍Selenium中的API方法。</p>
-<h3 id="浏览器操作"><a href="#浏览器操作" class="headerlink" title="浏览器操作"></a>浏览器操作</h3><p>脚本启动浏览器窗口大小默认不是全屏？如何刷新页面？</p>
-<p>通过调用Selenium的API来实现浏览器的操作。<span id="more"></span></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">maximize_window() 最大化浏览器窗口 --&gt; 模拟浏览器最大化按钮</span><br><span class="line">set_window_size(width, height) 设置浏览器窗口大小 --&gt; 设置浏览器宽、高(像素点)</span><br><span class="line">set_window_position(x, y) 设置浏览器窗口位置 --&gt; 设置浏览器位置</span><br><span class="line">back() 后退 --&gt; 模拟浏览器后退按钮</span><br><span class="line">forward() 前进 --&gt; 模拟浏览器前进按钮</span><br><span class="line">refresh() 刷新 --&gt; 模拟浏览器F5刷新</span><br><span class="line">close() 关闭当前窗口 --&gt; 模拟点击浏览器关闭按钮</span><br><span class="line">quit() 关闭浏览器驱动对象 --&gt; 关闭所有程序启动的窗口</span><br><span class="line">title 获取页面title</span><br><span class="line">current_url 获取当前页面URL</span><br><span class="line">注意： </span><br><span class="line">	driver.title 和 driver.current_url 没有括号，应用场景：一般为判断上步操作是否执行成功。</span><br><span class="line">driver.maximize_window() # 一般为我的前置代码，在获取driver后，直接编写最大化浏览器</span><br><span class="line">driver.refresh() 应用场景，在后面的cookie章节会使用到。</span><br><span class="line">driver.close()与driver.quit()区别：</span><br><span class="line">	close():关闭当前主窗口</span><br><span class="line">	quit():关闭由driver对象启动的所有窗口</span><br><span class="line">	提示：如果当前只有1个窗口，close与quit没有任何区别。</span><br></pre></td></tr></table></figure>
+    <title>pytest单元测试框架（基础篇）</title>
+    <url>/2023/11/21/pytest%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h2 id="单元测试框架"><a href="#单元测试框架" class="headerlink" title="单元测试框架"></a>单元测试框架</h2><p>​		1）什么是单元测试框架</p>
+<p>​		单元测试框架是指在软件开发的过程种，针对软件的最小单位（函数、方法）进行正确性测试</p>
+<span id="more"></span>
 
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#示例</span></span><br><span class="line"><span class="comment"># 最大化浏览器</span></span><br><span class="line">driver.maximize_window()</span><br><span class="line"><span class="comment"># 刷新</span></span><br><span class="line">driver.refresh()</span><br><span class="line"><span class="comment"># 后退</span></span><br><span class="line">driver.back()</span><br><span class="line"><span class="comment"># 前进</span></span><br><span class="line">driver.forward()</span><br><span class="line"><span class="comment"># 设置浏览器大小</span></span><br><span class="line">driver.set_window_size(<span class="number">300</span>,<span class="number">300</span>)</span><br><span class="line"><span class="comment"># 设置浏览器位置</span></span><br><span class="line">driver.set_window_position(<span class="number">300</span>,<span class="number">200</span>)</span><br><span class="line"><span class="comment"># 关闭浏览器单个窗口</span></span><br><span class="line">driver.close()</span><br><span class="line"><span class="comment"># 关闭浏览器所有窗口</span></span><br><span class="line">driver.quit()</span><br><span class="line"><span class="comment"># 获取title</span></span><br><span class="line">title = driver.title</span><br><span class="line"><span class="comment"># 获取当前页面url</span></span><br><span class="line">url = driver.current_url</span><br></pre></td></tr></table></figure>
-
-<h3 id="鼠标操作"><a href="#鼠标操作" class="headerlink" title="鼠标操作"></a>鼠标操作</h3><p>现在Web产品中存在丰富的鼠标交互方式，作为一个Web自动化测试框架，需要应对这些鼠标操作的应用场景。常见的鼠标操作有：点击、右击、双击、悬停、拖拽等，对于这些鼠标操作Selenium都封装了相应的操作方法。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：在Selenium中将操作鼠标的方法封装在ActionChains类中</span><br><span class="line">导包：from selenium.webdriver.common.action_chains import ActionChains</span><br><span class="line">实例化对象：action = ActionChains(driver)</span><br><span class="line">方法：</span><br><span class="line"> 	context_click(element) 右击 --&gt; 模拟鼠标右键点击效果</span><br><span class="line"> 	double_click(element) 双击 --&gt; 模拟鼠标双击效果</span><br><span class="line"> 	drag_and_drop(source, target) 拖动 --&gt; 模拟鼠标拖动效果</span><br><span class="line"> 	move_to_element(element) 悬停 --&gt; 模拟鼠标悬停效果</span><br><span class="line"> 	perform() 执行 --&gt; 此方法用来执行以上所有鼠标操作，操作上诉方法后，还需调用此方法猜能生效</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">鼠标执行-perform()</span><br><span class="line">说明：在ActionChains类中所有提供的鼠标事件方法，在调用的时候所有的行为都存储在ActionChains对象中，而perform()方法就是真正去执行所有的鼠标事件。</span><br><span class="line">强调：必须调用perform()方法才能执行鼠标事件</span><br><span class="line"></span><br><span class="line">鼠标右键-context_click()</span><br><span class="line">说明：对于点击鼠标右键，如果弹出的是浏览器默认的菜单，Selenium没有提供操作菜单选项的方法；如果是自定义的右键菜单，则可以通过元素定位来操作菜单中的选项。</span><br><span class="line"></span><br><span class="line">鼠标双击-double_click()</span><br><span class="line">说明：模拟双击鼠标左键操作</span><br><span class="line"></span><br><span class="line">鼠标拖动-drag_and_drop()</span><br><span class="line">说明：模拟鼠标拖动动作，选定拖动源元素释放到目标元素</span><br><span class="line">	源元素 source = driver.find_element_by_id(xxx)</span><br><span class="line">	目标元素 target = driver.find_element_by_id(xxx)</span><br><span class="line">	调用方法 action.drag_and_drop(source, target).perform()</span><br><span class="line"></span><br><span class="line">鼠标悬停-move_to_element()</span><br><span class="line">说明: 模拟鼠标悬停在指定的的元素上</span><br><span class="line"></span><br><span class="line">再次说明，最后调用perform()方法才能真正执行对应的鼠标方法。</span><br><span class="line">selenium框架中虽然提供了，右击鼠标方法，但是没有提供选择右击菜单方法，可以通过发送快捷键的方式解决(经测试，谷歌浏览器不支持)。</span><br></pre></td></tr></table></figure>
-
-<h3 id="键盘操作"><a href="#键盘操作" class="headerlink" title="键盘操作"></a>键盘操作</h3><p>如何实现复制、粘贴的操作？模拟键盘上一些按键或者组合键的输入 如：Ctrl+C 、Ctrl+V？Selenium中把键盘的按键都封装在Keys类中。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">导包：from selenium.webdriver.common.keys import Keys</span><br><span class="line">方法：</span><br><span class="line">	send_keys(Keys.BACK_SPACE) 删除键(BackSpace)</span><br><span class="line"> 	send_keys(Keys.SPACE) 空格键(Space)</span><br><span class="line"> 	send_keys(Keys.TAB) 制表键(Tab)</span><br><span class="line">	send_keys(Keys.ESCAPE) 回退键(Esc)</span><br><span class="line">	send_keys(Keys.ENTER) 回车键(Enter)</span><br><span class="line">	send_keys(Keys.CONTROL,&#x27;a&#x27;) 全选(Ctrl+A)</span><br><span class="line">	send_keys(Keys.CONTROL,&#x27;c&#x27;) 复制(Ctrl+C)</span><br><span class="line">别的组合键与上面类似。</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 定位用户名</span></span><br><span class="line">element = driver.find_element_by_id(<span class="string">&quot;HonorHL&quot;</span>)</span><br><span class="line"><span class="comment"># 输入用户名</span></span><br><span class="line">element.send_keys(<span class="string">&quot;荷包蛋HL&quot;</span>)</span><br><span class="line"><span class="comment"># 删除1</span></span><br><span class="line">element.send_keys(Keys.BACK_SPACE)</span><br><span class="line"><span class="comment"># 全选</span></span><br><span class="line">element.send_keys(Keys.CONTROL, <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line"><span class="comment"># 复制</span></span><br><span class="line">element.send_keys(Keys.CONTROL, <span class="string">&#x27;c&#x27;</span>)</span><br><span class="line"><span class="comment"># 粘贴</span></span><br><span class="line">driver.find_element_by_id(<span class="string">&#x27;HL&#x27;</span>).send_keys(Keys.CONTROL, <span class="string">&#x27;v&#x27;</span>)</span><br></pre></td></tr></table></figure>
-
-<h3 id="元素等待"><a href="#元素等待" class="headerlink" title="元素等待"></a>元素等待</h3><p>在定位页面元素时如果未找到，会在指定时间内一直等待的过程。</p>
-<p>为什么需要元素等待？网络速度慢，电脑配置低，服务器处理请求慢。即在有的时候，元素定位操作代码没有问题，可就是定位不到元素，可能的原因是页面没有加载完成就在执行元素定位，故定位不到元素。</p>
-<p>与sleep()的区别：不论是否找到元素，sleep都会等待设定的时间长度，而元素等待再定位到元素时就不会继续等待了。</p>
-<h4 id="隐式等待"><a href="#隐式等待" class="headerlink" title="隐式等待"></a>隐式等待</h4><p>定位元素时，如果能定位到元素则直接返回该元素，不触发等待； 如果不能定位到该元素，则间隔一段时间后再去定位元素； 如果在达到最大时长时还没有找到指定元素，则抛出元素不存在的异常 NoSuchElementException 。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">方法：driver.implicitly_wait(timeout)    (timeout：为等待最大时长，单位：秒)</span><br><span class="line">说明：隐式等待为全局设置（只需要设置一次，就会作用于所有元素），查找时间间隔为0.5秒</span><br></pre></td></tr></table></figure>
-
-<h4 id="显示等待"><a href="#显示等待" class="headerlink" title="显示等待"></a>显示等待</h4><p>定位指定元素时，如果能定位到元素则直接返回该元素，不触发等待； 如果不能定位到该元素，则间隔一段时间后再去定位元素； 如果在达到最大时长时还没有找到指定元素，则抛出超时异常 TimeoutException 。（与隐式抛出的异常对象不同）</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">在Selenium中把显式等待的相关方法封装在WebDriverWait类中</span><br><span class="line">导包：from selenium.webdriver.support.wait import WebDriverWait</span><br><span class="line"></span><br><span class="line">WebDriverWait(driver, timeout, poll_frequency=0.5)</span><br><span class="line"> 	driver：浏览器驱动对象</span><br><span class="line"> 	timeout：超时的时长，单位：秒</span><br><span class="line"> 	poll_frequency：检测间隔时间，默认为0.5秒</span><br><span class="line"> 	</span><br><span class="line">调用方法 until(method)：直到...时</span><br><span class="line">	 method：函数名称，该函数用来实现对元素的定位</span><br><span class="line"> 	一般使用匿名函数来实现：lambda x: x.find_element_by_id(&quot;userA&quot;)</span><br><span class="line"> 	</span><br><span class="line">例如：	element = WebDriverWait(driver, 10, 1).until(lambda x: x.find_element_by_id(&quot;HL&quot;))</span><br><span class="line">每隔1秒就去页面查找id为HL的元素，定位到元素后，则不再等待，继续操作，若未查找到，在10秒内每隔一秒就再去检查该元素，超时后就抛出异常。</span><br><span class="line"></span><br><span class="line">显示等待作用于一个元素，且可以自定义查找的时间间隔。</span><br></pre></td></tr></table></figure>
-
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ul>
-<li>作用域：隐式为全局元素，显式等待为单个元素有效</li>
-<li>使用方法：隐式等待直接通过驱动对象调用，而显式等待方法封装在WebDriverWait类中</li>
-<li>达到最大超时时长后抛出的异常不同：隐式为NoSuchElementException，显式等待为TimeoutException</li>
-</ul>
-<h3 id="下拉框操作"><a href="#下拉框操作" class="headerlink" title="下拉框操作"></a>下拉框操作</h3><p>下拉框就是HTML中select元素，可以使用前面学习的元素定位操作，定位到下拉框，再对其进行相应的操作。当选中某个下拉框时，需要先定位到该select元素的子元素option下拉框，再执行点击操作，操作较为繁琐。故Selenium为下拉框封装了Select类。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：Select类是Selenium为操作select标签特殊封装的。</span><br><span class="line">导包：from selenium.webdriver.support.select import Select</span><br><span class="line"></span><br><span class="line">实例化对象：</span><br><span class="line">	select = Select(element)</span><br><span class="line">		element: &lt;select&gt;标签对应的元素，通过元素定位方式获取，例如：driver.find_element_by_id(&quot;selectHL&quot;)</span><br><span class="line">注意：只需定位到对应的select元素，而不用定位到其子元素option。</span><br><span class="line"></span><br><span class="line">方法：选择对应的下拉框</span><br><span class="line">	select.select_by_index(index) --&gt; 根据option索引来定位，从0开始</span><br><span class="line">	select.select_by_value(value) --&gt; 根据option属性 value值来定位</span><br><span class="line">	select.select_by_visible_text(text) --&gt; 根据option显示文本来定位</span><br><span class="line"></span><br><span class="line">注意：调用Select类下面的方法，是通过索引、value属性值、显示文本去控制，而不需要click事件</span><br></pre></td></tr></table></figure>
-
-<h3 id="弹出框操作"><a href="#弹出框操作" class="headerlink" title="弹出框操作"></a>弹出框操作</h3><p>网页中常用的弹出框有三种</p>
+<p>​		2）常见的单元测试框架</p>
+<p>​		基于java的：junit和testng</p>
+<p>​		基于python的：unittest和<strong>pytest</strong></p>
+<p>​		3）单元测试流程</p>
+<p>​		1.测试发现：从多个文件中找到需要被测试的测试用例</p>
+<p>​		2.测试执行：按照一定的顺序执行测试用例，并生成结果</p>
+<p>​		3.测试判断：通过assert断言来自动判断结果与预期是否相符</p>
+<p>​		4.测试报告：生成这次测试的测试报告，包括耗时、通过率等</p>
+<h2 id="pytest"><a href="#pytest" class="headerlink" title="pytest"></a>pytest</h2><p>​		1）简介</p>
+<p>​		pytest是python的一种单元测试框架，与python自带的测试框架unittest类似，但比其更易上手，也更加的灵活。因此使用面也广于unittest。</p>
 <ul>
-<li>alert 警告框</li>
-<li>confirm 确认框</li>
-<li>prompt 提示框</li>
+<li><p>pytest比unittest更加成熟，同时支持unittest编写的测试用例</p>
+</li>
+<li><p>pytest可以和selenium，request，appium等测试框架相结合，实现web ui自动化，web 接口自动化，app ui自动化</p>
+</li>
+<li><p>pytest可以实现测试用例的跳过以及失败用例重试</p>
+</li>
+<li><p>pytest支持参数化数据驱动方式</p>
+</li>
+<li><p>pytest可以和Jenkins持续集成</p>
+</li>
+<li><p>pytest具有很多第三方插件，且支持自定义扩展</p>
+<ul>
+<li><p>pytest：单元测试框架</p>
+<p>pytest-xdist： 测试用例的分布式执行，即并发执行。可缩短总的用例的执行时间</p>
+<p>pytest-ordering： 可以指定测试用例的执行顺序，默认是从上到下依次执行</p>
+<p>pytest-rerunfailures： 用例失败后进行再次执行（多用于ui测试）</p>
+<p>pytest-html： 生成html格式的测试报告（不够美观）</p>
+<p>allure-pytest： 生成比上面美观的测试报告，且可进行测试报告的自定义</p>
+</li>
 </ul>
-<p>当网页弹出对应的弹出框时，再对页面进行相应的点击，赋值操作就没有执行了。故只有将其关闭后，接下来的语句才能正常执行。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：Selenium中对处理弹出框的操作，有专用的处理方法；并且处理的方法都一样</span><br><span class="line">获取弹出框对象： alert = driver.switch_to.alert</span><br><span class="line">调用：</span><br><span class="line">	alert.text --&gt; 返回alert/confirm/prompt中的文字信息</span><br><span class="line">	alert.accept() --&gt; 接受对话框选项</span><br><span class="line">	alert.dismiss() --&gt; 取消对话框选项</span><br><span class="line">注意：</span><br><span class="line">	可能有的弹出框的页面显示上没有取消/确定按钮，但仍能调用对应的接受和取消的方法。底层的弹出框是含有上述的方法的。且三种弹出框的处理方式都是一样的。</span><br><span class="line">	注意分辨前端人员自己编写的弹出框（使用div等模拟），而不是使用浏览器自带的弹出框。此类采用传统的方法，使用Selenium定位到该元素，再执行关闭操作。</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>​		2）安装</p>
+<p>​		新建python项目———在本地虚拟终端中执行以下命令即可。（注意：使用以上插件也需要安装到本地环境中，语法类似）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip install pytest   <span class="comment">#安装命令</span></span><br><span class="line"></span><br><span class="line">pytest --version     <span class="comment">#检查命令</span></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 点击弹出框按钮（弹出警告框）</span></span><br><span class="line">driver.find_element_by_id(<span class="string">&quot;alertHL&quot;</span>).click()</span><br><span class="line"><span class="comment"># 获取警告框</span></span><br><span class="line">alert = driver.switch_to.alert</span><br><span class="line"><span class="comment"># 打印警告框文本</span></span><br><span class="line"><span class="built_in">print</span>(alert.text)</span><br><span class="line"><span class="comment"># 接受警告框</span></span><br><span class="line">alert.accept()</span><br><span class="line"><span class="comment"># 取消警告框</span></span><br><span class="line"><span class="comment"># alert.dismiss()</span></span><br></pre></td></tr></table></figure>
+<p>​		3）使用pytest</p>
+<p>​		pytest的默认测试用例发现规则</p>
+<ul>
+<li><p>模块名（简单理解为一个py文件）以test_ 开头或 _test结尾</p>
+</li>
+<li><p>测试类以Test开头，并且不包含init()方法</p>
+</li>
+<li><p>测试方法以test开头</p>
+<p>4）运行pytest</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">         <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> <span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">     pytest.main()</span><br></pre></td></tr></table></figure>
 
-<h3 id="滚动条操作"><a href="#滚动条操作" class="headerlink" title="滚动条操作"></a>滚动条操作</h3><p>滚动条：一种可控制页面显示范围的组件</p>
-<p>在HTML页面中，由于前端技术框架的原因，页面元素为动态显示，元素根据滚动条的下拉而被加载。页面注册同意条款，需要滚动条到最底层，才能点击同意。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：selenium中并没有直接提供操作滚动条的方法，但是它提供了可执行JavaScript脚本的方法，所以我们可以通过JavaScript脚本来达到操作滚动条的目的。</span><br><span class="line">设置JavaScript脚本控制滚动条</span><br><span class="line">	js = &quot;window.scrollTo(0,1000)&quot;</span><br><span class="line">		(0:左边距；1000：上边距；单位：像素)</span><br><span class="line">		</span><br><span class="line">selenium调用执行JavaScript脚本的方法</span><br><span class="line">	driver.execute_script(js)</span><br></pre></td></tr></table></figure>
+<h2 id="pytest运行方式"><a href="#pytest运行方式" class="headerlink" title="pytest运行方式"></a>pytest运行方式</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">参数详解:</span><br><span class="line">-s:输出调试信心，包括<span class="built_in">print</span>打印的信息</span><br><span class="line">-v:显示更详细的信息</span><br><span class="line">-vs:两个连用，效用就是两个相加</span><br><span class="line">-n NUM: 支持多线程或分布式运行测试用例，使用NUM个线程。需要导入pytest-xdist插件</span><br><span class="line">--<span class="built_in">return</span> NUM:失败用例重跑NUM次，失败用例总共运行NUM+1次</span><br><span class="line">-x:有一个用例失败报错，则停止测试，默认是不停止测试</span><br><span class="line">--maxfail=NUM:出现NUM个失败用例就停止测试</span><br><span class="line">-k String:根据String字符串匹配对应的测试用例</span><br><span class="line">--html 文件路径/文件名：生成html格式的测试报告</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 最底层</span></span><br><span class="line">js1 = <span class="string">&quot;window.scrollTo(0,10000)&quot;</span></span><br><span class="line">driver.execute_script(js1)</span><br><span class="line"><span class="comment"># 最顶层</span></span><br><span class="line">js2 = <span class="string">&quot;window.scrollTo(0,0)&quot;</span></span><br><span class="line">driver.execute_script(js2)</span><br></pre></td></tr></table></figure>
+<p>​		1）主函数方式</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#文件夹与python package的区别：python package下包含一个_init_.py文件</span></span><br><span class="line"><span class="comment"># ./  :表示当前文件路径下</span></span><br><span class="line"><span class="comment"># ../  :表示当前文件路径的父路径，即向上一层</span></span><br><span class="line">pytest.main()    <span class="comment">#运行所有的按条件写的测试用例</span></span><br><span class="line">pytest.main(<span class="string">&#x27;-vs&#x27;</span>,<span class="string">&#x27;./tasecase&#x27;</span>)   <span class="comment">#运行tasecase文件夹下的测试用例</span></span><br><span class="line">pytest.main(<span class="string">&#x27;-x&#x27;</span>,<span class="string">&#x27;test01.py&#x27;</span>)    <span class="comment">#运行test01模块下的测试用例,且出现错误就停止测试</span></span><br><span class="line">pytest.mian(<span class="string">&#x27;-n 2&#x27;</span>,<span class="string">&#x27;./tesecase/test01.py::TestName::testName&#x27;</span>)   <span class="comment">#运行testcase文件夹下test01模块里TsetName类里的testName方法,且使用两个线程</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="Frame切换"><a href="#Frame切换" class="headerlink" title="Frame切换"></a>Frame切换</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">frame：HTML页面中的一种框架，主要作用是在当前页面中指定区域显示另一页面元素；</span><br><span class="line">形式一：[了解]</span><br><span class="line">	&lt;frameset cols=&quot;25%,75%&quot;&gt;</span><br><span class="line">		&lt;frame src=&quot;frame_a.htm&quot;&gt;  引用a.html</span><br><span class="line">		&lt;frame src=&quot;frame_b.htm&quot;&gt;</span><br><span class="line">	&lt;/frameset&gt;</span><br><span class="line">形式二：</span><br><span class="line">&lt;iframe name=&quot;iframe_a&quot; src=&quot;iframeHL.htm&quot; width=&quot;200&quot; height=&quot;200&quot;&gt;&lt;/iframe&gt;</span><br></pre></td></tr></table></figure>
+<p>​		2）命令行模式</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#即在安装pytest的本地虚拟环境中运行</span></span><br><span class="line">pytest     <span class="comment">#运行所有满足条件的测试用例</span></span><br><span class="line">pytest -vs ./testcase   <span class="comment">#运行tasecase文件夹下的测试用例</span></span><br><span class="line">pytest -x ./testcase/test01.py    <span class="comment">#运行test01模块下的测试用例,且出现错误就停止测试</span></span><br><span class="line">pytest -n 2 ./tesecase/test01.py::TestName::testName    <span class="comment">#运行testcase文件夹下test01模块里TsetName类里的testName方法,且使用两个线程</span></span><br></pre></td></tr></table></figure>
 
-<p>若此时的页面中，有对应的Frame别的页面信息，是定位不到对应的Frame页面的元素的，故就需要切换到该Frame页面才能定位到对应的元素。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：在Selenium中封装了如何切换frame框架的方法</span><br><span class="line">方法：</span><br><span class="line">	driver.switch_to.frame(frame_reference) --&gt; 切换到指定frame的方法</span><br><span class="line">		frame_reference：可以为frame框架的name、id或者定位到的frame元素</span><br><span class="line">		</span><br><span class="line">	driver.switch_to.default_content() --&gt; 恢复默认页面方法,回到主页面。在frame中操作其他页面，必须先回到默认页面，才能进一步操作。不能从Frame a页面切换到Frame b页面。只能a到主页面，主页面再到b页面。</span><br></pre></td></tr></table></figure>
+<p>​		3）全局配置模式</p>
+<p>​		通过读取pytest.ini文件得到对应的配置信息，最后在命令行输入pytest即可运行（名字不可变，只能为pytest.ini）</p>
+<ul>
+<li>文件位置：放在项目的根目录，即最外层即可</li>
+<li>编码格式：必须为ANSI格式，可使用notpad++修改格式</li>
+<li>运行规则：不论是主函数方式还是命令行方式，都会优先读取该配置文件</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#模板，前面的参数是不可变的，后面根据实际情况填写</span></span><br><span class="line"></span><br><span class="line">[<span class="string">pytest</span>]</span><br><span class="line"><span class="string">addopts</span> <span class="string">=</span> <span class="string">-vs</span> <span class="comment">#命令行的参数，用空格分隔</span></span><br><span class="line"><span class="string">testpaths</span> <span class="string">=</span> <span class="string">./testcase</span> <span class="comment">#测试用例的路径</span></span><br><span class="line"><span class="string">python_files</span> <span class="string">=</span> <span class="string">test_*.py</span> <span class="comment">#模块名的规则，可以更改默认规则</span></span><br><span class="line"><span class="string">python_classes</span> <span class="string">=</span> <span class="string">Test*</span> <span class="comment">#类名的规则</span></span><br><span class="line"><span class="string">python_functions</span> <span class="string">=</span> <span class="string">test</span> <span class="comment">#方法名的规则</span></span><br><span class="line"><span class="string">markers</span> <span class="string">=</span></span><br><span class="line">  <span class="string">smoke:冒烟用例</span>          <span class="comment">#设置独有的标记</span></span><br><span class="line">  <span class="string">usermanage:用户管理模块</span></span><br><span class="line">  <span class="string">productmanage:商品管理模块</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="多窗口切换"><a href="#多窗口切换" class="headerlink" title="多窗口切换"></a>多窗口切换</h3><p>在HTML页面中，当点击超链接或者按钮时，有的会在新的窗口打开页面。</p>
-<p>与Frame类似，当打开某个连接，浏览器打开新页面时，无法定位到新页面内容，也就无法对新页面进行操作。故需要进行窗口切换。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：在Selenium中封装了获取当前窗口句柄、获取所有窗口句柄和切换到指定句柄窗口的方法；句柄：英文handle，窗口的唯一识别码。</span><br><span class="line">方法：</span><br><span class="line"> 	driver.current_window_handle --&gt; 获取当前窗口句柄</span><br><span class="line"> 	driver.window_handles --&gt; 获取所有窗口句柄</span><br><span class="line"> 	driver.switch_to.window(handle) --&gt; 切换指定句柄窗口</span><br><span class="line"> 注意：通过获取所有的句柄以及当前窗口的句柄，来判断去要切换的句柄。</span><br></pre></td></tr></table></figure>
+<p>​		4）改变执行顺序</p>
+<p>​		pytest默认的执行顺序是从上到下，改变默认执行顺序，使用mark标记。（需要引入pytest-ordering插件）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">99</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAge</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myage&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">100</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAddr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myaddr&quot;</span>)</span><br><span class="line">        </span><br><span class="line">   <span class="comment">#优先执行带注释的用例，且order值越小，优先执行</span></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#获取所有的窗口句柄</span></span><br><span class="line">window_handles = driver.window_handles</span><br><span class="line"><span class="comment">#当只有两个窗口时，当前所在的窗口句柄下标为0，要切换的窗口句柄下标为1</span></span><br><span class="line">driver.switch_to.window(window_handles[<span class="number">1</span>])</span><br><span class="line"><span class="comment">#切回主窗口</span></span><br><span class="line">driver.switch_to.window(window_handles[<span class="number">0</span>])</span><br></pre></td></tr></table></figure>
+<p>​		5）分组执行</p>
+<p>​		在实际的测试场景中，需要对一类的用例进行优先测试，如，冒烟测试、用户管理模块测试、商品管理模块测试等。（还记得上面pytest.ini文件中得makers标记吗？就是用来自定自己的分组的）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@pytest.mark.somke</span></span><br><span class="line"><span class="comment">#在对应的方法上添加注解即可</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="窗口截图"><a href="#窗口截图" class="headerlink" title="窗口截图"></a>窗口截图</h3><p>自动化脚本是由程序去执行的，因此有时候打印的错误信息并不是十分明确。如果在执行出错的时候对当前窗口截图保存，那么通过图片就可以非常直观地看到出错的原因。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：在Selenium中，提供了截图方法，我们只需要调用即可</span><br><span class="line">方法：driver.get_screenshot_as_file(imgpath)   </span><br><span class="line">		imgpath：图片保存路径</span><br><span class="line">		</span><br><span class="line">例如：driver.get_screenshot_as_file(&quot;./img/HL.jpg&quot;)    存放到当前目录下的img文件夹下，命名为HL.jpg图片。可以通过时间戳的方式，生成对应的图片名，防止图片被覆盖。</span><br><span class="line">     driver.get_screenshot_as_file(&quot;../image/%s.png&quot;%(time.strftime(&quot;%Y_%m_%d %H_%M_%S&quot;)))</span><br><span class="line">	 		strftime:将时间转为字符串函数</span><br><span class="line">	        注意：%Y_%m_%d %H_%M_%S：代表，年 月 日 时 分 秒</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#执行</span></span><br><span class="line">pytest -m <span class="string">&quot;smoke&quot;</span> <span class="comment">#执行smoke模块测试用例</span></span><br><span class="line">pytest -m <span class="string">&quot;smoke or usermanage or productmanage&quot;</span>  <span class="comment">#执行这三个模块的测试用例</span></span><br></pre></td></tr></table></figure>
 
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">driver.get_screenshot_as_file(<span class="string">&quot;../image/%s.png&quot;</span>%(time.strftime(<span class="string">&quot;%Y_%m_%d %H_%M_%S&quot;</span>)))</span><br><span class="line"><span class="comment"># %s：占位符，使用%后面的字符串代替</span></span><br><span class="line"><span class="comment"># strftime:将时间转为字符串函数</span></span><br><span class="line"><span class="comment"># %Y_%m_%d %H_%M_%S：代表，年 月 日 时 分 秒</span></span><br></pre></td></tr></table></figure>
+<p>​		6）跳过测试用例</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line"></span><br><span class="line">    age=<span class="number">18</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">99</span></span>)</span></span><br><span class="line"><span class="meta">    @pytest.mark.skipif(<span class="params">age&gt;<span class="number">18</span>,reason=<span class="string">&quot;年龄已经大于18，不用测啦&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAge</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myage&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.skip(<span class="params">reas=<span class="string">&quot;不想测试这个啦&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAddr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myaddr&quot;</span>)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;  输出</span></span><br><span class="line"><span class="string">testcase/test_01.py::TestName::testAge myage PASSED testcase/test_01.py::TestName::testName hello,pytest PASSED testcase/test_01.py::TestName::testAddr SKIPPED (不想测试这个啦)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27; 当age=19时，输出</span></span><br><span class="line"><span class="string">testcase/test_01.py::TestName::testAge SKIPPED (年龄已经大于18，不用测啦) testcase/test_01.py::TestName::testName hello,pytest PASSED testcase/test_01.py::TestName::testAddr SKIPPED (不想测试这个啦)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="Cookie操作"><a href="#Cookie操作" class="headerlink" title="Cookie操作"></a>Cookie操作</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Cookie是由Web服务器生成的，并且保存在用户浏览器上的小文本文件，它可以包含用户相关的信息。</span><br><span class="line">Cookie数据格式：键值对组成（python中的字典）</span><br><span class="line">Cookie产生：客户端请求服务器，如果服务器需要记录该用户状态，就向客户端浏览器颁发一个Cookie数据</span><br><span class="line">Cookie使用：当浏览器再次请求该网站时，浏览器把请求的数据和Cookie数据一同提交给服务器，服务器检查该Cookie，以此来辨认用户状态。</span><br></pre></td></tr></table></figure>
+<a href="/2023/11/27/pytest%E8%BF%9B%E9%98%B6/" title="pytest单元测试框架（进阶篇）">pytest单元测试框架（进阶篇）</a>
 
-<p>更多鉴权内容请点击 （ <a href="/2023/12/02/token%E9%89%B4%E6%9D%83---JWT%E4%BB%A4%E7%89%8C/" title="token鉴权---JWT令牌">token鉴权---JWT令牌</a> ）</p>
-<p>实现会话跟踪，记录用户登录状态，实现记住密码和自动登录的功能。</p>
-<p>某些场景下，可使用cookie鉴权的方式，跳过繁琐的登录验证过程。如复杂的图片验证码验证。</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">说明：Selenium中对cookie操作提供相应的方法</span><br><span class="line">方法：</span><br><span class="line">	get_cookie(name) --&gt; 获取指定cookie</span><br><span class="line">		name:为cookie的名称</span><br><span class="line">		</span><br><span class="line">	get_cookies() --&gt; 获取本网站所有本地cookies</span><br><span class="line">	add_cookie(cookie_dict) --&gt; 添加cookie</span><br><span class="line">		cookie_dict：一个字典对象，必选的键包括：&quot;name&quot; and &quot;value&quot;</span><br><span class="line">注意：对cookie操作后，必须刷新当前页面才能生效。driver.refresh()</span><br></pre></td></tr></table></figure>
+
 
 
 
 ]]></content>
       <tags>
         <tag>测试</tag>
-        <tag>UI测试</tag>
-        <tag>爬虫</tag>
-        <tag>Selenium</tag>
+        <tag>pytest</tag>
       </tags>
   </entry>
   <entry>
@@ -423,105 +522,6 @@
         <tag>爬虫</tag>
         <tag>Selenium</tag>
         <tag>Web测试</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>pytest单元测试框架（基础篇）</title>
-    <url>/2023/11/21/pytest%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h2 id="单元测试框架"><a href="#单元测试框架" class="headerlink" title="单元测试框架"></a>单元测试框架</h2><p>​		1）什么是单元测试框架</p>
-<p>​		单元测试框架是指在软件开发的过程种，针对软件的最小单位（函数、方法）进行正确性测试</p>
-<span id="more"></span>
-
-<p>​		2）常见的单元测试框架</p>
-<p>​		基于java的：junit和testng</p>
-<p>​		基于python的：unittest和<strong>pytest</strong></p>
-<p>​		3）单元测试流程</p>
-<p>​		1.测试发现：从多个文件中找到需要被测试的测试用例</p>
-<p>​		2.测试执行：按照一定的顺序执行测试用例，并生成结果</p>
-<p>​		3.测试判断：通过assert断言来自动判断结果与预期是否相符</p>
-<p>​		4.测试报告：生成这次测试的测试报告，包括耗时、通过率等</p>
-<h2 id="pytest"><a href="#pytest" class="headerlink" title="pytest"></a>pytest</h2><p>​		1）简介</p>
-<p>​		pytest是python的一种单元测试框架，与python自带的测试框架unittest类似，但比其更易上手，也更加的灵活。因此使用面也广于unittest。</p>
-<ul>
-<li><p>pytest比unittest更加成熟，同时支持unittest编写的测试用例</p>
-</li>
-<li><p>pytest可以和selenium，request，appium等测试框架相结合，实现web ui自动化，web 接口自动化，app ui自动化</p>
-</li>
-<li><p>pytest可以实现测试用例的跳过以及失败用例重试</p>
-</li>
-<li><p>pytest支持参数化数据驱动方式</p>
-</li>
-<li><p>pytest可以和Jenkins持续集成</p>
-</li>
-<li><p>pytest具有很多第三方插件，且支持自定义扩展</p>
-<ul>
-<li><p>pytest：单元测试框架</p>
-<p>pytest-xdist： 测试用例的分布式执行，即并发执行。可缩短总的用例的执行时间</p>
-<p>pytest-ordering： 可以指定测试用例的执行顺序，默认是从上到下依次执行</p>
-<p>pytest-rerunfailures： 用例失败后进行再次执行（多用于ui测试）</p>
-<p>pytest-html： 生成html格式的测试报告（不够美观）</p>
-<p>allure-pytest： 生成比上面美观的测试报告，且可进行测试报告的自定义</p>
-</li>
-</ul>
-</li>
-</ul>
-<p>​		2）安装</p>
-<p>​		新建python项目———在本地虚拟终端中执行以下命令即可。（注意：使用以上插件也需要安装到本地环境中，语法类似）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip install pytest   <span class="comment">#安装命令</span></span><br><span class="line"></span><br><span class="line">pytest --version     <span class="comment">#检查命令</span></span><br></pre></td></tr></table></figure>
-
-<p>​		3）使用pytest</p>
-<p>​		pytest的默认测试用例发现规则</p>
-<ul>
-<li><p>模块名（简单理解为一个py文件）以test_ 开头或 _test结尾</p>
-</li>
-<li><p>测试类以Test开头，并且不包含init()方法</p>
-</li>
-<li><p>测试方法以test开头</p>
-<p>4）运行pytest</p>
-</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">         <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> <span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">     pytest.main()</span><br></pre></td></tr></table></figure>
-
-<h2 id="pytest运行方式"><a href="#pytest运行方式" class="headerlink" title="pytest运行方式"></a>pytest运行方式</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">参数详解:</span><br><span class="line">-s:输出调试信心，包括<span class="built_in">print</span>打印的信息</span><br><span class="line">-v:显示更详细的信息</span><br><span class="line">-vs:两个连用，效用就是两个相加</span><br><span class="line">-n NUM: 支持多线程或分布式运行测试用例，使用NUM个线程。需要导入pytest-xdist插件</span><br><span class="line">--<span class="built_in">return</span> NUM:失败用例重跑NUM次，失败用例总共运行NUM+1次</span><br><span class="line">-x:有一个用例失败报错，则停止测试，默认是不停止测试</span><br><span class="line">--maxfail=NUM:出现NUM个失败用例就停止测试</span><br><span class="line">-k String:根据String字符串匹配对应的测试用例</span><br><span class="line">--html 文件路径/文件名：生成html格式的测试报告</span><br></pre></td></tr></table></figure>
-
-<p>​		1）主函数方式</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#文件夹与python package的区别：python package下包含一个_init_.py文件</span></span><br><span class="line"><span class="comment"># ./  :表示当前文件路径下</span></span><br><span class="line"><span class="comment"># ../  :表示当前文件路径的父路径，即向上一层</span></span><br><span class="line">pytest.main()    <span class="comment">#运行所有的按条件写的测试用例</span></span><br><span class="line">pytest.main(<span class="string">&#x27;-vs&#x27;</span>,<span class="string">&#x27;./tasecase&#x27;</span>)   <span class="comment">#运行tasecase文件夹下的测试用例</span></span><br><span class="line">pytest.main(<span class="string">&#x27;-x&#x27;</span>,<span class="string">&#x27;test01.py&#x27;</span>)    <span class="comment">#运行test01模块下的测试用例,且出现错误就停止测试</span></span><br><span class="line">pytest.mian(<span class="string">&#x27;-n 2&#x27;</span>,<span class="string">&#x27;./tesecase/test01.py::TestName::testName&#x27;</span>)   <span class="comment">#运行testcase文件夹下test01模块里TsetName类里的testName方法,且使用两个线程</span></span><br></pre></td></tr></table></figure>
-
-<p>​		2）命令行模式</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#即在安装pytest的本地虚拟环境中运行</span></span><br><span class="line">pytest     <span class="comment">#运行所有满足条件的测试用例</span></span><br><span class="line">pytest -vs ./testcase   <span class="comment">#运行tasecase文件夹下的测试用例</span></span><br><span class="line">pytest -x ./testcase/test01.py    <span class="comment">#运行test01模块下的测试用例,且出现错误就停止测试</span></span><br><span class="line">pytest -n 2 ./tesecase/test01.py::TestName::testName    <span class="comment">#运行testcase文件夹下test01模块里TsetName类里的testName方法,且使用两个线程</span></span><br></pre></td></tr></table></figure>
-
-<p>​		3）全局配置模式</p>
-<p>​		通过读取pytest.ini文件得到对应的配置信息，最后在命令行输入pytest即可运行（名字不可变，只能为pytest.ini）</p>
-<ul>
-<li>文件位置：放在项目的根目录，即最外层即可</li>
-<li>编码格式：必须为ANSI格式，可使用notpad++修改格式</li>
-<li>运行规则：不论是主函数方式还是命令行方式，都会优先读取该配置文件</li>
-</ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#模板，前面的参数是不可变的，后面根据实际情况填写</span></span><br><span class="line"></span><br><span class="line">[<span class="string">pytest</span>]</span><br><span class="line"><span class="string">addopts</span> <span class="string">=</span> <span class="string">-vs</span> <span class="comment">#命令行的参数，用空格分隔</span></span><br><span class="line"><span class="string">testpaths</span> <span class="string">=</span> <span class="string">./testcase</span> <span class="comment">#测试用例的路径</span></span><br><span class="line"><span class="string">python_files</span> <span class="string">=</span> <span class="string">test_*.py</span> <span class="comment">#模块名的规则，可以更改默认规则</span></span><br><span class="line"><span class="string">python_classes</span> <span class="string">=</span> <span class="string">Test*</span> <span class="comment">#类名的规则</span></span><br><span class="line"><span class="string">python_functions</span> <span class="string">=</span> <span class="string">test</span> <span class="comment">#方法名的规则</span></span><br><span class="line"><span class="string">markers</span> <span class="string">=</span></span><br><span class="line">  <span class="string">smoke:冒烟用例</span>          <span class="comment">#设置独有的标记</span></span><br><span class="line">  <span class="string">usermanage:用户管理模块</span></span><br><span class="line">  <span class="string">productmanage:商品管理模块</span></span><br></pre></td></tr></table></figure>
-
-<p>​		4）改变执行顺序</p>
-<p>​		pytest默认的执行顺序是从上到下，改变默认执行顺序，使用mark标记。（需要引入pytest-ordering插件）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">99</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAge</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myage&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">100</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAddr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myaddr&quot;</span>)</span><br><span class="line">        </span><br><span class="line">   <span class="comment">#优先执行带注释的用例，且order值越小，优先执行</span></span><br></pre></td></tr></table></figure>
-
-<p>​		5）分组执行</p>
-<p>​		在实际的测试场景中，需要对一类的用例进行优先测试，如，冒烟测试、用户管理模块测试、商品管理模块测试等。（还记得上面pytest.ini文件中得makers标记吗？就是用来自定自己的分组的）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@pytest.mark.somke</span></span><br><span class="line"><span class="comment">#在对应的方法上添加注解即可</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#执行</span></span><br><span class="line">pytest -m <span class="string">&quot;smoke&quot;</span> <span class="comment">#执行smoke模块测试用例</span></span><br><span class="line">pytest -m <span class="string">&quot;smoke or usermanage or productmanage&quot;</span>  <span class="comment">#执行这三个模块的测试用例</span></span><br></pre></td></tr></table></figure>
-
-<p>​		6）跳过测试用例</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line"></span><br><span class="line">    age=<span class="number">18</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">99</span></span>)</span></span><br><span class="line"><span class="meta">    @pytest.mark.skipif(<span class="params">age&gt;<span class="number">18</span>,reason=<span class="string">&quot;年龄已经大于18，不用测啦&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAge</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myage&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.skip(<span class="params">reas=<span class="string">&quot;不想测试这个啦&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAddr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myaddr&quot;</span>)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;  输出</span></span><br><span class="line"><span class="string">testcase/test_01.py::TestName::testAge myage PASSED testcase/test_01.py::TestName::testName hello,pytest PASSED testcase/test_01.py::TestName::testAddr SKIPPED (不想测试这个啦)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27; 当age=19时，输出</span></span><br><span class="line"><span class="string">testcase/test_01.py::TestName::testAge SKIPPED (年龄已经大于18，不用测啦) testcase/test_01.py::TestName::testName hello,pytest PASSED testcase/test_01.py::TestName::testAddr SKIPPED (不想测试这个啦)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<a href="/2023/11/27/pytest%E8%BF%9B%E9%98%B6/" title="pytest单元测试框架（进阶篇）">pytest单元测试框架（进阶篇）</a>
-
-
-
-
-
-]]></content>
-      <tags>
-        <tag>测试</tag>
-        <tag>pytest</tag>
       </tags>
   </entry>
   <entry>
@@ -699,6 +699,134 @@
       <tags>
         <tag>java</tag>
         <tag>力扣</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>力扣经典题---编辑距离</title>
+    <url>/2023/12/12/%E5%8A%9B%E6%89%A3%E7%BB%8F%E5%85%B8%E9%A2%98---%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB/</url>
+    <content><![CDATA[<h2 id="编辑距离"><a href="#编辑距离" class="headerlink" title="编辑距离"></a>编辑距离</h2><h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p>给你两个单词 <code>word1</code> 和 <code>word2</code>， <em>请返回将 <code>word1</code> 转换成 <code>word2</code> 所使用的最少操作数</em> 。你可以对一个单词进行如下三种操作：<span id="more"></span></p>
+<ul>
+<li>插入一个字符</li>
+<li>删除一个字符</li>
+<li>替换一个字符</li>
+</ul>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：word1 = &quot;horse&quot;, word2 = &quot;ros&quot;</span><br><span class="line">输出：3</span><br><span class="line">解释：</span><br><span class="line">horse -&gt; rorse (将 &#x27;h&#x27; 替换为 &#x27;r&#x27;)</span><br><span class="line">rorse -&gt; rose (删除 &#x27;r&#x27;)</span><br><span class="line">rose -&gt; ros (删除 &#x27;e&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>示例 2：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：word1 = &quot;intention&quot;, word2 = &quot;execution&quot;</span><br><span class="line">输出：5</span><br><span class="line">解释：</span><br><span class="line">intention -&gt; inention (删除 &#x27;t&#x27;)</span><br><span class="line">inention -&gt; enention (将 &#x27;i&#x27; 替换为 &#x27;e&#x27;)</span><br><span class="line">enention -&gt; exention (将 &#x27;n&#x27; 替换为 &#x27;x&#x27;)</span><br><span class="line">exention -&gt; exection (将 &#x27;n&#x27; 替换为 &#x27;c&#x27;)</span><br><span class="line">exection -&gt; execution (插入 &#x27;u&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p><strong>提示：</strong></p>
+<ul>
+<li><code>0 &lt;= word1.length, word2.length &lt;= 500</code></li>
+<li><code>word1</code> 和 <code>word2</code> 由小写英文字母组成</li>
+</ul>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>编辑距离（Edit Distance），也称为Levenshtein距离，是一种用于比较两个字符串之间相似度或差异的度量方法。它表示在将一个字符串转换为另一个字符串所需的最少编辑操作次数，这些编辑操作可以是<strong>插入（Insertion）、删除（Deletion）、替换（Substitution）或交换（Transposition）</strong>字符。</p>
+<p><strong>交换</strong>字符：交换相邻的字符串，减少编辑距离，通常代价也设为1。若没有交换操作，使用插入，删除，替换操作替代时，会增大编辑距离。（删除前一个字符，再向后一个字符插入，2步）</p>
+<ol>
+<li>创建一个(m+1) x (n+1)的矩阵D，其中D[i][j]表示将S1的前i个字符转换为S2的前j个字符所需的最小编辑距离。</li>
+<li>初始化矩阵D的第一行和第一列：<ul>
+<li>D[i][0] &#x3D; i，表示将S1的前i个字符转换为一个空字符串所需的编辑距离。</li>
+<li>D[0][j] &#x3D; j，表示将一个空字符串转换为S2的前j个字符所需的编辑距离。</li>
+</ul>
+</li>
+<li>开始填充矩阵D的其余部分。对于每个D[i][j]，可以执行以下操作：<ul>
+<li>如果S1的第i个字符等于S2的第j个字符，则D[i][j] &#x3D; D[i-1][j-1]，即不需要执行任何编辑操作。</li>
+<li>否则，D[i][j] &#x3D; min(D[i-1][j], D[i][j-1], D[i-1][j-1]) + 1。这表示需要执行插入、删除或替换操作，选择其中编辑距离最小的操作，并将当前编辑距离加1。</li>
+</ul>
+</li>
+<li>最终，矩阵D的右下角元素D[m][n]将是S1和S2之间的编辑距离，即将S1转换为S2所需的最小编辑操作次数。</li>
+</ol>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">题目给定了两个单词，设为 A 和 B，这样我们就能够六种操作方法。但我们可以发现，如果我们有单词 A 和单词B：</span><br><span class="line"></span><br><span class="line">对单词 A 删除一个字符和对单词 B 插入一个字符是等价的。例如当单词 A 为 doge，单词 B 为 dog 时，我们既</span><br><span class="line">可以删除单词 A 的最后一个字符 e，得到相同的 dog，也可以在单词 B 末尾添加一个字符 e，得到相同的 doge；</span><br><span class="line"></span><br><span class="line">同理，对单词 B 删除一个字符和对单词 A 插入一个字符也是等价的；</span><br><span class="line">对单词 A 替换一个字符和对单词 B 替换一个字符是等价的。例如当单词 A 为 bat，单词 B 为 cat 时，我们修改</span><br><span class="line">单词 A 的第一个字母 b -&gt; c，和修改单词 B 的第一个字母 c -&gt; b 是等价的。</span><br><span class="line"></span><br><span class="line">这样一来，本质不同的操作实际上只有三种：</span><br><span class="line">在单词 A 中插入一个字符；</span><br><span class="line">在单词 B 中插入一个字符；</span><br><span class="line">修改单词 A 的一个字符。</span><br><span class="line"></span><br><span class="line">这样以来，我们就可以把原问题转化为规模较小的子问题。我们用 A = horse，B = ros 作为例子，来看一看是如</span><br><span class="line">何把这个问题转化为规模较小的若干子问题的。</span><br><span class="line">在单词 A 中插入一个字符：如果我们知道 horse 到 ro 的编辑距离为 a，那么显然 horse 到 ros 的编辑距离</span><br><span class="line">不会超过 a + 1。这是因为我们可以在 a 次操作后将 horse 和 ro 变为相同的字符串，只需要额外的 1 次操</span><br><span class="line">作，在单词 A 的末尾添加字符 s，就能在 a + 1 次操作后将 horse 和 ro 变为相同的字符串；</span><br><span class="line">在单词 B 中插入一个字符：如果我们知道 hors 到 ros 的编辑距离为 b，那么显然 horse 到 ros 的编辑距离</span><br><span class="line">不会超过 b + 1，原因同上；</span><br><span class="line">修改单词 A 的一个字符：如果我们知道 hors 到 ro 的编辑距离为 c，那么显然 horse 到 ros 的编辑距离不会</span><br><span class="line">超过 c + 1，原因同上。</span><br><span class="line"></span><br><span class="line">那么从 horse 变成 ros 的编辑距离应该为 min(a + 1, b + 1, c + 1)。</span><br><span class="line"></span><br><span class="line">注意：为什么我们总是在单词 A 和 B 的末尾插入或者修改字符，能不能在其它的地方进行操作呢？答案是可以的，</span><br><span class="line">但是我们知道，操作的顺序是不影响最终的结果的。例如对于单词 cat，我们希望在 c 和 a 之间添加字符 d 并且</span><br><span class="line">将字符 t 修改为字符 b，那么这两个操作无论为什么顺序，都会得到最终的结果 cdab。</span><br><span class="line"></span><br><span class="line">因此，我们就可以使用动态规划来解决这个问题了。我们用 D[i][j] 表示 A 的前 i 个字母和 B 的前 j 个字母之</span><br><span class="line">间的编辑距离。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minDistance</span><span class="params">(String word1, String word2)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> word1.length();</span><br><span class="line">        <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> word2.length();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 有一个字符串为空串</span></span><br><span class="line">        <span class="keyword">if</span> (n * m == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> n + m;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// DP 数组</span></span><br><span class="line">        <span class="type">int</span>[][] D = <span class="keyword">new</span> <span class="title class_">int</span>[n + <span class="number">1</span>][m + <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 边界状态初始化</span></span><br><span class="line">        <span class="comment">//从i到空字符串需要i步</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; n + <span class="number">1</span>; i++) &#123;</span><br><span class="line">            D[i][<span class="number">0</span>] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//同理</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; m + <span class="number">1</span>; j++) &#123;</span><br><span class="line">            D[<span class="number">0</span>][j] = j;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 计算所有 DP 值</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n + <span class="number">1</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; m + <span class="number">1</span>; j++) &#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> D[i - <span class="number">1</span>][j] + <span class="number">1</span>;</span><br><span class="line">                <span class="type">int</span> <span class="variable">down</span> <span class="operator">=</span> D[i][j - <span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">                <span class="type">int</span> <span class="variable">left_down</span> <span class="operator">=</span> D[i - <span class="number">1</span>][j - <span class="number">1</span>];</span><br><span class="line">                <span class="keyword">if</span> (word1.charAt(i - <span class="number">1</span>) != word2.charAt(j - <span class="number">1</span>)) &#123;</span><br><span class="line">                    left_down += <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                D[i][j] = Math.min(left, Math.min(down, left_down));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> D[n][m];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>java</tag>
+        <tag>力扣</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>性能测试</title>
+    <url>/2023/11/20/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/</url>
+    <content><![CDATA[<h2 id="性能测试"><a href="#性能测试" class="headerlink" title="性能测试"></a>性能测试</h2><h3 id="为什么进行性能测试"><a href="#为什么进行性能测试" class="headerlink" title="为什么进行性能测试"></a>为什么进行性能测试</h3><p>​		满足真实的业务场景（活动场景），支持大量的用户，满足商用需求。</p>
+<span id="more"></span>
+
+<h3 id="什么是性能"><a href="#什么是性能" class="headerlink" title="什么是性能"></a>什么是性能</h3><p>​		软件质量属性中的”效率“体现，指时特性与资源特性</p>
+<h3 id="什么是性能测试"><a href="#什么是性能测试" class="headerlink" title="什么是性能测试"></a>什么是性能测试</h3><p>​		使用<strong>自动化工具</strong>，模拟不同的场景，对软件各项性能指标进行测试和评估的过程。（ps:网络也是性能评估的一部分，且只能由工具测试，不能像功能测试一样手动执行）</p>
+<h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><ol>
+<li>评估当前系统的能力</li>
+<li>寻找性能瓶颈，优化性能</li>
+<li>评估软件是否能满足未来的需要</li>
+</ol>
+<h3 id="功能测试与性能测试"><a href="#功能测试与性能测试" class="headerlink" title="功能测试与性能测试"></a>功能测试与性能测试</h3><p>​		功能测试：验证软件系统操作功能是否符合产品功能需求规格，主要聚焦在功能（正向、逆向）；</p>
+<p>​		性能测试：验证软件系统是否满足业务需求场景，主要聚焦业务场景的满足（时间、资源）；</p>
+<p>​		一般项目中，先通过功能测试，后进行性能测试。</p>
+<h2 id="性能测试策略"><a href="#性能测试策略" class="headerlink" title="性能测试策略"></a>性能测试策略</h2><h3 id="基准测试"><a href="#基准测试" class="headerlink" title="基准测试"></a>基准测试</h3><p>​		狭义：<strong>单用户测试</strong>。测试环境确定后，对业务中的重要业务做单独的测试，获取单用户运行的各项性能指标。（不是指单次测试）</p>
+<p>​		广义：在某时刻建立一个已知性能的性能基准线，当<strong>系统软硬件环境</strong>发生变化之后再进行一次基准测试以确定变化对性能的影响。（类似控制变量法）</p>
+<p>​		作用：基准测试不会单独存在，为多用户并发测试和综合测试场景提供参考依据，且为系统环境配置，优化前后的性能变化提供参考。</p>
+<h3 id="负载测试"><a href="#负载测试" class="headerlink" title="负载测试"></a>负载测试</h3><p>​		通过<strong>逐步增加系统负载</strong>，确定在<strong>满足系统的性能指标</strong>（如响应时间等）的情况下，找出系统所能承受的<strong>最大负载量</strong>的测试。一般时长为1—2小时。</p>
+<p>​		作用：找出系统的最大负载量（也可得到极限负载量），当最大负载量达到需求时，系统才能上线使用。</p>
+<h3 id="稳定性测试"><a href="#稳定性测试" class="headerlink" title="稳定性测试"></a>稳定性测试</h3><p>​		在应用程序<strong>稳定运行</strong>（用户在正常的业务负载下）的情况下进行<strong>长时间测试</strong>（1天—1周），保证<strong>系统长时间稳定运行</strong>。</p>
+<p>​		作用：系统在用户要求的业务负载下运行达到相应的时间，才能正式上线使用。</p>
+<p>​		注意：只有用户在<strong>正常的业务负载</strong>下才能进行稳定性测试，若用户要求的负载量<strong>大于系统最大负载量</strong>，不能进行稳定性测试。应当进行负载测试，找出性能瓶颈，提升系统最大负载量后再进行稳定性测试。</p>
+<h3 id="压力测试"><a href="#压力测试" class="headerlink" title="压力测试"></a>压力测试</h3><p>​		在<strong>强负载下</strong>的测试，查看系统在<strong>峰值情况</strong>下是否具有<strong>功能隐患</strong>，是否具有良好的<strong>容错能力与可恢复能力</strong>。常用的测试场景有：极限负载情况下导致系统崩溃的<strong>破坏性压力测试</strong>和高负载下的长时间<strong>稳定性压力测试</strong>。</p>
+<p>​		注意：破坏性压力测试的负载量为系统的<strong>极限负载量</strong>，即系统即将崩溃。稳定性压力测试的负载量应当<strong>大于系统的最大负载量，小于系统的极限负载量</strong>。</p>
+<h3 id="并发测试"><a href="#并发测试" class="headerlink" title="并发测试"></a>并发测试</h3><p>​		并发测试（绝对并发）：指在<strong>极短的时间</strong>内，发送<strong>多个请求</strong>，验证系统对<strong>并发</strong>的处理能力。与负载测试（相对并发）相区别。特定活动场景如：抢红包、双11秒杀等。</p>
+<h2 id="性能测试指标"><a href="#性能测试指标" class="headerlink" title="性能测试指标"></a>性能测试指标</h2><p>​		一些经过运算得出的结果，来量化衡量某种操作的性能好坏；如：响应时间（RT）。</p>
+<h3 id="响应时间（RT）"><a href="#响应时间（RT）" class="headerlink" title="响应时间（RT）"></a>响应时间（RT）</h3><p>​		指用户从客户端发起一个请求开始，到客户端接收到从服务器端返回的结果，整个过程耗费的时间。即<strong>服务器的处理时间</strong>加<strong>请求&#x2F;结果的网络传输时间</strong>。</p>
+<p>​		注意：不包括发消息时前端页面的处理时间和收到消息后前端页面的渲染显示时间。</p>
+<h3 id="并发（用户）数"><a href="#并发（用户）数" class="headerlink" title="并发（用户）数"></a>并发（用户）数</h3><p>​		某一时刻<strong>同时</strong>向服务器<strong>发起请求</strong>的用户数（请求数）。</p>
+<h3 id="吞吐量（Throughput"><a href="#吞吐量（Throughput" class="headerlink" title="吞吐量（Throughput)"></a>吞吐量（Throughput)</h3><p>​		指<strong>单位时间内</strong>处理客户端请求的数量，<strong>直接</strong>体现系统的性能承载能力。</p>
+<p>​		QPS：Query Per Second。<strong>每秒查询数</strong>，即服务器每秒处理的指定请求（查询请求）的数量。</p>
+<p>​		TPS：Transactions Per Second。<strong>每秒事务数</strong>，即服务器每秒处理的事务请求的数量。 事务：即对应的一次业务操作，可能包含多个请求。一般由测试人员定义事务的大小。当一个事务对应一个请求时，TPS&#x3D;QPS。</p>
+<h3 id="点击数"><a href="#点击数" class="headerlink" title="点击数"></a>点击数</h3><p>​		指客户端向服务端发送请求时，<strong>所有的页面资源元素</strong>（图片，链接，css，js等）的请求总量。</p>
+<p>​		注意：只有web项目才有此指标；且点击数不是页面上的一次点击，而是这次点击所发出的总的请求数。</p>
+<h3 id="错误率"><a href="#错误率" class="headerlink" title="错误率"></a>错误率</h3><p>​		指系统在<strong>负载情况</strong>下，失败业务的概率。即错误率&#x3D;（失败业务&#x2F;业务总数）*100%。大多数系统都会要求错误率无限接近于0；错误率是一个性能指标，不是功能上的随机bug。先解决随机功能bug才能进行性能测试。</p>
+<p>​		注意：只有在负载情况下的失败才是性能上的问题，才能统计错误率，否则只能是功能上的随机bug。</p>
+<p>​		例如，一个用户发起10次请求，成功8次，错误2次，这只能说明出现了随机功能bug。因为没有具体的负载业务场景。</p>
+<h3 id="资源使用率"><a href="#资源使用率" class="headerlink" title="资源使用率"></a>资源使用率</h3><p>​		系统各种资源的使用情况，<strong>一般</strong>资源使用率&#x3D;（资源使用量&#x2F;资源总量）*100%。对于cpu与内存，指代的是使用的cpu与内存的百分比；而对于磁盘IO与网络，指的是读取写入速度的百分比与网络传输速度的百分比。</p>
+<h2 id="性能测试的流程"><a href="#性能测试的流程" class="headerlink" title="性能测试的流程"></a>性能测试的流程</h2><h3 id="性能测试需求分析"><a href="#性能测试需求分析" class="headerlink" title="性能测试需求分析"></a>性能测试需求分析</h3><p>​		熟悉需求，获取性能需求指标。</p>
+<p>​		明确被测系统（业务功能、架构）—明确测试内容（高频业务&#x2F;逻辑复杂业务、数据量大业务）—明确测试策略（负载、稳定…)—明确测试指标（预期指标对比&#x2F;预估指标）</p>
+<h3 id="性能测试的计划和方案"><a href="#性能测试的计划和方案" class="headerlink" title="性能测试的计划和方案"></a>性能测试的计划和方案</h3><p>​		WWW方案。What、Who、How。</p>
+<h3 id="性能测试用例"><a href="#性能测试用例" class="headerlink" title="性能测试用例"></a>性能测试用例</h3><p>​		用例名称、用例编号、用例描述、前置条件、用例步骤、期望性能结果、实际结果。</p>
+<h3 id="性能测试执行"><a href="#性能测试执行" class="headerlink" title="性能测试执行"></a>性能测试执行</h3><p>​		建立测试环境—编写测试脚本—性能测试监控—执行测试脚本。</p>
+<h3 id="性能分析与调优"><a href="#性能分析与调优" class="headerlink" title="性能分析与调优"></a>性能分析与调优</h3><p>​		性能测试分析人员根据对结果的分析，如果不符合性能需求，则提出性能bug，由开发人员进行后续的调优。而后继续进行性能验证，直到满足性能需求为止。</p>
+<h3 id="性能测试报告总结"><a href="#性能测试报告总结" class="headerlink" title="性能测试报告总结"></a>性能测试报告总结</h3><ul>
+<li>测试工作的回顾</li>
+<li>缺陷分析和调优</li>
+<li>风险评估</li>
+<li>性能测试结果</li>
+<li>总结与该进</li>
+</ul>
+<p>​		关于性能测试需求分析，描述正确的是:（ACD）<br>A、性能测试需求分析时，需要对系统的业务功能非常熟悉</p>
+<p>B、性能测试需求分析时，可以不用关心系统的技术实现</p>
+<p>C、有明确需求指标时，性能测试的指标完全根据需求来确定</p>
+<p>D、没有明确的需求指标时，性能测试的指标根据经验来确定</p>
+<p>ps：需要关心系统的技术实现，不同的环境、操作系统、资源对系统的性能影响。</p>
+<p>​		关于性能测试环境，描述正确的是: （AD）</p>
+<p>A、性能测试环境和功能测试环境一样，需要使用指定的软件及版本</p>
+<p>B、性能测试环境和功能测试环境一样，可以多个测试人员一起使用</p>
+<p>C、性能测试环境和功能测试环境一样，可以把软件都安装在一台服务器上，只需要保证环境可以正常访问即可</p>
+<p>D、性能测试环境可以找运维和开发协助搭建</p>
+<p>ps：多个测试人员一起使用就瓜分了系统资源了，判断不出具体的系统时间，空间特性；要保证测试环境与真实环境一致，测试才有意义。</p>
+<p>​		关于性能测试执行，描述正确的是: （ABC）</p>
+<p>A、性能测试脚本执行前，必须保证所有的脚本都调试通过了</p>
+<p>B、性能测试脚本执行前，还需要设置脚本运行的场景〔并发数、运行时间、启动方式等等)</p>
+<p>C、性能测试脚本执行时，需要同步监控服务器的各项性能指标</p>
+<p>D、服务器的各项性能指标，可以在性能测试结束后再统一收集</p>
+<p>ps：性能指标需要同步收集，最后只能收集到状态或小部分指标，不够全面准确。</p>
+<p>​		关于性能测试分析和调优，描述正确的是:（AD）<br>A、测试人员需要对性能测试结果进行分析，如果有问题则提交bug</p>
+<p>B、测试人员需要对性能测试的问题进行调优，找到问题的原因，并给出解决建议</p>
+<p>C、经验丰富的性能调优人员，通常能准确的定位出性能的根本原因，一次就能修改成功</p>
+<p>D、性能调优后，需要测试对比是否有性能提升;通常性能调优要经过很多轮的优化才能最终达成性能指标</p>
+<p>ps：调优是开发的工作。</p>
+]]></content>
+      <tags>
+        <tag>测试</tag>
       </tags>
   </entry>
   <entry>
@@ -1026,134 +1154,6 @@
       <tags>
         <tag>日志</tag>
         <tag>logger</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>性能测试</title>
-    <url>/2023/11/20/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/</url>
-    <content><![CDATA[<h2 id="性能测试"><a href="#性能测试" class="headerlink" title="性能测试"></a>性能测试</h2><h3 id="为什么进行性能测试"><a href="#为什么进行性能测试" class="headerlink" title="为什么进行性能测试"></a>为什么进行性能测试</h3><p>​		满足真实的业务场景（活动场景），支持大量的用户，满足商用需求。</p>
-<span id="more"></span>
-
-<h3 id="什么是性能"><a href="#什么是性能" class="headerlink" title="什么是性能"></a>什么是性能</h3><p>​		软件质量属性中的”效率“体现，指时特性与资源特性</p>
-<h3 id="什么是性能测试"><a href="#什么是性能测试" class="headerlink" title="什么是性能测试"></a>什么是性能测试</h3><p>​		使用<strong>自动化工具</strong>，模拟不同的场景，对软件各项性能指标进行测试和评估的过程。（ps:网络也是性能评估的一部分，且只能由工具测试，不能像功能测试一样手动执行）</p>
-<h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><ol>
-<li>评估当前系统的能力</li>
-<li>寻找性能瓶颈，优化性能</li>
-<li>评估软件是否能满足未来的需要</li>
-</ol>
-<h3 id="功能测试与性能测试"><a href="#功能测试与性能测试" class="headerlink" title="功能测试与性能测试"></a>功能测试与性能测试</h3><p>​		功能测试：验证软件系统操作功能是否符合产品功能需求规格，主要聚焦在功能（正向、逆向）；</p>
-<p>​		性能测试：验证软件系统是否满足业务需求场景，主要聚焦业务场景的满足（时间、资源）；</p>
-<p>​		一般项目中，先通过功能测试，后进行性能测试。</p>
-<h2 id="性能测试策略"><a href="#性能测试策略" class="headerlink" title="性能测试策略"></a>性能测试策略</h2><h3 id="基准测试"><a href="#基准测试" class="headerlink" title="基准测试"></a>基准测试</h3><p>​		狭义：<strong>单用户测试</strong>。测试环境确定后，对业务中的重要业务做单独的测试，获取单用户运行的各项性能指标。（不是指单次测试）</p>
-<p>​		广义：在某时刻建立一个已知性能的性能基准线，当<strong>系统软硬件环境</strong>发生变化之后再进行一次基准测试以确定变化对性能的影响。（类似控制变量法）</p>
-<p>​		作用：基准测试不会单独存在，为多用户并发测试和综合测试场景提供参考依据，且为系统环境配置，优化前后的性能变化提供参考。</p>
-<h3 id="负载测试"><a href="#负载测试" class="headerlink" title="负载测试"></a>负载测试</h3><p>​		通过<strong>逐步增加系统负载</strong>，确定在<strong>满足系统的性能指标</strong>（如响应时间等）的情况下，找出系统所能承受的<strong>最大负载量</strong>的测试。一般时长为1—2小时。</p>
-<p>​		作用：找出系统的最大负载量（也可得到极限负载量），当最大负载量达到需求时，系统才能上线使用。</p>
-<h3 id="稳定性测试"><a href="#稳定性测试" class="headerlink" title="稳定性测试"></a>稳定性测试</h3><p>​		在应用程序<strong>稳定运行</strong>（用户在正常的业务负载下）的情况下进行<strong>长时间测试</strong>（1天—1周），保证<strong>系统长时间稳定运行</strong>。</p>
-<p>​		作用：系统在用户要求的业务负载下运行达到相应的时间，才能正式上线使用。</p>
-<p>​		注意：只有用户在<strong>正常的业务负载</strong>下才能进行稳定性测试，若用户要求的负载量<strong>大于系统最大负载量</strong>，不能进行稳定性测试。应当进行负载测试，找出性能瓶颈，提升系统最大负载量后再进行稳定性测试。</p>
-<h3 id="压力测试"><a href="#压力测试" class="headerlink" title="压力测试"></a>压力测试</h3><p>​		在<strong>强负载下</strong>的测试，查看系统在<strong>峰值情况</strong>下是否具有<strong>功能隐患</strong>，是否具有良好的<strong>容错能力与可恢复能力</strong>。常用的测试场景有：极限负载情况下导致系统崩溃的<strong>破坏性压力测试</strong>和高负载下的长时间<strong>稳定性压力测试</strong>。</p>
-<p>​		注意：破坏性压力测试的负载量为系统的<strong>极限负载量</strong>，即系统即将崩溃。稳定性压力测试的负载量应当<strong>大于系统的最大负载量，小于系统的极限负载量</strong>。</p>
-<h3 id="并发测试"><a href="#并发测试" class="headerlink" title="并发测试"></a>并发测试</h3><p>​		并发测试（绝对并发）：指在<strong>极短的时间</strong>内，发送<strong>多个请求</strong>，验证系统对<strong>并发</strong>的处理能力。与负载测试（相对并发）相区别。特定活动场景如：抢红包、双11秒杀等。</p>
-<h2 id="性能测试指标"><a href="#性能测试指标" class="headerlink" title="性能测试指标"></a>性能测试指标</h2><p>​		一些经过运算得出的结果，来量化衡量某种操作的性能好坏；如：响应时间（RT）。</p>
-<h3 id="响应时间（RT）"><a href="#响应时间（RT）" class="headerlink" title="响应时间（RT）"></a>响应时间（RT）</h3><p>​		指用户从客户端发起一个请求开始，到客户端接收到从服务器端返回的结果，整个过程耗费的时间。即<strong>服务器的处理时间</strong>加<strong>请求&#x2F;结果的网络传输时间</strong>。</p>
-<p>​		注意：不包括发消息时前端页面的处理时间和收到消息后前端页面的渲染显示时间。</p>
-<h3 id="并发（用户）数"><a href="#并发（用户）数" class="headerlink" title="并发（用户）数"></a>并发（用户）数</h3><p>​		某一时刻<strong>同时</strong>向服务器<strong>发起请求</strong>的用户数（请求数）。</p>
-<h3 id="吞吐量（Throughput"><a href="#吞吐量（Throughput" class="headerlink" title="吞吐量（Throughput)"></a>吞吐量（Throughput)</h3><p>​		指<strong>单位时间内</strong>处理客户端请求的数量，<strong>直接</strong>体现系统的性能承载能力。</p>
-<p>​		QPS：Query Per Second。<strong>每秒查询数</strong>，即服务器每秒处理的指定请求（查询请求）的数量。</p>
-<p>​		TPS：Transactions Per Second。<strong>每秒事务数</strong>，即服务器每秒处理的事务请求的数量。 事务：即对应的一次业务操作，可能包含多个请求。一般由测试人员定义事务的大小。当一个事务对应一个请求时，TPS&#x3D;QPS。</p>
-<h3 id="点击数"><a href="#点击数" class="headerlink" title="点击数"></a>点击数</h3><p>​		指客户端向服务端发送请求时，<strong>所有的页面资源元素</strong>（图片，链接，css，js等）的请求总量。</p>
-<p>​		注意：只有web项目才有此指标；且点击数不是页面上的一次点击，而是这次点击所发出的总的请求数。</p>
-<h3 id="错误率"><a href="#错误率" class="headerlink" title="错误率"></a>错误率</h3><p>​		指系统在<strong>负载情况</strong>下，失败业务的概率。即错误率&#x3D;（失败业务&#x2F;业务总数）*100%。大多数系统都会要求错误率无限接近于0；错误率是一个性能指标，不是功能上的随机bug。先解决随机功能bug才能进行性能测试。</p>
-<p>​		注意：只有在负载情况下的失败才是性能上的问题，才能统计错误率，否则只能是功能上的随机bug。</p>
-<p>​		例如，一个用户发起10次请求，成功8次，错误2次，这只能说明出现了随机功能bug。因为没有具体的负载业务场景。</p>
-<h3 id="资源使用率"><a href="#资源使用率" class="headerlink" title="资源使用率"></a>资源使用率</h3><p>​		系统各种资源的使用情况，<strong>一般</strong>资源使用率&#x3D;（资源使用量&#x2F;资源总量）*100%。对于cpu与内存，指代的是使用的cpu与内存的百分比；而对于磁盘IO与网络，指的是读取写入速度的百分比与网络传输速度的百分比。</p>
-<h2 id="性能测试的流程"><a href="#性能测试的流程" class="headerlink" title="性能测试的流程"></a>性能测试的流程</h2><h3 id="性能测试需求分析"><a href="#性能测试需求分析" class="headerlink" title="性能测试需求分析"></a>性能测试需求分析</h3><p>​		熟悉需求，获取性能需求指标。</p>
-<p>​		明确被测系统（业务功能、架构）—明确测试内容（高频业务&#x2F;逻辑复杂业务、数据量大业务）—明确测试策略（负载、稳定…)—明确测试指标（预期指标对比&#x2F;预估指标）</p>
-<h3 id="性能测试的计划和方案"><a href="#性能测试的计划和方案" class="headerlink" title="性能测试的计划和方案"></a>性能测试的计划和方案</h3><p>​		WWW方案。What、Who、How。</p>
-<h3 id="性能测试用例"><a href="#性能测试用例" class="headerlink" title="性能测试用例"></a>性能测试用例</h3><p>​		用例名称、用例编号、用例描述、前置条件、用例步骤、期望性能结果、实际结果。</p>
-<h3 id="性能测试执行"><a href="#性能测试执行" class="headerlink" title="性能测试执行"></a>性能测试执行</h3><p>​		建立测试环境—编写测试脚本—性能测试监控—执行测试脚本。</p>
-<h3 id="性能分析与调优"><a href="#性能分析与调优" class="headerlink" title="性能分析与调优"></a>性能分析与调优</h3><p>​		性能测试分析人员根据对结果的分析，如果不符合性能需求，则提出性能bug，由开发人员进行后续的调优。而后继续进行性能验证，直到满足性能需求为止。</p>
-<h3 id="性能测试报告总结"><a href="#性能测试报告总结" class="headerlink" title="性能测试报告总结"></a>性能测试报告总结</h3><ul>
-<li>测试工作的回顾</li>
-<li>缺陷分析和调优</li>
-<li>风险评估</li>
-<li>性能测试结果</li>
-<li>总结与该进</li>
-</ul>
-<p>​		关于性能测试需求分析，描述正确的是:（ACD）<br>A、性能测试需求分析时，需要对系统的业务功能非常熟悉</p>
-<p>B、性能测试需求分析时，可以不用关心系统的技术实现</p>
-<p>C、有明确需求指标时，性能测试的指标完全根据需求来确定</p>
-<p>D、没有明确的需求指标时，性能测试的指标根据经验来确定</p>
-<p>ps：需要关心系统的技术实现，不同的环境、操作系统、资源对系统的性能影响。</p>
-<p>​		关于性能测试环境，描述正确的是: （AD）</p>
-<p>A、性能测试环境和功能测试环境一样，需要使用指定的软件及版本</p>
-<p>B、性能测试环境和功能测试环境一样，可以多个测试人员一起使用</p>
-<p>C、性能测试环境和功能测试环境一样，可以把软件都安装在一台服务器上，只需要保证环境可以正常访问即可</p>
-<p>D、性能测试环境可以找运维和开发协助搭建</p>
-<p>ps：多个测试人员一起使用就瓜分了系统资源了，判断不出具体的系统时间，空间特性；要保证测试环境与真实环境一致，测试才有意义。</p>
-<p>​		关于性能测试执行，描述正确的是: （ABC）</p>
-<p>A、性能测试脚本执行前，必须保证所有的脚本都调试通过了</p>
-<p>B、性能测试脚本执行前，还需要设置脚本运行的场景〔并发数、运行时间、启动方式等等)</p>
-<p>C、性能测试脚本执行时，需要同步监控服务器的各项性能指标</p>
-<p>D、服务器的各项性能指标，可以在性能测试结束后再统一收集</p>
-<p>ps：性能指标需要同步收集，最后只能收集到状态或小部分指标，不够全面准确。</p>
-<p>​		关于性能测试分析和调优，描述正确的是:（AD）<br>A、测试人员需要对性能测试结果进行分析，如果有问题则提交bug</p>
-<p>B、测试人员需要对性能测试的问题进行调优，找到问题的原因，并给出解决建议</p>
-<p>C、经验丰富的性能调优人员，通常能准确的定位出性能的根本原因，一次就能修改成功</p>
-<p>D、性能调优后，需要测试对比是否有性能提升;通常性能调优要经过很多轮的优化才能最终达成性能指标</p>
-<p>ps：调优是开发的工作。</p>
-]]></content>
-      <tags>
-        <tag>测试</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>力扣经典题---编辑距离</title>
-    <url>/2023/12/12/%E5%8A%9B%E6%89%A3%E7%BB%8F%E5%85%B8%E9%A2%98---%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB/</url>
-    <content><![CDATA[<h2 id="编辑距离"><a href="#编辑距离" class="headerlink" title="编辑距离"></a>编辑距离</h2><h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p>给你两个单词 <code>word1</code> 和 <code>word2</code>， <em>请返回将 <code>word1</code> 转换成 <code>word2</code> 所使用的最少操作数</em> 。你可以对一个单词进行如下三种操作：<span id="more"></span></p>
-<ul>
-<li>插入一个字符</li>
-<li>删除一个字符</li>
-<li>替换一个字符</li>
-</ul>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：word1 = &quot;horse&quot;, word2 = &quot;ros&quot;</span><br><span class="line">输出：3</span><br><span class="line">解释：</span><br><span class="line">horse -&gt; rorse (将 &#x27;h&#x27; 替换为 &#x27;r&#x27;)</span><br><span class="line">rorse -&gt; rose (删除 &#x27;r&#x27;)</span><br><span class="line">rose -&gt; ros (删除 &#x27;e&#x27;)</span><br></pre></td></tr></table></figure>
-
-<p><strong>示例 2：</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">输入：word1 = &quot;intention&quot;, word2 = &quot;execution&quot;</span><br><span class="line">输出：5</span><br><span class="line">解释：</span><br><span class="line">intention -&gt; inention (删除 &#x27;t&#x27;)</span><br><span class="line">inention -&gt; enention (将 &#x27;i&#x27; 替换为 &#x27;e&#x27;)</span><br><span class="line">enention -&gt; exention (将 &#x27;n&#x27; 替换为 &#x27;x&#x27;)</span><br><span class="line">exention -&gt; exection (将 &#x27;n&#x27; 替换为 &#x27;c&#x27;)</span><br><span class="line">exection -&gt; execution (插入 &#x27;u&#x27;)</span><br></pre></td></tr></table></figure>
-
-<p><strong>提示：</strong></p>
-<ul>
-<li><code>0 &lt;= word1.length, word2.length &lt;= 500</code></li>
-<li><code>word1</code> 和 <code>word2</code> 由小写英文字母组成</li>
-</ul>
-<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>编辑距离（Edit Distance），也称为Levenshtein距离，是一种用于比较两个字符串之间相似度或差异的度量方法。它表示在将一个字符串转换为另一个字符串所需的最少编辑操作次数，这些编辑操作可以是<strong>插入（Insertion）、删除（Deletion）、替换（Substitution）或交换（Transposition）</strong>字符。</p>
-<p><strong>交换</strong>字符：交换相邻的字符串，减少编辑距离，通常代价也设为1。若没有交换操作，使用插入，删除，替换操作替代时，会增大编辑距离。（删除前一个字符，再向后一个字符插入，2步）</p>
-<ol>
-<li>创建一个(m+1) x (n+1)的矩阵D，其中D[i][j]表示将S1的前i个字符转换为S2的前j个字符所需的最小编辑距离。</li>
-<li>初始化矩阵D的第一行和第一列：<ul>
-<li>D[i][0] &#x3D; i，表示将S1的前i个字符转换为一个空字符串所需的编辑距离。</li>
-<li>D[0][j] &#x3D; j，表示将一个空字符串转换为S2的前j个字符所需的编辑距离。</li>
-</ul>
-</li>
-<li>开始填充矩阵D的其余部分。对于每个D[i][j]，可以执行以下操作：<ul>
-<li>如果S1的第i个字符等于S2的第j个字符，则D[i][j] &#x3D; D[i-1][j-1]，即不需要执行任何编辑操作。</li>
-<li>否则，D[i][j] &#x3D; min(D[i-1][j], D[i][j-1], D[i-1][j-1]) + 1。这表示需要执行插入、删除或替换操作，选择其中编辑距离最小的操作，并将当前编辑距离加1。</li>
-</ul>
-</li>
-<li>最终，矩阵D的右下角元素D[m][n]将是S1和S2之间的编辑距离，即将S1转换为S2所需的最小编辑操作次数。</li>
-</ol>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">题目给定了两个单词，设为 A 和 B，这样我们就能够六种操作方法。但我们可以发现，如果我们有单词 A 和单词B：</span><br><span class="line"></span><br><span class="line">对单词 A 删除一个字符和对单词 B 插入一个字符是等价的。例如当单词 A 为 doge，单词 B 为 dog 时，我们既</span><br><span class="line">可以删除单词 A 的最后一个字符 e，得到相同的 dog，也可以在单词 B 末尾添加一个字符 e，得到相同的 doge；</span><br><span class="line"></span><br><span class="line">同理，对单词 B 删除一个字符和对单词 A 插入一个字符也是等价的；</span><br><span class="line">对单词 A 替换一个字符和对单词 B 替换一个字符是等价的。例如当单词 A 为 bat，单词 B 为 cat 时，我们修改</span><br><span class="line">单词 A 的第一个字母 b -&gt; c，和修改单词 B 的第一个字母 c -&gt; b 是等价的。</span><br><span class="line"></span><br><span class="line">这样一来，本质不同的操作实际上只有三种：</span><br><span class="line">在单词 A 中插入一个字符；</span><br><span class="line">在单词 B 中插入一个字符；</span><br><span class="line">修改单词 A 的一个字符。</span><br><span class="line"></span><br><span class="line">这样以来，我们就可以把原问题转化为规模较小的子问题。我们用 A = horse，B = ros 作为例子，来看一看是如</span><br><span class="line">何把这个问题转化为规模较小的若干子问题的。</span><br><span class="line">在单词 A 中插入一个字符：如果我们知道 horse 到 ro 的编辑距离为 a，那么显然 horse 到 ros 的编辑距离</span><br><span class="line">不会超过 a + 1。这是因为我们可以在 a 次操作后将 horse 和 ro 变为相同的字符串，只需要额外的 1 次操</span><br><span class="line">作，在单词 A 的末尾添加字符 s，就能在 a + 1 次操作后将 horse 和 ro 变为相同的字符串；</span><br><span class="line">在单词 B 中插入一个字符：如果我们知道 hors 到 ros 的编辑距离为 b，那么显然 horse 到 ros 的编辑距离</span><br><span class="line">不会超过 b + 1，原因同上；</span><br><span class="line">修改单词 A 的一个字符：如果我们知道 hors 到 ro 的编辑距离为 c，那么显然 horse 到 ros 的编辑距离不会</span><br><span class="line">超过 c + 1，原因同上。</span><br><span class="line"></span><br><span class="line">那么从 horse 变成 ros 的编辑距离应该为 min(a + 1, b + 1, c + 1)。</span><br><span class="line"></span><br><span class="line">注意：为什么我们总是在单词 A 和 B 的末尾插入或者修改字符，能不能在其它的地方进行操作呢？答案是可以的，</span><br><span class="line">但是我们知道，操作的顺序是不影响最终的结果的。例如对于单词 cat，我们希望在 c 和 a 之间添加字符 d 并且</span><br><span class="line">将字符 t 修改为字符 b，那么这两个操作无论为什么顺序，都会得到最终的结果 cdab。</span><br><span class="line"></span><br><span class="line">因此，我们就可以使用动态规划来解决这个问题了。我们用 D[i][j] 表示 A 的前 i 个字母和 B 的前 j 个字母之</span><br><span class="line">间的编辑距离。</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">minDistance</span><span class="params">(String word1, String word2)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> word1.length();</span><br><span class="line">        <span class="type">int</span> <span class="variable">m</span> <span class="operator">=</span> word2.length();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 有一个字符串为空串</span></span><br><span class="line">        <span class="keyword">if</span> (n * m == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> n + m;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// DP 数组</span></span><br><span class="line">        <span class="type">int</span>[][] D = <span class="keyword">new</span> <span class="title class_">int</span>[n + <span class="number">1</span>][m + <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 边界状态初始化</span></span><br><span class="line">        <span class="comment">//从i到空字符串需要i步</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; n + <span class="number">1</span>; i++) &#123;</span><br><span class="line">            D[i][<span class="number">0</span>] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//同理</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; m + <span class="number">1</span>; j++) &#123;</span><br><span class="line">            D[<span class="number">0</span>][j] = j;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 计算所有 DP 值</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt; n + <span class="number">1</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">1</span>; j &lt; m + <span class="number">1</span>; j++) &#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">left</span> <span class="operator">=</span> D[i - <span class="number">1</span>][j] + <span class="number">1</span>;</span><br><span class="line">                <span class="type">int</span> <span class="variable">down</span> <span class="operator">=</span> D[i][j - <span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">                <span class="type">int</span> <span class="variable">left_down</span> <span class="operator">=</span> D[i - <span class="number">1</span>][j - <span class="number">1</span>];</span><br><span class="line">                <span class="keyword">if</span> (word1.charAt(i - <span class="number">1</span>) != word2.charAt(j - <span class="number">1</span>)) &#123;</span><br><span class="line">                    left_down += <span class="number">1</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                D[i][j] = Math.min(left, Math.min(down, left_down));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> D[n][m];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>java</tag>
-        <tag>力扣</tag>
       </tags>
   </entry>
 </search>
