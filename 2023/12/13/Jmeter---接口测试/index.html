@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hlhehe.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Jmeter—接口测试JmeterApache JMeter，它是一个开源的性能测试工具，用于测试和评估应用程序、服务或网站的性能、负载和稳定性。  性能测试：JMeter 主要用于执行性能测试，通过模拟多个并发用户同时访问目标系统来测量系统的性能、响应时间和吞吐量。 负载测试：您可以使用 JMeter 来测试应用程序在不同负载条件下的性能，以确定系统在高负载情况下的稳定性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jmeter---接口测试">
+<meta property="og:url" content="https://hlhehe.github.io/2023/12/13/Jmeter---%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/index.html">
+<meta property="og:site_name" content="Honor">
+<meta property="og:description" content="Jmeter—接口测试JmeterApache JMeter，它是一个开源的性能测试工具，用于测试和评估应用程序、服务或网站的性能、负载和稳定性。  性能测试：JMeter 主要用于执行性能测试，通过模拟多个并发用户同时访问目标系统来测量系统的性能、响应时间和吞吐量。 负载测试：您可以使用 JMeter 来测试应用程序在不同负载条件下的性能，以确定系统在高负载情况下的稳定性。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213151812622.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213153337812.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213153548433.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213153949489.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213154428919.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213155631627.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213155618069.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213160203241.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213161921498.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213162009981.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213162110209.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213164037897.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213164247734.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213165143132.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213165833081.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213170144373.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213170556157.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213170716647.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213171538297.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213190233388.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213190410437.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213185050910.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213185331816.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213191223399.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213191808181.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231214104049384.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231214104353938.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231214104522084.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231214105106075.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231214110441786.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215110336901.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215110718581.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215111310243.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215112304757.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215112428284.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215113106058.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215115858828.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215115943544.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215114528045.png">
+<meta property="article:published_time" content="2023-12-13T09:21:21.000Z">
+<meta property="article:modified_time" content="2023-12-16T01:30:08.270Z">
+<meta property="article:author" content="荷包蛋-溏心">
+<meta property="article:tag" content="测试">
+<meta property="article:tag" content="接口测试">
+<meta property="article:tag" content="Jmeter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213151812622.png">
+
+
+<link rel="canonical" href="https://hlhehe.github.io/2023/12/13/Jmeter---%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hlhehe.github.io/2023/12/13/Jmeter---%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/","path":"2023/12/13/Jmeter---接口测试/","title":"Jmeter---接口测试"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Jmeter---接口测试 | Honor</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="waline-server-hlhehes-projects.vercel.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Honor</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">荷包蛋的成长之路</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">19</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">14</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Jmeter%E2%80%94%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95"><span class="nav-number">1.</span> <span class="nav-text">Jmeter—接口测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Jmeter"><span class="nav-number">1.1.</span> <span class="nav-text">Jmeter</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%81%E5%A4%A7%E7%BB%84%E4%BB%B6"><span class="nav-number">1.1.1.</span> <span class="nav-text">十大组件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F"><span class="nav-number">1.1.2.</span> <span class="nav-text">执行顺序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%9C%E7%94%A8%E5%9F%9F"><span class="nav-number">1.1.3.</span> <span class="nav-text">作用域</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95"><span class="nav-number">1.2.</span> <span class="nav-text">接口测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E5%85%B3%E8%81%94"><span class="nav-number">1.3.</span> <span class="nav-text">接口关联</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#json%E6%8F%90%E5%8F%96%E5%99%A8"><span class="nav-number">1.3.1.</span> <span class="nav-text">json提取器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%B0%83%E8%AF%95%E7%BB%93%E6%9E%9C%E5%8F%96%E6%A0%B7%E5%99%A8"><span class="nav-number">1.3.2.</span> <span class="nav-text">调试结果取样器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%8F%90%E5%8F%96%E5%99%A8"><span class="nav-number">1.3.3.</span> <span class="nav-text">正则表达式提取器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%85%E5%8A%A9%E5%87%BD%E6%95%B0"><span class="nav-number">1.4.</span> <span class="nav-text">辅助函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8A%E4%BC%A0%E6%96%87%E4%BB%B6"><span class="nav-number">1.5.</span> <span class="nav-text">上传文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E9%A9%B1%E5%8A%A8"><span class="nav-number">1.6.</span> <span class="nav-text">数据驱动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%89%87%E6%AE%B5"><span class="nav-number">1.7.</span> <span class="nav-text">测试片段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B0%E5%BB%BA%E6%B5%8B%E8%AF%95%E7%89%87%E6%AE%B5"><span class="nav-number">1.7.1.</span> <span class="nav-text">新建测试片段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%B5%8B%E8%AF%95%E7%89%87%E6%AE%B5"><span class="nav-number">1.7.2.</span> <span class="nav-text">使用测试片段</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#include%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="nav-number">1.7.2.1.</span> <span class="nav-text">include控制器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="nav-number">1.7.2.2.</span> <span class="nav-text">模块控制器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AC%E5%85%B1%E6%95%B0%E6%8D%AE"><span class="nav-number">1.8.</span> <span class="nav-text">公共数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E6%95%B0%E6%8D%AE"><span class="nav-number">1.9.</span> <span class="nav-text">数据库数据</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="荷包蛋-溏心"
+      src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+  <p class="site-author-name" itemprop="name">荷包蛋-溏心</p>
+  <div class="site-description" itemprop="description">哪有赌徒天天输，哪有小孩天天哭</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Hlhehe" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Hlhehe" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3113390285@qq.com" title="E-Mail → mailto:3113390285@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+
+       
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="250" height="250" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fidder/" rel="tag">Fidder</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Selenium/" rel="tag">Selenium</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/UI%E6%B5%8B%E8%AF%95/" rel="tag">UI测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E6%B5%8B%E8%AF%95/" rel="tag">Web测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/faker/" rel="tag">faker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logger/" rel="tag">logger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%9B%E6%89%A3/" rel="tag">力扣</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag">接口测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag">测试数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li></ul>
+        </canvas>
+    </div>
+</div>
+
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+     
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hlhehe.github.io/2023/12/13/Jmeter---%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+      <meta itemprop="name" content="荷包蛋-溏心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Honor">
+      <meta itemprop="description" content="哪有赌徒天天输，哪有小孩天天哭">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Jmeter---接口测试 | Honor">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Jmeter---接口测试
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-12-13 17:21:21" itemprop="dateCreated datePublished" datetime="2023-12-13T17:21:21+08:00">2023-12-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-12-16 09:30:08" itemprop="dateModified" datetime="2023-12-16T09:30:08+08:00">2023-12-16</time>
+    </span>
+
+  
+    <span id="/2023/12/13/Jmeter---%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" class="post-meta-item leancloud_visitors" data-flag-title="Jmeter---接口测试" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2023/12/13/Jmeter---%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2023/12/13/Jmeter---%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.3k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Jmeter—接口测试"><a href="#Jmeter—接口测试" class="headerlink" title="Jmeter—接口测试"></a>Jmeter—接口测试</h2><h3 id="Jmeter"><a href="#Jmeter" class="headerlink" title="Jmeter"></a>Jmeter</h3><p>Apache JMeter，它是一个开源的性能测试工具，用于测试和评估应用程序、服务或网站的性能、负载和稳定性。</p>
+<ul>
+<li><strong>性能测试</strong>：JMeter 主要用于执行性能测试，通过模拟多个并发用户同时访问目标系统来测量系统的性能、响应时间和吞吐量。</li>
+<li><strong>负载测试</strong>：您可以使用 JMeter 来测试应用程序在不同负载条件下的性能，以确定系统在高负载情况下的稳定性。</li>
+</ul>
+<span id="more"></span>
+
+<ul>
+<li><strong>压力测试</strong>：JMeter 可以帮助您确定应用程序在极限负载下的行为，包括性能瓶颈和系统崩溃点。</li>
+<li><strong>功能测试</strong>：除了性能测试，JMeter 也可以用于功能测试，验证应用程序的各种功能是否按预期工作。</li>
+<li><strong>多协议支持</strong>：JMeter 支持多种协议，包括HTTP、HTTPS、FTP、JDBC、SMTP、SOAP、REST等，因此可以测试各种类型的应用程序。</li>
+<li><strong>分布式测试</strong>：JMeter 具有分布式测试功能，可以将负载分散到多个测试机器上，以模拟更大的负载。</li>
+<li><strong>数据驱动测试</strong>：您可以使用 JMeter 进行数据驱动测试，通过CSV文件或数据库中的数据来执行多个测试用例。</li>
+<li><strong>生成报告</strong>：JMeter 可以生成详细的测试报告，包括图表和性能指标，以便分析测试结果。</li>
+<li><strong>插件支持</strong>：JMeter 具有丰富的插件生态系统，可以扩展其功能，满足不同测试需求。</li>
+</ul>
+<h4 id="十大组件"><a href="#十大组件" class="headerlink" title="十大组件"></a>十大组件</h4><ul>
+<li>Test Plan (测试计划)：测试计划是测试场景的顶层元素，测试的起点以及容器，它包含了整个测试的配置信息和执行逻辑。您可以在测试计划中添加各种组件以模拟不同的用户行为。</li>
+<li>Thread Group (线程组)：线程组定义了模拟的用户数量和执行计划。每个线程表示一个虚拟用户，您可以配置线程组的并发用户数、循环次数和启动延迟等。</li>
+</ul>
+<p><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213151812622.png" alt="image-20231213151812622"></p>
+<hr>
+<p>下面的组件都在线程组里面。</p>
+<hr>
+<ul>
+<li>Controllers (控制器)：控制器用于定义测试计划中的执行流程，定义发送请求的逻辑过程。常见的控制器包括逻辑控制器（如 If 控制器和 While 控制器）、事务控制器和分隔符控制器，它们允许您组织测试步骤。</li>
+<li>Samplers (采样器)：采样器用于发送请求并模拟用户与应用程序的交互。HTTP请求、FTP请求和数据库请求等都是常见的采样器。是发送请求的最小单元</li>
+<li>Listeners (监听器)：监听器用于收集和显示测试结果。JMeter提供了各种监听器，如查看结果树、汇总报告、图形结果等，以便您分析性能测试数据。</li>
+<li>Config Elements (配置元素)：配置元素允许您设置全局和特定请求的参数。例如，HTTP Cookie 管理器用于处理会话 cookie，HTTP请求默认值可以设置默认的HTTP请求属性。</li>
+<li>Timers (定时器)：定时器用于模拟用户之间的时间间隔，以便更真实地模拟负载，用于性能测试。常见的定时器包括常量定时器和随机定时器。</li>
+<li>Assertions (断言)：断言用于验证响应是否符合预期。您可以使用响应断言检查响应数据的内容、响应代码和响应时间等。</li>
+<li>Pre-Processors (前处理器)：前处理器允许您在发送请求之前对数据进行修改或准备。例如，正则表达式提取器可以从响应中提取特定数据。</li>
+<li>Post-Processors (后处理器)：后处理器用于对响应进行进一步处理。例如，JSON提取器可以从JSON响应中提取特定值，以供以后使用。</li>
+</ul>
+<h4 id="执行顺序"><a href="#执行顺序" class="headerlink" title="执行顺序"></a>执行顺序</h4><ol>
+<li>配置元素 (Config Elements)：配置元素首先被处理。它们用于设置全局或特定请求的参数，以确保测试的一致性。这些元素的设置将影响测试计划中的所有线程和请求。</li>
+<li>线程组 (Thread Group)：线程组是测试计划的入口点，定义了虚拟用户的数量和执行计划。线程组会根据配置中的并发用户数和循环次数启动线程。</li>
+<li>前处理器 (Pre-Processors)：前处理器在每个线程开始执行请求之前运行。它们通常用于修改请求数据或准备测试环境。</li>
+<li>采样器 (Samplers)：采样器发送请求并模拟用户与应用程序的交互。它们是性能测试的核心组件，根据线程组的配置以并发方式执行。</li>
+<li>定时器 (Timers)：定时器用于模拟用户之间的时间间隔。它们控制线程之间的请求发送时间，以模拟负载。</li>
+<li>后处理器 (Post-Processors)：后处理器在收到响应后运行。它们可以用于提取、处理或转换响应数据。</li>
+<li>断言 (Assertions)：断言用于验证响应是否符合预期。它们在接收到响应后运行，并且如果断言失败，测试计划将标记为失败。</li>
+<li>监听器 (Listeners)：监听器用于收集和显示测试结果。它们在测试执行过程中实时捕获和记录性能数据，也可以在测试结束后生成报告。</li>
+<li>控制器 (Controllers)：控制器用于定义测试计划中的执行流程。它们控制着组件的执行顺序和条件。例如，循环控制器可以使一组组件多次执行。</li>
+</ol>
+<h4 id="作用域"><a href="#作用域" class="headerlink" title="作用域"></a>作用域</h4><p><strong>全局作用域组件</strong>：</p>
+<ol>
+<li><strong>HTTP Cookie 管理器</strong>：全局作用域。Cookie 管理器用于管理HTTP请求中的会话cookie，对整个测试计划可见。</li>
+<li><strong>HTTP请求默认值</strong>：全局作用域。HTTP请求默认值组件用于设置全局HTTP请求属性，如协议、主机和端口，对整个测试计划可见。</li>
+<li><strong>用户定义的变量</strong>：全局作用域。用户定义的变量允许您创建全局变量，以供测试计划中的各个部分使用，对整个测试计划可见。</li>
+<li><strong>Keystore配置</strong>：全局作用域。Keystore配置用于管理SSL证书，对整个测试计划可见。</li>
+</ol>
+<p><strong>局部作用域组件</strong>：</p>
+<ol>
+<li><strong>HTTP请求</strong>：局部作用域。每个线程组可以包含自己的HTTP请求，这些请求仅在该线程组内部有效。</li>
+<li><strong>前处理器和后处理器</strong>：局部作用域。前处理器和后处理器可以附加到特定请求或线程组，以定制请求的行为或处理响应。它们的作用仅限于它们所附加的请求或线程组。</li>
+<li><strong>断言</strong>：局部作用域。每个线程组可以包含自己的断言，用于验证该线程组的请求响应。断言仅适用于所属的线程组。</li>
+<li><strong>定时器</strong>：局部作用域。定时器可以附加到特定请求或线程组，用于控制请求之间的时间间隔。它们的作用仅限于它们所附加的请求或线程组。</li>
+<li><strong>逻辑控制器</strong>：局部作用域。逻辑控制器用于定义特定请求的执行流程。每个线程组可以包含自己的逻辑控制器，它们的作用仅限于所属的线程组。</li>
+<li><strong>循环控制器</strong>：局部作用域。循环控制器可以定义特定请求的循环次数。它们的作用仅限于所属的线程组</li>
+</ol>
+<h3 id="接口测试"><a href="#接口测试" class="headerlink" title="接口测试"></a>接口测试</h3><ol>
+<li><strong>创建测试计划</strong>：打开 JMeter 并创建一个新的测试计划。</li>
+</ol>
+<p><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213153337812.png" alt="image-20231213153337812"></p>
+<ol start="2">
+<li><strong>设置线程组</strong>：在测试计划中，右键单击并添加线程组（Thread Group）。线程组用于定义并发用户的数量和测试执行次数。</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213153548433.png" alt="image-20231213153548433" style="zoom:67%;" />
+
+<ol start="3">
+<li><strong>Http cookie管理器</strong>：在测试计划（线程组）右键添加，配置元件，添加cookie管理器。有些请求是包含cookie关联的，添加上管理器jmeter会自动的管理cookie信息。</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213153949489.png" alt="image-20231213153949489" style="zoom:67%;" />
+
+<ol start="4">
+<li><strong>Http 请求默认值</strong>：在测试计划（线程组）中右键添加，配置元件，添加HTTP 请求默认值。用来填写对应的请求对应的 ip 地址、协议、内容编码格式和端口号等默认信息。</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213154428919.png" alt="image-20231213154428919" style="zoom:67%;" />
+
+<ol start="5">
+<li><strong>取样器—http请求</strong>：在线程组下，添加HTTP请求（HTTP Request）或其他适当的采样器来模拟接口请求。（上传文件时需要勾上对post使用。。。）</li>
+</ol>
+<p><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213155631627.png" alt="image-20231213155631627"><br><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213155618069.png" alt="image-20231213155618069"  /></p>
+<ol start="6">
+<li><strong>断言</strong>：在对应的请求上右键，添加断言，选择对应的断言即可。用于对实际结果与预期结果的比较。可以添加多个断言来验证不同方面的响应。</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213160203241.png" alt="image-20231213160203241" style="zoom:67%;" />
+
+<ol start="7">
+<li><strong>配置监听器</strong>：可以在线程组上添加监听器作用于整个线程组，也可在对应的请求上右键添加对应的监听器监听某一个请求。常见的监听器包括查看结果树、汇总报告、图形结果等。</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213161921498.png" alt="image-20231213161921498" style="zoom:67%;" />
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213162009981.png" alt="image-20231213162009981" style="zoom:67%;" />
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213162110209.png" alt="image-20231213162110209" style="zoom:67%;" />
+
+<h3 id="接口关联"><a href="#接口关联" class="headerlink" title="接口关联"></a>接口关联</h3><p>一般采用后置处理器处理对应的接口鉴权和接口关联信息。常用的有json提取器和正则表达式提取器。在对应的请求上右键添加，后置处理器，选择你需要的后置处理器即可。</p>
+<h4 id="json提取器"><a href="#json提取器" class="headerlink" title="json提取器"></a>json提取器</h4><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213164037897.png" alt="image-20231213164037897" style="zoom:67%;" />
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213164247734.png" alt="image-20231213164247734" style="zoom:67%;" />
+
+<p>后面采用 **${设置的名字}**使用对应的变量值。</p>
+<hr>
+<p>json提取器只能用于结果是json类型的数据，如果是普通的文本数据就需要用到正则表达式提取器。</p>
+<hr>
+<h4 id="调试结果取样器"><a href="#调试结果取样器" class="headerlink" title="调试结果取样器"></a>调试结果取样器</h4><p>通过在线程组上右键添加，取样器，调试结果取样器，并且将其拖动到查看结果树的上面，就可在查看结果树种观察到我们提取的参数的值。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213165143132.png" alt="image-20231213165143132" style="zoom:67%;" />
+
+<h4 id="正则表达式提取器"><a href="#正则表达式提取器" class="headerlink" title="正则表达式提取器"></a>正则表达式提取器</h4><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213165833081.png" alt="image-20231213165833081" style="zoom:67%;" />
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213170144373.png" alt="image-20231213170144373" style="zoom:67%;" />
+
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213170556157.png" alt="image-20231213170556157" style="zoom:67%;" />
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213170716647.png" alt="image-20231213170716647" style="zoom:67%;" />
+
+<p>最后还是通过${对应的名字}来使用它的值。</p>
+<h3 id="辅助函数"><a href="#辅助函数" class="headerlink" title="辅助函数"></a>辅助函数</h3><p>在测试时，比如添加某个物品时，不能重名，如果直接写对应的名字后，只能执行一次后就会报错。故需要给数据添加随机性。同时还包含一些<strong>加密函数</strong>等，用于对数据加密。<br>导航栏上选择工具，选择函数助手对话框，里面内置了许多的函数供我们使用。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213171538297.png" alt="image-20231213171538297" style="zoom:67%;" />
+
+<p>示例：加密算法，且加密后将字符串转为大写。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213190233388.png" alt="image-20231213190233388" style="zoom:67%;" />
+
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213190410437.png" alt="image-20231213190410437" style="zoom:67%;" />
+
+<h3 id="上传文件"><a href="#上传文件" class="headerlink" title="上传文件"></a>上传文件</h3><p>实现方式1：填写mime类型。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213185050910.png" alt="image-20231213185050910" style="zoom:67%;" />
+
+<p>实现方式2：勾选对post使用，不填写mime类型。与上面类似，填写对应内容，但是勾选对post使用，且不填写mime类型。将高级里面实现选择java即可。（默认是httpclient4）</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213185331816.png" alt="image-20231213185331816" style="zoom:67%;" />
+
+<h3 id="数据驱动"><a href="#数据驱动" class="headerlink" title="数据驱动"></a>数据驱动</h3><p>一般选择多个测试用例，多次执行该请求，包含正确的用例和错误的用例。<strong>一般一行代表一个测试用例，同时还应该代表预期返回的结果便于做结果断言。</strong></p>
+<p>在对应的请求上右键，添加，配置元件，csv数据文件设置（可处理txt文件和csv文件）。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213191223399.png" alt="image-20231213191223399" style="zoom:67%;" />
+
+<p>**说明：变量的使用都是${变量名}**。之后，设置循环器（不要使用线程组中的循环次数，虽然也能执行，但是是所有的请求都会执行那么多次。应为此次请求设置循环器，就只作用于此次请求）。线程组右键，添加，逻辑控制器，循环控制器。而后将对应请求拖动到while控制器内确保只对该请求生效。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231213191808181.png" alt="image-20231213191808181" style="zoom:67%;" />
+
+<h3 id="测试片段"><a href="#测试片段" class="headerlink" title="测试片段"></a>测试片段</h3><p>测试片段（Test Fragment）是一种可重复使用的组件，用于存储测试计划中的通用配置和操作。测试片段允许您将一组关键字或配置元素封装到一个可重用的单元中，以便在多个测试计划或线程组中使用。这有助于减少重复工作，提高测试计划的可维护性。<strong>测试片段与线程组是同级的</strong>。</p>
+<ul>
+<li>当jmeter脚本非常复杂的时候，可以通过测试片段分模块管理用例</li>
+<li>当jmeter脚本由多个测试人员共同完成，通过测试片段分人分模块管理用例</li>
+</ul>
+<p>比如：A测试购物车相关模块，B测试订单相关模块，但是都需要先进行登录。就进行了重复工作。就可以将登录测试封装成一个测试片段，然后A，B需要使用的时候直接调用该片段即可。</p>
+<h4 id="新建测试片段"><a href="#新建测试片段" class="headerlink" title="新建测试片段"></a>新建测试片段</h4><p>在测试计划右键，添加，测试片段即可。而后再测试片段中添加你所需要的测试请求。最后选中将其保存为测试片段方便后面使用。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231214104049384.png" alt="image-20231214104049384" style="zoom:67%;" />
+
+<h4 id="使用测试片段"><a href="#使用测试片段" class="headerlink" title="使用测试片段"></a>使用测试片段</h4><p>一般使用include控制器或模块控制器使用测试片段。</p>
+<p>在线程组上右键添加，逻辑控制器，include控制器或者模块控制器。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231214104353938.png" alt="image-20231214104353938" style="zoom:67%;" />
+
+<h5 id="include控制器"><a href="#include控制器" class="headerlink" title="include控制器"></a>include控制器</h5><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231214104522084.png" alt="image-20231214104522084" style="zoom:67%;" />
+
+<h5 id="模块控制器"><a href="#模块控制器" class="headerlink" title="模块控制器"></a>模块控制器</h5><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231214105106075.png" alt="image-20231214105106075" style="zoom:67%;" />
+
+<h3 id="公共数据"><a href="#公共数据" class="headerlink" title="公共数据"></a>公共数据</h3><p>通过将一些数据定义为用户自定义的变量，能使得修改更加的方便。比如ip和端口号。</p>
+<p>测试计划右键添加，配置元件，用户定义的变量。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231214110441786.png" alt="image-20231214110441786" style="zoom:67%;" />
+
+<h3 id="数据库数据"><a href="#数据库数据" class="headerlink" title="数据库数据"></a>数据库数据</h3><ol>
+<li>首先去官网下载对应的sql版本驱动。<a target="_blank" rel="noopener" href="https://dev.mysql.com/downloads/connector/j/">驱动地址</a>，将下载好的驱动jar包放入jmeter的lib文件夹中。</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215110336901.png" alt="image-20231215110336901" style="zoom:67%;" />
+
+<ol start="2">
+<li>测试计划右键，添加，配置元件，JDBC Connection Configuration。</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215110718581.png" alt="image-20231215110718581" style="zoom:67%;" />
+
+<p><strong>DataBase URL：</strong> jdbc:mysql:&#x2F;&#x2F;localhost:3306&#x2F;user?useUnicode&#x3D;true&amp;characterEncoding&#x3D;utf-8</p>
+<ul>
+<li>localhost:3306为数据库的地址和端口号；dataname为数据库名</li>
+<li>useUnicode&#x3D;true&amp;characterEncoding&#x3D;utf-8 指定字符的编码解码格式utf-8</li>
+</ul>
+<p><strong>JDBC Driver Class ：</strong> com.mysql.jdbc.Driver ，此为mysql数据库的驱动</p>
+<p><strong>Username：</strong> 数据库的登录用户名</p>
+<p><strong>Password：</strong> 数据库的密码</p>
+<ol start="3">
+<li>添加线程组，在线程组右键添加，取样器，JDBC Request。</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215111310243.png" alt="image-20231215111310243" style="zoom:67%;" />
+
+<p>（一般取出的变量有几个，对应写几个变量在Variable names中，用逗号分隔，一一对应保存，后续方便使用，这里只做演示，将查询的所有结果保存在Result variable name中）</p>
+<p><strong>（注意Result variable name为所有结果的保存变量名，单个变量名写在上面Variable neme中使用）</strong></p>
+<ol start="4">
+<li>在jdbc request中右键，添加，后置处理器，调试后置处理程序。查看对应的结果值（user值）</li>
+<li>添加查看结果树查看整个结果。</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215112304757.png" alt="image-20231215112304757" style="zoom:67%;" />
+
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215112428284.png" alt="image-20231215112428284" style="zoom:67%;" />
+
+<p>可以查看到将数据库中数据查出来并正确传递到了user值中。</p>
+<ol start="6">
+<li>对于数据库中查询出来的数据，一般使用for each循环处理器循环调用。在线程组右键添加逻辑控制器，foreach循环控制器。</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215113106058.png" alt="image-20231215113106058" style="zoom:67%;" />
+
+<ol start="7">
+<li>添加对应的http请求，然后传入的数据按照要求改即可。不仅可以通过${usera}使用对应的值。同时还可以使用${user_1}使用user中的第一个值。（根据上图，默认的语法就是在数字之前加上_，故可以直接使用${user_1}（<strong>注意不是usera，同时下标从1开始</strong>）（<strong>下划线的语法只针对Variable value变量有效</strong>）</li>
+</ol>
+<hr>
+<p>将数据库中的所有数据进行数据驱动DDT。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215115858828.png" alt="image-20231215115858828" style="zoom:67%;" />
+
+<p><strong>（此处count应该写在Variable value中）</strong></p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215115943544.png" alt="image-20231215115943544" style="zoom:67%;" />
+
+<p>可以直接使用${count_1}。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231215114528045.png" alt="image-20231215114528045" style="zoom:67%;" />
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>荷包蛋-溏心
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://hlhehe.github.io/2023/12/13/Jmeter---%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" title="Jmeter---接口测试">https://hlhehe.github.io/2023/12/13/Jmeter---接口测试/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 测试</a>
+              <a href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 接口测试</a>
+              <a href="/tags/Jmeter/" rel="tag"><i class="fa fa-tag"></i> Jmeter</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/12/12/%E5%8A%9B%E6%89%A3%E7%BB%8F%E5%85%B8%E9%A2%98---%E7%BC%96%E8%BE%91%E8%B7%9D%E7%A6%BB/" rel="prev" title="力扣经典题---编辑距离">
+                  <i class="fa fa-angle-left"></i> 力扣经典题---编辑距离
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">荷包蛋-溏心</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">91k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:23</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script size="200" alpha="0.3" zIndex="-1" src="https://cdnjs.cloudflare.com/ajax/libs/ribbon.js/1.0.2/ribbon.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"zQHkOXQtgB7AhS3wRnD4QyO1-gzGzoHsz","app_key":"UrTyQXlCIxiycOdHT6j6W2xk","server_url":null,"security":true}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"waline-server-hlhehes-projects.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"泰酷辣！","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2023/12/13/Jmeter---%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+  
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #4D4D4C;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #F7F7F7;
+      background-image: linear-gradient(#F7F7F7, #F7F7F7);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+<script type="text/javascript" src="/js/clicklove.js"></script>
+
+</html>
