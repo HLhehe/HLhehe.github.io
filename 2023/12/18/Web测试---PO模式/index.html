@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hlhehe.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"show_result":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Web测试Web UI测试是确保网站或应用程序用户界面的功能、外观和交互行为符合预期的测试过程。它包括以下方面：  功能性测试： 确保用户界面的各个部分按照预期工作。例如，按钮是否执行正确的操作，表单是否接收正确的输入等等。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web测试---PO模式">
+<meta property="og:url" content="https://hlhehe.github.io/2023/12/18/Web%E6%B5%8B%E8%AF%95---PO%E6%A8%A1%E5%BC%8F/index.html">
+<meta property="og:site_name" content="Honor">
+<meta property="og:description" content="Web测试Web UI测试是确保网站或应用程序用户界面的功能、外观和交互行为符合预期的测试过程。它包括以下方面：  功能性测试： 确保用户界面的各个部分按照预期工作。例如，按钮是否执行正确的操作，表单是否接收正确的输入等等。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-12-18T09:21:21.000Z">
+<meta property="article:modified_time" content="2023-12-18T08:25:59.186Z">
+<meta property="article:author" content="荷包蛋-溏心">
+<meta property="article:tag" content="测试">
+<meta property="article:tag" content="Web测试">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hlhehe.github.io/2023/12/18/Web%E6%B5%8B%E8%AF%95---PO%E6%A8%A1%E5%BC%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hlhehe.github.io/2023/12/18/Web%E6%B5%8B%E8%AF%95---PO%E6%A8%A1%E5%BC%8F/","path":"2023/12/18/Web测试---PO模式/","title":"Web测试---PO模式"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Web测试---PO模式 | Honor</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="waline-server-hlhehes-projects.vercel.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Honor</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">荷包蛋的成长之路</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">19</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">16</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Web%E6%B5%8B%E8%AF%95"><span class="nav-number">1.</span> <span class="nav-text">Web测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="nav-number">1.1.</span> <span class="nav-text">验证码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PO%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">PO模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%AC%E5%85%B1%E5%B1%82"><span class="nav-number">1.2.1.</span> <span class="nav-text">公共层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%B5%E9%9D%A2%E5%B1%82"><span class="nav-number">1.2.2.</span> <span class="nav-text">页面层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E5%B1%82"><span class="nav-number">1.2.3.</span> <span class="nav-text">测试层</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E8%8E%B7%E5%8F%96"><span class="nav-number">1.2.4.</span> <span class="nav-text">浏览器获取</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="荷包蛋-溏心"
+      src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+  <p class="site-author-name" itemprop="name">荷包蛋-溏心</p>
+  <div class="site-description" itemprop="description">哪有赌徒天天输，哪有小孩天天哭</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">16</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Hlhehe" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Hlhehe" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3113390285@qq.com" title="E-Mail → mailto:3113390285@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+
+       
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="250" height="250" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fidder/" rel="tag">Fidder</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Selenium/" rel="tag">Selenium</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E6%B5%8B%E8%AF%95/" rel="tag">Web测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/faker/" rel="tag">faker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logger/" rel="tag">logger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%9B%E6%89%A3/" rel="tag">力扣</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="tag">性能测试</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag">接口测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag">测试数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li></ul>
+        </canvas>
+    </div>
+</div>
+
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+     
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hlhehe.github.io/2023/12/18/Web%E6%B5%8B%E8%AF%95---PO%E6%A8%A1%E5%BC%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+      <meta itemprop="name" content="荷包蛋-溏心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Honor">
+      <meta itemprop="description" content="哪有赌徒天天输，哪有小孩天天哭">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Web测试---PO模式 | Honor">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Web测试---PO模式
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-12-18 17:21:21 / 修改时间：16:25:59" itemprop="dateCreated datePublished" datetime="2023-12-18T17:21:21+08:00">2023-12-18</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2023/12/18/Web%E6%B5%8B%E8%AF%95---PO%E6%A8%A1%E5%BC%8F/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2023/12/18/Web%E6%B5%8B%E8%AF%95---PO%E6%A8%A1%E5%BC%8F/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>9.5k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>9 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Web测试"><a href="#Web测试" class="headerlink" title="Web测试"></a>Web测试</h2><p>Web UI测试是确保网站或应用程序用户界面的功能、外观和交互行为符合预期的测试过程。它包括以下方面：</p>
+<ul>
+<li><strong>功能性测试：</strong> 确保用户界面的各个部分按照预期工作。例如，按钮是否执行正确的操作，表单是否接收正确的输入等等。<span id="more"></span></li>
+<li><strong>兼容性测试：</strong> 确保用户界面在不同的浏览器、操作系统和设备上能够正确显示和工作。</li>
+<li><strong>可用性测试：</strong> 评估用户界面的易用性和可访问性。这包括确保界面清晰易懂，易于导航，并且对于所有用户（包括残障用户）都可以访问和操作。</li>
+<li><strong>响应式设计测试：</strong> 确保界面在不同的屏幕尺寸和设备上能够适应和呈现良好。</li>
+<li><strong>UI性能测试：</strong> 评估用户界面的性能，例如加载速度、交互响应时间等。</li>
+</ul>
+<h3 id="验证码"><a href="#验证码" class="headerlink" title="验证码"></a>验证码</h3><p>验证码是一种用于验证用户身份或确认用户不是自动程序（比如机器人或恶意软件）的安全机制。它通常以文字、数字、图像或音频的形式呈现给用户，要求用户根据提示进行输入或操作，以验证其是真实的人类用户。<strong>验证码就是用来防止自动化测试脚本自动化处理的</strong>。目前面对验证码，常用的几种操作为：</p>
+<ol>
+<li>去掉验证码—测试环境下可用 </li>
+<li>设置万能验证码—生产测试环境下可用，注意保密。<strong>（以上都由开发进行相应工作的完成）</strong></li>
+<li>验证码识别技术—精度不高，验证码越来越复杂</li>
+<li>cookie—通过cookie跳过登录验证，前提是不能进行登录的测试。</li>
+</ol>
+<hr>
+<p>在做UI自动化时定位元素特别依赖页面，一旦页面发生变更就不得不跟着去修改定位元素的代码。举例:假设要对一个元素进行点击操作，而且会经常对该元素进行操作，那么你就可能会编写多处如下代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">driver.find_element_by_id(<span class="string">&quot;1ogin-btn&quot;</span>).click()</span><br></pre></td></tr></table></figure>
+<p>存在的问题:<br>如果开发人员修改了这个元素的id，这时候你就不得不修改所有对应的代码<br>存在大量冗余代码</p>
+<hr>
+<h3 id="PO模式"><a href="#PO模式" class="headerlink" title="PO模式"></a>PO模式</h3><p>“Page Object” 是一种软件测试设计模式，通常用于自动化测试中，特别是针对 web 应用程序的测试。它的核心思想是将页面的逻辑和行为封装到一个对象中，以便于测试代码的编写和维护。在 Page Object 模式中，每个页面或页面片段都被抽象为一个对象，对象中包含了该页面的元素定位、操作方法和行为。这种抽象使测试代码更加模块化、可读性更强、易于维护。</p>
+<ol>
+<li>提高可维护性和可重用性</li>
+</ol>
+<ul>
+<li><strong>模块化结构：</strong> 将页面功能封装成对象，使得代码更加模块化和清晰。</li>
+<li><strong>减少重复代码：</strong> 将页面元素定位和操作方法封装在对象中，减少了测试代码中的重复代码，提高了代码的重用性。</li>
+</ul>
+<ol start="2">
+<li>简化测试用例</li>
+</ol>
+<ul>
+<li><strong>清晰的接口：</strong> 提供了简洁、易读的接口，测试用例可以专注于业务逻辑而不是页面细节。</li>
+<li><strong>易于维护：</strong> 当页面结构变化时，只需更新页面对象类，而不需要修改所有相关的测试用例。</li>
+</ul>
+<ol start="3">
+<li>提高可读性和可维护性</li>
+</ol>
+<ul>
+<li><strong>抽象化和封装：</strong> 隐藏了页面细节，使得测试代码更易读、易懂。</li>
+<li><strong>减少耦合性：</strong> 页面对象模式降低了测试代码与页面结构的耦合，使得代码更加稳定。</li>
+</ul>
+<ol start="4">
+<li>团队协作和开发效率</li>
+</ol>
+<ul>
+<li><strong>便于团队协作：</strong> 使用 Page Object 模式可以提高团队协作，因为代码结构更清晰，每个成员都能更容易理解和使用。</li>
+<li><strong>提高效率：</strong> 通过将页面功能抽象为对象，使得自动化测试代码更易于编写和维护，提高了开发效率。</li>
+</ul>
+<h4 id="公共层"><a href="#公共层" class="headerlink" title="公共层"></a>公共层</h4><p>在公共层中，可以包含以下内容：</p>
+<ul>
+<li>元素定位和操作方法（Element Locators and Actions）<ul>
+<li>封装元素的定位方法，如使用 XPath、CSS 选择器等来定位页面元素。</li>
+<li>封装元素的操作方法，如点击、输入文本、获取元素文本等操作。</li>
+</ul>
+</li>
+<li>辅助函数和工具类（Utility Functions and Helper Classes）<ul>
+<li>包括一些通用的辅助函数，比如日期处理、文件操作等。</li>
+<li>可能还包括一些辅助类或方法，用于初始化测试环境、驱动器设置、日志记录等通用功能。</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.support.wait <span class="keyword">import</span> WebDriverWait</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span>:</span><br><span class="line"> <span class="comment">#初始化函数，传入需要的driver对象，一般由前置夹具生成，保证一次session会话的driver的唯一性</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, driver</span>):</span><br><span class="line">        self.driver = driver</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 查找元素方法 封装</span></span><br><span class="line">    <span class="comment"># loc=By.CSS_SELECTOR,&quot;.HL&quot;</span></span><br><span class="line">    <span class="comment"># loc变量为元组，*loc为解包，去掉没用的引号</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">base_find</span>(<span class="params">self, loc,  timeout=<span class="number">30</span>, poll=<span class="number">0.5</span></span>):</span><br><span class="line">        <span class="comment"># 使用显示等待 查找元素</span></span><br><span class="line">        <span class="comment">#查找时间间隔默认0.5s，超时时间为30秒</span></span><br><span class="line">        <span class="keyword">return</span> WebDriverWait(self.driver,</span><br><span class="line">                             timeout=timeout,</span><br><span class="line">                             poll_frequency=poll).until(<span class="keyword">lambda</span> x:x.find_element(*loc))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 点击元素 方法封装</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">base_click</span>(<span class="params">self, loc</span>):</span><br><span class="line">        self.base_find(loc).click()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 输入元素 方法封装</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">base_input</span>(<span class="params">self, loc, value</span>):</span><br><span class="line">        <span class="comment"># 获取元素</span></span><br><span class="line">        el = self.base_find(loc)</span><br><span class="line">        <span class="comment"># 清空</span></span><br><span class="line">        el.clear()</span><br><span class="line">        <span class="comment"># 输入</span></span><br><span class="line">        el.send_keys(value)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取文本信息 方法封装（用于判断操作的成功与否）</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">base_get_text</span>(<span class="params">self, loc</span>):</span><br><span class="line">        <span class="keyword">return</span> self.base_find(loc).text</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 截图 方法封装</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">base_get_image</span>(<span class="params">self</span>):</span><br><span class="line">        self.driver.get_screenshot_as_file(<span class="string">&quot;../image/&#123;&#125;.png&quot;</span>.<span class="built_in">format</span>(time.strftime(<span class="string">&quot;%Y_%m_%d %H_%M_%S&quot;</span>)))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 判断元素是否存在 方法封装</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">base_element_is_exist</span>(<span class="params">self, loc</span>):</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            self.base_find(loc, timeout=<span class="number">2</span>)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span> <span class="comment"># 代表元素存在</span></span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span> <span class="comment"># 代表元素不存在</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="页面层"><a href="#页面层" class="headerlink" title="页面层"></a>页面层</h4><p>页面层主要包含页面对象类（Page Object Classes），每个页面对象类代表一个页面或页面片段，并封装了该页面的元素定位和操作方法。</p>
+<p>一个页面对象类通常包含以下内容：</p>
+<ol>
+<li>元素定位器（Element Locators）</li>
+</ol>
+<ul>
+<li>包括页面中各个元素的定位方式，如XPath、CSS选择器、ID等。</li>
+<li>这些定位器<strong>通常作为类中的属性，便于在类中进行使用。</strong></li>
+</ul>
+<ol start="2">
+<li>页面操作方法（Page Action Methods）</li>
+</ol>
+<ul>
+<li>封装了对页面元素的操作方法，如点击按钮、输入文本等。</li>
+<li>这些方法用于执行特定的用户操作，隐藏了底层的元素定位和操作细节。</li>
+</ul>
+<ol start="3">
+<li>页面状态检查方法（Page Assertion Methods）</li>
+</ol>
+<ul>
+<li>用于验证页面状态或元素的方法，通常包括断言操作。</li>
+<li>这些方法用于验证页面是否按预期加载、元素是否显示等。</li>
+</ul>
+<ol start="4">
+<li>可能的业务逻辑方法（Business Logic Methods）</li>
+</ol>
+<ul>
+<li>在某些情况下，页面对象类可能包含一些实现业务逻辑的方法，比如表单提交、搜索等。</li>
+<li>这些方法封装了页面的业务流程，提高了测试代码的可读性和复用性。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> page</span><br><span class="line"><span class="comment">#定位元素的基本数据放在page pathon文件夹下的_init_.py文件夹中</span></span><br><span class="line"><span class="keyword">from</span> base.base <span class="keyword">import</span> Base</span><br><span class="line"></span><br><span class="line"><span class="comment">#以登录页为例</span></span><br><span class="line"><span class="comment">#page python文件夹下的PageLogin类。</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PageLogin</span>(<span class="title class_ inherited__">Base</span>):   <span class="comment">#继承上面的base类</span></span><br><span class="line">    <span class="comment"># 点击登录链接</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">page_click_login_link</span>(<span class="params">self</span>):</span><br><span class="line">        self.base_click(page.login_link)</span><br><span class="line">        <span class="comment">#page.login_link即为_init_.py中的数据</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 输入用户名</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">page_input_username</span>(<span class="params">self, username</span>):</span><br><span class="line">        <span class="comment">#username即为文本框中填写的数据</span></span><br><span class="line">        <span class="comment">#page.login_username为定位到文本框，调用base里的相应函数</span></span><br><span class="line">        self.base_input(page.login_username, username)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 输入密码</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">page_input_password</span>(<span class="params">self, pwd</span>):</span><br><span class="line">        self.base_input(page.login_pwd, pwd)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 输入验证码</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">page_input_verify_code</span>(<span class="params">self, code</span>):</span><br><span class="line">        self.base_input(page.login_verify_code, code)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 点击登录按钮</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">page_click_login_btn</span>(<span class="params">self</span>):</span><br><span class="line">        self.base_click(page.login_btn)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取异常提示信息</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">page_get_error_info</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> self.base_get_text(page.login_err_info)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 点击异常信息框 确定</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">page_click_err_btn_ok</span>(<span class="params">self</span>):</span><br><span class="line">        self.base_click(page.login_err_btn_ok)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 截图</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">page_get_img</span>(<span class="params">self</span>):</span><br><span class="line">        self.base_get_image()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 点击 安全退出 --》退出使用</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">page_click_logout</span>(<span class="params">self</span>):</span><br><span class="line">        self.base_click(page.login_logout)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 判断是否登录成功</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">page_is_login_success</span>(<span class="params">self</span>):<span class="comment">#通过判断是否有退出登录按钮</span></span><br><span class="line">        <span class="keyword">return</span> self.base_element_is_exist(page.login_logout)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 判断是否退出成功</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">page_is_logout_success</span>(<span class="params">self</span>):<span class="comment">#通过判断是否有登录按钮</span></span><br><span class="line">        <span class="keyword">return</span> self.base_element_is_exist(page.login_link)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 组合业务方法</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">page_login</span>(<span class="params">self, username, pwd, code</span>):</span><br><span class="line">        self.page_input_username(username)</span><br><span class="line">        self.page_input_password(pwd)</span><br><span class="line">        self.page_input_verify_code(code)</span><br><span class="line">        self.page_click_login_btn()</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#_init_.py</span></span><br><span class="line"><span class="keyword">from</span> selenium.webdriver.common.by <span class="keyword">import</span> By</span><br><span class="line"><span class="string">&quot;&quot;&quot;项目配置地址&quot;&quot;&quot;</span></span><br><span class="line">url = <span class="string">&quot;http://localhost&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="string">&quot;&quot;&quot;以下为登录页面元素配置信息&quot;&quot;&quot;</span></span><br><span class="line"><span class="comment"># 登录链接</span></span><br><span class="line">login_link = By.PARTIAL_LINK_TEXT, <span class="string">&quot;登录&quot;</span></span><br><span class="line"><span class="comment"># 用户名</span></span><br><span class="line">login_username = By.ID, <span class="string">&quot;username&quot;</span></span><br><span class="line"><span class="comment"># 密码</span></span><br><span class="line">login_pwd = By.ID, <span class="string">&quot;password&quot;</span></span><br><span class="line"><span class="comment"># 验证码</span></span><br><span class="line">login_verify_code = By.ID, <span class="string">&quot;verify_code&quot;</span></span><br><span class="line"><span class="comment"># 登录按钮</span></span><br><span class="line">login_btn = By.CSS_SELECTOR, <span class="string">&quot;.J-login-submit&quot;</span></span><br><span class="line"><span class="comment"># 获取异常文本信息</span></span><br><span class="line">login_err_info = By.CSS_SELECTOR, <span class="string">&quot;.layui-layer-content&quot;</span></span><br><span class="line"><span class="comment"># 点击异常提示框 按钮</span></span><br><span class="line">login_err_btn_ok = By.CSS_SELECTOR, <span class="string">&quot;.layui-layer-btn0&quot;</span></span><br><span class="line"><span class="comment"># 安全退出</span></span><br><span class="line">login_logout = By.PARTIAL_LINK_TEXT, <span class="string">&quot;安全退出&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="测试层"><a href="#测试层" class="headerlink" title="测试层"></a>测试层</h4><p>测试层是指测试用例的集合，这些用例用于验证应用程序的特定功能、行为或业务流程。测试层包含了实际的测试用例和测试数据。</p>
+<p>在测试层中，通常包含以下内容：</p>
+<ol>
+<li>测试用例（Test Cases）</li>
+</ol>
+<ul>
+<li><strong>测试脚本：</strong> 包括编写测试逻辑的代码，调用页面对象类来执行测试步骤。</li>
+<li><strong>测试数据：</strong> 不同的测试用例可能需要不同的输入数据和预期输出数据，这些数据用于验证系统的行为是否符合预期。</li>
+</ul>
+<ol start="2">
+<li>测试断言和验证（Assertions and Validations）</li>
+</ol>
+<ul>
+<li><strong>断言操作：</strong> 在测试用例中执行断言来验证系统的状态、页面元素的存在或特定操作的结果是否与预期一致。</li>
+<li><strong>验证功能：</strong> 测试用例中包含验证步骤，确保被测试的功能按照预期执行。</li>
+</ul>
+<ol start="3">
+<li>测试环境设置和清理</li>
+</ol>
+<ul>
+<li><strong>测试前置条件：</strong> 在测试开始之前，可能需要进行一些测试环境的设置，比如初始化数据库、模拟用户登录等操作。</li>
+<li><strong>测试后置条件：</strong> 在测试结束后，可能需要进行一些清理工作，比如删除测试数据、恢复测试环境等操作。</li>
+</ul>
+<ol start="4">
+<li>测试报告和记录</li>
+</ol>
+<ul>
+<li><strong>生成测试报告：</strong> 在测试执行完毕后，生成测试报告以汇总测试结果和执行情况。</li>
+<li><strong>记录测试日志：</strong> 记录测试执行过程中的详细日志，便于排查问题和回溯测试执行路径。</li>
+</ul>
+<p>测试层是验证软件功能和行为的地方，它利用页面对象类来执行测试步骤，并进行验证和断言。测试用例和测试数据的设计非常重要，它们直接影响着测试的全面性和有效性。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 导包</span></span><br><span class="line"><span class="keyword">import</span> unittest</span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> sleep</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> base.get_driver <span class="keyword">import</span> GetDriver</span><br><span class="line"><span class="keyword">from</span> page.page_login <span class="keyword">import</span> PageLogin</span><br><span class="line"><span class="keyword">from</span> parameterized <span class="keyword">import</span> parameterized</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> tool.read_json <span class="keyword">import</span> read_json</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_data</span>():</span><br><span class="line">    arrs = []</span><br><span class="line">    <span class="keyword">for</span> data <span class="keyword">in</span> read_json(<span class="string">&quot;login.json&quot;</span>).values():</span><br><span class="line">        arrs.append((data.get(<span class="string">&quot;username&quot;</span>),</span><br><span class="line">                     data.get(<span class="string">&quot;password&quot;</span>),</span><br><span class="line">                     data.get(<span class="string">&quot;verify_code&quot;</span>),</span><br><span class="line">                     data.get(<span class="string">&quot;expect_result&quot;</span>),</span><br><span class="line">                     data.get(<span class="string">&quot;success&quot;</span>)))</span><br><span class="line">    <span class="keyword">return</span> arrs <span class="comment"># 注意：必须进行return 返回</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 新建测试类 并使用pytest框架</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestLogin</span>():</span><br><span class="line">    login = <span class="literal">None</span></span><br><span class="line">    <span class="comment"># setUp</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">setUpClass</span>(<span class="params">cls</span>):</span><br><span class="line">        <span class="comment"># 实例化 获取页面对象 PageLogin</span></span><br><span class="line">        cls.login = PageLogin(GetDriver().get_driver())</span><br><span class="line">        <span class="comment"># 点击登录连接</span></span><br><span class="line">        cls.login.page_click_login_link()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># tearDown</span></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">tearDownClass</span>(<span class="params">cls</span>):</span><br><span class="line">        sleep(<span class="number">3</span>)</span><br><span class="line">        <span class="comment"># 关闭 driver驱动对象</span></span><br><span class="line">        GetDriver().quit_driver()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 登录测试方法</span></span><br><span class="line"><span class="meta">    @parameterized.expand(<span class="params">get_data(<span class="params"></span>)</span>)</span></span><br><span class="line">    <span class="comment">#使用@pytest.mark.parametrize(&quot;username, pwd, code, expect_result, success&quot;, get_data())替代</span></span><br><span class="line">    <span class="comment">#名字不需要完全相同，一一对应即可。</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">test_login</span>(<span class="params">self, username, pwd, code, expect_result, success</span>):</span><br><span class="line">        <span class="comment"># 调用登录方法</span></span><br><span class="line">        self.login.page_login(username, pwd, code)</span><br><span class="line">        <span class="keyword">if</span> success:</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="comment"># 判断安全退出是否存在</span></span><br><span class="line">                self.assertTrue(self.login.page_is_login_success())</span><br><span class="line">                <span class="comment"># 点击退出</span></span><br><span class="line">                self.login.page_click_logout()</span><br><span class="line">                <span class="keyword">try</span>:</span><br><span class="line">                    self.assertTrue(self.login.page_is_logout_success)</span><br><span class="line">                <span class="keyword">except</span>:</span><br><span class="line">                    <span class="comment"># 截图</span></span><br><span class="line">                    self.login.page_get_img()</span><br><span class="line">                <span class="comment"># 点击登录连接</span></span><br><span class="line">                self.login.page_click_login_link()</span><br><span class="line">            <span class="keyword">except</span>:</span><br><span class="line">                <span class="comment"># 截图</span></span><br><span class="line">                self.login.page_get_img()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 获取登录提示信息</span></span><br><span class="line">            msg = self.login.page_get_error_info()</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="comment"># 断言</span></span><br><span class="line">                self.assertEqual(msg, expect_result)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">except</span> AssertionError:</span><br><span class="line">                <span class="comment"># 截图</span></span><br><span class="line">                self.login.page_get_img()</span><br><span class="line">            <span class="comment"># 点击 确认框</span></span><br><span class="line">            self.login.page_click_err_btn_ok()</span><br></pre></td></tr></table></figure>
+
+<h4 id="浏览器获取"><a href="#浏览器获取" class="headerlink" title="浏览器获取"></a>浏览器获取</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#方式一</span></span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">import</span> page</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GetDriver</span>:</span><br><span class="line">    <span class="comment"># 设置类属性</span></span><br><span class="line">    driver = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 获取driver</span></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_driver</span>(<span class="params">cls</span>):</span><br><span class="line">        <span class="keyword">if</span> cls.driver <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 实例化浏览器</span></span><br><span class="line">            cls.driver = webdriver.Firefox()</span><br><span class="line">            <span class="comment"># 最大化</span></span><br><span class="line">            cls.driver.maximize_window()</span><br><span class="line">            <span class="comment"># 打开浏览器</span></span><br><span class="line">            cls.driver.get(page.url)</span><br><span class="line">        <span class="keyword">return</span> cls.driver</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 退出driver</span></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">quit_driver</span>(<span class="params">cls</span>):</span><br><span class="line">        <span class="keyword">if</span> cls.driver:</span><br><span class="line">            cls.driver.quit()</span><br><span class="line">            <span class="comment"># 注意：此处有一个很大坑,退出之后需要将drive置空</span></span><br><span class="line">            cls.driver = <span class="literal">None</span></span><br><span class="line">            <span class="comment"># print(&quot;置空之后：&quot;, cls.driver)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#方式二,而后函数中使用broswer调用对应的浏览器，且一次session有效</span></span><br><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line">driver =<span class="literal">None</span></span><br><span class="line"><span class="meta">@pytest.fixture(<span class="params">scope=<span class="string">&quot;session&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">browser</span>():</span><br><span class="line">    <span class="keyword">global</span> driver</span><br><span class="line">    <span class="keyword">if</span> driver <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    	driver = webdriver.Chrome()  <span class="comment"># 例如，这里使用 Chrome 作为示例，你可以选择其他浏览器</span></span><br><span class="line">    	driver.maximize_window()<span class="comment">#最大化窗口</span></span><br><span class="line">    <span class="keyword">yield</span> driver</span><br><span class="line">    driver.quit()</span><br><span class="line">    driver = <span class="literal">None</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>荷包蛋-溏心
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://hlhehe.github.io/2023/12/18/Web%E6%B5%8B%E8%AF%95---PO%E6%A8%A1%E5%BC%8F/" title="Web测试---PO模式">https://hlhehe.github.io/2023/12/18/Web测试---PO模式/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 测试</a>
+              <a href="/tags/Web%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> Web测试</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2023/12/16/Jmeter---%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/" rel="prev" title="Jmeter---压力测试">
+                  <i class="fa fa-angle-left"></i> Jmeter---压力测试
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">荷包蛋-溏心</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">103k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">1:33</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script size="200" alpha="0.3" zIndex="-1" src="https://cdnjs.cloudflare.com/ajax/libs/ribbon.js/1.0.2/ribbon.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #4D4D4C;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #F7F7F7;
+      background-image: linear-gradient(#F7F7F7, #F7F7F7);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"waline-server-hlhehes-projects.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"泰酷辣！","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2023/12/18/Web%E6%B5%8B%E8%AF%95---PO%E6%A8%A1%E5%BC%8F/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+<script type="text/javascript" src="/js/clicklove.js"></script>
+
+</html>
