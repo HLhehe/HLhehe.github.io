@@ -957,7 +957,7 @@
 </li>
 <li>与基本类型的区别：<strong>数值类型，存储位置，默认值，调用方法，性能</strong>等方面比较。（基本类型更加高效率）</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">        Short a=<span class="number">1</span>;</span><br><span class="line">          Integer b=<span class="number">1</span>;</span><br><span class="line">        System.out.println(a.equals(b));<span class="comment">//false</span></span><br><span class="line"><span class="comment">//虽然重写了equals方法，但还是不同的对象，还是false，只有在对象类型相同时，equals() 方法才会比较它们的值。</span></span><br><span class="line"><span class="comment">//有点东西</span></span><br><span class="line"> 		  <span class="type">short</span> a=<span class="number">1</span>;</span><br><span class="line">          Integer b=<span class="number">1</span>;</span><br><span class="line">        System.out.println(a==b);<span class="comment">//true</span></span><br><span class="line"><span class="comment">//equals只要是类型不同，就是false</span></span><br><span class="line"><span class="comment">//b先自动拆箱为int，而后short与int运算，short自动类型转换为int，故变为值比较，结果为true。</span></span><br><span class="line">        <span class="type">Integer</span> <span class="variable">i1</span> <span class="operator">=</span> <span class="number">128</span>;</span><br><span class="line">		<span class="type">Integer</span> <span class="variable">i2</span> <span class="operator">=</span> <span class="number">128</span>;</span><br><span class="line">		<span class="type">int</span> <span class="variable">i3</span> <span class="operator">=</span> <span class="number">128</span>;</span><br><span class="line">		<span class="type">int</span> <span class="variable">i4</span> <span class="operator">=</span> <span class="number">128</span>;</span><br><span class="line">		System.out.println(i1 == i2);<span class="comment">//false，比较地址，128超过Integer缓存对象</span></span><br><span class="line">		System.out.println(i3 == i4);<span class="comment">//true，比较数据值</span></span><br><span class="line">		System.out.println(i1 == i3);<span class="comment">//true，i1自动拆箱按照基本数据类型比较</span></span><br><span class="line">        <span class="comment">//包装类对象与基本数据类型进行比较时，就会把包装类对象自动拆箱，按照基本数据类型的规则进行比较</span></span><br><span class="line"><span class="type">Integer</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"><span class="type">Double</span> <span class="variable">d</span> <span class="operator">=</span> <span class="number">1.0</span></span><br><span class="line">System.out.println(i==d);<span class="comment">//编译报错，Integer不能和Double==比较，奥里给，都两个不同的对象了</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">        Short a=<span class="number">1</span>;</span><br><span class="line">          Integer b=<span class="number">1</span>;</span><br><span class="line">        System.out.println(a.equals(b));<span class="comment">//false</span></span><br><span class="line"><span class="comment">//虽然重写了equals方法，但还是不同的对象，还是false，只有在对象类型相同时，equals() 方法才会比较它们的值。</span></span><br><span class="line"><span class="comment">//即使是包装类和基本类使用equals，类型不同也是false。</span></span><br><span class="line"><span class="comment">//有点东西</span></span><br><span class="line"> 		  <span class="type">short</span> a=<span class="number">1</span>;</span><br><span class="line">          Integer b=<span class="number">1</span>;</span><br><span class="line">        System.out.println(a==b);<span class="comment">//true</span></span><br><span class="line"><span class="comment">//equals只要是类型不同，就是false</span></span><br><span class="line"><span class="comment">//b先自动拆箱为int，而后short与int运算，short自动类型转换为int，故变为值比较，结果为true。</span></span><br><span class="line">        <span class="type">Integer</span> <span class="variable">i1</span> <span class="operator">=</span> <span class="number">128</span>;</span><br><span class="line">		<span class="type">Integer</span> <span class="variable">i2</span> <span class="operator">=</span> <span class="number">128</span>;</span><br><span class="line">		<span class="type">int</span> <span class="variable">i3</span> <span class="operator">=</span> <span class="number">128</span>;</span><br><span class="line">		<span class="type">int</span> <span class="variable">i4</span> <span class="operator">=</span> <span class="number">128</span>;</span><br><span class="line">		System.out.println(i1 == i2);<span class="comment">//false，比较地址，128超过Integer缓存对象</span></span><br><span class="line">		System.out.println(i3 == i4);<span class="comment">//true，比较数据值</span></span><br><span class="line">		System.out.println(i1 == i3);<span class="comment">//true，i1自动拆箱按照基本数据类型比较</span></span><br><span class="line">        <span class="comment">//包装类对象与基本数据类型进行比较时，就会把包装类对象自动拆箱，按照基本数据类型的规则进行比较</span></span><br><span class="line"><span class="type">Integer</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"><span class="type">Double</span> <span class="variable">d</span> <span class="operator">=</span> <span class="number">1.0</span></span><br><span class="line">System.out.println(i==d);<span class="comment">//编译报错，Integer不能和Double==比较，奥里给，都两个不同的对象了</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h3><ol>
 <li>整数类型 int<code>、</code>short<code>、</code>byte&#96;</li>
@@ -1015,7 +1015,7 @@
 <li>显式初始化：如果在类定义中对实例变量进行了显式初始化，将使用显式提供的值来初始化实例变量。<strong>说的稍稍有点争议了，不够严谨，主要看是否调用了构造函数，从而调用实例 变量的定义过程，实例化代码块，反正按顺序执行static的相关内容。包括变量定义以及代码块</strong></li>
 <li>静态初始化块：静态初始化块是一个在类加载时执行的代码块，用 <code>static &#123; &#125;</code> 声明。它可以对静态变量进行复杂赋值操作。<strong>只执行一次</strong></li>
 </ol>
-<h3 id="类的执行顺序"><a href="#类的执行顺序" class="headerlink" title="类的执行顺序"></a>类的执行顺序</h3><p>类加载时：只用查看变量的初始化过程，实例化变量直接不用管。查看<strong>静态变量的实例化</strong>，<strong>按顺序依次初始化</strong>，调用对应的函数。若初始化使用构造函数，则按顺序执行<strong>实例化变量</strong>的初始化过程，<strong>代码块，最后执行构造函数</strong>。最后所有静态变量初始化完成后，按顺序执行<strong>静态代码块。</strong>如果<strong>没用构造函数的调用</strong>，那么<strong>代码块，实例变量的初始化过程均不会执行输出。</strong></p>
+<h3 id="类的执行顺序"><a href="#类的执行顺序" class="headerlink" title="类的执行顺序"></a>类的执行顺序</h3><p>类<strong>加载</strong>时：只用查看变量的初始化过程，实例化变量直接不用管。查看<strong>静态变量的实例化</strong>，<strong>按顺序依次初始化</strong>，调用对应的函数。若初始化使用构造函数，则按顺序执行<strong>实例化变量</strong>的初始化过程，<strong>代码块，最后执行构造函数</strong>。最后所有静态变量初始化完成后，按顺序执行<strong>静态代码块。</strong>如果<strong>没用构造函数的调用</strong>，那么<strong>代码块，实例变量的初始化过程均不会执行。</strong></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">T</span> &#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">T</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">T</span>(<span class="string">&quot;t1&quot;</span>);</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">T</span> <span class="variable">t2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">T</span>(<span class="string">&quot;t2&quot;</span>);</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> print(<span class="string">&quot;i&quot;</span>);</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> <span class="number">99</span>;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">public</span> <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> print(<span class="string">&quot;j&quot;</span>);</span><br><span class="line">    </span><br><span class="line">	&#123;</span><br><span class="line">		print(<span class="string">&quot;构造块&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">static</span>&#123;</span><br><span class="line">		print(<span class="string">&quot;静态块&quot;</span>);</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="title function_">T</span><span class="params">(String str)</span>&#123;</span><br><span class="line">		System.out.println((++k) + <span class="string">&quot;:&quot;</span> + str + <span class="string">&quot;  i=&quot;</span> + i + <span class="string">&quot;  n=&quot;</span> + n);</span><br><span class="line">		++n;</span><br><span class="line">		++i;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">print</span><span class="params">(String str)</span>&#123;</span><br><span class="line">		System.out.println((++k) + <span class="string">&quot;:&quot;</span> + str + <span class="string">&quot;  i=&quot;</span> + i + <span class="string">&quot;  n=&quot;</span> + n);</span><br><span class="line">		++n;</span><br><span class="line">		<span class="keyword">return</span> ++i;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">	<span class="comment">//只用管类加载过程，哈拉少</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//输出顺序：j,构造块，t1，j，构造块，t2，i，静态块</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">1:j  i=0  n=0 </span></span><br><span class="line"><span class="comment">2:构造块  i=1  n=1</span></span><br><span class="line"><span class="comment">3:t1  i=2  n=2</span></span><br><span class="line"><span class="comment">4:j  i=3  n=3</span></span><br><span class="line"><span class="comment">5:构造块  i=4  n=4</span></span><br><span class="line"><span class="comment">6:t2  i=5  n=5</span></span><br><span class="line"><span class="comment">7:i  i=6  n=6</span></span><br><span class="line"><span class="comment">8:静态块  i=7  n=99 </span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
 
 <p>类加载完成使用时：构造函数调用前优先调用代码块。奥里给<strong>（不会调用静态代码块，静态只会类加载时调用一次）</strong></p>
@@ -1092,10 +1092,10 @@
 <li>默认继承java.lang.Enum，故不能再继承别的类。</li>
 <li>默认被final修饰，亦不可被别的类继承。</li>
 <li>枚举类型的比较通常使用 <code>==</code> 运算符。这是因为枚举类型的每个常量是唯一的，并且在编译时已经确定。</li>
-<li>枚举可实现接口，每个枚举常量都必须提供接口中定义的方法的实现。可以通过枚举变量来调用接口中定义的方法。</li>
+<li>枚举<strong>可实现接口</strong>，每个枚举常量都必须提供接口中定义的方法的实现。可以通过枚举变量来调用接口中定义的方法。</li>
 <li>构造函数私有，系统会在枚举类加载时自动创建这些枚举常量，并且只会创建一次。构造函数可以重载，可以不同的枚举常量调用不同的构造函数。</li>
 <li>枚举常量默认使用 <code>public static final</code> 修饰符，因此它们可以被任何类访问，是静态的（因为它们属于类而不是实例），并且是最终的（即不可修改）。</li>
-<li>枚举中可定义抽象方法，但是枚举的所有实例必须实现对应的方法。调用也和实现接口类似。</li>
+<li>枚举中<strong>可定义抽象方法</strong>，但是枚举的所有实例必须实现对应的方法。调用也和实现接口类似。</li>
 <li>枚举的equals方法调用&#x3D;&#x3D;方法，即object类中的equals方法。但由于枚举常量的唯一性，所以可以简单认为是值等判断。</li>
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 定义形状接口   例1</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">Shape</span> &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">draw</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 枚举实现形状接口</span></span><br><span class="line"><span class="keyword">enum</span> <span class="title class_">SimpleShape</span> <span class="keyword">implements</span> <span class="title class_">Shape</span> &#123;</span><br><span class="line">    CIRCLE &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">draw</span><span class="params">()</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;绘制圆形&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    SQUARE &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">draw</span><span class="params">()</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;绘制正方形&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    TRIANGLE &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">draw</span><span class="params">()</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;绘制三角形&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HL</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        SimpleShape.CIRCLE.draw();    <span class="comment">// 输出 &quot;绘制圆形&quot;</span></span><br><span class="line">        SimpleShape.SQUARE.draw();    <span class="comment">// 输出 &quot;绘制正方形&quot;</span></span><br><span class="line">        SimpleShape.TRIANGLE.draw();  <span class="comment">// 输出 &quot;绘制三角形&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -1118,19 +1118,28 @@
 <li>finally是在return后面的表达式运算之后执行的，此时并没有返回运算之后的值，而是把值保存起来，不管finally对该值做任何的改变，返回的值都不会改变，依然返回保存起来的值。也就是说方法的返回值是在finally运算之前就确定了的。如果return的数据是引用数据类型，而在finally中对该引用数据类型的属性值的改变起作用，try中的return语句返回的就是在finally中改变后的该属性的值。</li>
 </ul>
 </li>
-<li>先捕获子类异常，再捕获父类异常。捕获父类异常之后，不能捕获子类异常了，否则编译不通过。</li>
-<li>Exception分为两大类：运行时异常 [即程序运行时，发生的异常]。编译时异常 [即编程时编译器检查出的异常，Checked异常]。<br>所有的RuntimeException类及其子类的实例被称为Runtime异常；不是RuntimeException类及其子类的异常实例则被称为Checked异常。<ul>
+<li><p>先捕获子类异常，再捕获父类异常。捕获父类异常之后，不能捕获子类异常了，否则编译不通过。</p>
+</li>
+<li><p>Exception分为两大类：运行时异常 [即程序运行时，发生的异常]。编译时异常 [即编程时编译器检查出的异常，Checked异常]。<br>所有的RuntimeException类及其子类的实例被称为Runtime异常；不是RuntimeException类及其子类的异常实例则被称为Checked异常。</p>
+<ul>
 <li>编译时异常：(受检异常)在执行javac.exe命令时，出现的异常。<br>                |—– ClassNotFoundException<br>                |—– FileNotFoundException<br>                |—– IOException</li>
 <li>运行时异常：(非受检异常)在执行java.exe命令时，出现的异常。<br>                |—- ArrayIndexOutOfBoundsException<br>                |—- NullPointerException<br>                |—- ClassCastException<br>                |—- NumberFormatException<br>                |—- InputMismatchException<br>                |—- ArithmeticException</li>
 </ul>
 </li>
-<li>throw是抛出异常，二throws是处理异常（交由调用者处理，自己不管，继续向上抛出异常）</li>
-<li>异常处理方式，两种，throws和try，catch</li>
-<li>继承于Throwable父类</li>
-<li>finally语句和catch语句是可选的，但finally不能单独使用。写入finally中：我们在开发中，有一些资源（比如：输入流、输出流，数据库连接、Socket连接等资源），在使用完以后，必须显式的进行关闭操作，否则，GC不会自动的回收这些资源。进而导致内存的泄漏。</li>
-<li>子类重写的方法抛出的异常类型可以与父类被重写的方法抛出的异常类型相同，或是<strong>父类被重写的方法抛出的异常类型的子类</strong>。</li>
-<li><code>finalize()</code> 方法是 Java 中 <code>Object</code> 类的一个方法，用于在对象被垃圾回收之前执行一些清理操作。每个对象在被垃圾回收器回收之前都有机会执行 <code>finalize()</code> 方法。</li>
-<li>自定义异常<ul>
+<li><p>throw是抛出异常，二throws是处理异常（交由调用者处理，自己不管，继续向上抛出异常）</p>
+</li>
+<li><p>异常处理方式，两种，throws和try，catch</p>
+</li>
+<li><p>继承于Throwable父类</p>
+</li>
+<li><p>finally语句和catch语句是可选的，但finally不能单独使用。写入finally中：我们在开发中，有一些资源（比如：输入流、输出流，数据库连接、Socket连接等资源），在使用完以后，必须显式的进行关闭操作，否则，GC不会自动的回收这些资源。进而导致内存的泄漏。</p>
+</li>
+<li><p>子类重写的方法抛出的异常类型可以与父类被重写的方法抛出的异常类型相同，或是<strong>父类被重写的方法抛出的异常类型的子类</strong>。</p>
+</li>
+<li><p><code>finalize()</code> 方法是 Java 中 <code>Object</code> 类的一个方法，用于在对象被垃圾回收之前执行一些清理操作。每个对象在被垃圾回收器回收之前都有机会执行 <code>finalize()</code> 方法。</p>
+</li>
+<li><p>自定义异常</p>
+<ul>
 <li>继承于现有的异常体系。通常继承于RuntimeException \ Exception</li>
 <li>通常提供几个重载的构造器</li>
 <li><strong>提供一个全局常量</strong>，声明为：static final long serialVersionUID;</li>
@@ -1186,7 +1195,7 @@
 <h4 id="11"><a href="#11" class="headerlink" title="11"></a>11</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//编译不通过，因为在C类中x有歧义。</span></span><br><span class="line"><span class="keyword">interface</span> <span class="title class_">A</span>&#123;</span><br><span class="line">	<span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span>&#123;</span><br><span class="line">	<span class="type">int</span> <span class="variable">x</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">C</span> <span class="keyword">extends</span> <span class="title class_">B</span> <span class="keyword">implements</span> <span class="title class_">A</span>&#123;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">printX</span><span class="params">()</span>&#123;</span><br><span class="line"><span class="comment">//		System.out.println(x);//有歧义，要么写super.x，要么下A.x</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">		<span class="keyword">new</span> <span class="title class_">C</span>().printX();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h4 id="12"><a href="#12" class="headerlink" title="12"></a>12</h4><p>编写一个匿名内部类，它<strong>继承Object</strong>，并在匿名内部类中，声明一个方法public void print()，输出荷包蛋-HL。请编写代码调用这个方法。<strong>巧妙的方法</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">public class HL &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        new Object()&#123;</span><br><span class="line">            public void print()&#123;</span><br><span class="line">                System.out.println(&quot;荷包蛋-HL&quot;);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HL</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Object</span>()&#123;</span><br><span class="line">            <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">()</span>&#123;</span><br><span class="line">                System.out.println(<span class="string">&quot;荷包蛋-HL&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;.print();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h4 id="13"><a href="#13" class="headerlink" title="13"></a>13</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Object</span> <span class="variable">o1</span> <span class="operator">=</span> <span class="literal">true</span> ? <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">1</span>) : <span class="keyword">new</span> <span class="title class_">Double</span>(<span class="number">2.0</span>);   <span class="comment">//应该后面两个要同类型</span></span><br><span class="line">System.out.println(o1);<span class="comment">//1.0</span></span><br><span class="line"><span class="comment">//共同的父类Number抽象类。找最兼容的类就是Double类，然后给Object对象，最后调用toString方法打印输出。</span></span><br></pre></td></tr></table></figure>
 
@@ -1356,7 +1365,7 @@
 </ul>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//例子1</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Exercise3</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">stringReplace</span><span class="params">(String text)</span>&#123;</span><br><span class="line">        text = text.replace(<span class="string">&#x27;j&#x27;</span>,<span class="string">&#x27;i&#x27;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">bufferReplace</span><span class="params">(StringBuffer text)</span>&#123;</span><br><span class="line">        text.append(<span class="string">&quot;C&quot;</span>);<span class="comment">//指向对象后加了C</span></span><br><span class="line">        text = <span class="keyword">new</span> <span class="title class_">StringBuffer</span>(<span class="string">&quot;Hello&quot;</span>);<span class="comment">//text指向变了，但函数外得textbuffer指向并没有变，故不会影响textbuffer得值</span></span><br><span class="line">        text.append(<span class="string">&quot;World!&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">textString</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;java&quot;</span>);<span class="comment">//具有不变性，故不会影响它得值。</span></span><br><span class="line">        <span class="type">StringBuffer</span> <span class="variable">textBuffer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>(<span class="string">&quot;java&quot;</span>);<span class="comment">//可变字符串</span></span><br><span class="line"></span><br><span class="line">        stringReplace(textString);</span><br><span class="line">        bufferReplace(textBuffer);</span><br><span class="line"></span><br><span class="line">        System.out.println(textString + textBuffer);<span class="comment">//javajavaC</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//例子2</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">aaa</span> &#123;</span><br><span class="line">    <span class="type">int</span> a;</span><br><span class="line">    <span class="type">int</span> b;</span><br><span class="line">    String str;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">f</span><span class="params">()</span>&#123;</span><br><span class="line">        a = <span class="number">0</span>;</span><br><span class="line">        b = <span class="number">0</span>;</span><br><span class="line">        str = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">        <span class="type">int</span>[] c = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">        g(b,c,str);<span class="comment">//参数不含有a，</span></span><br><span class="line">        System.out.println(a + <span class="string">&quot; &quot;</span> + b + <span class="string">&quot; &quot;</span> + c[<span class="number">0</span>] + <span class="string">&quot;,&quot;</span> + str);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">g</span><span class="params">(<span class="type">int</span> b, <span class="type">int</span>[] c,String s)</span>&#123;</span><br><span class="line">        a = <span class="number">1</span>;<span class="comment">//因此修改得是类属性a，会对最终得a产生影响。</span></span><br><span class="line">        b = <span class="number">1</span>;<span class="comment">//此处修改得参数b，不是类属性b，因此不会对类属性b产生影响。</span></span><br><span class="line">        c[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        s = <span class="string">&quot;world&quot;</span>;<span class="comment">//修改s得引用，不影响str得值。奥里给</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">aaa</span> <span class="variable">t</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">aaa</span>();</span><br><span class="line">        t.f();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//例子2</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">aaa</span> &#123;</span><br><span class="line">    <span class="type">int</span> a;</span><br><span class="line">    <span class="type">int</span> b;</span><br><span class="line">    String str;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">f</span><span class="params">()</span>&#123;</span><br><span class="line">        a = <span class="number">0</span>;</span><br><span class="line">        b = <span class="number">0</span>;</span><br><span class="line">        str = <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">        <span class="type">int</span>[] c = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">        g(b,c,str);<span class="comment">//参数不含有a，</span></span><br><span class="line">        System.out.println(a + <span class="string">&quot; &quot;</span> + b + <span class="string">&quot; &quot;</span> + c[<span class="number">0</span>] + <span class="string">&quot;,&quot;</span> + str);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">g</span><span class="params">(<span class="type">int</span> b, <span class="type">int</span>[] c,String s)</span>&#123;</span><br><span class="line">        a = <span class="number">1</span>;<span class="comment">//因此修改得是类属性a，会对最终得a产生影响。</span></span><br><span class="line">        b = <span class="number">1</span>;<span class="comment">//此处修改得参数b，不是类属性b，因此不会对类属性b产生影响。</span></span><br><span class="line">        c[<span class="number">0</span>] = <span class="number">1</span>;</span><br><span class="line">        s = <span class="string">&quot;world&quot;</span>;<span class="comment">//修改s得引用，不影响str得值。奥里给。且String具有不可变性，奥里给</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">aaa</span> <span class="variable">t</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">aaa</span>();</span><br><span class="line">        t.f();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">//例子3</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">aaa</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">StringBuffer</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>(<span class="string">&quot;A&quot;</span>);</span><br><span class="line">        <span class="type">StringBuffer</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>(<span class="string">&quot;B&quot;</span>);</span><br><span class="line">        operate(a, b);<span class="comment">//a指向得内容和x相同，b指向得内容</span></span><br><span class="line">        System.out.println(a + <span class="string">&quot;,&quot;</span> + b);<span class="comment">// ABx , B</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">operate</span><span class="params">(StringBuffer x, StringBuffer y)</span> &#123;</span><br><span class="line">        x.append(y);<span class="comment">//x指向得内容变为AB</span></span><br><span class="line">        y = x;<span class="comment">//y指向x，也就断开了和b指向同一个内容。接下来得操作只会影响x得值</span></span><br><span class="line">        y.append(<span class="string">&#x27;x&#x27;</span>);<span class="comment">//x指向得内容变为ABx</span></span><br><span class="line">    &#125;<span class="comment">//脑子自己画个草图，简单得一。。。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -1374,7 +1383,7 @@
 <li>String:不可变的字符序列;底层使用char[] （jdk8及之前），底层使用byte[] （jdk9及之后）</li>
 <li>StringBuffer:可变的字符序列;JDK1.0声明，线程安全的，效率低;底层使用char[] （jdk8及之前），底层使用byte[] （jdk9及之后）</li>
 <li>StringBuilder:可变的字符序列;JDK5.0声明，线程不安全的,效率高;底层使用char[] （jdk8及之前），底层使用byte[] （jdk9及之后）</li>
-<li>这段内容描述了String类的当前实现方式：它使用一个char数组存储字符，对每个字符使用两个字节（十六位）。通过从许多不同应用程序收集的数据表明，字符串是堆内存使用的主要组成部分，并且大多数String对象仅包含Latin-1字符。这些字符仅需要一个字节的存储空间，因此这些String对象内部的char数组有一半的空间处于未使用状态。</li>
+<li>这段内容描述了String类的当前实现方式：它使用一个char数组存储字符，对每个字符使用两个字节（十六位）。通过从许多不同应用程序收集的数据表明，字符串是堆内存使用的主要组成部分，并且大多数String对象仅包含Latin-1字符。这些字符仅需要一个字节的存储空间，因此这些String对象内部的char数组有一半的空间处于未使用状态。对于英文字符（ASCII字符）来说，每个字符都会占用两个字节的内存空间，这导致了在表示纯英文字符串时会浪费一半的内存空间。</li>
 <li>我们建议将String类的内部表示方式从UTF-16的char数组更改为一个字节数组加上一个编码标志字段。新的String类将根据字符串的内容，将字符存储为ISO-8859-1&#x2F;Latin-1（每个字符一个字节）或UTF-16（每个字符两个字节）。编码标志将指示使用的编码方式。</li>
 </ul>
 </li>
@@ -1389,7 +1398,7 @@
 <li>ArrayList:List的主要实现类；线程不安全的、效率高；底层<strong>使用Object[]数</strong>组存储。在添加数据、查找数据时，效率较高；在插入、删除数据时，效率较低。<code>ArrayList</code> 的扩容策略是增加当前容量的 50%。即*1.5</li>
 <li>LinkedList:底层使用<strong>双向链表的</strong>方式进行存储；在对集合中的数据进行频繁的删除、插入操作时，建议使用此类在插入、删除数据时，效率较高；在添加数据、查找数据时，效率较低；</li>
 <li>Vector:List的古老实现类；线程安全的、效率低；底层<strong>使用Object[]数组</strong>存储，<code>Vector</code> 的扩容策略是增加一倍。*2</li>
-<li>向List中添加元素的要求：要求元素所属的类一定要重写equals()!</li>
+<li>向List中添加元素的要求：要求元素所属的类<strong>一定要重写equals()</strong>!</li>
 </ul>
 </li>
 <li>子接口：Set:存储<strong>无序的、不可重复</strong>的数据(高中学习的集合)<ul>
@@ -1423,12 +1432,12 @@
 </li>
 </ul>
 </li>
-<li>集合的父类coiiection接口，注意map是和它同级别的接口。</li>
+<li>集合的父类Collection接口，注意Map是和它同级别的接口。</li>
 </ul>
 <h3 id="ArrayList与Vector"><a href="#ArrayList与Vector" class="headerlink" title="ArrayList与Vector"></a>ArrayList与Vector</h3><ul>
 <li>ArrayList是新版的动态数组，线程不安全，效率高，Vector是旧版的动态数组，线程安全，效率低。</li>
 <li>动态数组的扩容机制不同，ArrayList默认扩容为原来的1.5倍，Vector默认扩容增加为原来的2倍。</li>
-<li>数组的初始化容量，如果在构建ArrayList与Vector的集合对象时，没有显式指定初始化容量，那么Vector的内部数组的初始容量默认为10，而ArrayList在JDK 7.0 及之前的版本也是10，JDK8.0 之后的版本ArrayList初始化为长度为0的空数组，之后在添加第一个元素时，再创建长度为10的数组。</li>
+<li>数组的初始化容量，如<strong>果在构建ArrayList与Vector的集合对象时，没有显式指定初始化容量，那么Vector的内部数组的初始容量默认为10，而ArrayList在JDK 7.0 及之前的版本也是10，JDK8.0 之后的版本ArrayList初始化为长度为0的空数组，之后在添加第一个元素时，再创建长度为10的数组。饿汉式和懒汉式</strong></li>
 </ul>
 <h3 id="ArrayList与数组"><a href="#ArrayList与数组" class="headerlink" title="ArrayList与数组"></a>ArrayList与数组</h3><ol>
 <li><strong>固定大小 vs. 动态大小：</strong><ul>
@@ -2652,6 +2661,283 @@
       <tags>
         <tag>日志</tag>
         <tag>logger</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JVM</title>
+    <url>/2024/02/28/JVM/</url>
+    <content><![CDATA[<h3 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h3><h4 id="什么是jvm？"><a href="#什么是jvm？" class="headerlink" title="什么是jvm？"></a>什么是jvm？</h4><p>JVM（Java虚拟机）是Java编程语言的关键组成部分之一，它是一个能够在不同平台上执行Java字节码的虚拟机。java程序首先被编译成Java字节码，然后由JVM解释执行或者编译执行。<span id="more"></span></p>
+<p>JVM有自己的指令集和内存管理机制，它负责加载字节码、执行字节码指令、管理内存、进行垃圾回收等任务。这种设计使得Java程序具有跨平台性，即一次编写，到处运行的能力，因为只要目标平台上有相应的JVM实现，就可以在该平台上运行Java程序，而不需要重新编写或修改代码。</p>
+<h4 id="JVM组成"><a href="#JVM组成" class="headerlink" title="JVM组成"></a>JVM组成</h4><ul>
+<li>类加载子系统<ul>
+<li>加载</li>
+<li>验证</li>
+<li>准备</li>
+<li>解析</li>
+<li>初始化</li>
+</ul>
+</li>
+<li>运行时数据区<ul>
+<li>方法区</li>
+<li>堆</li>
+<li>栈</li>
+<li>程序计数器</li>
+<li>本地方法栈</li>
+</ul>
+</li>
+<li>执行引擎<ul>
+<li>解释器</li>
+<li>即时编译器</li>
+</ul>
+</li>
+<li>本地接口</li>
+<li>本地方法库</li>
+<li>安全引擎</li>
+<li>垃圾回收器</li>
+</ul>
+<h4 id="JVM生命周期"><a href="#JVM生命周期" class="headerlink" title="JVM生命周期"></a>JVM生命周期</h4><p>Java虚拟机的启动是通过引导类加载器(bootstrap class loader)创建一个初始类(initial class)来完成的，这个类是由虚拟机的具体实现指定的。</p>
+<p>虚拟机的退出,有如下的几种情况：<br>① 某线程调用Runtime类或System类的exit方法，或 Runtime类的halt方法，并且Java安全管理器也允许这次exit或halt操作。<br>② 程序正常执行结束<br>③ 程序在执行过程中遇到了异常或错误而异常终止<br>④ 由于操作系统出现错误而导致Java虚拟机进程终止</p>
+<h4 id="为什么不把基本数据类型存放在堆中"><a href="#为什么不把基本数据类型存放在堆中" class="headerlink" title="为什么不把基本数据类型存放在堆中"></a>为什么不把基本数据类型存放在堆中</h4><ol>
+<li><strong>性能问题</strong>：基本类型的值通常是较小的数据，将它们放在堆中会增加内存开销和访问时间。堆中的对象需要额外的内存空间来管理对象的元数据，以及额外的操作来进行内存分配和垃圾回收。</li>
+<li><strong>自动内存管理（Garbage Collection）</strong>：将基本类型放在堆中会增加垃圾回收的压力。由于基本类型不需要垃圾回收，将它们放在堆中会使得垃圾回收器需要额外的工作来管理这些不需要回收的对象，增加了系统的负担。</li>
+<li><strong>封装的优势</strong>：Java语言通过将基本类型封装为对象来提供更多的功能和便利性。例如，可以利用包装类提供的方法进行数值转换、数学运算、自动装箱和拆箱等操作，从而使得程序更加灵活和易于理解。</li>
+<li><strong>存储和访问效率</strong>：将基本类型存储在栈中可以提高存储和访问的效率。栈是一个轻量级的数据结构，对于基本类型的操作，栈的访问速度通常比堆更快。</li>
+</ol>
+<h4 id="字节码"><a href="#字节码" class="headerlink" title="字节码"></a>字节码</h4><ol>
+<li>加载和存储指令：aload、astore、iload、istore等。</li>
+<li>运算指令：iadd、isub、imul、idiv等。</li>
+<li>类型转换指令：i2b、i2c、i2l、i2f等。</li>
+<li>控制流指令：if_icmpeq、goto、return等。</li>
+<li>方法调用指令：invokevirtual、invokespecial、invokestatic等。</li>
+</ol>
+<h3 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h3><p>Java虚拟机（JVM）的类加载机制是指在Java程序运行时，JVM将类的字节码加载到内存中并生成相应的类对象的过程。类加载机制主要包括类加载器、双亲委派模型和类加载过程三个方面。</p>
+<ol>
+<li><strong>加载（Loading）</strong>：<ul>
+<li>加载是指查找并加载class文件到内存中的过程。当Java虚拟机需要使用某个类时，它会调用类加载器来加载这个类的class文件。</li>
+<li>类加载器（ClassLoader）负责从文件系统、网络或其他地方加载class文件，然后将class文件的字节码数据转换成内存中的Class对象。</li>
+</ul>
+</li>
+<li><strong>链接（Linking）</strong>：<ul>
+<li>链接过程包括三个阶段：验证（Verification）、准备（Preparation）、解析（Resolution）。</li>
+<li>验证阶段确保class文件的字节码符合JVM规范，不会对系统造成危害。</li>
+<li>准备阶段为类的静态变量分配内存空间，并设置默认初始值。</li>
+<li>解析阶段将类中的符号引用转换为直接引用，以便执行引擎能够直接使用。</li>
+</ul>
+</li>
+<li><strong>初始化（Initialization）</strong>：<ul>
+<li>在初始化阶段，虚拟机会执行类的初始化代码，包括静态变量的赋值和静态代码块的执行。</li>
+<li>如果一个类具有父类，则会先初始化父类，然后再初始化子类。</li>
+<li>初始化是类加载过程的最后一个阶段，它确保一个类在使用之前被正确地初始化。</li>
+</ul>
+</li>
+</ol>
+<h4 id="类加载的时机"><a href="#类加载的时机" class="headerlink" title="类加载的时机"></a>类加载的时机</h4><ul>
+<li>主动使用（会造成类的加载）<ol>
+<li>当创建一个类的实例时，比如使用new关键字，或者通过反射、克隆、反序列化。</li>
+<li>当调用类的静态方法时，即当使用了字节码invokestatic指令。</li>
+<li>当使用类、接口的静态字段时(final修饰特殊考虑)，比如，使用getstatic或者putstatic指令。</li>
+<li>当使用java.lang.reflect包中的方法反射类的方法时。比如：Class.forName(“com.atguigu.java.Test”)</li>
+<li>当初始化子类时，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。</li>
+<li>如果一个接口定义了default方法，那么直接实现或者间接实现该接口的类的初始化，该接口要在其之前被初始化。</li>
+<li>当虚拟机启动时，用户需要指定一个要执行的主类（包含main()方法的那个类），虚拟机会先初始化这个主类。</li>
+</ol>
+</li>
+<li>被动使用（不会造成类的加载）<ol>
+<li>当访问一个静态字段时，只有真正声明这个字段的类才会被初始化。<strong>当通过子类引用父类的静态变量，不会导致子类初始化</strong></li>
+<li>通过数组定义类引用，不会触发此类的初始化</li>
+<li>引用常量不会触发此类或接口的初始化。因为常量在链接阶段就已经被显式赋值了。</li>
+<li>调用ClassLoader类的loadClass()方法加载一个类，并不是对类的主动使用，不会导致类的初始化。</li>
+</ol>
+</li>
+</ul>
+<h4 id="Class-forName-与classLoader-loadClass"><a href="#Class-forName-与classLoader-loadClass" class="headerlink" title="Class.forName()与classLoader.loadClass()"></a>Class.forName()与classLoader.loadClass()</h4><p>Class.forName()：是一个静态方法,最常用的是Class.forName(String className);根据传入的类的全限定名返回一个 Class 对象。该方法在将 Class 文件加载到内存的同时,会执行类的初始化。</p>
+<p>ClassLoader.loadClass()：这是一个实例方法,需要一个 ClassLoader 对象来调用该方法。该方法将 Class 文件加载到内存时,并不会执行类的初始化,直到这个类第一次使用时才进行初始化。该方法因为需要得到一个 ClassLoader 对象,所以可以根据需要指定使用哪个类加载器。</p>
+<h4 id="Tomcat类加载机制"><a href="#Tomcat类加载机制" class="headerlink" title="Tomcat类加载机制"></a>Tomcat类加载机制</h4><ol>
+<li><strong>Web 应用程序类加载器</strong>：<ul>
+<li>每个部署在 Tomcat 中的 Web 应用程序都有自己独立的类加载器，称为 Web 应用程序类加载器。</li>
+<li>Web 应用程序类加载器负责加载 Web 应用程序中的类，包括 Servlet、JSP 和其他类。</li>
+<li>每个 Web 应用程序都有自己的类加载路径，包括 WEB-INF&#x2F;classes 目录和 WEB-INF&#x2F;lib 目录下的 JAR 文件。</li>
+</ul>
+</li>
+<li><strong>共享类加载器</strong>：<ul>
+<li>Tomcat 使用共享的类加载器来加载 Tomcat 内部的类，如 Catalina、Coyote、Jasper 等。</li>
+<li>这些类被放置在 Tomcat 的 lib 目录下，由共享类加载器加载。</li>
+</ul>
+</li>
+<li><strong>类加载的委派机制</strong>：<ul>
+<li>Tomcat 的类加载机制在一定程度上遵循双亲委派模型，即先尝试由自己加载，加载失败时再委派给父类加载器。</li>
+<li>但与传统的双亲委派模型不同，Tomcat 的类加载器在尝试加载类时，首先由自己尝试加载，而不是直接委派给父类加载器。</li>
+</ul>
+</li>
+<li><strong>Servlet 规范的推荐做法</strong>：<ul>
+<li>这种加载机制被称为”Hybrid Classloading”，它允许 Web 应用程序通过自定义的类加载器加载一些特定于应用程序的类，而不会影响到其他 Web 应用程序。</li>
+<li>这种方法为应用程序提供了更大的灵活性和可定制性，并且也符合 Servlet 规范的推荐做法。</li>
+</ul>
+</li>
+</ol>
+<h3 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h3><h4 id="栈和堆"><a href="#栈和堆" class="headerlink" title="栈和堆"></a>栈和堆</h4><ol>
+<li><strong>数据类型</strong>：<ul>
+<li>栈存储的是<strong>基本数据类型的局部变量和方法调用的栈帧。</strong></li>
+<li>堆存储的是动态分配的对象实例和数组。</li>
+</ul>
+</li>
+<li><strong>生命周期</strong>：<ul>
+<li>栈中的数据是线程私有的，随着方法的执行而动态创建和销毁，其生命周期与方法的调用和返回密切相关。</li>
+<li>堆中的对象由Java虚拟机的垃圾回收器进行管理，其生命周期不受方法的限制，可以在程序的任何地方被访问，并且只有在没有引用时才会被垃圾回收器回收。</li>
+</ul>
+</li>
+<li><strong>访问方式</strong>：<ul>
+<li>栈中的数据可以直接访问，存取速度较快。</li>
+<li>堆中的对象只能通过引用来访问，存取速度相对较慢，因为需要通过引用查找内存中的对象。</li>
+</ul>
+</li>
+<li><strong>存储内容</strong>：<ul>
+<li>栈中存储的是方法调用的栈帧，包括局部变量表、操作数栈、动态链接、方法出口等信息。</li>
+<li>堆中存储的是动态分配的对象实例和数组，包括所有的对象数据和实例方法。</li>
+</ul>
+</li>
+<li><strong>内存管理</strong>：<ul>
+<li>栈的内存管理由Java虚拟机自动管理，不需要手动释放。没有GC</li>
+<li>堆的内存管理由Java虚拟机的垃圾回收器负责，负责回收不再被引用的对象，并释放其占用的内存空间。</li>
+</ul>
+</li>
+</ol>
+<h4 id="初始堆大小和最大堆大小一样，问这样有什么好处？"><a href="#初始堆大小和最大堆大小一样，问这样有什么好处？" class="headerlink" title="初始堆大小和最大堆大小一样，问这样有什么好处？"></a>初始堆大小和最大堆大小一样，问这样有什么好处？</h4><ol>
+<li><strong>稳定性</strong>：初始堆大小和最大堆大小相同时，JVM在启动时就会分配足够的内存空间，避免了在应用程序运行过程中由于堆空间不足而触发的垃圾回收或者OutOfMemoryError错误。这可以提高应用程序的稳定性和可靠性。</li>
+<li><strong>性能</strong>：初始堆大小和最大堆大小相同时，可以减少在应用程序启动阶段由于堆大小动态调整而引起的性能开销。因为JVM不需要在运行过程中动态调整堆大小，而是一次性分配足够的内存空间，减少了堆大小调整的次数，提高了应用程序的性能。</li>
+<li><strong>预测性</strong>：初始堆大小和最大堆大小相同时，可以更加准确地预测应用程序的内存使用情况。开发人员可以根据应用程序的实际内存需求来设置堆大小，而不需要考虑动态调整的影响，从而更好地规划和管理内存资源。</li>
+<li><strong>简化配置</strong>：将初始堆大小和最大堆大小设置为相同的值可以简化配置，减少了配置参数的数量和复杂度。这样可以降低配置错误的可能性，并使应用程序的部署和管理更加简单和方便。</li>
+</ol>
+<h4 id="Full-GC"><a href="#Full-GC" class="headerlink" title="Full GC"></a>Full GC</h4><p>（1）调用System.gc()时，系统建议执行Full GC，但是不必然执行<br>（2）老年代空间不足<br>（3）方法区空间不足<br>（4）通过Minor GC后进入老年代的平均大小大于老年代的可用内存（开启了空间担保策略）<br>（5）由Eden区、survivor space0（From Space）区向survivor space1（To Space）区复制时，对象大小大于To Space可用内存，则把该对象转存到老年代，且老年代的可用内存小于该对象大小</p>
+<h4 id="full-gc产生的问题"><a href="#full-gc产生的问题" class="headerlink" title="full gc产生的问题"></a>full gc产生的问题</h4><ol>
+<li><strong>应用程序性能下降</strong>（吞吐量下降）：频繁的Full GC会导致应用程序的性能下降，因为Full GC会停止所有应用程序线程，直到垃圾回收完成。这种停顿时间较长的操作会影响应用程序的响应速度和吞吐量。</li>
+<li><strong>系统的不稳定性</strong>：频繁的Full GC可能会导致系统的不稳定性，因为这些长时间的停顿可能会导致应用程序无法正常响应用户请求，甚至造成系统的崩溃。</li>
+<li><strong>内存资源浪费</strong>：由于Full GC会清理整个堆内存，包括新生代和老年代，所以频繁的Full GC会导致大量的内存资源被浪费在垃圾回收上，而不是被应用程序使用。</li>
+<li><strong>内存溢出风险</strong>：如果Full GC无法释放足够的内存空间，或者由于内存碎片过多而无法为新对象分配足够的连续内存空间，就有可能触发内存溢出错误（OutOfMemoryError），导致应用程序崩溃。</li>
+</ol>
+<h4 id="堆空间大小"><a href="#堆空间大小" class="headerlink" title="堆空间大小"></a>堆空间大小</h4><ol>
+<li><strong>32位与64位 JVM</strong>：在32位 JVM中，最大堆大小通常受到2GB到4GB的地址空间限制。而在64位 JVM中，通常受到操作系统的物理内存限制。</li>
+<li><strong>操作系统和硬件</strong>：操作系统和硬件的限制也会影响最大堆大小。例如，32位操作系统上即使是64位 JVM也受到地址空间限制，物理内存的大小也会限制最大堆大小。</li>
+<li><strong>JVM 参数</strong>：通过设置JVM参数，如-Xmx参数可以控制最大堆大小。但是需要确保指定的最大堆大小不超过JVM能够访问的地址空间大小或操作系统的物理内存大小。</li>
+</ol>
+<p>对于32位虚拟机，如果物理内存等于4G，那么堆内存可以达到1G。对于64位虚拟机，如果物理内存为128G，那么heap最多可以达到32G。</p>
+<h4 id="对象进入老年代"><a href="#对象进入老年代" class="headerlink" title="对象进入老年代"></a>对象进入老年代</h4><ol>
+<li>正常经过15次young gc，晋升为老年代对象</li>
+<li>大对象直接进入老年代</li>
+<li>当survivor区相同年龄存活对象大于50%时，年龄大于等于该年龄的所有对象直接进入老年代。</li>
+<li>如果在一次 Minor GC 过程中，新生代中的存活对象无法全部放入 Survivor 区，就会发生分配担保。这时，JVM 会将存活对象晋升到老年代，以确保 Minor GC 的空间要求得到满足。（空间分配担保）</li>
+</ol>
+<h4 id="元空间-JDK8"><a href="#元空间-JDK8" class="headerlink" title="元空间 JDK8"></a>元空间 JDK8</h4><p>在 Java 8 中，永久代被元空间（Metaspace）所取代。类型信息，域信息，方法信息，非final的类变量，运行时常量池</p>
+<ol>
+<li><strong>避免永久代内存溢出问题</strong>：永久代是 JVM 中用于存放类的元数据信息、常量池等的区域。在之前的 JDK 版本中，永久代的大小是有限的，并且难以动态调整。因此，如果应用程序动态加载大量的类或者字符串，容易导致永久代内存溢出的问题。使用元空间可以避免永久代的内存溢出问题，因为元空间可以动态地调整大小，并且使用的是本地内存而不是 JVM 堆内存。</li>
+<li><strong>简化内存管理</strong>：永久代的内存管理较为复杂，需要手动调整大小，并且在垃圾回收过程中会频繁触发 Full GC。而元空间的内存管理更加简单，不需要手动调整大小，并且可以与堆内存一样由垃圾回收器自动管理。</li>
+<li><strong>提高性能</strong>：元空间使用本地内存存放类的元数据信息，而不是使用堆内存。这样可以减少堆内存的使用，减少了垃圾回收的压力，并且提高了垃圾回收的效率，从而提高了整体性能。</li>
+<li><strong>更好的适应大规模应用程序</strong>：随着应用程序规模的增长，类的数量和元数据信息的大小也会增加。元空间可以根据应用程序的需要动态调整大小，并且可以利用操作系统的虚拟内存来满足大规模应用程序的需求。</li>
+</ol>
+<p>同时，在jdk 7中，将字符串常量池和类静态变量放到堆中存储。方便GC。</p>
+<h4 id="java内存泄漏"><a href="#java内存泄漏" class="headerlink" title="java内存泄漏"></a>java内存泄漏</h4><ol>
+<li>静态集合类<ul>
+<li>静态集合类，如HashMap、LinkedList等等。如果这些容器为静态的，那么它们的生命周期与JVM程序一致，则容器中的对象在程序结束之前将不能被释放，从而造成内存泄漏。简单而言，长生命周期的对象持有短生命周期对象的引用，尽管短生命周期的对象不再使用，但是因为长生命周期对象持有它的引用而导致不能被回收。</li>
+</ul>
+</li>
+<li>单例模式<ul>
+<li>单例模式，和静态集合导致内存泄露的原因类似，因为单例的静态特性，它的生命周期和 JVM 的生命周期一样长，所以如果单例对象如果持有外部对象的引用，那么这个外部对象也不会被回收，那么就会造成内存泄漏。</li>
+</ul>
+</li>
+<li>内部类持有外部类的引用<ul>
+<li>内部类持有外部类，如果一个外部类的实例对象的方法返回了一个内部类的实例对象。这个内部类对象被长期引用了，即使那个外部类实例对象不再被使用，但由于内部类持有外部类的实例对象，这个外部类对象将不会被垃圾回收，这也会造成内存泄漏。</li>
+</ul>
+</li>
+<li>各种连接，io资源</li>
+<li>变量的不合理作用域<ul>
+<li>一般而言，一个变量的定义的作用范围大于其使用范围，很有可能会造成内存泄漏。另一方面，如果没有及时地把对象设置为null，很有可能导致内存泄漏的发生。</li>
+</ul>
+</li>
+<li>改变hash值。</li>
+<li>缓存泄漏<ul>
+<li>内存泄漏的另一个常见来源是缓存，一旦你把对象引用放入到缓存中，他就很容易遗忘。</li>
+<li>对于这个问题，可以使用WeakHashMap代表缓存，此种Map的特点是，当除了自身有对key的引用外，此key没有其他引用那么此map会自动丢弃此值。</li>
+</ul>
+</li>
+<li>监听器和回调器<ul>
+<li>内存泄漏另一个常见来源是监听器和其他回调，如果客户端在你实现的API中注册回调，却没有显式的取消，那么就会积聚。</li>
+<li>需要确保回调立即被当作垃圾回收的最佳方法是只保存它的弱引用，例如将他们保存成为WeakHashMap中的键。</li>
+</ul>
+</li>
+</ol>
+<h3 id="对象内存布局"><a href="#对象内存布局" class="headerlink" title="对象内存布局"></a>对象内存布局</h3><h4 id="new对象流程"><a href="#new对象流程" class="headerlink" title="new对象流程"></a>new对象流程</h4><ol>
+<li><strong>类加载</strong>：首先，JVM会加载该对象的类。类加载的过程包括加载、链接（验证、准备、解析）和初始化三个阶段。</li>
+<li><strong>分配内存</strong>：在堆内存中为对象分配内存空间。这个过程可以通过不同的垃圾回收器和内存分配策略来实现。<ul>
+<li>指针碰撞</li>
+<li>空闲列表</li>
+</ul>
+</li>
+<li><strong>处理并发安全问题</strong><ul>
+<li>CAS</li>
+<li>TLAB</li>
+</ul>
+</li>
+<li><strong>初始化零值</strong>：在分配的内存空间中，所有的字段都会被初始化为零值（数值类型为0，布尔类型为false，引用类型为null）。</li>
+<li><strong>设置对象头</strong>：在对象头中包括对象的哈希码、锁状态标志等信息，用于在程序运行过程中管理对象。</li>
+<li><strong>执行init函数进行初始化</strong>：调用对象的构造函数进行初始化。在构造函数中可以对对象的字段进行赋值和其他初始化操作。</li>
+<li><strong>返回对象引用</strong>：最后，将对象的引用返回给调用方，使得调用方可以操作该对象。</li>
+</ol>
+<h3 id="垃圾处理器"><a href="#垃圾处理器" class="headerlink" title="垃圾处理器"></a>垃圾处理器</h3><h4 id="GC-Roots"><a href="#GC-Roots" class="headerlink" title="GC Roots"></a>GC Roots</h4><ul>
+<li>虚拟机栈中引用的对象<ul>
+<li>比如：各个线程被调用的方法中使用到的参数、局部变量等。</li>
+</ul>
+</li>
+<li>本地方法栈内JNI(通常说的本地方法)引用的对象</li>
+<li>类静态属性引用的对象（方法区中的静态变量的引用）<ul>
+<li>比如：Java类的引用类型静态变量</li>
+</ul>
+</li>
+<li>方法区中常量引用的对象<ul>
+<li>比如：字符串常量池（String Table）里的引用</li>
+</ul>
+</li>
+<li>所有被同步锁synchronized持有的对象</li>
+<li>Java虚拟机内部的引用。</li>
+</ul>
+<h4 id="CMS"><a href="#CMS" class="headerlink" title="CMS"></a>CMS</h4><p>首个并发垃圾处理器。只针对老年代进行垃圾收集。采用标记清楚算法。一共产生两次停顿。会产生内存碎片。无法处理浮动垃圾（先前可达，而后不可达，只有下次gc才能清理）。JDK9不推荐使用。JDK14删除。</p>
+<p>初始标记（STW）：暂时时间非常短，标记与GC Roots直接关联的对象。<br>并发标记（最耗时）：从GC Roots开始遍历整个对象图的过程。不会停顿用户线程<br>重新标记：（STW）：修复并发标记环节，因为用户线程的执行，导致数据的不一致性问题。主要是标记先前不可达而现在又可达的对象。<br>并发清理（最耗时）。</p>
+<h4 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h4><p>垃圾优先。并行而且并发。在延迟可控的情况下最大化吞吐量。将内存分为一个个的域。JDK7中启用。在JDK9中默认使用。young gc -&gt; young gc + concurrent mark-&gt; Mixed GC顺序，进行垃圾回收。</p>
+<p><strong>yongGC</strong>：并行独占式GC，复制算法</p>
+<p>当堆内存使用达到一定值（默认45%）时，开始老年代并发标记过程。</p>
+<p><strong>并发标记：</strong></p>
+<ol>
+<li>初始标记阶段：标记从根节点直接可达的对象。这个阶段是STW的，并且会触发一次年轻代GC。</li>
+<li>根区域扫描（Root Region Scanning）：G1 GC<strong>扫描Survivor区直接可达的老年代区域对象，并标记被引用的对象</strong>。这一过程必须在young GC之前完成。</li>
+<li>并发标记(Concurrent Marking)：在整个堆中进行并发标记(和应用程序并发执行)，此过程可能被young GC中断。在并发标记阶段，若发现区域对象中的所有对象都是垃圾，那这个区域会被立即回收。同时，并发标记过程中，会计算每个区域的对象活性(区域中存活对象的比例)。</li>
+<li>再次标记(Remark)： 由于应用程序持续进行，需要修正上一次的标记结果。是STW的。G1中采用了比CMS更快的初始快照算法:snapshot-at-the-beginning (SATB)。</li>
+<li>独占清理(cleanup,STW)：计算各个区域的存活对象和GC回收比例，并进行排序，识别可以混合回收的区域。为下阶段做铺垫。是STW的。这个阶段并不会实际上去做垃圾的收集</li>
+<li>并发清理阶段：识别并清理完全空闲的区域。</li>
+</ol>
+<h4 id="G1与CMS"><a href="#G1与CMS" class="headerlink" title="G1与CMS"></a>G1与CMS</h4><ol>
+<li><strong>并发能力</strong>：<ul>
+<li>CMS（Concurrent Mark-Sweep）是一种以降低停顿时间为目标的并发垃圾收集器。它在标记和清除阶段尽可能地与应用程序并发执行，以减少停顿时间。</li>
+<li>G1（Garbage-First）也是一种以降低停顿时间为目标的并发垃圾收集器，但它采用了更先进的标记-整理算法，通过并发标记和并发整理来减少停顿时间。</li>
+</ul>
+</li>
+<li><strong>内存分配和管理</strong>：<ul>
+<li>CMS不对堆内存进行分区管理，它主要针对老年代进行并发收集，对新生代使用传统的复制算法。</li>
+<li>G1将堆内存划分为多个大小相等的区域，每个区域可以是Eden区、Survivor区、老年代区或者空闲区。G1采用分区管理来实现更精细的内存管理。</li>
+</ul>
+</li>
+<li><strong>停顿时间</strong>：<ul>
+<li>CMS尽量减少垃圾收集过程中的停顿时间，但在清除阶段会产生内存碎片，可能会导致Full GC的发生，进而引起较长的停顿。</li>
+<li>G1通过并发标记-整理算法来减少垃圾收集过程中的停顿时间，避免了大部分的Full GC，对于大内存堆可以获得较低的停顿时间。</li>
+</ul>
+</li>
+<li><strong>适用场景</strong>：<ul>
+<li>CMS适用于对停顿时间敏感的应用，如Web服务器等，但不太适合需要较大堆内存的场景。</li>
+<li>G1适用于对停顿时间和吞吐量都有要求的应用，尤其是需要大堆内存的应用，如大型企业应用系统等。</li>
+</ul>
+</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>java</tag>
       </tags>
   </entry>
 </search>

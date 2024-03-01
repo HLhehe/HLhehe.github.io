@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hlhehe.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"show_result":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="JVM什么是jvm？JVM（Java虚拟机）是Java编程语言的关键组成部分之一，它是一个能够在不同平台上执行Java字节码的虚拟机。java程序首先被编译成Java字节码，然后由JVM解释执行或者编译执行。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JVM">
+<meta property="og:url" content="https://hlhehe.github.io/2024/02/28/JVM/index.html">
+<meta property="og:site_name" content="Honor">
+<meta property="og:description" content="JVM什么是jvm？JVM（Java虚拟机）是Java编程语言的关键组成部分之一，它是一个能够在不同平台上执行Java字节码的虚拟机。java程序首先被编译成Java字节码，然后由JVM解释执行或者编译执行。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-02-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-01T01:37:28.187Z">
+<meta property="article:author" content="荷包蛋-溏心">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hlhehe.github.io/2024/02/28/JVM/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hlhehe.github.io/2024/02/28/JVM/","path":"2024/02/28/JVM/","title":"JVM"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>JVM | Honor</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="waline-server-hlhehes-projects.vercel.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Honor</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">荷包蛋的成长之路</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">19</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">19</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM"><span class="nav-number">1.</span> <span class="nav-text">JVM</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFjvm%EF%BC%9F"><span class="nav-number">1.1.</span> <span class="nav-text">什么是jvm？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JVM%E7%BB%84%E6%88%90"><span class="nav-number">1.2.</span> <span class="nav-text">JVM组成</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JVM%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="nav-number">1.3.</span> <span class="nav-text">JVM生命周期</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E6%8A%8A%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E5%AD%98%E6%94%BE%E5%9C%A8%E5%A0%86%E4%B8%AD"><span class="nav-number">1.4.</span> <span class="nav-text">为什么不把基本数据类型存放在堆中</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%97%E8%8A%82%E7%A0%81"><span class="nav-number">1.5.</span> <span class="nav-text">字节码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-number">2.</span> <span class="nav-text">类加载</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E7%9A%84%E6%97%B6%E6%9C%BA"><span class="nav-number">2.1.</span> <span class="nav-text">类加载的时机</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Class-forName-%E4%B8%8EclassLoader-loadClass"><span class="nav-number">2.2.</span> <span class="nav-text">Class.forName()与classLoader.loadClass()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Tomcat%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6"><span class="nav-number">2.3.</span> <span class="nav-text">Tomcat类加载机制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98"><span class="nav-number">3.</span> <span class="nav-text">内存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A0%88%E5%92%8C%E5%A0%86"><span class="nav-number">3.1.</span> <span class="nav-text">栈和堆</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%A0%86%E5%A4%A7%E5%B0%8F%E5%92%8C%E6%9C%80%E5%A4%A7%E5%A0%86%E5%A4%A7%E5%B0%8F%E4%B8%80%E6%A0%B7%EF%BC%8C%E9%97%AE%E8%BF%99%E6%A0%B7%E6%9C%89%E4%BB%80%E4%B9%88%E5%A5%BD%E5%A4%84%EF%BC%9F"><span class="nav-number">3.2.</span> <span class="nav-text">初始堆大小和最大堆大小一样，问这样有什么好处？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Full-GC"><span class="nav-number">3.3.</span> <span class="nav-text">Full GC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#full-gc%E4%BA%A7%E7%94%9F%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">3.4.</span> <span class="nav-text">full gc产生的问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A0%86%E7%A9%BA%E9%97%B4%E5%A4%A7%E5%B0%8F"><span class="nav-number">3.5.</span> <span class="nav-text">堆空间大小</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E8%BF%9B%E5%85%A5%E8%80%81%E5%B9%B4%E4%BB%A3"><span class="nav-number">3.6.</span> <span class="nav-text">对象进入老年代</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%83%E7%A9%BA%E9%97%B4-JDK8"><span class="nav-number">3.7.</span> <span class="nav-text">元空间 JDK8</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#java%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F"><span class="nav-number">3.8.</span> <span class="nav-text">java内存泄漏</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80"><span class="nav-number">4.</span> <span class="nav-text">对象内存布局</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#new%E5%AF%B9%E8%B1%A1%E6%B5%81%E7%A8%8B"><span class="nav-number">4.1.</span> <span class="nav-text">new对象流程</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9E%83%E5%9C%BE%E5%A4%84%E7%90%86%E5%99%A8"><span class="nav-number">5.</span> <span class="nav-text">垃圾处理器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#GC-Roots"><span class="nav-number">5.1.</span> <span class="nav-text">GC Roots</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#CMS"><span class="nav-number">5.2.</span> <span class="nav-text">CMS</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1"><span class="nav-number">5.3.</span> <span class="nav-text">G1</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#G1%E4%B8%8ECMS"><span class="nav-number">5.4.</span> <span class="nav-text">G1与CMS</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="荷包蛋-溏心"
+      src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+  <p class="site-author-name" itemprop="name">荷包蛋-溏心</p>
+  <div class="site-description" itemprop="description">哪有赌徒天天输，哪有小孩天天哭</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">19</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Hlhehe" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Hlhehe" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3113390285@qq.com" title="E-Mail → mailto:3113390285@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+
+       
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="250" height="250" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fidder/" rel="tag">Fidder</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Selenium/" rel="tag">Selenium</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E6%B5%8B%E8%AF%95/" rel="tag">Web测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/faker/" rel="tag">faker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logger/" rel="tag">logger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%9B%E6%89%A3/" rel="tag">力扣</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="tag">性能测试</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag">接口测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag">测试数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li></ul>
+        </canvas>
+    </div>
+</div>
+
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+     
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hlhehe.github.io/2024/02/28/JVM/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+      <meta itemprop="name" content="荷包蛋-溏心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Honor">
+      <meta itemprop="description" content="哪有赌徒天天输，哪有小孩天天哭">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="JVM | Honor">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          JVM
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-02-28 00:00:00" itemprop="dateCreated datePublished" datetime="2024-02-28T00:00:00+08:00">2024-02-28</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-01 09:37:28" itemprop="dateModified" datetime="2024-03-01T09:37:28+08:00">2024-03-01</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2024/02/28/JVM/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2024/02/28/JVM/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>8.2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h3><h4 id="什么是jvm？"><a href="#什么是jvm？" class="headerlink" title="什么是jvm？"></a>什么是jvm？</h4><p>JVM（Java虚拟机）是Java编程语言的关键组成部分之一，它是一个能够在不同平台上执行Java字节码的虚拟机。java程序首先被编译成Java字节码，然后由JVM解释执行或者编译执行。<span id="more"></span></p>
+<p>JVM有自己的指令集和内存管理机制，它负责加载字节码、执行字节码指令、管理内存、进行垃圾回收等任务。这种设计使得Java程序具有跨平台性，即一次编写，到处运行的能力，因为只要目标平台上有相应的JVM实现，就可以在该平台上运行Java程序，而不需要重新编写或修改代码。</p>
+<h4 id="JVM组成"><a href="#JVM组成" class="headerlink" title="JVM组成"></a>JVM组成</h4><ul>
+<li>类加载子系统<ul>
+<li>加载</li>
+<li>验证</li>
+<li>准备</li>
+<li>解析</li>
+<li>初始化</li>
+</ul>
+</li>
+<li>运行时数据区<ul>
+<li>方法区</li>
+<li>堆</li>
+<li>栈</li>
+<li>程序计数器</li>
+<li>本地方法栈</li>
+</ul>
+</li>
+<li>执行引擎<ul>
+<li>解释器</li>
+<li>即时编译器</li>
+</ul>
+</li>
+<li>本地接口</li>
+<li>本地方法库</li>
+<li>安全引擎</li>
+<li>垃圾回收器</li>
+</ul>
+<h4 id="JVM生命周期"><a href="#JVM生命周期" class="headerlink" title="JVM生命周期"></a>JVM生命周期</h4><p>Java虚拟机的启动是通过引导类加载器(bootstrap class loader)创建一个初始类(initial class)来完成的，这个类是由虚拟机的具体实现指定的。</p>
+<p>虚拟机的退出,有如下的几种情况：<br>① 某线程调用Runtime类或System类的exit方法，或 Runtime类的halt方法，并且Java安全管理器也允许这次exit或halt操作。<br>② 程序正常执行结束<br>③ 程序在执行过程中遇到了异常或错误而异常终止<br>④ 由于操作系统出现错误而导致Java虚拟机进程终止</p>
+<h4 id="为什么不把基本数据类型存放在堆中"><a href="#为什么不把基本数据类型存放在堆中" class="headerlink" title="为什么不把基本数据类型存放在堆中"></a>为什么不把基本数据类型存放在堆中</h4><ol>
+<li><strong>性能问题</strong>：基本类型的值通常是较小的数据，将它们放在堆中会增加内存开销和访问时间。堆中的对象需要额外的内存空间来管理对象的元数据，以及额外的操作来进行内存分配和垃圾回收。</li>
+<li><strong>自动内存管理（Garbage Collection）</strong>：将基本类型放在堆中会增加垃圾回收的压力。由于基本类型不需要垃圾回收，将它们放在堆中会使得垃圾回收器需要额外的工作来管理这些不需要回收的对象，增加了系统的负担。</li>
+<li><strong>封装的优势</strong>：Java语言通过将基本类型封装为对象来提供更多的功能和便利性。例如，可以利用包装类提供的方法进行数值转换、数学运算、自动装箱和拆箱等操作，从而使得程序更加灵活和易于理解。</li>
+<li><strong>存储和访问效率</strong>：将基本类型存储在栈中可以提高存储和访问的效率。栈是一个轻量级的数据结构，对于基本类型的操作，栈的访问速度通常比堆更快。</li>
+</ol>
+<h4 id="字节码"><a href="#字节码" class="headerlink" title="字节码"></a>字节码</h4><ol>
+<li>加载和存储指令：aload、astore、iload、istore等。</li>
+<li>运算指令：iadd、isub、imul、idiv等。</li>
+<li>类型转换指令：i2b、i2c、i2l、i2f等。</li>
+<li>控制流指令：if_icmpeq、goto、return等。</li>
+<li>方法调用指令：invokevirtual、invokespecial、invokestatic等。</li>
+</ol>
+<h3 id="类加载"><a href="#类加载" class="headerlink" title="类加载"></a>类加载</h3><p>Java虚拟机（JVM）的类加载机制是指在Java程序运行时，JVM将类的字节码加载到内存中并生成相应的类对象的过程。类加载机制主要包括类加载器、双亲委派模型和类加载过程三个方面。</p>
+<ol>
+<li><strong>加载（Loading）</strong>：<ul>
+<li>加载是指查找并加载class文件到内存中的过程。当Java虚拟机需要使用某个类时，它会调用类加载器来加载这个类的class文件。</li>
+<li>类加载器（ClassLoader）负责从文件系统、网络或其他地方加载class文件，然后将class文件的字节码数据转换成内存中的Class对象。</li>
+</ul>
+</li>
+<li><strong>链接（Linking）</strong>：<ul>
+<li>链接过程包括三个阶段：验证（Verification）、准备（Preparation）、解析（Resolution）。</li>
+<li>验证阶段确保class文件的字节码符合JVM规范，不会对系统造成危害。</li>
+<li>准备阶段为类的静态变量分配内存空间，并设置默认初始值。</li>
+<li>解析阶段将类中的符号引用转换为直接引用，以便执行引擎能够直接使用。</li>
+</ul>
+</li>
+<li><strong>初始化（Initialization）</strong>：<ul>
+<li>在初始化阶段，虚拟机会执行类的初始化代码，包括静态变量的赋值和静态代码块的执行。</li>
+<li>如果一个类具有父类，则会先初始化父类，然后再初始化子类。</li>
+<li>初始化是类加载过程的最后一个阶段，它确保一个类在使用之前被正确地初始化。</li>
+</ul>
+</li>
+</ol>
+<h4 id="类加载的时机"><a href="#类加载的时机" class="headerlink" title="类加载的时机"></a>类加载的时机</h4><ul>
+<li>主动使用（会造成类的加载）<ol>
+<li>当创建一个类的实例时，比如使用new关键字，或者通过反射、克隆、反序列化。</li>
+<li>当调用类的静态方法时，即当使用了字节码invokestatic指令。</li>
+<li>当使用类、接口的静态字段时(final修饰特殊考虑)，比如，使用getstatic或者putstatic指令。</li>
+<li>当使用java.lang.reflect包中的方法反射类的方法时。比如：Class.forName(“com.atguigu.java.Test”)</li>
+<li>当初始化子类时，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。</li>
+<li>如果一个接口定义了default方法，那么直接实现或者间接实现该接口的类的初始化，该接口要在其之前被初始化。</li>
+<li>当虚拟机启动时，用户需要指定一个要执行的主类（包含main()方法的那个类），虚拟机会先初始化这个主类。</li>
+</ol>
+</li>
+<li>被动使用（不会造成类的加载）<ol>
+<li>当访问一个静态字段时，只有真正声明这个字段的类才会被初始化。<strong>当通过子类引用父类的静态变量，不会导致子类初始化</strong></li>
+<li>通过数组定义类引用，不会触发此类的初始化</li>
+<li>引用常量不会触发此类或接口的初始化。因为常量在链接阶段就已经被显式赋值了。</li>
+<li>调用ClassLoader类的loadClass()方法加载一个类，并不是对类的主动使用，不会导致类的初始化。</li>
+</ol>
+</li>
+</ul>
+<h4 id="Class-forName-与classLoader-loadClass"><a href="#Class-forName-与classLoader-loadClass" class="headerlink" title="Class.forName()与classLoader.loadClass()"></a>Class.forName()与classLoader.loadClass()</h4><p>Class.forName()：是一个静态方法,最常用的是Class.forName(String className);根据传入的类的全限定名返回一个 Class 对象。该方法在将 Class 文件加载到内存的同时,会执行类的初始化。</p>
+<p>ClassLoader.loadClass()：这是一个实例方法,需要一个 ClassLoader 对象来调用该方法。该方法将 Class 文件加载到内存时,并不会执行类的初始化,直到这个类第一次使用时才进行初始化。该方法因为需要得到一个 ClassLoader 对象,所以可以根据需要指定使用哪个类加载器。</p>
+<h4 id="Tomcat类加载机制"><a href="#Tomcat类加载机制" class="headerlink" title="Tomcat类加载机制"></a>Tomcat类加载机制</h4><ol>
+<li><strong>Web 应用程序类加载器</strong>：<ul>
+<li>每个部署在 Tomcat 中的 Web 应用程序都有自己独立的类加载器，称为 Web 应用程序类加载器。</li>
+<li>Web 应用程序类加载器负责加载 Web 应用程序中的类，包括 Servlet、JSP 和其他类。</li>
+<li>每个 Web 应用程序都有自己的类加载路径，包括 WEB-INF&#x2F;classes 目录和 WEB-INF&#x2F;lib 目录下的 JAR 文件。</li>
+</ul>
+</li>
+<li><strong>共享类加载器</strong>：<ul>
+<li>Tomcat 使用共享的类加载器来加载 Tomcat 内部的类，如 Catalina、Coyote、Jasper 等。</li>
+<li>这些类被放置在 Tomcat 的 lib 目录下，由共享类加载器加载。</li>
+</ul>
+</li>
+<li><strong>类加载的委派机制</strong>：<ul>
+<li>Tomcat 的类加载机制在一定程度上遵循双亲委派模型，即先尝试由自己加载，加载失败时再委派给父类加载器。</li>
+<li>但与传统的双亲委派模型不同，Tomcat 的类加载器在尝试加载类时，首先由自己尝试加载，而不是直接委派给父类加载器。</li>
+</ul>
+</li>
+<li><strong>Servlet 规范的推荐做法</strong>：<ul>
+<li>这种加载机制被称为”Hybrid Classloading”，它允许 Web 应用程序通过自定义的类加载器加载一些特定于应用程序的类，而不会影响到其他 Web 应用程序。</li>
+<li>这种方法为应用程序提供了更大的灵活性和可定制性，并且也符合 Servlet 规范的推荐做法。</li>
+</ul>
+</li>
+</ol>
+<h3 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h3><h4 id="栈和堆"><a href="#栈和堆" class="headerlink" title="栈和堆"></a>栈和堆</h4><ol>
+<li><strong>数据类型</strong>：<ul>
+<li>栈存储的是<strong>基本数据类型的局部变量和方法调用的栈帧。</strong></li>
+<li>堆存储的是动态分配的对象实例和数组。</li>
+</ul>
+</li>
+<li><strong>生命周期</strong>：<ul>
+<li>栈中的数据是线程私有的，随着方法的执行而动态创建和销毁，其生命周期与方法的调用和返回密切相关。</li>
+<li>堆中的对象由Java虚拟机的垃圾回收器进行管理，其生命周期不受方法的限制，可以在程序的任何地方被访问，并且只有在没有引用时才会被垃圾回收器回收。</li>
+</ul>
+</li>
+<li><strong>访问方式</strong>：<ul>
+<li>栈中的数据可以直接访问，存取速度较快。</li>
+<li>堆中的对象只能通过引用来访问，存取速度相对较慢，因为需要通过引用查找内存中的对象。</li>
+</ul>
+</li>
+<li><strong>存储内容</strong>：<ul>
+<li>栈中存储的是方法调用的栈帧，包括局部变量表、操作数栈、动态链接、方法出口等信息。</li>
+<li>堆中存储的是动态分配的对象实例和数组，包括所有的对象数据和实例方法。</li>
+</ul>
+</li>
+<li><strong>内存管理</strong>：<ul>
+<li>栈的内存管理由Java虚拟机自动管理，不需要手动释放。没有GC</li>
+<li>堆的内存管理由Java虚拟机的垃圾回收器负责，负责回收不再被引用的对象，并释放其占用的内存空间。</li>
+</ul>
+</li>
+</ol>
+<h4 id="初始堆大小和最大堆大小一样，问这样有什么好处？"><a href="#初始堆大小和最大堆大小一样，问这样有什么好处？" class="headerlink" title="初始堆大小和最大堆大小一样，问这样有什么好处？"></a>初始堆大小和最大堆大小一样，问这样有什么好处？</h4><ol>
+<li><strong>稳定性</strong>：初始堆大小和最大堆大小相同时，JVM在启动时就会分配足够的内存空间，避免了在应用程序运行过程中由于堆空间不足而触发的垃圾回收或者OutOfMemoryError错误。这可以提高应用程序的稳定性和可靠性。</li>
+<li><strong>性能</strong>：初始堆大小和最大堆大小相同时，可以减少在应用程序启动阶段由于堆大小动态调整而引起的性能开销。因为JVM不需要在运行过程中动态调整堆大小，而是一次性分配足够的内存空间，减少了堆大小调整的次数，提高了应用程序的性能。</li>
+<li><strong>预测性</strong>：初始堆大小和最大堆大小相同时，可以更加准确地预测应用程序的内存使用情况。开发人员可以根据应用程序的实际内存需求来设置堆大小，而不需要考虑动态调整的影响，从而更好地规划和管理内存资源。</li>
+<li><strong>简化配置</strong>：将初始堆大小和最大堆大小设置为相同的值可以简化配置，减少了配置参数的数量和复杂度。这样可以降低配置错误的可能性，并使应用程序的部署和管理更加简单和方便。</li>
+</ol>
+<h4 id="Full-GC"><a href="#Full-GC" class="headerlink" title="Full GC"></a>Full GC</h4><p>（1）调用System.gc()时，系统建议执行Full GC，但是不必然执行<br>（2）老年代空间不足<br>（3）方法区空间不足<br>（4）通过Minor GC后进入老年代的平均大小大于老年代的可用内存（开启了空间担保策略）<br>（5）由Eden区、survivor space0（From Space）区向survivor space1（To Space）区复制时，对象大小大于To Space可用内存，则把该对象转存到老年代，且老年代的可用内存小于该对象大小</p>
+<h4 id="full-gc产生的问题"><a href="#full-gc产生的问题" class="headerlink" title="full gc产生的问题"></a>full gc产生的问题</h4><ol>
+<li><strong>应用程序性能下降</strong>（吞吐量下降）：频繁的Full GC会导致应用程序的性能下降，因为Full GC会停止所有应用程序线程，直到垃圾回收完成。这种停顿时间较长的操作会影响应用程序的响应速度和吞吐量。</li>
+<li><strong>系统的不稳定性</strong>：频繁的Full GC可能会导致系统的不稳定性，因为这些长时间的停顿可能会导致应用程序无法正常响应用户请求，甚至造成系统的崩溃。</li>
+<li><strong>内存资源浪费</strong>：由于Full GC会清理整个堆内存，包括新生代和老年代，所以频繁的Full GC会导致大量的内存资源被浪费在垃圾回收上，而不是被应用程序使用。</li>
+<li><strong>内存溢出风险</strong>：如果Full GC无法释放足够的内存空间，或者由于内存碎片过多而无法为新对象分配足够的连续内存空间，就有可能触发内存溢出错误（OutOfMemoryError），导致应用程序崩溃。</li>
+</ol>
+<h4 id="堆空间大小"><a href="#堆空间大小" class="headerlink" title="堆空间大小"></a>堆空间大小</h4><ol>
+<li><strong>32位与64位 JVM</strong>：在32位 JVM中，最大堆大小通常受到2GB到4GB的地址空间限制。而在64位 JVM中，通常受到操作系统的物理内存限制。</li>
+<li><strong>操作系统和硬件</strong>：操作系统和硬件的限制也会影响最大堆大小。例如，32位操作系统上即使是64位 JVM也受到地址空间限制，物理内存的大小也会限制最大堆大小。</li>
+<li><strong>JVM 参数</strong>：通过设置JVM参数，如-Xmx参数可以控制最大堆大小。但是需要确保指定的最大堆大小不超过JVM能够访问的地址空间大小或操作系统的物理内存大小。</li>
+</ol>
+<p>对于32位虚拟机，如果物理内存等于4G，那么堆内存可以达到1G。对于64位虚拟机，如果物理内存为128G，那么heap最多可以达到32G。</p>
+<h4 id="对象进入老年代"><a href="#对象进入老年代" class="headerlink" title="对象进入老年代"></a>对象进入老年代</h4><ol>
+<li>正常经过15次young gc，晋升为老年代对象</li>
+<li>大对象直接进入老年代</li>
+<li>当survivor区相同年龄存活对象大于50%时，年龄大于等于该年龄的所有对象直接进入老年代。</li>
+<li>如果在一次 Minor GC 过程中，新生代中的存活对象无法全部放入 Survivor 区，就会发生分配担保。这时，JVM 会将存活对象晋升到老年代，以确保 Minor GC 的空间要求得到满足。（空间分配担保）</li>
+</ol>
+<h4 id="元空间-JDK8"><a href="#元空间-JDK8" class="headerlink" title="元空间 JDK8"></a>元空间 JDK8</h4><p>在 Java 8 中，永久代被元空间（Metaspace）所取代。类型信息，域信息，方法信息，非final的类变量，运行时常量池</p>
+<ol>
+<li><strong>避免永久代内存溢出问题</strong>：永久代是 JVM 中用于存放类的元数据信息、常量池等的区域。在之前的 JDK 版本中，永久代的大小是有限的，并且难以动态调整。因此，如果应用程序动态加载大量的类或者字符串，容易导致永久代内存溢出的问题。使用元空间可以避免永久代的内存溢出问题，因为元空间可以动态地调整大小，并且使用的是本地内存而不是 JVM 堆内存。</li>
+<li><strong>简化内存管理</strong>：永久代的内存管理较为复杂，需要手动调整大小，并且在垃圾回收过程中会频繁触发 Full GC。而元空间的内存管理更加简单，不需要手动调整大小，并且可以与堆内存一样由垃圾回收器自动管理。</li>
+<li><strong>提高性能</strong>：元空间使用本地内存存放类的元数据信息，而不是使用堆内存。这样可以减少堆内存的使用，减少了垃圾回收的压力，并且提高了垃圾回收的效率，从而提高了整体性能。</li>
+<li><strong>更好的适应大规模应用程序</strong>：随着应用程序规模的增长，类的数量和元数据信息的大小也会增加。元空间可以根据应用程序的需要动态调整大小，并且可以利用操作系统的虚拟内存来满足大规模应用程序的需求。</li>
+</ol>
+<p>同时，在jdk 7中，将字符串常量池和类静态变量放到堆中存储。方便GC。</p>
+<h4 id="java内存泄漏"><a href="#java内存泄漏" class="headerlink" title="java内存泄漏"></a>java内存泄漏</h4><ol>
+<li>静态集合类<ul>
+<li>静态集合类，如HashMap、LinkedList等等。如果这些容器为静态的，那么它们的生命周期与JVM程序一致，则容器中的对象在程序结束之前将不能被释放，从而造成内存泄漏。简单而言，长生命周期的对象持有短生命周期对象的引用，尽管短生命周期的对象不再使用，但是因为长生命周期对象持有它的引用而导致不能被回收。</li>
+</ul>
+</li>
+<li>单例模式<ul>
+<li>单例模式，和静态集合导致内存泄露的原因类似，因为单例的静态特性，它的生命周期和 JVM 的生命周期一样长，所以如果单例对象如果持有外部对象的引用，那么这个外部对象也不会被回收，那么就会造成内存泄漏。</li>
+</ul>
+</li>
+<li>内部类持有外部类的引用<ul>
+<li>内部类持有外部类，如果一个外部类的实例对象的方法返回了一个内部类的实例对象。这个内部类对象被长期引用了，即使那个外部类实例对象不再被使用，但由于内部类持有外部类的实例对象，这个外部类对象将不会被垃圾回收，这也会造成内存泄漏。</li>
+</ul>
+</li>
+<li>各种连接，io资源</li>
+<li>变量的不合理作用域<ul>
+<li>一般而言，一个变量的定义的作用范围大于其使用范围，很有可能会造成内存泄漏。另一方面，如果没有及时地把对象设置为null，很有可能导致内存泄漏的发生。</li>
+</ul>
+</li>
+<li>改变hash值。</li>
+<li>缓存泄漏<ul>
+<li>内存泄漏的另一个常见来源是缓存，一旦你把对象引用放入到缓存中，他就很容易遗忘。</li>
+<li>对于这个问题，可以使用WeakHashMap代表缓存，此种Map的特点是，当除了自身有对key的引用外，此key没有其他引用那么此map会自动丢弃此值。</li>
+</ul>
+</li>
+<li>监听器和回调器<ul>
+<li>内存泄漏另一个常见来源是监听器和其他回调，如果客户端在你实现的API中注册回调，却没有显式的取消，那么就会积聚。</li>
+<li>需要确保回调立即被当作垃圾回收的最佳方法是只保存它的弱引用，例如将他们保存成为WeakHashMap中的键。</li>
+</ul>
+</li>
+</ol>
+<h3 id="对象内存布局"><a href="#对象内存布局" class="headerlink" title="对象内存布局"></a>对象内存布局</h3><h4 id="new对象流程"><a href="#new对象流程" class="headerlink" title="new对象流程"></a>new对象流程</h4><ol>
+<li><strong>类加载</strong>：首先，JVM会加载该对象的类。类加载的过程包括加载、链接（验证、准备、解析）和初始化三个阶段。</li>
+<li><strong>分配内存</strong>：在堆内存中为对象分配内存空间。这个过程可以通过不同的垃圾回收器和内存分配策略来实现。<ul>
+<li>指针碰撞</li>
+<li>空闲列表</li>
+</ul>
+</li>
+<li><strong>处理并发安全问题</strong><ul>
+<li>CAS</li>
+<li>TLAB</li>
+</ul>
+</li>
+<li><strong>初始化零值</strong>：在分配的内存空间中，所有的字段都会被初始化为零值（数值类型为0，布尔类型为false，引用类型为null）。</li>
+<li><strong>设置对象头</strong>：在对象头中包括对象的哈希码、锁状态标志等信息，用于在程序运行过程中管理对象。</li>
+<li><strong>执行init函数进行初始化</strong>：调用对象的构造函数进行初始化。在构造函数中可以对对象的字段进行赋值和其他初始化操作。</li>
+<li><strong>返回对象引用</strong>：最后，将对象的引用返回给调用方，使得调用方可以操作该对象。</li>
+</ol>
+<h3 id="垃圾处理器"><a href="#垃圾处理器" class="headerlink" title="垃圾处理器"></a>垃圾处理器</h3><h4 id="GC-Roots"><a href="#GC-Roots" class="headerlink" title="GC Roots"></a>GC Roots</h4><ul>
+<li>虚拟机栈中引用的对象<ul>
+<li>比如：各个线程被调用的方法中使用到的参数、局部变量等。</li>
+</ul>
+</li>
+<li>本地方法栈内JNI(通常说的本地方法)引用的对象</li>
+<li>类静态属性引用的对象（方法区中的静态变量的引用）<ul>
+<li>比如：Java类的引用类型静态变量</li>
+</ul>
+</li>
+<li>方法区中常量引用的对象<ul>
+<li>比如：字符串常量池（String Table）里的引用</li>
+</ul>
+</li>
+<li>所有被同步锁synchronized持有的对象</li>
+<li>Java虚拟机内部的引用。</li>
+</ul>
+<h4 id="CMS"><a href="#CMS" class="headerlink" title="CMS"></a>CMS</h4><p>首个并发垃圾处理器。只针对老年代进行垃圾收集。采用标记清楚算法。一共产生两次停顿。会产生内存碎片。无法处理浮动垃圾（先前可达，而后不可达，只有下次gc才能清理）。JDK9不推荐使用。JDK14删除。</p>
+<p>初始标记（STW）：暂时时间非常短，标记与GC Roots直接关联的对象。<br>并发标记（最耗时）：从GC Roots开始遍历整个对象图的过程。不会停顿用户线程<br>重新标记：（STW）：修复并发标记环节，因为用户线程的执行，导致数据的不一致性问题。主要是标记先前不可达而现在又可达的对象。<br>并发清理（最耗时）。</p>
+<h4 id="G1"><a href="#G1" class="headerlink" title="G1"></a>G1</h4><p>垃圾优先。并行而且并发。在延迟可控的情况下最大化吞吐量。将内存分为一个个的域。JDK7中启用。在JDK9中默认使用。young gc -&gt; young gc + concurrent mark-&gt; Mixed GC顺序，进行垃圾回收。</p>
+<p><strong>yongGC</strong>：并行独占式GC，复制算法</p>
+<p>当堆内存使用达到一定值（默认45%）时，开始老年代并发标记过程。</p>
+<p><strong>并发标记：</strong></p>
+<ol>
+<li>初始标记阶段：标记从根节点直接可达的对象。这个阶段是STW的，并且会触发一次年轻代GC。</li>
+<li>根区域扫描（Root Region Scanning）：G1 GC<strong>扫描Survivor区直接可达的老年代区域对象，并标记被引用的对象</strong>。这一过程必须在young GC之前完成。</li>
+<li>并发标记(Concurrent Marking)：在整个堆中进行并发标记(和应用程序并发执行)，此过程可能被young GC中断。在并发标记阶段，若发现区域对象中的所有对象都是垃圾，那这个区域会被立即回收。同时，并发标记过程中，会计算每个区域的对象活性(区域中存活对象的比例)。</li>
+<li>再次标记(Remark)： 由于应用程序持续进行，需要修正上一次的标记结果。是STW的。G1中采用了比CMS更快的初始快照算法:snapshot-at-the-beginning (SATB)。</li>
+<li>独占清理(cleanup,STW)：计算各个区域的存活对象和GC回收比例，并进行排序，识别可以混合回收的区域。为下阶段做铺垫。是STW的。这个阶段并不会实际上去做垃圾的收集</li>
+<li>并发清理阶段：识别并清理完全空闲的区域。</li>
+</ol>
+<h4 id="G1与CMS"><a href="#G1与CMS" class="headerlink" title="G1与CMS"></a>G1与CMS</h4><ol>
+<li><strong>并发能力</strong>：<ul>
+<li>CMS（Concurrent Mark-Sweep）是一种以降低停顿时间为目标的并发垃圾收集器。它在标记和清除阶段尽可能地与应用程序并发执行，以减少停顿时间。</li>
+<li>G1（Garbage-First）也是一种以降低停顿时间为目标的并发垃圾收集器，但它采用了更先进的标记-整理算法，通过并发标记和并发整理来减少停顿时间。</li>
+</ul>
+</li>
+<li><strong>内存分配和管理</strong>：<ul>
+<li>CMS不对堆内存进行分区管理，它主要针对老年代进行并发收集，对新生代使用传统的复制算法。</li>
+<li>G1将堆内存划分为多个大小相等的区域，每个区域可以是Eden区、Survivor区、老年代区或者空闲区。G1采用分区管理来实现更精细的内存管理。</li>
+</ul>
+</li>
+<li><strong>停顿时间</strong>：<ul>
+<li>CMS尽量减少垃圾收集过程中的停顿时间，但在清除阶段会产生内存碎片，可能会导致Full GC的发生，进而引起较长的停顿。</li>
+<li>G1通过并发标记-整理算法来减少垃圾收集过程中的停顿时间，避免了大部分的Full GC，对于大内存堆可以获得较低的停顿时间。</li>
+</ul>
+</li>
+<li><strong>适用场景</strong>：<ul>
+<li>CMS适用于对停顿时间敏感的应用，如Web服务器等，但不太适合需要较大堆内存的场景。</li>
+<li>G1适用于对停顿时间和吞吐量都有要求的应用，尤其是需要大堆内存的应用，如大型企业应用系统等。</li>
+</ul>
+</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>荷包蛋-溏心
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://hlhehe.github.io/2024/02/28/JVM/" title="JVM">https://hlhehe.github.io/2024/02/28/JVM/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/01/08/java%E6%9D%82%E8%B0%88---2/" rel="prev" title="java杂谈---2">
+                  <i class="fa fa-angle-left"></i> java杂谈---2
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">荷包蛋-溏心</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">172k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:36</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script size="200" alpha="0.3" zIndex="-1" src="https://cdnjs.cloudflare.com/ajax/libs/ribbon.js/1.0.2/ribbon.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #4D4D4C;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #F7F7F7;
+      background-image: linear-gradient(#F7F7F7, #F7F7F7);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"waline-server-hlhehes-projects.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"泰酷辣！","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2024/02/28/JVM/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+<script type="text/javascript" src="/js/clicklove.js"></script>
+
+</html>
