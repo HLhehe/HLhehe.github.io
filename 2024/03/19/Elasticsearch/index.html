@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hlhehe.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"show_result":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Elasticsearch正排和倒排 正向索引是最传统的，根据id索引的方式。但根据词条查询时，必须先逐条获取每个文档，然后判断文档中是否包含所需要的词条，是根据文档找词条的过程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch">
+<meta property="og:url" content="https://hlhehe.github.io/2024/03/19/Elasticsearch/index.html">
+<meta property="og:site_name" content="Honor">
+<meta property="og:description" content="Elasticsearch正排和倒排 正向索引是最传统的，根据id索引的方式。但根据词条查询时，必须先逐条获取每个文档，然后判断文档中是否包含所需要的词条，是根据文档找词条的过程。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-03-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-19T10:46:43.502Z">
+<meta property="article:author" content="荷包蛋-溏心">
+<meta property="article:tag" content="ES">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hlhehe.github.io/2024/03/19/Elasticsearch/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hlhehe.github.io/2024/03/19/Elasticsearch/","path":"2024/03/19/Elasticsearch/","title":"Elasticsearch"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Elasticsearch | Honor</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="waline-server-hlhehes-projects.vercel.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Honor</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">荷包蛋的成长之路</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">22</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">22</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Elasticsearch"><span class="nav-number">1.</span> <span class="nav-text">Elasticsearch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E6%8E%92%E5%92%8C%E5%80%92%E6%8E%92"><span class="nav-number">1.1.</span> <span class="nav-text">正排和倒排</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL%E4%B8%8EES"><span class="nav-number">1.2.</span> <span class="nav-text">MySQL与ES</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ik%E5%88%86%E8%AF%8D%E5%99%A8"><span class="nav-number">1.3.</span> <span class="nav-text">ik分词器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mapping%E5%B1%9E%E6%80%A7%E6%98%A0%E5%B0%84"><span class="nav-number">1.4.</span> <span class="nav-text">Mapping属性映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CRUD%E7%B4%A2%E5%BC%95"><span class="nav-number">1.5.</span> <span class="nav-text">CRUD索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DSL%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.6.</span> <span class="nav-text">DSL查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-number">1.7.</span> <span class="nav-text">排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E9%A1%B5"><span class="nav-number">1.8.</span> <span class="nav-text">分页</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E5%88%86%E9%A1%B5%E9%97%AE%E9%A2%98"><span class="nav-number">1.8.1.</span> <span class="nav-text">深度分页问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E4%BA%AE"><span class="nav-number">1.9.</span> <span class="nav-text">高亮</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E8%81%9A%E5%90%88"><span class="nav-number">1.10.</span> <span class="nav-text">数据聚合</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="荷包蛋-溏心"
+      src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+  <p class="site-author-name" itemprop="name">荷包蛋-溏心</p>
+  <div class="site-description" itemprop="description">哪有赌徒天天输，哪有小孩天天哭</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Hlhehe" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Hlhehe" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3113390285@qq.com" title="E-Mail → mailto:3113390285@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+
+       
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="250" height="250" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES/" rel="tag">ES</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fidder/" rel="tag">Fidder</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MQ/" rel="tag">MQ</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Selenium/" rel="tag">Selenium</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E6%B5%8B%E8%AF%95/" rel="tag">Web测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/faker/" rel="tag">faker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logger/" rel="tag">logger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%9B%E6%89%A3/" rel="tag">力扣</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="tag">性能测试</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag">接口测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag">测试数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li></ul>
+        </canvas>
+    </div>
+</div>
+
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+     
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hlhehe.github.io/2024/03/19/Elasticsearch/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+      <meta itemprop="name" content="荷包蛋-溏心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Honor">
+      <meta itemprop="description" content="哪有赌徒天天输，哪有小孩天天哭">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Elasticsearch | Honor">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Elasticsearch
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-03-19 00:00:00 / 修改时间：18:46:43" itemprop="dateCreated datePublished" datetime="2024-03-19T00:00:00+08:00">2024-03-19</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2024/03/19/Elasticsearch/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2024/03/19/Elasticsearch/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h2><h3 id="正排和倒排"><a href="#正排和倒排" class="headerlink" title="正排和倒排"></a>正排和倒排</h3><ul>
+<li><strong>正向索引</strong>是最传统的，根据id索引的方式。但根据词条查询时，必须先逐条获取每个文档，然后判断文档中是否包含所需要的词条，是<strong>根据文档找词条的过程</strong>。<span id="more"></span><ul>
+<li>优点：<ul>
+<li>可以给多个字段创建索引</li>
+<li>根据索引字段搜索、排序速度非常快</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>根据非索引字段，或者索引字段中的部分词条查找时，只能全表扫描。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>而<strong>倒排索引</strong>则相反，是先找到用户要搜索的词条，根据词条得到保护词条的文档的id，然后根据id获取文档。是<strong>根据词条找文档的过程</strong>。<ul>
+<li>优点：<ul>
+<li>根据词条搜索、模糊搜索时，速度非常快</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>只能给词条创建索引，而不是字段</li>
+<li>无法根据字段做排序</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="MySQL与ES"><a href="#MySQL与ES" class="headerlink" title="MySQL与ES"></a>MySQL与ES</h3><table>
+<thead>
+<tr>
+<th><strong>MySQL</strong></th>
+<th><strong>Elasticsearch</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Table</td>
+<td>Index</td>
+<td>索引(index)，就是文档的集合，类似数据库的表(table)</td>
+</tr>
+<tr>
+<td>Row</td>
+<td>Document</td>
+<td>文档（Document），就是一条条的数据，类似数据库中的行（Row），文档都是JSON格式</td>
+</tr>
+<tr>
+<td>Column</td>
+<td>Field</td>
+<td>字段（Field），就是JSON文档中的字段，类似数据库中的列（Column）</td>
+</tr>
+<tr>
+<td>Schema</td>
+<td>Mapping</td>
+<td>Mapping（映射）是索引中文档的约束，例如字段类型约束。类似数据库的表结构（Schema）</td>
+</tr>
+<tr>
+<td>SQL</td>
+<td>DSL</td>
+<td>DSL是elasticsearch提供的JSON风格的请求语句，用来操作elasticsearch，实现CRUD</td>
+</tr>
+</tbody></table>
+<h3 id="ik分词器"><a href="#ik分词器" class="headerlink" title="ik分词器"></a>ik分词器</h3><p>创建倒排索引时对文档分词。用户搜索时，对输入的内容分词</p>
+<p>IK分词器模式</p>
+<ul>
+<li><p>ik_smart：智能切分，粗粒度</p>
+</li>
+<li><p>ik_max_word：最细切分，细粒度</p>
+</li>
+</ul>
+<p>拓展词条，停用词条</p>
+<ul>
+<li>利用config目录的IkAnalyzer.cfg.xml文件添加拓展词典和停用词典</li>
+</ul>
+<h3 id="Mapping属性映射"><a href="#Mapping属性映射" class="headerlink" title="Mapping属性映射"></a>Mapping属性映射</h3><ul>
+<li>type：字段数据类型，常见的简单类型有：<ul>
+<li>字符串：text（可分词的文本）、keyword（精确值，例如：品牌、国家、ip地址）<ul>
+<li>不需要分词的就指定为keyword</li>
+</ul>
+</li>
+<li>数值：long、integer、short、byte、double、float、</li>
+<li>布尔：boolean</li>
+<li>日期：date</li>
+<li>对象：object</li>
+</ul>
+</li>
+<li>index：是否创建索引，默认为true（需要参与搜索的话，就创建索引，不参与搜索就不创建索引）</li>
+<li>analyzer：使用哪种分词器</li>
+<li>properties：该字段的子字段</li>
+</ul>
+<h3 id="CRUD索引"><a href="#CRUD索引" class="headerlink" title="CRUD索引"></a>CRUD索引</h3><ul>
+<li>put &#x2F;索引库名，参数为mapping映射规则，即json串</li>
+<li>get &#x2F;索引库名</li>
+<li>无法修改mapping中已有的字段，但是可以添加新的字段到mapping<ul>
+<li><pre><code class="text">PUT /索引库名/_mapping
+&#123;
+  &quot;properties&quot;: &#123;
+    &quot;新字段名&quot;:&#123;
+      &quot;type&quot;: &quot;integer&quot;
+    &#125;
+  &#125;
+&#125;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">- delete /索引库名</span><br><span class="line"></span><br><span class="line">### CRUD文档</span><br><span class="line">- ```</span><br><span class="line">  POST /索引库名/_doc/文档id</span><br><span class="line">  &#123;</span><br><span class="line">      &quot;字段1&quot;: &quot;值1&quot;,</span><br><span class="line">      &quot;字段2&quot;: &quot;值2&quot;,</span><br><span class="line">      &quot;字段3&quot;: &#123;</span><br><span class="line">          &quot;子属性1&quot;: &quot;值3&quot;,</span><br><span class="line">          &quot;子属性2&quot;: &quot;值4&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      // ...</span><br><span class="line">  &#125;</span><br><span class="line">  //新增文档</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li>GET &#x2F;{索引库名称}&#x2F;_doc&#x2F;{id}</li>
+<li>DELETE &#x2F;{索引库名}&#x2F;_doc&#x2F;id值</li>
+<li>全量修改—覆盖<ul>
+<li><pre><code>PUT /&#123;索引库名&#125;/_doc/文档id
+&#123;
+    &quot;字段1&quot;: &quot;值1&quot;,
+    &quot;字段2&quot;: &quot;值2&quot;,
+    // ... 略
+&#125;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- 增量修改---修改已有字段的值</span><br><span class="line">  - ```</span><br><span class="line">    POST /&#123;索引库名&#125;/_update/文档id</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;doc&quot;: &#123;</span><br><span class="line">             &quot;字段名&quot;: &quot;新的值&quot;,  //对应需要修改的字段</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="DSL查询"><a href="#DSL查询" class="headerlink" title="DSL查询"></a>DSL查询</h3><ul>
+<li><strong>查询所有</strong>：查询出所有数据，一般测试用。例如：match_all</li>
+<li><strong>全文检索（full text）查询</strong>：利用分词器对用户输入内容分词，然后去倒排索引库中匹配。例如：<ul>
+<li>match_query</li>
+<li>multi_match_query（一般不用，生成索引是时可选择合并索引，生成一个新的索引进行查询）<ul>
+<li>建议采用copy_to，然后单字段查询的方式。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>精确查询</strong>：根据精确词条值查找数据，一般是查找keyword、数值、日期、boolean等类型字段。查询的条件也必须是<strong>不分词</strong>的词条。<ul>
+<li>range：根据值的范围查询</li>
+<li>term：根据词条精确值查询</li>
+</ul>
+</li>
+<li><strong>地理（geo）查询</strong>：根据经纬度查询。例如：<ul>
+<li>geo_distance:附近查询，也叫做距离查询（geo_distance）：查询到指定中心点小于某个距离值的所有文档。常用</li>
+<li>geo_bounding_box:矩形范围查询</li>
+</ul>
+</li>
+<li><strong>复合（compound）查询</strong>：复合查询可以将上述各种查询条件组合起来，合并查询条件。例如：<ul>
+<li>bool：布尔查询，利用逻辑关系组合多个其它的查询，实现复杂搜索</li>
+<li>function_score：算分函数查询，可以控制文档相关性算分，控制文档排名</li>
+</ul>
+</li>
+</ul>
+<h3 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">GET /indexName/_search</span><br><span class="line">&#123;//普通字段排序</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;sort&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;FIELD&quot;: &quot;desc&quot;  // 排序字段、排序方式ASC、DESC</span><br><span class="line">    &#125;</span><br><span class="line">    //多个花括号定义多个排序字段</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">GET /indexName/_search</span><br><span class="line">&#123;//地理坐标排序</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;sort&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;_geo_distance&quot; : &#123;</span><br><span class="line">          &quot;FIELD&quot; : &quot;纬度，经度&quot;, // 文档中geo_point类型的字段名、目标坐标点</span><br><span class="line">          &quot;order&quot; : &quot;asc&quot;, // 排序方式</span><br><span class="line">          &quot;unit&quot; : &quot;km&quot; // 排序的距离单位</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h3><p>elasticsearch 默认情况下只返回top10的数据。而如果要查询更多数据就需要修改分页参数了。elasticsearch中通过修改from、size参数来控制要返回的分页结果：类似于mysql中的<code>limit ?, ?</code></p>
+<ul>
+<li>from：从第几个文档开始</li>
+<li>size：总共查询几个文档</li>
+</ul>
+<h4 id="深度分页问题"><a href="#深度分页问题" class="headerlink" title="深度分页问题"></a>深度分页问题</h4><p>现在，我要查询990<del>1000的数据，这里是查询990开始的数据，也就是 第990</del>第1000条 数据。不过，elasticsearch内部分页时，必须先查询 0~1000条，然后截取其中的990 ~ 1000的这10条。查询TOP1000，如果es是单点模式，这并无太大影响。但是elasticsearch将来一定是集群，例如我集群有5个节点，我要查询TOP1000的数据，并不是每个节点查询200条就可以了。要想获取整个集群的TOP1000，必须先查询出每个节点的TOP1000，汇总结果后，重新排名，重新截取TOP1000。</p>
+<p><strong>因此elasticsearch会禁止from+ size 超过10000的请求。</strong><br>针对深度分页，ES提供了两种解决方案，<a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html">官方文档</a>：</p>
+<ul>
+<li>search after：分页时需要排序，原理是从上一次的排序值开始，查询下一页数据。官方推荐使用的方式。</li>
+<li>scroll：原理将排序后的文档id形成快照，保存在内存。官方已经不推荐使用。</li>
+</ul>
+<h3 id="高亮"><a href="#高亮" class="headerlink" title="高亮"></a>高亮</h3><p>高亮显示的实现分为两步：</p>
+<ul>
+<li><p>1）给文档中的所有关键字都添加一个标签，例如<code>&lt;em&gt;</code>标签</p>
+</li>
+<li><p>2）<strong>页面给<code>&lt;em&gt;</code>标签编写CSS样式</strong></p>
+</li>
+<li><p>高亮是对关键字高亮，因此<strong>搜索条件必须带有关键字</strong>，而不能是范围这样的查询。</p>
+<ul>
+<li><p>默认情况下，<strong>高亮的字段，必须与搜索指定的字段一致</strong>，否则无法高亮</p>
+</li>
+<li><p>如果要对非搜索字段高亮，则需要添加一个属性：required_field_match&#x3D;false</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">GET /hotel/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;FIELD&quot;: &quot;TEXT&quot; // 查询条件，高亮一定要使用全文检索查询</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;highlight&quot;: &#123;</span><br><span class="line">    &quot;fields&quot;: &#123; // 指定要高亮的字段</span><br><span class="line">      &quot;FIELD&quot;: &#123;</span><br><span class="line">        &quot;pre_tags&quot;: &quot;&lt;em&gt;&quot;,  // 用来标记高亮字段的前置标签</span><br><span class="line">        &quot;post_tags&quot;: &quot;&lt;/em&gt;&quot; // 用来标记高亮字段的后置标签</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="数据聚合"><a href="#数据聚合" class="headerlink" title="数据聚合"></a>数据聚合</h3><p>参加聚合的字段必须是keyword、日期、数值、布尔类型</p>
+<ul>
+<li><strong>桶（Bucket）</strong>聚合：用来对文档做分组<ul>
+<li>TermAggregation：按照文档字段值分组，例如按照品牌值分组、按照国家分组</li>
+<li>Date Histogram：按照日期阶梯分组，例如一周为一组，或者一月为一组</li>
+</ul>
+</li>
+<li><strong>度量（Metric）</strong>聚合：用以计算一些值，比如：最大值、最小值、平均值等<ul>
+<li>Avg：求平均值</li>
+<li>Max：求最大值</li>
+<li>Min：求最小值</li>
+<li>Stats：同时求max、min、avg、sum等</li>
+</ul>
+</li>
+<li><strong>管道（pipeline）</strong>聚合：其它聚合的结果为基础做聚合</li>
+</ul>
+<p>aggs代表聚合，与query同级，此时query的作用是限定聚合的的文档范围<br>聚合必须的三要素：</p>
+<ul>
+<li>聚合名称</li>
+<li>聚合类型，terms还是states</li>
+<li>聚合字段</li>
+</ul>
+<p>聚合可配置属性有：</p>
+<ul>
+<li>size：指定聚合结果数量</li>
+<li>order：指定聚合结果排序方式</li>
+<li>field：指定聚合字段</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>荷包蛋-溏心
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://hlhehe.github.io/2024/03/19/Elasticsearch/" title="Elasticsearch">https://hlhehe.github.io/2024/03/19/Elasticsearch/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/ES/" rel="tag"><i class="fa fa-tag"></i> ES</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/03/19/Rabbit-MQ/" rel="prev" title="Rabbit MQ">
+                  <i class="fa fa-angle-left"></i> Rabbit MQ
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">荷包蛋-溏心</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">191k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:54</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script size="200" alpha="0.3" zIndex="-1" src="https://cdnjs.cloudflare.com/ajax/libs/ribbon.js/1.0.2/ribbon.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #4D4D4C;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #F7F7F7;
+      background-image: linear-gradient(#F7F7F7, #F7F7F7);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"waline-server-hlhehes-projects.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"泰酷辣！","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2024/03/19/Elasticsearch/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+<script type="text/javascript" src="/js/clicklove.js"></script>
+
+</html>

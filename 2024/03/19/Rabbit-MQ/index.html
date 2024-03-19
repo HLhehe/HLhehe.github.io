@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hlhehe.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"show_result":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Rabbit MQ消息模型 基本消息队列 一个队列，一个消费者">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rabbit MQ">
+<meta property="og:url" content="https://hlhehe.github.io/2024/03/19/Rabbit-MQ/index.html">
+<meta property="og:site_name" content="Honor">
+<meta property="og:description" content="Rabbit MQ消息模型 基本消息队列 一个队列，一个消费者">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20210718220843323.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20210718221039542.png">
+<meta property="article:published_time" content="2024-03-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-19T10:46:35.183Z">
+<meta property="article:author" content="荷包蛋-溏心">
+<meta property="article:tag" content="MQ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20210718220843323.png">
+
+
+<link rel="canonical" href="https://hlhehe.github.io/2024/03/19/Rabbit-MQ/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hlhehe.github.io/2024/03/19/Rabbit-MQ/","path":"2024/03/19/Rabbit-MQ/","title":"Rabbit MQ"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Rabbit MQ | Honor</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="waline-server-hlhehes-projects.vercel.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Honor</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">荷包蛋的成长之路</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">22</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">22</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Rabbit-MQ"><span class="nav-number">1.</span> <span class="nav-text">Rabbit MQ</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.1.</span> <span class="nav-text">消息模型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E8%BD%AC%E6%8D%A2%E5%99%A8"><span class="nav-number">1.2.</span> <span class="nav-text">消息转换器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="nav-number">1.3.</span> <span class="nav-text">消息可靠性</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E7%94%9F%E4%BA%A7%E7%A1%AE%E8%AE%A4"><span class="nav-number">1.3.1.</span> <span class="nav-text">消息生产确认</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">1.3.2.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BB%B6%E8%BF%9F%E9%98%9F%E5%88%97"><span class="nav-number">1.4.</span> <span class="nav-text">延迟队列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%83%B0%E6%80%A7%E9%98%9F%E5%88%97"><span class="nav-number">1.5.</span> <span class="nav-text">惰性队列</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MQ%E9%9B%86%E7%BE%A4"><span class="nav-number">1.6.</span> <span class="nav-text">MQ集群</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="荷包蛋-溏心"
+      src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+  <p class="site-author-name" itemprop="name">荷包蛋-溏心</p>
+  <div class="site-description" itemprop="description">哪有赌徒天天输，哪有小孩天天哭</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">22</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">22</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Hlhehe" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Hlhehe" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3113390285@qq.com" title="E-Mail → mailto:3113390285@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+
+       
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="250" height="250" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES/" rel="tag">ES</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fidder/" rel="tag">Fidder</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MQ/" rel="tag">MQ</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Selenium/" rel="tag">Selenium</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E6%B5%8B%E8%AF%95/" rel="tag">Web测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/faker/" rel="tag">faker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logger/" rel="tag">logger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%9B%E6%89%A3/" rel="tag">力扣</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="tag">性能测试</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag">接口测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag">测试数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li></ul>
+        </canvas>
+    </div>
+</div>
+
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+     
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hlhehe.github.io/2024/03/19/Rabbit-MQ/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+      <meta itemprop="name" content="荷包蛋-溏心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Honor">
+      <meta itemprop="description" content="哪有赌徒天天输，哪有小孩天天哭">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Rabbit MQ | Honor">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Rabbit MQ
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-03-19 00:00:00 / 修改时间：18:46:35" itemprop="dateCreated datePublished" datetime="2024-03-19T00:00:00+08:00">2024-03-19</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2024/03/19/Rabbit-MQ/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2024/03/19/Rabbit-MQ/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>6.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="Rabbit-MQ"><a href="#Rabbit-MQ" class="headerlink" title="Rabbit MQ"></a>Rabbit MQ</h3><h4 id="消息模型"><a href="#消息模型" class="headerlink" title="消息模型"></a>消息模型</h4><ul>
+<li>基本消息队列<ul>
+<li>一个队列，一个消费者<span id="more"></span></li>
+</ul>
+</li>
+<li>工作消息队列<ul>
+<li>一个队列，多个消费者。（消息只能被一个消费者消费，只有一个消息队列，就只有一份消息）</li>
+</ul>
+</li>
+<li>发布订阅<ul>
+<li>Exchange：交换机，一方面，接收生产者发送的消息。另一方面，知道如何处理消息，例如递交给某个特别队列、递交给所有队列、或是将消息丢弃。到底如何操作，取决于Exchange的类型。Exchange有以下3种类型：<ul>
+<li>Fanout：广播，将消息交给所有绑定到交换机的队列</li>
+<li>Direct：定向，把消息交给符合指定routing key 的队列</li>
+<li>Topic：通配符，把消息交给符合routing pattern（路由模式） 的队列<ul>
+<li><code>#</code>：匹配0个或多个词</li>
+<li><code>*</code>：匹配不多不少恰好1个词</li>
+</ul>
+</li>
+<li>有几个消息队列，就有几份对应的一样的消息，就可以被不同的应用程序消费。</li>
+</ul>
+</li>
+<li><strong>Exchange（交换机）只负责转发消息，不具备存储消息的能力</strong>，因此如果没有任何队列与Exchange绑定，或者没有符合路由规则的队列，那么消息会丢失！</li>
+</ul>
+</li>
+</ul>
+<h4 id="消息转换器"><a href="#消息转换器" class="headerlink" title="消息转换器"></a>消息转换器</h4><p>Spring会把你发送的消息序列化为字节发送给MQ，接收消息的时候，还会把字节反序列化为Java对象。</p>
+<ul>
+<li>数据体积过大</li>
+<li>有安全漏洞</li>
+<li>可读性差<br>因此可以使用JSON方式来做序列化和反序列化。<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.fasterxml.jackson.dataformat<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jackson-dataformat-xml<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.9.10<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//在启动类配置消息转换器即可。</span></span><br><span class="line"><span class="meta">@Bean</span></span><br><span class="line"><span class="keyword">public</span> MessageConverter <span class="title function_">jsonMessageConverter</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Jackson2JsonMessageConverter</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="消息可靠性"><a href="#消息可靠性" class="headerlink" title="消息可靠性"></a>消息可靠性</h4><h5 id="消息生产确认"><a href="#消息生产确认" class="headerlink" title="消息生产确认"></a>消息生产确认</h5><p>RabbitMQ提供了publisher confirm机制来避免消息发送到MQ过程中丢失。这种机制必须给每个消息指定一个唯一ID。消息发送到MQ以后，会返回一个结果给发送者，表示消息是否处理成功。只用配置在生产者方</p>
+<p>返回结果有两种方式：</p>
+<ul>
+<li><p>publisher-confirm，发送者确认</p>
+<ul>
+<li>消息成功投递到交换机，返回ack</li>
+<li>消息未投递到交换机，返回nack</li>
+</ul>
+</li>
+<li><p>publisher-return，发送者回执</p>
+<ul>
+<li>消息投递到交换机了，但是没有路由到队列。返回ACK，及路由失败原因。</li>
+</ul>
+</li>
+<li><pre><code class="yaml">spring:
+  rabbitmq:
+    publisher-confirm-type: correlated
+    publisher-returns: true
+    template:
+      mandatory: true
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">  - `publish-confirm-type`：开启publisher-confirm，这里支持两种类型：</span><br><span class="line">    - `simple`：同步等待confirm结果，直到超时</span><br><span class="line">    - `correlated`：异步回调，定义ConfirmCallback，MQ返回结果时会回调这个ConfirmCallback</span><br><span class="line">      - 这个方法被调用说明消息发送到交换机失败。</span><br><span class="line">  - `publish-returns`：开启publish-return功能，同样是基于callback机制，不过是定义ReturnCallback</span><br><span class="line">    - ReturnCallback是每个redistemplate只能配置一个因此需要在项目加载时配置，被调用表明投递交换机成功，但是被消费失败。</span><br><span class="line">  - `template.mandatory`：定义消息路由失败时的策略。true，则调用ReturnCallback；false：则直接丢弃消息</span><br><span class="line"></span><br><span class="line">##### 持久化</span><br><span class="line">默认使用SpringAMQP，创建的交换机，队列，消息都是持久化的，不必单独设置。</span><br><span class="line">- ```java</span><br><span class="line">  @Bean</span><br><span class="line">  public DirectExchange simpleExchange()&#123;</span><br><span class="line">      // 三个参数：交换机名称、是否持久化、当没有queue与其绑定时是否自动删除</span><br><span class="line">      return new DirectExchange(&quot;simple.direct&quot;, true, false);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><pre><code class="java">@Bean
+public Queue simpleQueue()&#123;
+    // 使用QueueBuilder构建队列，durable就是持久化的
+    return QueueBuilder.durable(&quot;simple.queue&quot;).build();
+&#125;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">- &lt;img src=&quot;https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20210718165100016-17108286277931.png&quot; alt=&quot;image-20210718165100016&quot; style=&quot;zoom:67%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">##### 消费消费确认</span><br><span class="line">RabbitMQ是**阅后即焚**机制，RabbitMQ确认消息被消费者消费后会立刻删除。而RabbitMQ是通过消费者回执来确认消费者是否成功处理消息的：消费者获取消息后，应该向RabbitMQ发送ACK回执，表明自己已经处理消息。只用配置在消费者方。</span><br><span class="line"></span><br><span class="line">而SpringAMQP则允许配置三种确认模式：</span><br><span class="line">- manual：手动ack，需要在业务代码结束后，调用api发送ack。</span><br><span class="line">  - manual：自己根据业务情况，判断什么时候该ack</span><br><span class="line">- auto：自动ack，由spring监测listener代码是否出现异常，没有异常则返回ack；抛出异常则返回nack</span><br><span class="line">  - auto模式类似事务机制，出现异常时返回nack，消息回滚到mq；没有异常，返回ack</span><br><span class="line">- none：关闭ack，MQ假定消费者获取消息后会成功处理，因此消息投递后立即被删除</span><br><span class="line">  - none模式下，消息投递是不可靠的，可能丢失</span><br><span class="line"></span><br><span class="line">##### 消费失败重试</span><br><span class="line"></span><br><span class="line">当消费者出现异常后，消息会不断requeue（重入队）到队列，再重新发送给消费者，然后再次异常，再次requeue，无限循环，导致mq的消息处理飙升，带来不必要的压力</span><br><span class="line">```yaml</span><br><span class="line">spring:</span><br><span class="line">  rabbitmq:</span><br><span class="line">    listener:</span><br><span class="line">      simple:</span><br><span class="line">        retry:</span><br><span class="line">          enabled: true # 开启消费者失败重试</span><br><span class="line">          initial-interval: 1000 # 初识的失败等待时长为1秒</span><br><span class="line">          multiplier: 1 # 失败的等待时长倍数，下次等待时长 = multiplier * last-interval</span><br><span class="line">          max-attempts: 3 # 最大重试次数</span><br><span class="line">          stateless: true # true无状态；false有状态。如果业务中包含事务，这里改为false</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+<li><p>开启本地重试时，消息处理过程中抛出异常，不会requeue到队列，而是在消费者本地重试</p>
+</li>
+<li><p>重试达到最大次数后，Spring会返回ack，消息会被丢弃。</p>
+<ul>
+<li>失败策略，在开启重试模式后，重试次数耗尽，如果消息依然失败，则需要有MessageRecovery接口来处理，它包含三种不同的实现：<ul>
+<li><p>RejectAndDontRequeueRecoverer：重试耗尽后，直接reject，丢弃消息。默认就是这种方式</p>
+</li>
+<li><p>ImmediateRequeueMessageRecoverer：重试耗尽后，返回nack，消息重新入队</p>
+</li>
+<li><p><strong>RepublishMessageRecoverer</strong>：重试耗尽后，将失败消息投递到指定的交换机</p>
+<ul>
+<li>这是比较优雅的方式，失败后指定一个失败的交换机，而后路由到指定队列，而后可交由人工进行处理。</li>
+<li><pre><code class="java">@Configuration
+public class ErrorMessageConfig &#123;
+    @Bean
+    public DirectExchange errorMessageExchange()&#123;
+        return new DirectExchange(&quot;error.direct&quot;);
+    &#125;
+    @Bean
+    public Queue errorQueue()&#123;
+        return new Queue(&quot;error.queue&quot;, true);
+    &#125;
+    @Bean
+    public Binding errorBinding(Queue errorQueue, DirectExchange errorMessageExchange)&#123;
+        return BindingBuilder.bind(errorQueue).to(errorMessageExchange).with(&quot;error&quot;);
+    &#125;
+
+    @Bean
+    public MessageRecoverer republishMessageRecoverer(RabbitTemplate rabbitTemplate)&#123;
+        return new RepublishMessageRecoverer(rabbitTemplate, &quot;error.direct&quot;, &quot;error&quot;);
+    &#125;
+&#125;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">##### 总结</span><br><span class="line">- 开启生产者确认机制，确保生产者的消息能到达队列</span><br><span class="line">- 开启持久化功能，确保消息未消费前在队列中不会丢失</span><br><span class="line">- 开启消费者确认机制为auto，由spring确认消息处理成功后完成ack</span><br><span class="line">- 开启消费者失败重试机制，并设置MessageRecoverer，多次重试失败后将消息投递到异常交换机，交由人工处理</span><br><span class="line"></span><br><span class="line">#### 死信交换机</span><br><span class="line">当一个队列中的消息满足下列情况之一时，可以成为死信（dead letter）：</span><br><span class="line">- 消费者使用basic.reject或 basic.nack声明消费失败，并且消息的requeue（重新入队）参数设置为false</span><br><span class="line">- 消息是一个过期消息，超时无人消费</span><br><span class="line">- 要投递的队列消息满了，无法投递</span><br><span class="line">如果这个包含死信的队列配置了`dead-letter-exchange`属性，指定了一个交换机，那么队列中的死信就会投递到这个交换机中，而这个交换机称为**死信交换机**（Dead Letter Exchange，检查DLX）。</span><br><span class="line">- 绑定死信交换机时，同时也要指定死信交换机与队列绑定的key，不然不能路由到死信队列。</span><br><span class="line"></span><br><span class="line">##### 拓展</span><br><span class="line">在失败重试策略中，默认的RejectAndDontRequeueRecoverer会在本地重试次数耗尽后，发送reject给RabbitMQ，消息变成死信，被丢弃。我们可以给simple.queue添加一个死信交换机，给死信交换机绑定一个队列。这样消息变成死信后也不会丢弃，而是最终投递到死信交换机，路由到与死信交换机绑定的队列。</span><br><span class="line">```java</span><br><span class="line">//定义普通的交换机和队列</span><br><span class="line">@Bean</span><br><span class="line">public DirectExchange ttlExchange()&#123;</span><br><span class="line">    return new DirectExchange(&quot;ttl.direct&quot;);</span><br><span class="line">&#125;</span><br><span class="line">@Bean</span><br><span class="line">public Queue ttlQueue()&#123;</span><br><span class="line">    return QueueBuilder.durable(&quot;ttl.queue&quot;) // 指定队列名称，并持久化</span><br><span class="line">        .ttl(10000) // 设置队列的超时时间，10秒</span><br><span class="line">        .deadLetterExchange(&quot;dl.ttl.direct&quot;) // 指定死信交换机，与下面的死信交换机名字相同</span><br><span class="line">        .deadLetterRoutingKey(&quot;dl&quot;)//指定RoutingKey，下面死信交换机和队列绑定的key</span><br><span class="line">        .build();</span><br><span class="line">&#125;</span><br><span class="line">@Bean</span><br><span class="line">public Binding ttlBinding()&#123;</span><br><span class="line">    return BindingBuilder.bind(ttlQueue()).to(ttlExchange()).with(&quot;ttl&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建死信交换机</span></span><br><span class="line"><span class="meta">@RabbitListener(bindings = @QueueBinding(</span></span><br><span class="line"><span class="meta">    value = @Queue(name = &quot;dl.ttl.queue&quot;, durable = &quot;true&quot;),</span></span><br><span class="line"><span class="meta">    exchange = @Exchange(name = &quot;dl.ttl.direct&quot;),</span></span><br><span class="line"><span class="meta">    key = &quot;dl&quot;</span></span><br><span class="line"><span class="meta">))</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">listenDlQueue</span><span class="params">(String msg)</span>&#123;</span><br><span class="line">    log.info(<span class="string">&quot;接收到 dl.ttl.queue的延迟消息：&#123;&#125;&quot;</span>, msg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h5><ul>
+<li>给队列设置ttl属性，进入队列后超过ttl时间的消息变为死信</li>
+<li>给消息设置ttl属性，队列接收到消息超过ttl时间后变为死信</li>
+<li>当队列、消息都设置了TTL时，任意一个到期就会成为死信。</li>
+<li>可设置超时时间，完成延迟队列。</li>
+</ul>
+<h4 id="延迟队列"><a href="#延迟队列" class="headerlink" title="延迟队列"></a>延迟队列</h4><p>可利用死信交换机和ttl的设置完成延迟队列的效果。同时，官方也实现了延迟队列。<br>DelayExchange需要将一个交换机声明为delayed类型。当我们发送消息到delayExchange时，流程如下：</p>
+<ul>
+<li><p>接收消息</p>
+</li>
+<li><p><strong>判断消息是否具备x-delay属性</strong>，必须设置才有效哎。</p>
+</li>
+<li><p>如果有x-delay属性，说明是延迟消息，持久化到硬盘，读取x-delay值，作为延迟时间</p>
+</li>
+<li><p>返回routing not found结果给消息发送者</p>
+</li>
+<li><p>x-delay时间到期后，重新投递消息到指定队列</p>
+</li>
+</ul>
+<p>声明一个<strong>交换机，交换机的类型可以是任意类型，只需要设定delayed属性为true即可</strong>，然后声明队列与其绑定即可。<strong>发送消息时，一定要携带x-delay属性，指定延迟的时间</strong>。</p>
+<h4 id="惰性队列"><a href="#惰性队列" class="headerlink" title="惰性队列"></a>惰性队列</h4><p>解决消息堆积问题：持久化到硬盘；采用多个消费者模式。<br>从RabbitMQ的3.6.0版本开始，就增加了Lazy Queues的概念，也就是惰性队列。惰性队列的特征如下：</p>
+<ul>
+<li>接收到消息后直接存入磁盘而非内存</li>
+<li>消费者要消费消息时才会从磁盘中读取并加载到内存</li>
+<li>支持数百万条的消息存储</li>
+<li>而要设置一个队列为惰性队列，<strong>只需要在声明队列时，指定x-queue-mode属性为lazy即可。</strong></li>
+</ul>
+<h4 id="MQ集群"><a href="#MQ集群" class="headerlink" title="MQ集群"></a>MQ集群</h4><ul>
+<li>普通集群<ul>
+<li>会在集群的各个节点间共享部分数据，包括：交换机、队列元信息。不包含队列中的消息。</li>
+<li>当访问集群某节点时，如果队列不在该节点，会从数据所在节点传递到当前节点并返回</li>
+<li>队列所在节点宕机，队列中的消息就会丢失</li>
+<li><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20210718220843323.png" alt="image-20210718220843323" style="zoom:67%;" /></li>
+</ul>
+</li>
+<li>镜像集群（主从集群）<ul>
+<li>交换机、队列、队列中的消息会在各个mq的镜像节点之间同步备份。</li>
+<li>创建队列的节点被称为该队列的<strong>主节点，</strong>备份到的其它节点叫做该队列的<strong>镜像</strong>节点。</li>
+<li>一个队列的主节点可能是另一个队列的镜像节点</li>
+<li>所有操作都是主节点完成，然后同步给镜像节点</li>
+<li>主宕机后，镜像节点会替代成新的主</li>
+<li><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20210718221039542.png" alt="image-20210718221039542" style="zoom:67%;" /></li>
+</ul>
+</li>
+<li>仲裁队列<ul>
+<li>与镜像队列一样，都是主从模式，支持主从数据同步</li>
+<li>使用非常简单，没有复杂的配置</li>
+<li>主从同步基于Raft协议，强一致</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>荷包蛋-溏心
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://hlhehe.github.io/2024/03/19/Rabbit-MQ/" title="Rabbit MQ">https://hlhehe.github.io/2024/03/19/Rabbit-MQ/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/MQ/" rel="tag"><i class="fa fa-tag"></i> MQ</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/03/01/MySQL%E7%B4%A2%E5%BC%95/" rel="prev" title="MySQL索引">
+                  <i class="fa fa-angle-left"></i> MySQL索引
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/03/19/Elasticsearch/" rel="next" title="Elasticsearch">
+                  Elasticsearch <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">荷包蛋-溏心</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">191k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">2:54</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script size="200" alpha="0.3" zIndex="-1" src="https://cdnjs.cloudflare.com/ajax/libs/ribbon.js/1.0.2/ribbon.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #4D4D4C;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #F7F7F7;
+      background-image: linear-gradient(#F7F7F7, #F7F7F7);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"waline-server-hlhehes-projects.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"泰酷辣！","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2024/03/19/Rabbit-MQ/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+<script type="text/javascript" src="/js/clicklove.js"></script>
+
+</html>
