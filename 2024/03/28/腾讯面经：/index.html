@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hlhehe.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"show_result":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="腾讯面经：算法：LRU(Least Recently Used) 是一种缓存淘汰机制，是一种根据数据的历史访问频率来淘汰数据的算法，而LRU-K是这种算法的变种之一，优先清理最近没有使用过的数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="腾讯面经">
+<meta property="og:url" content="https://hlhehe.github.io/2024/03/28/%E8%85%BE%E8%AE%AF%E9%9D%A2%E7%BB%8F%EF%BC%9A/index.html">
+<meta property="og:site_name" content="Honor">
+<meta property="og:description" content="腾讯面经：算法：LRU(Least Recently Used) 是一种缓存淘汰机制，是一种根据数据的历史访问频率来淘汰数据的算法，而LRU-K是这种算法的变种之一，优先清理最近没有使用过的数据">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="c:\Users\Administrator\AppData\Local\Temp{F589F9DC-FB0F-4f8a-99A7-8706075350F1}.png">
+<meta property="og:image" content="c:\Users\Administrator\AppData\Local\Temp{8AA9C382-D2A2-4d40-AC47-B0A160CD5787}.png">
+<meta property="article:published_time" content="2024-03-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-03-28T02:54:50.729Z">
+<meta property="article:author" content="荷包蛋-溏心">
+<meta property="article:tag" content="面经">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:\Users\Administrator\AppData\Local\Temp{F589F9DC-FB0F-4f8a-99A7-8706075350F1}.png">
+
+
+<link rel="canonical" href="https://hlhehe.github.io/2024/03/28/%E8%85%BE%E8%AE%AF%E9%9D%A2%E7%BB%8F%EF%BC%9A/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hlhehe.github.io/2024/03/28/%E8%85%BE%E8%AE%AF%E9%9D%A2%E7%BB%8F%EF%BC%9A/","path":"2024/03/28/腾讯面经：/","title":"腾讯面经"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>腾讯面经 | Honor</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="waline-server-hlhehes-projects.vercel.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Honor</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">荷包蛋的成长之路</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">24</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%85%BE%E8%AE%AF%E9%9D%A2%E7%BB%8F%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">腾讯面经：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%97%E6%B3%95%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">算法：</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E4%B8%87%E4%B8%AA%E6%95%B0%E6%89%BE%E5%87%BA%E4%B8%AD%E4%BD%8D%E6%95%B0%EF%BC%8C%E5%86%85%E5%AD%98%E5%AD%98%E4%B8%8D%E4%B8%8B%E6%89%80%E6%9C%89%E6%95%B0%E6%8D%AE%E6%80%8E%E4%B9%88%E5%8A%9E"><span class="nav-number">1.1.1.</span> <span class="nav-text">一万个数找出中位数，内存存不下所有数据怎么办</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%EF%BC%9A"><span class="nav-number">1.2.</span> <span class="nav-text">项目：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%EF%BC%9A"><span class="nav-number">1.3.</span> <span class="nav-text">网络：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%EF%BC%9A"><span class="nav-number">1.4.</span> <span class="nav-text">操作系统：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#C-C"><span class="nav-number">1.5.</span> <span class="nav-text">C&#x2F;C++:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux%EF%BC%9A"><span class="nav-number">1.6.</span> <span class="nav-text">Linux：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A3%E7%A0%81%EF%BC%9A"><span class="nav-number">1.7.</span> <span class="nav-text">代码：</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="荷包蛋-溏心"
+      src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+  <p class="site-author-name" itemprop="name">荷包蛋-溏心</p>
+  <div class="site-description" itemprop="description">哪有赌徒天天输，哪有小孩天天哭</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Hlhehe" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Hlhehe" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3113390285@qq.com" title="E-Mail → mailto:3113390285@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+
+       
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="250" height="250" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES/" rel="tag">ES</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fidder/" rel="tag">Fidder</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MQ/" rel="tag">MQ</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Selenium/" rel="tag">Selenium</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E6%B5%8B%E8%AF%95/" rel="tag">Web测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/faker/" rel="tag">faker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logger/" rel="tag">logger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%9B%E6%89%A3/" rel="tag">力扣</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="tag">性能测试</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag">接口测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag">测试数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag">面经</a><span class="tag-list-count">1</span></li></ul>
+        </canvas>
+    </div>
+</div>
+
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+     
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hlhehe.github.io/2024/03/28/%E8%85%BE%E8%AE%AF%E9%9D%A2%E7%BB%8F%EF%BC%9A/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+      <meta itemprop="name" content="荷包蛋-溏心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Honor">
+      <meta itemprop="description" content="哪有赌徒天天输，哪有小孩天天哭">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="腾讯面经 | Honor">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          腾讯面经
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-03-28 00:00:00 / 修改时间：10:54:50" itemprop="dateCreated datePublished" datetime="2024-03-28T00:00:00+08:00">2024-03-28</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2024/03/28/%E8%85%BE%E8%AE%AF%E9%9D%A2%E7%BB%8F%EF%BC%9A/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2024/03/28/%E8%85%BE%E8%AE%AF%E9%9D%A2%E7%BB%8F%EF%BC%9A/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>30k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>27 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="腾讯面经："><a href="#腾讯面经：" class="headerlink" title="腾讯面经："></a>腾讯面经：</h1><h2 id="算法："><a href="#算法：" class="headerlink" title="算法："></a>算法：</h2><p><em>LRU(Least Recently Used) 是一种缓存淘汰机制，是一种根据数据的历史访问频率来淘汰数据的算法，而LRU-K是这种算法的变种之一</em>，优先清理最近没有使用过的数据<span id="more"></span></p>
+<p>LRU-K:</p>
+<p>LRU-K的主要目的是为了解决LRU算法“缓存污染”的问题，其核心思想是将“最近使用过1次”的判断标准扩展为“最近使用过K次”。也就是说没有到达K次访问的数据并不会被缓存，这也意味着需要对于缓存数据的访问次数进行计数，当需要淘汰数据时，LRU-K会淘汰第K次访问时间距当前时间最大的数据。</p>
+<p>具体实现：hashmap+双向链表</p>
+<p>缓存污染：偶发性的、周期性的数据会导致LRU命中率急剧下降</p>
+<p>其他的缓存淘汰机制：FIFO、LFU</p>
+<h3 id="一万个数找出中位数，内存存不下所有数据怎么办"><a href="#一万个数找出中位数，内存存不下所有数据怎么办" class="headerlink" title="一万个数找出中位数，内存存不下所有数据怎么办"></a>一万个数找出中位数，内存存不下所有数据怎么办</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">如果内存无法容纳所有数据，可以考虑使用一些外部排序算法，如归并排序（Merge Sort）或堆排序（Heap Sort），这些算法可以有效地在磁盘上对大量数据进行排序。</span><br><span class="line"></span><br><span class="line">下面是一个简单的思路：</span><br><span class="line"></span><br><span class="line">分块排序：将一万个数分成若干个较小的块，每个块的大小可以根据内存大小来确定。然后对每个块使用内存能够容纳的排序算法进行排序，如快速排序（Quick Sort）。在排序完成后，将每个块的最小元素放入一个优先队列（最小堆）中。</span><br><span class="line"></span><br><span class="line">选择中位数：从所有块的最小元素中选择第 n/2 小的元素作为初始的候选中位数。这个过程可以通过维护一个大小为 n/2 的最小堆来实现，每次从最小堆中取出最小元素，并将对应块的下一个元素插入最小堆中。</span><br><span class="line"></span><br><span class="line">更新候选中位数：重复上述步骤，直到最终找到中位数。这个过程会在每次选择过程中不断更新候选中位数，直到遍历完所有块。</span><br><span class="line"></span><br><span class="line">通过这种方法，我们可以在不将所有数据同时加载到内存的情况下找到中位数。这种方式虽然需要额外的时间和空间来处理分块和维护候选中位数，但是可以有效地处理大量数据。</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="项目："><a href="#项目：" class="headerlink" title="项目："></a>项目：</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">它利用了一个onenet平台，首先将EXP8266连接到MQTT服务器，之后在onenet上创建设备并登录，这样设备和单片机就相当于联通了，然后比如说控制LED，设备发送控制信息到onenet平台，平台转发信息到esp8266模块，esp8266模块通过串口将数据发送给单片机，单片机产生串口中断，然后将模块发送过来的数据放入环形缓冲区内，然后唤醒一个的解析进程，这个解析进程会解析出控制命令来控制LED</span><br></pre></td></tr></table></figure>
+
+<p>遇到的问题：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1：因为在发送数据的时候，需要先将数据保存起来，再取出数据进行读取，因此会频繁的利用数据，所以要采用一个高效的结构来保存数据，然后想到利用环形缓冲区，环形缓冲区的构建是先定义一个缓存buff，然后定义两个位置，一个读位置，一个写位置，本来判断环形缓冲区是否为空是要用读和写是否指向同一位置来判断的，但是为了防止读写冲突(也就是还没写完就相等)，设置了一个next_write，环形缓冲区的最后一位一般不用，当next_write = read时，缓冲区内就已满或者为空。</span><br><span class="line">2：在点亮LED等的时候出现了一些问题，后来发现是一些引脚的默认功能不是GPIO功能，所以要先将引脚的默认功能关闭，然后设置为GPIO功能，</span><br></pre></td></tr></table></figure>
+
+<p>如果智能家居收不到命令，可能是什么原因：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1：网络丢包</span><br><span class="line">2：如果服务器负责监听订阅的进程崩溃了，那么客户端就收不到反馈，由于客户端由keepalive机制，会发送探测报文来查看服务器是否存活，如果经过一段时间的探测后，服务器没响应，则会断开连接。</span><br></pre></td></tr></table></figure>
+
+<p>在点亮串口的时候发生了错误，因为发现引脚的默认功能不是GPIO功能，所以需要先将引脚的默认功能关闭，然后设置为GPIO功能</p>
+<p>用XCOM来调试串口</p>
+<p>ESP8266用AT命令实现很简单，一般不用管他，我们只需要发送几个AT指令告诉他干嘛就行，AT,AT+CWMOD,AT+CWDHCP,EPS8266+WIFI_INFO</p>
+<p>可以去原理图中查看板子中的LED灯对应的引脚是哪个</p>
+<h2 id="网络："><a href="#网络：" class="headerlink" title="网络："></a>网络：</h2><p>HTTPS了解吗，讲讲TLS 流程，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">说HTTPS之前先说一下http协议，http协议是一种基于TCP协议的应用层传输协议，又因为HTTP在传输过程中是以明文形式传输，容易被攻击者窃听、篡改，HTTPS是在HTTP和TCP之间增加了一个SSL或者T LS安全传输协议，而HTTPS通过使用TLS或者SSL协议对数据进行加密和认证，提高了传输的安全性和保密性。</span><br><span class="line">TLS的流程：TLS也是通过客户端和服务器端之间的握手来保证数据传输的安全性的。</span><br><span class="line"></span><br><span class="line">HTTPS流程</span><br><span class="line">首先客户端向服务端发送一个请求，并且连接到服务端的443端口</span><br><span class="line">之后，服务端会发送一个公钥(证书)过来</span><br><span class="line">之后客户端解析这个公钥(证书)，查看这个证书是否有效，如果有效，那么就会生成一个随机值(这个随机值就是密钥)，之后用服务端发送过来的公钥来加密这个随机值</span><br><span class="line">发送这个加密过的随机值</span><br><span class="line">服务端收到这个随机值之后，利用自己的私钥来解密，获得这个随机值，之后利用这个随机值来对称加密内容</span><br><span class="line">传输内容</span><br><span class="line">客户端利用随机值来进行解密</span><br><span class="line">这就是整个的过程</span><br><span class="line"></span><br><span class="line">TLS流程</span><br><span class="line">TLS/SSL 的功能实现主要依赖于三类基本算法：散列函数 、对称加密和非对称加密</span><br><span class="line">其利用非对称加密实现身份认证和密钥协商，对称加密算法采用协商的密钥对数据加密，基于散列函数验证信息的完整性。</span><br><span class="line">所以HTTPS是使用对称加密和非对称加密两者并用的混合加密机制。</span><br><span class="line">具体做法是：发送密文的一方使用对方的公钥进行加密处理“对称的密钥”，然后对方用自己的私钥解密拿到“对称的密钥”，这样可以确保交换的密钥是安全的前提下，使用对称加密方式进行通信。</span><br></pre></td></tr></table></figure>
+
+<p><img src="C:\Users\Administrator\AppData\Local\Temp{F589F9DC-FB0F-4f8a-99A7-8706075350F1}.png" alt="{F589F9DC-FB0F-4f8a-99A7-8706075350F1}"></p>
+<p>hTTP的常用状态码：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">1xx表示提示信息</span><br><span class="line"></span><br><span class="line">2xx表示成功</span><br><span class="line">200 ok（请求成功）</span><br><span class="line">204 no content （请求成功，但是没有结果返回）</span><br><span class="line">206 partial content （客户端请求一部分资源，服务端成功响应，返回一范围资源）</span><br><span class="line"></span><br><span class="line">3xx表示重定向，网页或者资源位置发生变化，</span><br><span class="line">301 move permanently （永久性重定向）</span><br><span class="line">302 found （临时性重定向）</span><br><span class="line">303 see other （示由于请求对应的资源存在着另一个 URI，应使用 GET方法定向获取请求的资源）</span><br><span class="line">304 not modified （表示在客户端采用带条件的访问某资源时，服务端找到了资源，但是这个请求的条件不符合。跟重定向无关）</span><br><span class="line">307 temporary redirect （跟302一个意思）</span><br><span class="line"></span><br><span class="line">4xx表示客户端错误，请求报文有误</span><br><span class="line">400 bad request （请求报文存在语法错误）</span><br><span class="line">401 unauthorized （需要认证（第一次返回）或者认证失败（第二次返回））</span><br><span class="line">403 forbidden （请求被服务器拒绝了）</span><br><span class="line">404 not found （服务器上无法找到请求的资源）</span><br><span class="line"></span><br><span class="line">5xx表示服务器错误</span><br><span class="line">500 internal server error （服务端执行请求时发生了错误）</span><br><span class="line">503 service unavailable （服务器正在超负载或者停机维护，无法处理请求）</span><br></pre></td></tr></table></figure>
+
+<p>http中的get、post区别</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">GET和POST请求都是http的请求方式，用户通过不同的http的请求方式完成对资源（url）的不同操作。具体点来讲GET一般用于获取/查询资源信息，而POST一般用于更新资源信息。</span><br><span class="line">1、Get请求提交的数据会在地址栏显示出来，而post请求不会再地址栏显示出来，</span><br><span class="line">2、传输数据的大小，http Get请求由于浏览器对地址长度的限制而导致传输的数据有限制。而POST请求不会因为地址长度限制而导致传输数据限制。</span><br><span class="line">3、安全性,POST的安全性要比GET的安全性高。由于数据是会在地址中呈现，所以可以通过历史记录找到密码等关键信息。</span><br></pre></td></tr></table></figure>
+
+<p>http版本也很多了，http2和1.1有什么优势呢</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">多路复用（Multiplexing）：</span><br><span class="line">在 HTTP/1.1 中，每个请求都需要通过单独的 TCP 连接发送，导致了&quot;队头阻塞&quot;的问题，即一个请求在等待时会阻塞后续请求的发送。</span><br><span class="line">HTTP/2 使用了多路复用技术，允许多个请求同时通过同一个 TCP 连接发送和接收，解决了队头阻塞的问题，提高了并发性能。</span><br><span class="line">流量控制（Flow Control）：</span><br><span class="line">在 HTTP/1.1 中，没有有效的机制来控制流量，可能导致服务器发送速度过快而导致客户端无法处理。</span><br><span class="line">HTTP/2 使用了流量控制机制，允许客户端和服务器之间进行流量控制，保证了数据的平稳传输，防止了过载的情况发生。</span><br></pre></td></tr></table></figure>
+
+<p>http怎么进行传参</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">HTTP 协议本身并没有提供传参的机制，但在实际应用中，常用的传参方式包括在 URL 中使用查询字符串（query string）、在请求体中使用表单数据等。以下是常见的 HTTP 传参方式：</span><br><span class="line">查询字符串（Query String）：</span><br><span class="line">查询字符串是指 URL 中问号后面的部分，例如 http://example.com/resource?param1=value1&amp;param2=value2。</span><br><span class="line">查询字符串中的参数以键值对的形式出现，使用 key=value 的格式，多个参数之间使用 &amp; 符号分隔。</span><br><span class="line">查询字符串适用于 GET 请求，客户端将参数直接附加在 URL 中发送给服务器。</span><br><span class="line"></span><br><span class="line">表单数据（Form Data）：</span><br><span class="line">表单数据通常用于 POST 请求，客户端将参数放在请求体中以表单形式提交给服务器。</span><br><span class="line">在 HTML 表单中，可以使用 &lt;form&gt; 标签包裹输入元素，用户填写表单后，提交时浏览器会将表单数据以键值对的形式发送给服务器。</span><br><span class="line">服务器端可以通过解析请求体来获取表单数据，常见的编码方式包括 application/x-www-form-urlencoded 和 multipart/form-data。</span><br></pre></td></tr></table></figure>
+
+<p>安全通信的四大原则</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">机密性，对数据进行加密</span><br><span class="line">完整性：数据在传输过程中没有经过篡改</span><br><span class="line">身份认证：确认对方的身份</span><br><span class="line">不可否认：</span><br></pre></td></tr></table></figure>
+
+<p>CA 签发流程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1.申请认证, 2.审核信息, 3.签发证书 4.返回证书 5.验证证书 6.密钥协商 </span><br></pre></td></tr></table></figure>
+
+<p>讲一下tcp协议握手协议</p>
+<p><img src="C:\Users\Administrator\AppData\Local\Temp{8AA9C382-D2A2-4d40-AC47-B0A160CD5787}.png" alt="{8AA9C382-D2A2-4d40-AC47-B0A160CD5787}"></p>
+<p>TCP分为三次握手和四次挥手：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">	三次握手</span><br><span class="line"></span><br><span class="line">​	在TCP连接过程中为了建立端到端的连接，需要进行TCP的三次握手过程，首先，服务器处于监听阶段，客户端发来一个SYN包到服务器，表示自己想要建立连接，之后服务器会发送一个SYN和ACK包来确认收到请求并允许建立连接，之后客户端再发送一个ACK包表示已经收到服务器的回复，并同意建立可靠连接。</span><br><span class="line"></span><br><span class="line">​	四次挥手：</span><br><span class="line"></span><br><span class="line">​	首先客户端发送一个FIN包表示自己想要关闭连接，之后服务器会发送一个ACK确认包到客户端，表示同意关闭连接，之后等服务器向客户端传递的数据传输完毕之后，服务器再发送一个FIN+ACK包来表示自己的数据已经发送完毕，请求关闭连接，客户端再发送一个ACK确认包来回复服务器表示同意关闭</span><br></pre></td></tr></table></figure>
+
+<p>TCP与UDP的区别：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">TCP是面向连接的，UDP是无连接的</span><br><span class="line">TCP是可靠的，UDP是不可靠的</span><br><span class="line">TCP是面向字节流的，UDP是面向数据报文的</span><br><span class="line">TCP只支持点对点通信，UDP支持一对一，一对多，多对多</span><br><span class="line">TCP报文首部20个字节，UDP首部8个字节</span><br><span class="line">TCP有拥塞控制机制，UDP没有</span><br></pre></td></tr></table></figure>
+
+<p>讲一下向某个网站从发送请求到收到数据这个过程中发生的事情。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">浏览器进行DNS域名解析，得到对应的IP地址</span><br><span class="line">根据这个IP，找到对应的服务器建立连接（三次握手）</span><br><span class="line">建立TCP连接后发起HTTP请求（一个完整的http请求报文）</span><br><span class="line">服务器响应HTTP请求，浏览器得到html代码（服务器如何响应）</span><br><span class="line">浏览器解析html代码，并请求html代码中的资源（如js、css、图片等）</span><br><span class="line">浏览器对页面进行渲染呈现给用户</span><br><span class="line">服务器关闭TCP连接（四次挥手）</span><br></pre></td></tr></table></figure>
+
+<p>​	http和htpps的区别</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">HTTP和HTTPS是用于在客户端和服务器之间传输数据的两种协议。它们的主要区别在于安全性和加密方面：</span><br><span class="line"></span><br><span class="line">   1. `安全性`：HTTP是一种不安全的协议，数据在传输过程中以明文形式传输，容易被攻击者窃听、篡改或伪装。而HTTPS通过使用TLS（Transport Layer Security）或SSL（Secure Sockets Layer）协议对数据进行加密和认证，提供了更高的安全性和保密性。</span><br><span class="line"></span><br><span class="line">   2. `加密通信`：HTTP不提供数据的加密传输，使得敏感信息（如登录凭据、信用卡号等）容易被攻击者获取。而HTTPS使用SSL/TLS协议对通信进行加密，确保数据在传输过程中的机密性，使得攻击者无法轻易获取敏感信息。</span><br><span class="line"></span><br><span class="line">   3. `证书验证`：HTTPS使用SSL/TLS证书对服务器进行身份验证，确保客户端与服务器之间的通信建立在可信任的连接上。客户端会验证服务器的证书，以确保与合法和受信任的服务器建立连接。这样可以防止中间人攻击和DNS劫持等安全威胁。</span><br><span class="line"></span><br><span class="line">   4. `默认端口`：HTTP使用端口号80进行通信，而HTTPS使用端口号443进行加密通信。</span><br><span class="line"></span><br><span class="line">HTTPS在保护用户隐私和数据安全方面比HTTP更加可靠，因此在需要保护敏感信息的场景，如电子商务网站、在线支付平台等，推荐使用HTTPS。</span><br></pre></td></tr></table></figure>
+
+<p>http没那么安全的例子？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">因为HTTP来传输的时候是使用明文来进行传输的，而明文很容易就被心怀不轨者所窃听，篡改或伪装，所以http并不安全</span><br></pre></td></tr></table></figure>
+
+<p>tcp三次握手和四次挥手的过程中，双端是怎样变化的	</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">三次握手：</span><br><span class="line">1.客户端向服务器发送SYN包，并进入SYN_SENT状态，等待服务器确认；</span><br><span class="line"></span><br><span class="line">2.服务器收到SYN包并进行确认，同时向客户端发送SYN包，即SYN+ACK包。此时服务器进入SYN_RECV状态。</span><br><span class="line"></span><br><span class="line">3.客户端收到服务器的SYN+ACK包后，向服务器发送确认包ACK，发送完毕后，TCP连接成功，完成三次握手。</span><br><span class="line"></span><br><span class="line">四次挥手：</span><br><span class="line">1.首先客户端发送一个FIN包表示自己想要关闭连接，客户端进入FIN_CLOSE1状态</span><br><span class="line">2之后服务器会发送一个ACK确认包到客户端，表示同意关闭连接，服务器进入CLOSE_WAIT状态，客户端进入FIN_CLOSE2状态</span><br><span class="line">3之后等服务器向客户端传递的数据传输完毕之后，服务器再发送一个FIN+ACK包来表示自己的数据已经发送完毕，请求关闭连接，服务器进入LAST_ACK状态</span><br><span class="line">4客户端再发送一个ACK确认包来回复服务器表示同意关闭，客户端进入TIME_WAIT状态</span><br></pre></td></tr></table></figure>
+
+<p>黑客想要通过TCP攻击，会如何攻击，应该怎样应对</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">因为TCP需要经过三次握手过程才可以建立连接，黑客们一般会通过伪装大量的IP地址给服务器发送SYN请求连接报文，但是由于IP地址不存在，因此当服务器给客户端发送回确认之后，由于一直收不到确认，会一直处于SYN_RECV状态，服务器会将IP放入等待队列，并重发确认报文，而由于攻击者发送了大量的请求报文，会导致服务器要维持一个很大的等待队列，导致服务器崩溃</span><br></pre></td></tr></table></figure>
+
+<p>讲一下三次握手，两次行不行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">两次握手相比较于三次握手可能会出现一些问题，最主要的原因在于三次握手可以避免重复历史连接</span><br></pre></td></tr></table></figure>
+
+<p>讲一下time_wait状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">time_wait是客户端在收到服务器发来数据已经传送完成并且请求关闭连接之后，客户端发送确认报文，就进入了time_wait状态，这个状态主要是为了保证连接正确关闭，例如当主动关闭方发送的确认报文丢失了，那么被动方会重新发送一个请求报文，所以设置一个time_wait是有必要的</span><br><span class="line">另外，如果不设置这个time_wait当又有新的连接在这两个端口连接时，如果有上一个链接迟来的报文到达，会导致数据错乱</span><br></pre></td></tr></table></figure>
+
+<p>那假设A服务器开了8080端口，B服务器用什么命令去访问</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">可以使用netstat来查看哪些端口被打开</span><br><span class="line">可以直接使用ssh来直接登录b服务器</span><br></pre></td></tr></table></figure>
+
+<p>了解滑动窗口吗</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">TCP的滑动窗口是一种核心的流量控制机制。它基于窗口的概念，窗口实际上是一个缓冲区，在这个缓冲区内，发送方被允许在未收到确认的情况下连续发送数据</span><br><span class="line">滑动窗口分为三类：停止等待、后退N帧、选择重传，他们之间的区别就在于发送窗口和接收窗口的区别，</span><br><span class="line">停止等待：发送窗口=1，接收窗口=1</span><br><span class="line">后退N帧：发送窗口&gt;=1，接收窗口=1，允许在未收到确认帧时发送后面的帧，但是当接收方发现接收到错误帧，那么后面发来的全部帧全部不要</span><br><span class="line">选择重传：发送窗口&gt;=1,接收窗口&gt;=1，在后退N帧基础上，在缓存中保存了错误帧后面的帧，等到重传的正确帧到来后一起上传</span><br></pre></td></tr></table></figure>
+
+<p>那你讲一下拥塞控制的方法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">慢开始，拥塞避免，快重传，快恢复</span><br><span class="line">慢开始是指在传输刚开始时，拥塞窗口=1，然后发送方每收到一个确认报文，拥塞窗口都会加一，为了防止拥塞窗口过大而导致网络拥塞，设置一个慢开始门限，小于门限使用满开始，高于门限，则使用拥塞避免，表示拥塞窗口每次只加一</span><br><span class="line">当遇到拥塞时，门限减为原来的一半，拥塞窗口从1开始</span><br><span class="line">快重传表示如果发送方连续接收到了3个重复确认，那么立即重传要求的报文</span><br><span class="line">快恢复表示在快重传之后，不是执行慢开始而是执行快恢复，将拥塞窗口和门限都除以二，执行拥塞避免</span><br></pre></td></tr></table></figure>
+
+<p>拥塞控制与流量控制：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">拥塞控制是一种全局的问题，而流量控制往往指点到点通信量的控制，是一种端到端的</span><br></pre></td></tr></table></figure>
+
+<p>RPC是什么</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">RPC（Remote Procedure Call）远程过程调用协议，一种通过网络从远程计算机上请求服务，而不需要了解底层网络技术的协议。在OSI网络七层模型中，RPC跨越了传输层和应用层。</span><br></pre></td></tr></table></figure>
+
+<p>arp协议</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">数据链路层使用arp协议来进行寻址，当数据链路层收到了网络层传下来的数据包后，根据IP地址，首先查看自己的arp缓存中有没有目的IP地址对应的MAC地址，如果有，那么就利用这个MAC地址建立通信，如果没有，那么就向局域网内发送arp请求广播，局域网内所有的主机都能听到，局域网内的主机检查发来的arp广播中的目的IP地址是否与自己的IP地址一致，如果一致，那么主机就发送一个ARP响应，包含自己的MAC地址，这个响应也是以广播方式发送，请求主机收到响应后，他将更新arp缓存，将目标IP地址和MAC地址更新，之后就根据MAC地址建立连接</span><br></pre></td></tr></table></figure>
+
+<p>ip协议</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在网络层使用ip协议来进行寻址，ip地址是分配给计算机或者网络设备的唯一标识符，在IP协议中，每个数据包中都包含目的地址和源地址，使得数据能够在网络中正确的传递</span><br></pre></td></tr></table></figure>
+
+<p>TCP是可靠传输，我们在编程的时候相比UDP是不是要绑定端口这些？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">在使用socket编程时：</span><br><span class="line">无论是TCP还是UDP，在编程时都需要绑定端口，这是因为套接字（Socket）通信是通过端口来识别应用程序和服务的。</span><br><span class="line">无论是TCP还是UDP编程，通常都需要进行以下步骤：</span><br><span class="line"></span><br><span class="line">创建套接字：使用socket()函数创建套接字。</span><br><span class="line">绑定端口：使用bind()函数将套接字绑定到特定的端口上，这样其他程序就可以通过指定的端口来与该程序通信。</span><br><span class="line">监听连接（仅适用于TCP）：如果是TCP编程，还需要调用listen()函数开始监听传入的连接请求。</span><br><span class="line">接受连接（仅适用于TCP）：如果是TCP编程，还需要调用accept()函数接受传入的连接请求，建立连接。</span><br><span class="line">发送和接收数据：使用send()和recv()（或者sendto()和recvfrom()）函数进行数据的发送和接收。</span><br><span class="line">在TCP编程中，因为TCP是面向连接的协议，所以需要额外的步骤来监听连接和接受连接，这些步骤不适用于UDP编程。但是无论是TCP还是UDP，都需要在编程中绑定端口，以便程序能够通过特定的端口进行通信。</span><br></pre></td></tr></table></figure>
+
+<p>socket编程，TCP和UDP在API层面主要有哪些区别？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">首先在创建套接字时，利用socket函数，TCP使用sock_STREAM参数，UDP使用SOCK_DGRAM参数</span><br><span class="line">tcp需要使用connect函数来建立链接，UDP不需要建立连接，直接发送制定目标IP地址和端口号</span><br><span class="line">TCP使用send函数发送数据，UDP使用sendto函数发送数据</span><br><span class="line">TCP使用recv函数接收数据，UDP使用recvfrom函数接收数据</span><br></pre></td></tr></table></figure>
+
+<p>TCP是怎么实现可靠传输的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">TCP的三次握手，四次挥手</span><br><span class="line">TCP提供了检验和，并且有序列号和确认应答机制</span><br><span class="line">TCP有拥塞控制和滑动窗口机制</span><br></pre></td></tr></table></figure>
+
+<p>非对称加密算法和对称加密算法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">对称密码体制设计和实现的中心是: 用何种方法产生满足保密要求的密钥以及用何种方法将密钥安全又可靠地分配给通信双方。对称密码体制可以通过分组密码或流密码来实现，它既可以用于数据加密，又可以用于消息认证。</span><br><span class="line">非对称密码体制使用公钥加密消息，使用私钥来解密。使用非对称密码体制可增强通信的安全性。</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="操作系统："><a href="#操作系统：" class="headerlink" title="操作系统："></a>操作系统：</h2><p>什么是僵尸进程、孤儿进程、守护进程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">僵尸进程：是一个进程使用fork创建子进程，如果子进程退出，而父进程并没有调用wait或waitpid获取子进程的状态信息，那么子进程的进程描述符仍然保存在系统中。这种进程称之为僵死进程。</span><br><span class="line"></span><br><span class="line">孤儿进程：一个父进程退出，而它的一个或多个子进程还在运行，那么这些子进程将成为孤儿进程。孤儿进程将被init进程（进程号为1）所收养，并由init进程完成对它们状态收集工作。</span><br><span class="line"></span><br><span class="line">守护进程：是一种运行在后台的特殊进程，它独立与控制终端 ，并周期性地执行某项任务或等待处理某些发生的事件。</span><br></pre></td></tr></table></figure>
+
+<p>僵尸进程有什么好处吗</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">僵尸进程通常被认为是一种不良现象，因为它们占用系统资源并可能导致系统性能下降。</span><br><span class="line">但是僵尸进程在特定情况下可能会有一些潜在的好处：</span><br><span class="line"></span><br><span class="line">首先就是当一个进程创建子进程并等待子进程终止时，父进程可以通过检查子进程是否为僵尸进程来知道子进程已经结束执行。这种情况下，就相当于僵尸进程提供了一个通知机制，父进程可以通过查看僵尸进程来确认子进程已经结束，而不必依赖于信号或其他机制。</span><br><span class="line"></span><br><span class="line">提供了子进程的退出状态：僵尸进程保存了子进程的退出状态，包括退出码和终止原因。虽然父进程可以通过其他方式获取子进程的退出状态，如通过 wait() 系统调用，但在某些情况下，僵尸进程提供了一个备用的方式来查看子进程的退出状态。</span><br></pre></td></tr></table></figure>
+
+<p>讲讲中断的流程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cpu接受中断请求-&gt;保存中断上下文跳转到中断处理过程-&gt;执行中断上半部-&gt;执行中断下半部-&gt;恢复中断上下文。</span><br></pre></td></tr></table></figure>
+
+<p>中断的类型</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">中断分为内部中断和外部中断，其中内部中断又称为异常，</span><br><span class="line">内部中断与当前执行的指令有关</span><br><span class="line">外部中断与外部硬件有关</span><br></pre></td></tr></table></figure>
+
+<p>中断的作用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">因为在一些情况下，操作系统会把CPU的使用权交给应用程序，而中断是内核夺回CPU使用权的唯一途径</span><br></pre></td></tr></table></figure>
+
+<p>软中断和硬中断区别</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">硬中断是由外部事件引起的因此具有随机性和突发性；软中断是执行中断指令产生的，因此不是随机的而是由程序安排好的。</span><br><span class="line">硬中断的中断响应周期，CPU需要发中断回合信号，软中断的中断响应周期，CPU不需发中断回合信号。</span><br><span class="line">硬中断的中断号是由中断控制器提供的；软中断的中断号由指令直接给出，无需使用中断控制器。</span><br><span class="line">硬中断是可屏蔽的，软中断不可屏蔽。</span><br><span class="line"></span><br><span class="line">硬中断的具体例程：</span><br><span class="line">硬中断主要包括网卡或者硬盘等硬件带来的中断，表示硬件的状态出现了变化</span><br><span class="line">软中断的具体例程：</span><br><span class="line">软中断表示执行中断指令产生的，比如处理网卡产生的数据，当网卡接收到一个数据包之后，硬中断只是把数据拷贝到缓存区中，并且要置一个标志位，告诉操作系统有事做，即使软中断了。</span><br></pre></td></tr></table></figure>
+
+<p>你知道i&#x2F;o的历程嘛，把操作系统进行i&#x2F;o的历程以及参与的软硬件串起来整个说一下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">操作系统I/O历程是一个计算机系统进行输入输出的过程，它涉及到了多个硬件或者软件</span><br><span class="line">首先用户可以通过应用程序来和计算机进行交互，利用操作系统提供的应用程序API来发起输入输出请求</span><br><span class="line">当操作系统收到应用程序发来的IO请求时，他会去调用设备驱动程序来执行相应的IO操作，设备驱动程序是一个软件，用来与硬件来进行通信。</span><br><span class="line">之后设备驱动程序会调用设备控制器，控制具体的硬件来进行输入输出操作。设备控制器是连接在总线上的硬件设备，用来控制具体的外部设备</span><br></pre></td></tr></table></figure>
+
+<p>操作系统中堆栈的作用，与数据结构中的堆和栈的区别</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在数据结构中，堆是一个满足父子结点关系的完全二叉树，而栈是一个非常简单的结构，拥有先入后出的特性</span><br><span class="line">在操作系统中堆和栈都是内存空间，不同的是堆是系统按需申请，动态分配的，而栈是程序运行时自动拥有的一小块内存，大小由参数确定</span><br></pre></td></tr></table></figure>
+
+<p>CPU访问内存的步骤</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CPU首先需要确定要访问的内存的地址</span><br><span class="line">之后，CPU将内存的地址发送到内存总线，内存总线是CPU和内存之间的物理通道</span><br><span class="line">发送到内存总线之后，内存总线将内存发送到内存模块</span><br><span class="line">内存模块会根据收到的地址来去选择相应的存储单元，之后就根据具体的指令，判断是将存储单元中的数据读取出来然后利用数据总线传送到CPU中的寄存器或者缓存中，如果是写操作，那么就将数据总线传过来的数据写入到存储单元中去。</span><br></pre></td></tr></table></figure>
+
+<p>讲一下进程与线程与协程的区别，以及你对操作系统的理解</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">进程是资源分配的基本单位，它是程序执行时的一个实例，在程序运行时创建。</span><br><span class="line"></span><br><span class="line">线程是程序执行的最小单位，是进程的一个执行流，一个线程由多个线程组成的。</span><br><span class="line"></span><br><span class="line">协程是一种比线程更加轻量级的存在，完全由程序控制，他可以在不同的执行流之间切换，但不涉及操作系统的线程调度和上下文切换，所以会比线程更快</span><br><span class="line"></span><br><span class="line">其中线程和进程的区别：</span><br><span class="line">1、进程是资源分配的基本单位，线程是程序运行的基本单位</span><br><span class="line"></span><br><span class="line">2、进程有自己的资源空间，线程是共享进程中的数据，所以进程切换开销更大一点</span><br><span class="line"></span><br><span class="line">3、由于线程之间能共享内存地址，因此需要有一些同步和互斥的机制</span><br><span class="line"></span><br><span class="line">4、线程执行开销小，进程执行开销大。</span><br><span class="line"></span><br><span class="line">5、一个线程的意外终止会影响整个进程的正常运行，但是一个进程的意外终止不会影响其他的进程的运行。因此，多进程程序安全性更高。</span><br></pre></td></tr></table></figure>
+
+<p>线程如何数据交互，进程如何数据交互?</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">进程间可以通过管道、信号量、消息队列、共享内存、套接字</span><br><span class="line">线程间可以通过条件变量，标志位来通信</span><br><span class="line">管道、信号量、消息队列、共享内存、套接字</span><br><span class="line"></span><br><span class="line">管道(pipe)</span><br><span class="line">管道这种通讯方式有两种限制，一是半双工的通信，数据只能单向流动，二是只能在具有亲缘关系的进程间使用</span><br><span class="line"></span><br><span class="line">信号量(semophore)</span><br><span class="line">信号量是一个计数器，可以用来控制多个进程对共享资源的访问。它常作为一种锁机制，防止某进程正在访问共享资源时，其他进程也访问该资源。因此，主要作为进程间以及同一进程内不同线程之间的同步手段。</span><br><span class="line"></span><br><span class="line">消息队列(message queue)</span><br><span class="line">消息队列是由消息组成的链表，存放在内核中并由消息队列标识符标识。</span><br><span class="line"></span><br><span class="line">共享内存(shared memory)</span><br><span class="line"></span><br><span class="line">共享内存就是映射一段能被其他进程所访问的内存，这段共享内存由一个进程创建，但多个进程都可以</span><br><span class="line">访问。共享内存是最快的 IPC 方式，它是针对其他进程间通信方式运行效率低而专门设计的。它往往与</span><br><span class="line">其他通信机制，如信号量，配合使用，来实现进程间的同步和通信。</span><br><span class="line"></span><br><span class="line">套接字(socket)</span><br><span class="line"></span><br><span class="line">套解字也是一种进程间通信机制，与其他通信机制不同的是，它可用于不同机器间的进程通信。</span><br><span class="line"></span><br><span class="line">线程间的通讯方式</span><br><span class="line">（1）通过条件变量进行线程间的通信</span><br><span class="line"></span><br><span class="line">（2）通过标志位来通知线程间的通信</span><br><span class="line"></span><br><span class="line">（3）通过std::furture来进行线程间的通信</span><br></pre></td></tr></table></figure>
+
+<p>内存池的实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">内存池避免了申请了内存之后，忘记释放而导致的内存泄漏和内存不能循环使用问题</span><br></pre></td></tr></table></figure>
+
+<p>内存对齐</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">内存对齐是将数据保存到他的自然边界上，这样就能以最少的次数来读取这个数据</span><br></pre></td></tr></table></figure>
+
+<p>死锁是什么，如何避免？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">死锁是一组相互竞争资源的线程因为他们之间得到互相等待导致“永久“阻塞的现象</span><br><span class="line"></span><br><span class="line">死锁的四个条件：</span><br><span class="line">互斥，请求和保持，不可剥夺，循环等待</span><br></pre></td></tr></table></figure>
+
+<p>多线程了解吗，和单线程的比较，是否存在不如单线程的情况，为什么以及什么情况不如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">多线程编程是指在一个应用程序中同时运行多个线程来执行不同的任务，从而提高程序的并发性和性能，</span><br><span class="line">多线程允许程序在同一时间内执行多个任务，从而提高程序的并发性和性能。</span><br><span class="line">多线程可以更好地利用多核处理器，充分利用系统资源，提高整体资源利用率。</span><br></pre></td></tr></table></figure>
+
+<p>段页式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">段页式（Segmentation with Paging）它结合了分段（Segmentation）和分页（Paging）两种技术的优点，用于实现虚拟内存的管理。在段页式内存管理中，程序的地址空间被划分为多个段（segments）。每个段由多个页（pages）组成，每个页的大小是固定的。在进行内存映射的时候，逻辑地址被划分为段号和段内偏移量，然后通过段表（Segment Table）找到对应段的基址。接着，将段内偏移量划分为页号和页内偏移量，然后通过页表找到对应的物理页号，并将页内偏移量加上物理页的起始地址得到最终的物理地址。</span><br></pre></td></tr></table></figure>
+
+<p>如何实现线程之间的负载均衡：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">可以使用分区器，有两种分区器</span><br><span class="line">静态分区器：</span><br><span class="line">静态分区器是指多个线程共同处理一个数据源时，每个线程可以处理的数据项的个数是相同的，并且当有的线程先一步处理完任务后，不会帮助其他线程去处理任务，而是会空闲下来，这样做的优点是每个线程需要处理的线程在一开始就确定了，不会产生锁的问题，适合数据元素较多的情况</span><br><span class="line">动态分区器：</span><br><span class="line">动态分区器是指每次向数据项请求并处理完数据之后，会向数据源在此请求数据，类似于能者多劳，适合数据元素较少的情况</span><br></pre></td></tr></table></figure>
+
+<p>互斥锁 自旋锁 读写锁 条件变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">信号量和互斥锁的区别：</span><br><span class="line">首先信号量是一个非负整数变量，它主要用来统计可用资源的个数，当资源足够时，它允许多个线程进行访问</span><br><span class="line">而互斥锁是用来进行互斥的，只允许一个访问者来对资源进行访问</span><br><span class="line"></span><br><span class="line">1.互斥锁是一种简单的加锁的方法来控制对共享资源的访问</span><br><span class="line"></span><br><span class="line">2.条件变量用来自动阻塞一个线程，直到某特殊情况发生为止。通常条件变量和互斥锁同时使用。就是当不满足这个条件时，就将这个线程挂起，满足时在将她唤醒</span><br><span class="line"></span><br><span class="line">3.读写锁与互斥锁类似，读写锁也叫共享互斥锁。读写锁可以有3种状态：读模式下加锁状态、写模式加锁状态、不加锁状态。一次只有一个线程可以占有写模式的读写锁，但是多个线程可以同时占有读模式的读写锁（允许多个线程读但只允许一个线程写）</span><br><span class="line"></span><br><span class="line">4.自旋锁与互斥量功能一样，唯一一点不同的就是其他锁阻塞后休眠让出cpu，而自旋锁阻塞后不会让出cpu，也就表示这个线程在经过一段时间的休眠之后，会再次去申请这段临界区，如果不能，那么就再次进入休眠，重复这个过程称为自旋，适用于持有锁的线程占有短时间的情况下，因为自旋的过程的消耗小于挂起和唤醒</span><br></pre></td></tr></table></figure>
+
+<p>死锁</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">死锁（Deadlock）是在并发编程中一种常见的问题，它发生在多个进程或线程相互等待对方持有的资源而无法继续执行的情况。</span><br><span class="line"></span><br><span class="line">死锁通常涉及多个资源和多个进程（或线程），并满足以下四个必要条件：</span><br><span class="line"></span><br><span class="line">互斥条件（Mutual Exclusion）：至少有一个资源必须是独占的，即同一时刻只能被一个进程或线程持有。</span><br><span class="line">持有并等待（Hold and Wait）：一个进程或线程可以持有一个资源并等待其他进程或线程拥有的资源。</span><br><span class="line">非抢占条件（No Preemption）：资源不能被抢占，即资源只能被持有者显式地释放。</span><br><span class="line">循环等待（Circular Wait）：存在一个进程（或线程）的资源等待序列，使得每个进程（或线程）等待下一个进程（或线程）所持有的资源。</span><br><span class="line">死锁的出现会导致程序无法继续执行，进程或线程陷入无限等待的状态，从而造成系统资源的浪费和程序的停滞。</span><br><span class="line"></span><br><span class="line">解决死锁的方法通常包括以下几种：</span><br><span class="line">避免死锁：通过设计合理的算法和系统结构来避免发生死锁。例如，使用资源分配图等技术来检测和避免死锁的发生。</span><br><span class="line">检测和恢复：实时检测死锁的发生，并采取相应的措施来解除死锁。例如，使用死锁检测算法来识别死锁，然后通过终止部分进程来解除死锁。</span><br><span class="line"></span><br><span class="line">死锁检测：银行家算法，死锁检测器，最简单的超时机制</span><br><span class="line"></span><br><span class="line">预防死锁：通过破坏死锁发生的四个必要条件中的一个或多个来预防死锁。例如，通过实现资源的抢占、按顺序申请资源、以及限制资源的最大占用时间等方法来预防死锁的发生。</span><br><span class="line">避免阻塞：尽量减少资源的持有时间，以降低发生死锁的概率。例如，尽量减少代码中的临界区，及时释放资源等。</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="C-C"><a href="#C-C" class="headerlink" title="C&#x2F;C++:"></a>C&#x2F;C++:</h2><p>排序的时间复杂度：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">快速排序的时间复杂度：最坏情况下是O(n2)，平均情况下是O(nlogn）</span><br><span class="line">堆排序：O(nlogn）</span><br><span class="line">归并排序：O(nlogn）</span><br><span class="line">冒泡O(n2)</span><br><span class="line">选择O(n2)</span><br><span class="line">插入O(n2)</span><br></pre></td></tr></table></figure>
+
+<p>快速排序和归并排序</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">归并排序和快排的相同点：</span><br><span class="line">1，利用分治思想</span><br><span class="line">2，具体实现都用递归</span><br><span class="line">归并排序和快排的不同点：</span><br><span class="line"></span><br><span class="line">1，先分解再合并：归并排序先递归分解到一个元素，然后单个元素开始合并排序，自下而上的合并排序；</span><br><span class="line">2，边分解边排序：快速排序每次都保证参照物左侧的数都小于参照值，右侧的大于参照值；是自上而下的排序；</span><br><span class="line">3，归并排序不是原地排序，快速排序是原地排序，</span><br><span class="line"></span><br><span class="line">快速排序什么时候最好，什么时候最差：</span><br><span class="line">最好：每次选择的点都能够正好的将序列分为大小接近相等的两部分</span><br><span class="line">最差：原序列部分或者已经是有序的了，</span><br><span class="line">每次都选择最小或者最大的点当哨位</span><br></pre></td></tr></table></figure>
+
+<p>unordered_map rehash过程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一般我们在使用unordered_map函数的时候，不会使用到rehash函数，当map容器已经填满时，unordered_map会自动调用rehash函数来增加容器的大小，同样的我们也可以自己手动的调用rehash函数来增加容器大小，将原来的元素重新映射到新的容器中</span><br></pre></td></tr></table></figure>
+
+<p>c&#x2F;c++的区别：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">最主要的区别在于c是面向过程的，c++是面向对象的</span><br><span class="line">他们的后缀不同，c的后缀是.c，c++的后缀是.cpp</span><br><span class="line">c不支持函数重载，c++支持函数重载</span><br></pre></td></tr></table></figure>
+
+<p>虚函数和纯虚函数的区别：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">虚函数是在基类中定义并实现了的，而纯虚函数是在基类中定义但是并没有实现，具体的实现要在子类中</span><br><span class="line">子类继承了父类之后，子类也可以不对虚函数进行重写，但是对于纯虚函数来说，子类继承了父类之后，必须进行重写</span><br><span class="line">带纯虚函数的类叫做抽象类，这种类不能直接生成对象，而只有被继承，并重写其虚函数后，才能使用</span><br></pre></td></tr></table></figure>
+
+<p>c++ stl中有没有线程安全的容器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c++stl中的容器一般都是线程不安全的，但是可以通过增加互斥锁来达到这样一个目的，但是会导致stl的性能下降</span><br></pre></td></tr></table></figure>
+
+<p><strong>用到过那些C++11新特性</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">auto：让编译器在编译的时候就推导出变量的类型。</span><br><span class="line">智能指针：智能指针是C++11库里的一个高级指针类，它能够自动管理动态分配的内存资源，并在适当的时候释放该资源，避免了内存泄漏和野指针等问题，</span><br></pre></td></tr></table></figure>
+
+<p>数据结构栈和队列的区别？一般用在哪些场景，举例，栈和队列经常用的操作</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">栈是先入后出，队列是先入先出，</span><br></pre></td></tr></table></figure>
+
+<p>介绍一下 堆 这个数据结构？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">堆是一个满足父子结点条件的完全二叉树，例如大根堆就是根节点是最大值</span><br></pre></td></tr></table></figure>
+
+<p>介绍一下动态规划的思想？上楼梯问题了解吗？用了动态规划和暴力时间复杂度分别是多少？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">动态规划的思想类似于“我们要模拟完成一个大任务”，这个大任务可以分成若干个小任务，每个任务有若干种决策，每个任务完成后，就到达了一个阶段性状态，动态规划时间复杂度为O(n)</span><br></pre></td></tr></table></figure>
+
+<p>什么是稳定排序？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">稳定排序指具有多个相同关键字的序列经过排序之后，这些记录的相对次序不变，则是稳定排序，稳定排序：冒泡排序，基数排序</span><br><span class="line">不稳定排序：堆排序，快排</span><br></pre></td></tr></table></figure>
+
+<p>智能指针？三大智能指针内部实现和做什么的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">智能指针是C++11库里的一个高级指针类，它能够自动管理动态分配的内存资源，并在适当的时候释放该资源，避免了内存泄漏和野指针等问题，</span><br><span class="line"></span><br><span class="line">常见的智能指针unique_ptr，shared_ptr，weak_ptr</span><br><span class="line">shared_ptr通常用于一些资源创建昂贵比较耗时的场景，当需要共享资源的所有权时，例如，一个资源需要被多个对象共享，但是不知道哪个对象会最后释放它，这时候就可以使用std::shared_ptr&lt;T&gt;。</span><br><span class="line">unique_ptr“独占”所指向的对象，unique_ptr有更小的内存，而且不需要维护引用计数，因此它的性能更好。当我们需要独占所指向的对象时，应该优先使用std::unique_ptr</span><br><span class="line">weak_ptr，weak_ptr一般是通过shared_ptr来创建的，weak_ptr用来指向shared_ptr指向的对象，但是不会增加sheared_ptr的引用计数。只是一个观察者的角色，通过观察shared_ptr来判定资源是否存在</span><br><span class="line">weak_ptr持有的引用计数，不是资源的引用计数，而是同一个资源的观察者的计数</span><br><span class="line">weak_ptr没有提供常用的指针操作，无法直接访问资源，需要先通过lock方法提升为shared_ptr强智能指针，才能访问资源</span><br><span class="line"></span><br><span class="line">shared_ptr实现原理：</span><br><span class="line">主要涉及到引用计数和析构函数</span><br><span class="line">shared_ptr 通过一个引用计数器来跟踪共享对象的引用次数。每当一个新的 shared_ptr 对象指向某个动态分配的内存资源时，引用计数器就会增加。当 shared_ptr 对象超出作用域、被赋予新值、或者被显式调用 reset() 等函数释放资源时，引用计数器就会减少。当引用计数器减少到零时，表示没有 shared_ptr 对象指向该内存资源，于是释放内存资源并销毁相关的控制块。</span><br><span class="line"></span><br><span class="line">shared_ptr 使用一个控制块来管理引用计数和指向动态内存的指针。主要是用来当没有指针指向动态内存的时候，能够正确的释放动态内存</span><br><span class="line"></span><br><span class="line">shared_ptr 的析构函数被设计为自动释放所管理的内存资源。当 shared_ptr 对象超出其作用域时，析构函数会自动被调用，引用计数减少，当引用计数减为零时，控制块会释放动态内存资源，从而避免内存泄漏。</span><br><span class="line"></span><br><span class="line">unique_ptr实现原理：</span><br><span class="line">独占所有权：</span><br><span class="line">unique_ptr 通过设计原则来保证对于同一个动态分配的内存资源，同一时间只能有一个 unique_ptr 指向它。这种独占所有权的设计使得 unique_ptr 不需要维护引用计数，从而避免了引用计数的开销。</span><br><span class="line">控制块：</span><br><span class="line">与 shared_ptr 类似，unique_ptr 也使用一个控制块来管理动态分配的内存资源。控制块通常包含一个指针成员，指向动态分配的内存资源，以及一个析构函数，用于释放内存资源。</span><br><span class="line">析构函数：</span><br><span class="line">unique_ptr 的析构函数被设计为自动释放所管理的内存资源。当 unique_ptr 对象超出其作用域时，析构函数会自动被调用，从而释放动态内存资源，避免内存泄漏。</span><br><span class="line">移动语义：</span><br><span class="line">移动语义是指unique_ptr可以将内存的所有权转让给其他的unique_ptr，使得在函数返回值或者容器元素传递时，可以高效的转移所有权</span><br></pre></td></tr></table></figure>
+
+<p>为什么c++11要设计move</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">为了减少无意义的拷贝和减少内存资源的申请和释放</span><br></pre></td></tr></table></figure>
+
+<p>如果要你设计一个shared_ptr指针，你会怎么设计(有哪些成员函数、成员变量) </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">这个类设计中，SharedPtr类包含了一个指向被管理资源的指针ptr和一个引用计数的指针refCount。当有新的SharedPtr对象指向相同资源时，它们共享同一个refCount，以便正确地跟踪引用计数。当最后一个SharedPtr对象销毁时，释放被管理资源。</span><br><span class="line"></span><br><span class="line">这个类还提供了拷贝构造函数、析构函数、赋值运算符重载，以及解引用操作符和成员访问操作符，使得其行为类似于原生指针。此外，还提供了use_count()函数用于获取当前引用计数，以及isNull()函数用于检查是否为空指针。</span><br></pre></td></tr></table></figure>
+
+<p>vector扩容机制：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">当向vector中插入元素时，如果元素有效个数size与空间容量capacity相等时，vector内部会触发扩容机制</span><br><span class="line">vector的扩容会</span><br><span class="line">1：拷贝旧元素</span><br><span class="line">2：释放旧空间</span><br><span class="line"></span><br><span class="line">因为每次扩容都会拷贝元素并且释放旧空间，因此会产生一系列问题：</span><br><span class="line">内存分配和复制：每次扩容都需要分配新的内存并复制旧元素，这是一个耗时的操作。</span><br><span class="line">迭代器失效：扩容后，所有指向旧元素的迭代器、指针和引用都会失效。</span><br><span class="line">频繁扩容：如果vector每次扩容的空间太小，可能会导致频繁扩容，影响性能。</span><br><span class="line"></span><br><span class="line">为了避免这些问题，可以采取以下措施：</span><br><span class="line">预留容量：如果你提前知道需要存储的元素数量，可以使用reserve()方法预先分配足够的内存。</span><br><span class="line">减少扩容次数：通过合理选择初始容量或使用reserve()来减少扩容的次数。</span><br><span class="line"></span><br><span class="line">windows使用1.5倍扩容，linux使用2倍扩容</span><br></pre></td></tr></table></figure>
+
+<p>函数的调用过程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">当程序执行到一个函数调用语句时，控制流将跳转到被调用函数的起始位置，在函数内部，会创建局部变量来存储参数和在函数内部定义的变量。函数的代码被执行，它可以包含各种语句，例如条件语句、循环等。在函数执行期间，程序可能会调用其他函数。如果函数有返回语句，它将返回一个值。在这种情况下，函数调用表达式可以被替换为返回值。</span><br><span class="line">这里面还涉及到函数栈，每当调用函数的时候，都会创建一个函数栈帧并推入函数栈的顶部，</span><br></pre></td></tr></table></figure>
+
+<p>多态是靠覆盖来实现的，派生类的对象可以赋值给基类的引用，具体调用那个虚函数是看对象是那个类型</p>
+<p>C++为什么使用红黑树?</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">红黑树(红黑树的五个特点)：红黑树，一种二叉查找树(二叉查找树表示树已经排序了，左子树小于根节点，右子树大于)，但在每个结点上增加一个存储位表示结点的颜色，二叉查找树的查找时间为O(lgn)</span><br><span class="line">	1.节点要么为黑色要么为红色</span><br><span class="line">	2.根节点为黑色</span><br><span class="line">    3.叶子节点(Nil空节点)为黑色</span><br><span class="line">    4.红色节点的孩子都为黑色节点</span><br><span class="line">    5.任一节点到叶子节点的路径中黑色节点的数量一致。</span><br></pre></td></tr></table></figure>
+
+<p>讲一下set和unordered_set</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">set的底层是红黑树，unordered_set底层是哈希结构</span><br><span class="line">set和unordered_set区别在于unordered_set不能对加入的数据进行自动排序</span><br><span class="line">这两者都不能对容器内的元素进行随意更改数值，只能先删除之后再插入进行修改数值</span><br><span class="line">set的插入查找删除操作因为底层是红黑树，所以时间复杂度是O(logn)，而unordered_set是常数级别的O(N);</span><br></pre></td></tr></table></figure>
+
+<p>如果想要拦截malloc（即调用malloc时转而调用我们写的函数），应该怎么做。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">可以使用钩子函数来实现重定向标准库函数调用</span><br></pre></td></tr></table></figure>
+
+<p>什么时候必须使用初始化列表</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 当初始化一个引用成员变量时；</span><br><span class="line">2. 初始化一个const成员变量时；</span><br><span class="line">初始化列表中的初始化顺序是由类中的成员声明顺序决定的，不是初始化列表中的排列顺序决定的。</span><br></pre></td></tr></table></figure>
+
+<p>C++STL迭代器的原理</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在C++中的STL容器中，有些容器（vector）可以通过下标索引的方式访问容器里面的数据，但是大部分的容器不能使用这种方式访问容器中的元素。为了统一不同容器的访问方式，STL为每种容器在实现的时候设计了一个内嵌的iterator类，迭代器的作用就是提供一个遍历容器内部所有元素的接口，因此迭代器的内部必须保存一个与容器相关联的指针，然后重载各种运算操作来方便遍历，例如++，——等运算符，</span><br><span class="line">这个类似于智能指针，智能指针也是通过封装一个指针然后通过引用计数或者其他方法来达到自动释放内存的功能，智能指针也需要对-&gt;,++等运算符进行重载</span><br></pre></td></tr></table></figure>
+
+<p>什么是内存对齐</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">内存对齐是指数据在内存中存储时按照一定规则进行排列，使得数据存储的起始地址符合特定的规定，在内存对齐的概念中，最常见的是按字节对齐。在按字节对齐的情况下，数据的起始地址必须是该数据类型所占内存字节大小的整数倍</span><br></pre></td></tr></table></figure>
+
+<p>map的迭代器失效怎么办</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">删除STL容器vector、map中的元素，容易引起迭代器失效问题。</span><br><span class="line">对于vector、deque，他们是序列式容器；当当前元素的iterator被删除后，其后的所有元素的迭代器都会失效，这是因为vector，deque都是连续存储的一段空间，当对其进行erase操作时，其后的每一个元素都会向前移一个位置。迭代器失效时会返回下一个有效的迭代器，it=erase(it)。处理方式见，代码1-2。</span><br><span class="line"></span><br><span class="line">对于list,set,map，删除时只有被删除节点迭代器失效，处理方式在当前迭代器失效前指向下一个迭代器，即erase(it++)。</span><br><span class="line"></span><br><span class="line">这里主要解释一下erase(it++)的执行过程：这句话分三步走，先把iter传值到erase里面，然后iter自增，然后执行erase,所以iter在失效前已经自增了。</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Linux："><a href="#Linux：" class="headerlink" title="Linux："></a>Linux：</h2><p>Linux常见命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">如何查看一个文件中的所有.py文件</span><br><span class="line">ls -A (目录) *.py</span><br><span class="line">查看Linux系统中当前运行的所有进程</span><br><span class="line">top命令用来监控Linux的系统状况，能显示各个进程的资源占用状况</span><br><span class="line"></span><br><span class="line">nice调整进程的优先级</span><br></pre></td></tr></table></figure>
+
+<p>linux 有哪些缓存，分别在哪里会被用到，举一个例子即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">页面缓存（Page Cache）：页面缓存是内核将磁盘上的数据缓存在内存中的一种缓存机制。当应用程序读取文件时，内核会将文件的内容从磁盘读取到内存中，并保留在页面缓存中。这样，如果应用程序再次请求相同的文件，内核可以直接从内存中读取，而不需要再次访问磁盘，从而提高了读取文件的速度。</span><br><span class="line"></span><br><span class="line">使用示例：假设你有一个程序需要读取一个大型日志文件。第一次读取该文件时，内核会将文件内容缓存在页面缓存中。如果稍后再次读取相同的文件，内核将会从页面缓存中读取，而不会再次访问磁盘，从而提高了读取文件的速度。</span><br><span class="line"></span><br><span class="line">inode 缓存：inode 缓存保存了文件系统中每个文件的元数据信息，如文件的权限、大小、所有者等。这样，在文件系统中进行文件访问时，内核可以首先检查 inode 缓存，如果找到相应的 inode，则可以避免频繁地访问磁盘来获取文件的元数据信息。</span><br><span class="line"></span><br><span class="line">使用示例：当你使用 ls -l 命令列出当前目录下的文件时，内核将会使用 inode 缓存来获取每个文件的元数据信息，从而加快列出文件的速度。</span><br><span class="line"></span><br><span class="line">目录项缓存（Directory Entry Cache）：目录项缓存保存了目录中条目（文件和子目录）的索引信息，以加速对文件系统中目录的访问。当需要查找某个文件或目录时，内核可以首先检查目录项缓存，如果找到相应的条目，则可以避免频繁地访问磁盘来获取目录的索引信息。</span><br><span class="line"></span><br><span class="line">使用示例：当你在文件系统中执行 cd 命令切换目录时，内核会使用目录项缓存来查找目标目录的索引信息，从而加快目录切换的速度。</span><br></pre></td></tr></table></figure>
+
+<p>fork() 的原理，哪里体现了fork分配资源？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">调用fork之后，操作系统会为子进程分配新的PCB，用于存储进程的执行状态、上下文信息</span><br><span class="line">之后会复制父进程的堆栈，数据段和代码段，并且子进程会继承父进程的文件描述符和信号处理器等资源，</span><br></pre></td></tr></table></figure>
+
+<p>fork()是把进程从1个变成2个，那么最初的进程是从哪里来的？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">系统启动时先加载内核，然后通过引导程序启动初始进程init或者叫systemd进程，这个进程是所有进程的祖先</span><br></pre></td></tr></table></figure>
+
+<p>启动进程是用户态还是内核态？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">init进程是由内核直接创建的，但他是运行在用户态的</span><br><span class="line">普通进程可以在用户态（User Mode）和内核态（Kernel Mode）之间切换运行，取决于进程当前执行的代码和正在执行的操作。</span><br><span class="line">用户态（User Mode）：在用户态运行时，进程只能访问受限的资源，如进程的用户空间地址、非特权指令、部分系统调用等。大多数应用程序和用户代码都在用户态运行，例如浏览器、文本编辑器、游戏等。</span><br><span class="line"></span><br><span class="line">内核态（Kernel Mode）：在内核态运行时，进程具有更高的特权级别，可以访问系统的全部资源，包括内存、设备、CPU 寄存器等。内核态运行时，进程可以执行特权指令，并直接访问操作系统的内部数据结构和功能。内核态通常用于执行操作系统内核代码和处理硬件中断等特权操作。</span><br></pre></td></tr></table></figure>
+
+<p>进程是通过fork创建的，linux下线程是怎么创建的?</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">可以利用pthread_create来创建线程</span><br><span class="line">要了解并区分内核态和用户态线程</span><br><span class="line">用户态线程的创建：用户空间的线程库pthread负责管理，内核实际上是看不见的，可以看见并操作的最小粒度是进程</span><br><span class="line">内核态创建线程：系统调用clone，由内核直接负责创建、调度、资源分配</span><br></pre></td></tr></table></figure>
+
+<p>如何查看一个程序的调用堆栈</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">可以使用gdb backtrace(gdb bt) 来查看程序的函数调用堆栈</span><br><span class="line">jstack命令可以查看堆栈信息</span><br></pre></td></tr></table></figure>
+
+<p>gdb用法</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gdb是一种程序调试工具</span><br><span class="line">通过在编译的时候增加-g参数来保留调试参数，之后在使用gdb来启动程序来进行调试，包括设置断点，单步执行等</span><br></pre></td></tr></table></figure>
+
+<p>linux用过什么命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">gcc编译</span><br><span class="line">ps查看当前进程</span><br><span class="line">mkdir创建目录</span><br><span class="line">查看当前路径pwd</span><br><span class="line">linux的命令：</span><br><span class="line">insmod加载驱动</span><br><span class="line">rmmod卸载驱动</span><br><span class="line">makefile</span><br></pre></td></tr></table></figure>
+
+<p>查询网络状态的有什么</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">netstat</span><br><span class="line">ping</span><br></pre></td></tr></table></figure>
+
+<p>查询磁盘空间的命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df表示以磁盘分区为单位查看磁盘空间，一般使用df -h将磁盘大小适当显示</span><br><span class="line">du表示显示当前目录的大小	一般使用du -sh</span><br></pre></td></tr></table></figure>
+
+<p>动态链接库和静态链接库</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">动态链接库和静态链接库的区别主要在于库是否在编译的时候被编译进目标代码中去，</span><br><span class="line">动态链接库.so：并没有被编译进目标代码中，只有在程序执行到相关函数的时候才会去调用该函数库中的函数(有需要才会调用)，因此动态库的改变升级会比较方便，但是因为没有编译进代码中去，所以在程序运行的过程中，需要外部库的支持</span><br><span class="line">静态链接库.a：在程序编译的时候就将整个函数库编译进目标代码中，程序编译完成后，就不需要外部库的支持了，但是当静态库发生改变的时候，整个程序又要重新编译</span><br></pre></td></tr></table></figure>
+
+<p>●Linux中如果出现了CPU满载，如何排查问题？</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">首先使用top命令来查看CPU占比最高的进程</span><br><span class="line">然后使用top -H -p pid0命令找到消耗资源最多的线程</span><br><span class="line">最后在使用jstack来打印堆栈信息</span><br></pre></td></tr></table></figure>
+
+<p>为什么多路复用使用epoll</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">多路复用：</span><br><span class="line">多路指的是多个socket网络连接</span><br><span class="line">复用指的是使用一个线程去监听多个文件描述符的状态</span><br><span class="line">IO多路复用指的是一种机制，一个线程可以监视多个描述符，一旦某个描述符就绪（一般是读就绪或者写就绪），能够通知程序进行相应的读写操作。</span><br><span class="line">select：select采用轮询的方式来监视文件描述符，当调用select时会将全部监听的 fd 从用户态空间拷贝至内核态空间并线性扫描一遍找出就绪的 fd 再返回到用户态。并且select可监听的文件描述符数量有限</span><br><span class="line">而poll对比select只是使用了一个pollfd结构而不是select的fd_set结构，仅仅是解决了select的文件描述符数量限制问题</span><br><span class="line"></span><br><span class="line">IO多路复用就是通过一种机制，一个进程可以监视多个描述符，一旦某个描述符就绪，能够通知程序进行相应的读写操作</span><br><span class="line">epoll比select和poll更高效的原因：</span><br><span class="line"></span><br><span class="line">1.epoll 采用红黑树管理文件描述符，红黑树插入和删除的都是时间复杂度 O(logN)，不会随着文件描述符数量增加而改变。而select、poll采用数组或者链表的形式管理文件描述符，那么在遍历文件描述符时，时间复杂度会随着文件描述的增加而增加。</span><br><span class="line"></span><br><span class="line">2.epoll 将文件描述符添加和检测分离，减少了文件描述符拷贝的消耗，select&amp;poll 调用时会将全部监听的 fd 从用户态空间拷贝至内核态空间并线性扫描一遍找出就绪的 fd 再返回到用户态。下次需要监听时，又需要把之前已经传递过的文件描述符再读传递进去，增加了拷贝文件的无效消耗，当文件描述很多时，性能瓶颈更加明显。</span><br><span class="line">而epoll只需要使用epoll_ctl添加一次，后续的检查使用epoll_wait，减少了文件拷贝的消耗。</span><br><span class="line"></span><br><span class="line">epoll的水平触发和边沿触发</span><br><span class="line">水平触发：</span><br><span class="line">socket接收缓冲区不为空 有数据可读 读事件一直触发</span><br><span class="line">socket发送缓冲区不满 可以继续写入数据 写事件一直触发</span><br><span class="line">边沿触发：</span><br><span class="line">socket的接收缓冲区状态变化时触发读事件，即空的接收缓冲区刚接收到数据时触发读事件</span><br><span class="line">socket的发送缓冲区状态变化时触发写事件，即满的缓冲区刚空出空间时触发读事件</span><br></pre></td></tr></table></figure>
+
+<p>Linux中的ioremap函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在系统运行时，驱动程序并不能直接通过物理地址访问I/O内存资源，而必须将它们映射到核心虚地址空间内，通过页表，才能根据映射到的虚拟地址范围，访问这些I/O内存资源。</span><br><span class="line">利用ioremap函数进行内存映射，将物理地址映射为虚拟地址之后，内核就能通过ioremap返回的虚拟地址以虚拟地址-&gt;mmu页表映射-&gt;物理地址的形式正确地访问到物理地址了。</span><br></pre></td></tr></table></figure>
+
+<h2 id="代码："><a href="#代码：" class="headerlink" title="代码："></a>代码：</h2><p>快速排序：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">public static void quickSort(int nums[], int start, int end) &#123;</span><br><span class="line">    //数组有多个元素进行排序</span><br><span class="line">    if (start &lt; end) &#123;</span><br><span class="line">        int base = nums[start];//以要进行排序数组第0个元素为base</span><br><span class="line">        int left = start;//左指针</span><br><span class="line">        int right = end;//右指针</span><br><span class="line">        while (left &lt; right) &#123;</span><br><span class="line">            //从右向左找，比base大，right--</span><br><span class="line">            while (left&lt; right &amp;&amp; nums[right] &gt;= base) &#123;</span><br><span class="line">                right--;</span><br><span class="line">            &#125;</span><br><span class="line">            //比base小，替换left所在位置的数字</span><br><span class="line">            nums[left] = nums[right];</span><br><span class="line">            //从左向右找，比base小，left++</span><br><span class="line">            while (left &lt; right &amp;&amp; nums[left] &lt;= base)&#123;</span><br><span class="line">                left++;</span><br><span class="line">            &#125;</span><br><span class="line">            //比base大，替换right所在位置的数字</span><br><span class="line">            nums[right] = nums[left];</span><br><span class="line">        &#125;</span><br><span class="line">        nums[left] = base;//此时left=right，用base替换这个位置的数字</span><br><span class="line">        //排列比base小的数字的数组</span><br><span class="line">        quickSort(nums, start, left - 1);</span><br><span class="line">        //排列比base大的数字的数组</span><br><span class="line">        quickSort(nums, left + 1, end);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>归并排序：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">template&lt;typename T&gt;</span><br><span class="line">void merge_sort_recursive(T arr[], T reg[], int start, int end) &#123;</span><br><span class="line">    if (start &gt;= end)</span><br><span class="line">        return;</span><br><span class="line">    int len = end - start, mid = (len &gt;&gt; 1) + start;</span><br><span class="line">    int start1 = start, end1 = mid;</span><br><span class="line">    int start2 = mid + 1, end2 = end;</span><br><span class="line">    merge_sort_recursive(arr, reg, start1, end1);</span><br><span class="line">    merge_sort_recursive(arr, reg, start2, end2);</span><br><span class="line">    int k = start;</span><br><span class="line">    while (start1 &lt;= end1 &amp;&amp; start2 &lt;= end2)</span><br><span class="line">        reg[k++] = arr[start1] &lt; arr[start2] ? arr[start1++] : arr[start2++];</span><br><span class="line">    while (start1 &lt;= end1)</span><br><span class="line">        reg[k++] = arr[start1++];</span><br><span class="line">    while (start2 &lt;= end2)</span><br><span class="line">        reg[k++] = arr[start2++];</span><br><span class="line">    for (k = start; k &lt;= end; k++)</span><br><span class="line">        arr[k] = reg[k];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// merge_sort</span><br><span class="line">template&lt;typename T&gt;</span><br><span class="line">void merge_sort(T arr[], const int len) &#123;</span><br><span class="line">    T reg[len];</span><br><span class="line">    merge_sort_recursive(arr, reg, 0, len - 1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>堆排序：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">int n;</span><br><span class="line">void downAdjust(vector&lt;int&gt;&amp; v,int l,int r) &#123;</span><br><span class="line">	int i = l, j = 2*l;</span><br><span class="line">	while(j&lt;=r) &#123;</span><br><span class="line">		if(j+1&lt;=r&amp;&amp;v[j+1] &lt; v[j])j++</span><br><span class="line">		if(v[j] &lt; v[i]) &#123;</span><br><span class="line">			swap(v[i],v[j]);</span><br><span class="line">			i=j;</span><br><span class="line">			j=i*2;</span><br><span class="line">		&#125;else break;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">void create(vector&lt;int&gt;&amp; v) &#123;</span><br><span class="line">	v.resize(n+1);</span><br><span class="line">	for(int i = n-1;i&gt;=0;--i) v[i+1] = v[i];</span><br><span class="line">	for(int i = n/2;i&gt;=1;--i) downAdjust(v,i,n);</span><br><span class="line">&#125;</span><br><span class="line">void heapSort(vector&lt;int&gt;&amp; v) &#123;</span><br><span class="line">	for(int i = n ;i &gt;= 1; --i) &#123;</span><br><span class="line">		cout &lt;&lt; v[i] &lt;&lt;&quot;&quot;;</span><br><span class="line">		swap(v[i],v[1]);</span><br><span class="line">		downAdjust(v,1,i-1);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">int main() &#123;</span><br><span class="line">	vector&lt;int&gt; v&#123;1,5,6,8,7,3&#125;;</span><br><span class="line">	n = v.size();</span><br><span class="line">	create(v);</span><br><span class="line">	heapsort(v);</span><br><span class="line">	return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>反转链表：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;iostream&gt;</span><br><span class="line">#include &lt;algorithm&gt;</span><br><span class="line"></span><br><span class="line">using namespace std;</span><br><span class="line"></span><br><span class="line">const int N = 1e6 + 10;</span><br><span class="line"></span><br><span class="line">int n, k, h, idx;</span><br><span class="line">int link[N], ne[N], e[N];</span><br><span class="line"></span><br><span class="line">int main()</span><br><span class="line">&#123;</span><br><span class="line">    cin &gt;&gt; h &gt;&gt; n &gt;&gt; k;</span><br><span class="line">    for(int i = 0; i &lt; n; i ++ )</span><br><span class="line">    &#123;</span><br><span class="line">        int ad, val, next;</span><br><span class="line">        cin &gt;&gt; ad &gt;&gt; val &gt;&gt; next;</span><br><span class="line">        e[ad] = val, ne[ad] = next;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    while(h != -1)</span><br><span class="line">    &#123;</span><br><span class="line">        link[idx ++] = h;</span><br><span class="line">        h = ne[h];</span><br><span class="line">    &#125;</span><br><span class="line">    for(int i = 0; i + k &lt;= idx; i += k) reverse(link + i, link + i + k);</span><br><span class="line">    for(int i = 0; i &lt; idx; i ++ )</span><br><span class="line">    &#123;</span><br><span class="line">        if(i + 1 &gt;= idx) printf(&quot;%05d %d -1\n&quot;, link[i], e[link[i]]);</span><br><span class="line">        else printf(&quot;%05d %d %05d\n&quot;, link[i], e[link[i]], link[i + 1]);</span><br><span class="line">    &#125;</span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>LFU:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line">struct Node &#123;</span><br><span class="line">    int cnt, time, key, value;</span><br><span class="line">    Node(int _cnt, int _time, int _key, int _value):cnt(_cnt), time(_time), key(_key), value(_value)&#123;&#125;</span><br><span class="line">    bool operator &lt; (const Node&amp; rhs) const &#123;</span><br><span class="line">        return cnt == rhs.cnt ? time &lt; rhs.time : cnt &lt; rhs.cnt;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">class LFUCache &#123;</span><br><span class="line">    // 缓存容量，时间戳</span><br><span class="line">    int capacity, time;</span><br><span class="line">    unordered_map&lt;int, Node&gt; key_table;</span><br><span class="line">    set&lt;Node&gt; S;</span><br><span class="line">public:</span><br><span class="line">    LFUCache(int _capacity) &#123;</span><br><span class="line">        capacity = _capacity;</span><br><span class="line">        time = 0;</span><br><span class="line">        key_table.clear();</span><br><span class="line">        S.clear();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    int get(int key) &#123;</span><br><span class="line">        if (capacity == 0) return -1;</span><br><span class="line">        auto it = key_table.find(key);</span><br><span class="line">        // 如果哈希表中没有键 key，返回 -1</span><br><span class="line">        if (it == key_table.end()) return -1;</span><br><span class="line">        // 从哈希表中得到旧的缓存</span><br><span class="line">        Node cache = it -&gt; second;</span><br><span class="line">        // 从平衡二叉树中删除旧的缓存</span><br><span class="line">        S.erase(cache);</span><br><span class="line">        // 将旧缓存更新</span><br><span class="line">        cache.cnt += 1;</span><br><span class="line">        cache.time = ++time;</span><br><span class="line">        // 将新缓存重新放入哈希表和平衡二叉树中</span><br><span class="line">        S.insert(cache);</span><br><span class="line">        it -&gt; second = cache;</span><br><span class="line">        return cache.value;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    void put(int key, int value) &#123;</span><br><span class="line">        if (capacity == 0) return;</span><br><span class="line">        auto it = key_table.find(key);</span><br><span class="line">        if (it == key_table.end()) &#123;</span><br><span class="line">            // 如果到达缓存容量上限</span><br><span class="line">            if (key_table.size() == capacity) &#123;</span><br><span class="line">                // 从哈希表和平衡二叉树中删除最近最少使用的缓存</span><br><span class="line">                key_table.erase(S.begin() -&gt; key);</span><br><span class="line">                S.erase(S.begin());</span><br><span class="line">            &#125;</span><br><span class="line">            // 创建新的缓存</span><br><span class="line">            Node cache = Node(1, ++time, key, value);</span><br><span class="line">            // 将新缓存放入哈希表和平衡二叉树中</span><br><span class="line">            key_table.insert(make_pair(key, cache));</span><br><span class="line">            S.insert(cache);</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            // 这里和 get() 函数类似</span><br><span class="line">            Node cache = it -&gt; second;</span><br><span class="line">            S.erase(cache);</span><br><span class="line">            cache.cnt += 1;</span><br><span class="line">            cache.time = ++time;</span><br><span class="line">            cache.value = value;</span><br><span class="line">            S.insert(cache);</span><br><span class="line">            it -&gt; second = cache;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>LRU</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line">struct DLinkedNode &#123;</span><br><span class="line">    int key, value;</span><br><span class="line">    DLinkedNode* prev;</span><br><span class="line">    DLinkedNode* next;</span><br><span class="line">    DLinkedNode(): key(0), value(0), prev(nullptr), next(nullptr) &#123;&#125;</span><br><span class="line">    DLinkedNode(int _key, int _value): key(_key), value(_value), prev(nullptr), next(nullptr) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">class LRUCache &#123;</span><br><span class="line">private:</span><br><span class="line">    unordered_map&lt;int, DLinkedNode*&gt; cache;</span><br><span class="line">    DLinkedNode* head;</span><br><span class="line">    DLinkedNode* tail;</span><br><span class="line">    int size;</span><br><span class="line">    int capacity;</span><br><span class="line"></span><br><span class="line">public:</span><br><span class="line">    LRUCache(int _capacity): capacity(_capacity), size(0) &#123;</span><br><span class="line">        // 使用伪头部和伪尾部节点</span><br><span class="line">        head = new DLinkedNode();</span><br><span class="line">        tail = new DLinkedNode();</span><br><span class="line">        head-&gt;next = tail;</span><br><span class="line">        tail-&gt;prev = head;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    int get(int key) &#123;</span><br><span class="line">        if (!cache.count(key)) &#123;</span><br><span class="line">            return -1;</span><br><span class="line">        &#125;</span><br><span class="line">        // 如果 key 存在，先通过哈希表定位，再移到头部</span><br><span class="line">        DLinkedNode* node = cache[key];</span><br><span class="line">        moveToHead(node);</span><br><span class="line">        return node-&gt;value;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    void put(int key, int value) &#123;</span><br><span class="line">        if (!cache.count(key)) &#123;</span><br><span class="line">            // 如果 key 不存在，创建一个新的节点</span><br><span class="line">            DLinkedNode* node = new DLinkedNode(key, value);</span><br><span class="line">            // 添加进哈希表</span><br><span class="line">            cache[key] = node;</span><br><span class="line">            // 添加至双向链表的头部</span><br><span class="line">            addToHead(node);</span><br><span class="line">            ++size;</span><br><span class="line">            if (size &gt; capacity) &#123;</span><br><span class="line">                // 如果超出容量，删除双向链表的尾部节点</span><br><span class="line">                DLinkedNode* removed = removeTail();</span><br><span class="line">                // 删除哈希表中对应的项</span><br><span class="line">                cache.erase(removed-&gt;key);</span><br><span class="line">                // 防止内存泄漏</span><br><span class="line">                delete removed;</span><br><span class="line">                --size;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        else &#123;</span><br><span class="line">            // 如果 key 存在，先通过哈希表定位，再修改 value，并移到头部</span><br><span class="line">            DLinkedNode* node = cache[key];</span><br><span class="line">            node-&gt;value = value;</span><br><span class="line">            moveToHead(node);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void addToHead(DLinkedNode* node) &#123;</span><br><span class="line">        node-&gt;prev = head;</span><br><span class="line">        node-&gt;next = head-&gt;next;</span><br><span class="line">        head-&gt;next-&gt;prev = node;</span><br><span class="line">        head-&gt;next = node;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    void removeNode(DLinkedNode* node) &#123;</span><br><span class="line">        node-&gt;prev-&gt;next = node-&gt;next;</span><br><span class="line">        node-&gt;next-&gt;prev = node-&gt;prev;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    void moveToHead(DLinkedNode* node) &#123;</span><br><span class="line">        removeNode(node);</span><br><span class="line">        addToHead(node);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    DLinkedNode* removeTail() &#123;</span><br><span class="line">        DLinkedNode* node = tail-&gt;prev;</span><br><span class="line">        removeNode(node);</span><br><span class="line">        return node;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>手撕memcpy函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">void* memcpy(void *dst, const void *src, size_t size) &#123;</span><br><span class="line">    char *psrc, *pdst;</span><br><span class="line">    if (dst == NULL || src == NULL) </span><br><span class="line">        return NULL;</span><br><span class="line">    if (dst &lt;= str) &#123;</span><br><span class="line">        psrc = src;</span><br><span class="line">        pdst = dst;</span><br><span class="line">        while (size--) </span><br><span class="line">            *pdst++ = *psrc++;</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        psrc = src + size - 1;</span><br><span class="line">        pdst = dst + size - 1;</span><br><span class="line">        while (size--) &#123;</span><br><span class="line">            *pdst-- = *psrc--;</span><br><span class="line">    &#125;</span><br><span class="line">    return pdst;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>荷包蛋-溏心
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://hlhehe.github.io/2024/03/28/%E8%85%BE%E8%AE%AF%E9%9D%A2%E7%BB%8F%EF%BC%9A/" title="腾讯面经">https://hlhehe.github.io/2024/03/28/腾讯面经：/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag"><i class="fa fa-tag"></i> 面经</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/03/19/Elasticsearch/" rel="prev" title="Elasticsearch">
+                  <i class="fa fa-angle-left"></i> Elasticsearch
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/05/14/ElasticSearch---Search%E8%AF%AD%E6%B3%95/" rel="next" title="ElasticSearch---Search语法">
+                  ElasticSearch---Search语法 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">荷包蛋-溏心</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">229k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">3:28</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script size="200" alpha="0.3" zIndex="-1" src="https://cdnjs.cloudflare.com/ajax/libs/ribbon.js/1.0.2/ribbon.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #4D4D4C;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #F7F7F7;
+      background-image: linear-gradient(#F7F7F7, #F7F7F7);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"waline-server-hlhehes-projects.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"泰酷辣！","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2024/03/28/%E8%85%BE%E8%AE%AF%E9%9D%A2%E7%BB%8F%EF%BC%9A/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+<script type="text/javascript" src="/js/clicklove.js"></script>
+
+</html>
