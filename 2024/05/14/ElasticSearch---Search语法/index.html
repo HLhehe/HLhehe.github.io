@@ -30,13 +30,17 @@
 <meta property="og:site_name" content="Honor">
 <meta property="og:description" content="ElasticSearch查找发送get请求，http:&#x2F;&#x2F;localhost&#x2F;index&#x2F;_search，根据请求体的变化实现复杂的查询功能。">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240528091944544.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240528092412438.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240528092948080.png">
 <meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240515145609468.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240608145940595.png">
 <meta property="article:published_time" content="2024-05-13T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-05-19T08:06:49.737Z">
+<meta property="article:modified_time" content="2024-06-11T06:04:23.535Z">
 <meta property="article:author" content="荷包蛋-溏心">
 <meta property="article:tag" content="ES">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240515145609468.png">
+<meta name="twitter:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240528091944544.png">
 
 
 <link rel="canonical" href="https://hlhehe.github.io/2024/05/14/ElasticSearch---Search%E8%AF%AD%E6%B3%95/">
@@ -95,7 +99,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">24</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">25</span></a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -146,7 +150,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ElasticSearch"><span class="nav-number">1.</span> <span class="nav-text">ElasticSearch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE"><span class="nav-number">1.1.</span> <span class="nav-text">查找</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E6%96%87%E6%A1%A3"><span class="nav-number">1.1.1.</span> <span class="nav-text">查询所有文档</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B2%BE%E7%A1%AE%E5%8C%B9%E9%85%8D%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.2.</span> <span class="nav-text">精确匹配查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%97%E6%AE%B5%E5%8C%B9%E9%85%8D%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.3.</span> <span class="nav-text">字段匹配查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97%E7%B2%BE%E7%A1%AE%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.4.</span> <span class="nav-text">关键字精确查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E5%85%B3%E9%94%AE%E5%AD%97%E7%B2%BE%E7%A1%AE%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.5.</span> <span class="nav-text">多关键字精确查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E6%98%BE%E7%A4%BA%E5%AD%97%E6%AE%B5"><span class="nav-number">1.1.6.</span> <span class="nav-text">指定显示字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E5%AD%97%E6%AE%B5"><span class="nav-number">1.1.7.</span> <span class="nav-text">过滤字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.8.</span> <span class="nav-text">组合查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8C%83%E5%9B%B4%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.9.</span> <span class="nav-text">范围查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E7%B3%8A%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.10.</span> <span class="nav-text">模糊查询</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-number">1.2.</span> <span class="nav-text">排序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E5%AD%97%E6%AE%B5"><span class="nav-number">1.2.1.</span> <span class="nav-text">单字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E5%AD%97%E6%AE%B5"><span class="nav-number">1.2.2.</span> <span class="nav-text">多字段</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E4%BA%AE%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.3.</span> <span class="nav-text">高亮查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.4.</span> <span class="nav-text">分页查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E5%88%86%E9%A1%B5%E9%97%AE%E9%A2%98"><span class="nav-number">1.4.1.</span> <span class="nav-text">深度分页问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.5.</span> <span class="nav-text">聚合查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%92%88%E5%AF%B9%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.5.1.</span> <span class="nav-text">针对数值类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%B6%E8%81%9A%E5%90%88"><span class="nav-number">1.5.2.</span> <span class="nav-text">桶聚合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%81%9A%E8%81%9A%E5%92%8C"><span class="nav-number">1.5.3.</span> <span class="nav-text">聚聚和</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E8%AF%8D%E5%99%A8"><span class="nav-number">1.6.</span> <span class="nav-text">分词器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Elasticsearch-%E7%9A%84-master-%E9%80%89%E4%B8%BE%E6%B5%81%E7%A8%8B%EF%BC%9F"><span class="nav-number">1.7.</span> <span class="nav-text">Elasticsearch 的 master 选举流程？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES%E8%84%91%E8%A3%82%E9%97%AE%E9%A2%98%EF%BC%88%E5%A4%9A%E4%B8%AAmaster%EF%BC%89"><span class="nav-number">1.8.</span> <span class="nav-text">ES脑裂问题（多个master）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES%E7%B4%A2%E5%BC%95%E6%96%87%E6%A1%A3%E7%9A%84%E6%B5%81%E7%A8%8B"><span class="nav-number">1.9.</span> <span class="nav-text">ES索引文档的流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES%E6%9B%B4%E6%96%B0%E5%92%8C%E5%88%A0%E9%99%A4%E6%96%87%E6%A1%A3"><span class="nav-number">1.10.</span> <span class="nav-text">ES更新和删除文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES-search%E6%B5%81%E7%A8%8B"><span class="nav-number">1.11.</span> <span class="nav-text">ES search流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8GC%E6%97%B6%EF%BC%8C%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E5%95%A5"><span class="nav-number">1.12.</span> <span class="nav-text">在GC时，需要注意啥</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B6%E5%8F%91%E4%BF%9D%E8%AF%81%E4%B8%80%E8%87%B4%E6%80%A7%EF%BC%8C%E8%AF%BB%E5%86%99"><span class="nav-number">1.13.</span> <span class="nav-text">并发保证一致性，读写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E9%80%89b-%E6%A0%91%E4%BD%9C%E4%B8%BA%E5%85%A8%E6%96%87%E7%B4%A2%E5%BC%95"><span class="nav-number">1.14.</span> <span class="nav-text">为什么不选b+树作为全文索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A3%81%E7%9B%98%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AD%98%E5%82%A8%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95"><span class="nav-number">1.15.</span> <span class="nav-text">磁盘中如何存储倒排索引</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ElasticSearch"><span class="nav-number">1.</span> <span class="nav-text">ElasticSearch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE"><span class="nav-number">1.1.</span> <span class="nav-text">查找</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E6%89%80%E6%9C%89%E6%96%87%E6%A1%A3"><span class="nav-number">1.1.1.</span> <span class="nav-text">查询所有文档</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B2%BE%E7%A1%AE%E5%8C%B9%E9%85%8D%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.2.</span> <span class="nav-text">精确匹配查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%97%E6%AE%B5%E5%8C%B9%E9%85%8D%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.3.</span> <span class="nav-text">字段匹配查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E9%94%AE%E5%AD%97%E7%B2%BE%E7%A1%AE%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.4.</span> <span class="nav-text">关键字精确查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E5%85%B3%E9%94%AE%E5%AD%97%E7%B2%BE%E7%A1%AE%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.5.</span> <span class="nav-text">多关键字精确查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A%E6%98%BE%E7%A4%BA%E5%AD%97%E6%AE%B5"><span class="nav-number">1.1.6.</span> <span class="nav-text">指定显示字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E5%AD%97%E6%AE%B5"><span class="nav-number">1.1.7.</span> <span class="nav-text">过滤字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BB%84%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.8.</span> <span class="nav-text">组合查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8C%83%E5%9B%B4%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.9.</span> <span class="nav-text">范围查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A8%A1%E7%B3%8A%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.1.10.</span> <span class="nav-text">模糊查询</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F"><span class="nav-number">1.2.</span> <span class="nav-text">排序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E5%AD%97%E6%AE%B5"><span class="nav-number">1.2.1.</span> <span class="nav-text">单字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%9A%E5%AD%97%E6%AE%B5"><span class="nav-number">1.2.2.</span> <span class="nav-text">多字段</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E4%BA%AE%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.3.</span> <span class="nav-text">高亮查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.4.</span> <span class="nav-text">分页查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%B1%E5%BA%A6%E5%88%86%E9%A1%B5%E9%97%AE%E9%A2%98"><span class="nav-number">1.4.1.</span> <span class="nav-text">深度分页问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mysql%E6%B7%B1%E5%BA%A6%E5%88%86%E9%A1%B5%E9%97%AE%E9%A2%98"><span class="nav-number">1.4.2.</span> <span class="nav-text">mysql深度分页问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%81%9A%E5%90%88%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.5.</span> <span class="nav-text">聚合查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%92%88%E5%AF%B9%E6%95%B0%E5%80%BC%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.5.1.</span> <span class="nav-text">针对数值类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A1%B6%E8%81%9A%E5%90%88"><span class="nav-number">1.5.2.</span> <span class="nav-text">桶聚合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%81%9A%E8%81%9A%E5%92%8C"><span class="nav-number">1.5.3.</span> <span class="nav-text">聚聚和</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E8%AF%8D%E5%99%A8"><span class="nav-number">1.6.</span> <span class="nav-text">分词器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E8%A1%A5%E5%85%A8%E6%90%9C%E7%B4%A2"><span class="nav-number">1.7.</span> <span class="nav-text">自动补全搜索</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Elasticsearch-%E7%9A%84-master-%E9%80%89%E4%B8%BE%E6%B5%81%E7%A8%8B%EF%BC%9F"><span class="nav-number">1.8.</span> <span class="nav-text">Elasticsearch 的 master 选举流程？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES%E8%84%91%E8%A3%82%E9%97%AE%E9%A2%98%EF%BC%88%E5%A4%9A%E4%B8%AAmaster%EF%BC%89"><span class="nav-number">1.9.</span> <span class="nav-text">ES脑裂问题（多个master）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES%E7%B4%A2%E5%BC%95%E6%96%87%E6%A1%A3%E7%9A%84%E6%B5%81%E7%A8%8B%EF%BC%88%E4%BF%9D%E5%AD%98%E6%96%87%E6%A1%A3%EF%BC%89"><span class="nav-number">1.10.</span> <span class="nav-text">ES索引文档的流程（保存文档）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES%E6%9B%B4%E6%96%B0%E5%92%8C%E5%88%A0%E9%99%A4%E6%96%87%E6%A1%A3"><span class="nav-number">1.11.</span> <span class="nav-text">ES更新和删除文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES-search%E6%B5%81%E7%A8%8B"><span class="nav-number">1.12.</span> <span class="nav-text">ES search流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8GC%E6%97%B6%EF%BC%8C%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E5%95%A5"><span class="nav-number">1.13.</span> <span class="nav-text">在GC时，需要注意啥</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B6%E5%8F%91%E4%BF%9D%E8%AF%81%E4%B8%80%E8%87%B4%E6%80%A7%EF%BC%8C%E8%AF%BB%E5%86%99"><span class="nav-number">1.14.</span> <span class="nav-text">并发保证一致性，读写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%B8%8D%E9%80%89b-%E6%A0%91%E4%BD%9C%E4%B8%BA%E5%85%A8%E6%96%87%E7%B4%A2%E5%BC%95"><span class="nav-number">1.15.</span> <span class="nav-text">为什么不选b+树作为全文索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A3%81%E7%9B%98%E4%B8%AD%E5%A6%82%E4%BD%95%E5%AD%98%E5%82%A8%E5%80%92%E6%8E%92%E7%B4%A2%E5%BC%95"><span class="nav-number">1.16.</span> <span class="nav-text">磁盘中如何存储倒排索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E5%85%B8%E6%A0%91%E5%9C%A8es%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">1.17.</span> <span class="nav-text">字典树在es中的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%B6%E5%8F%91%E5%9C%BA%E6%99%AF%E4%B8%8B%E6%95%B0%E6%8D%AE%E4%B8%80%E8%87%B4%E6%80%A7%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81"><span class="nav-number">1.18.</span> <span class="nav-text">并发场景下数据一致性如何保证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES%E7%9A%84%E5%AE%9E%E6%97%B6%E6%80%A7"><span class="nav-number">1.19.</span> <span class="nav-text">ES的实时性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#filter%E5%92%8Cquery"><span class="nav-number">1.20.</span> <span class="nav-text">filter和query</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#elasticsearch-%E7%B4%A2%E5%BC%95%E6%95%B0%E6%8D%AE%E5%A4%9A%E4%BA%86%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%8C%E5%A6%82%E4%BD%95%E8%B0%83%E4%BC%98%EF%BC%8C%E9%83%A8%E7%BD%B2"><span class="nav-number">1.21.</span> <span class="nav-text">elasticsearch 索引数据多了怎么办，如何调优，部署</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES%E7%B4%A2%E5%BC%95%E8%AE%BE%E8%AE%A1"><span class="nav-number">1.22.</span> <span class="nav-text">ES索引设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ES%E6%8F%92%E5%85%A5%E5%A4%A7%E9%87%8F%E6%96%87%E6%A1%A3%E3%80%82%EF%BC%88%E6%89%B9%E9%87%8F%E5%86%99%E5%85%A5-%E5%BC%82%E6%AD%A5%E5%86%99%E5%85%A5%EF%BC%89"><span class="nav-number">1.23.</span> <span class="nav-text">ES插入大量文档。（批量写入&#x2F;异步写入）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90id"><span class="nav-number">1.24.</span> <span class="nav-text">自动生成id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-number">1.25.</span> <span class="nav-text">查询优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Doc-values"><span class="nav-number">1.26.</span> <span class="nav-text">Doc values</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -161,7 +165,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">25</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -193,7 +197,7 @@
       <div class="widget-wrap">
     <div id="myCanvasContainer" class="widget tagcloud">
         <canvas width="250" height="250" id="resCanvas" style="width=100%">
-            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES/" rel="tag">ES</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fidder/" rel="tag">Fidder</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MQ/" rel="tag">MQ</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Selenium/" rel="tag">Selenium</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E6%B5%8B%E8%AF%95/" rel="tag">Web测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/faker/" rel="tag">faker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logger/" rel="tag">logger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%9B%E6%89%A3/" rel="tag">力扣</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="tag">性能测试</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag">接口测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag">测试数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag">面经</a><span class="tag-list-count">1</span></li></ul>
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES/" rel="tag">ES</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fidder/" rel="tag">Fidder</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MQ/" rel="tag">MQ</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Selenium/" rel="tag">Selenium</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E6%B5%8B%E8%AF%95/" rel="tag">Web测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/faker/" rel="tag">faker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logger/" rel="tag">logger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%9B%E6%89%A3/" rel="tag">力扣</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="tag">性能测试</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag">接口测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag">测试数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag">面经</a><span class="tag-list-count">1</span></li></ul>
         </canvas>
     </div>
 </div>
@@ -259,7 +263,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-05-19 16:06:49" itemprop="dateModified" datetime="2024-05-19T16:06:49+08:00">2024-05-19</time>
+      <time title="修改时间：2024-06-11 14:04:23" itemprop="dateModified" datetime="2024-06-11T14:04:23+08:00">2024-06-11</time>
     </span>
 
   
@@ -283,14 +287,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>8.6k</span>
+      <span>15k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>8 分钟</span>
+      <span>14 分钟</span>
     </span>
 </div>
 
@@ -329,7 +333,38 @@
 
 <h3 id="分页查询"><a href="#分页查询" class="headerlink" title="分页查询"></a>分页查询</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line"><span class="attr">&quot;query&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line"><span class="attr">&quot;match_all&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;sort&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line"><span class="attr">&quot;age&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line"><span class="attr">&quot;order&quot;</span><span class="punctuation">:</span> <span class="string">&quot;desc&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;from&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">2</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
-<h4 id="深度分页问题"><a href="#深度分页问题" class="headerlink" title="深度分页问题"></a>深度分页问题</h4><h3 id="聚合查询"><a href="#聚合查询" class="headerlink" title="聚合查询"></a>聚合查询</h3><h4 id="针对数值类型"><a href="#针对数值类型" class="headerlink" title="针对数值类型"></a>针对数值类型</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line"><span class="attr">&quot;aggs&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line"><span class="attr">&quot;min_age&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span>#聚合的名称</span><br><span class="line"><span class="attr">&quot;min&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;field&quot;</span><span class="punctuation">:</span><span class="string">&quot;age&quot;</span><span class="punctuation">&#125;</span> #聚合的方式和使用的字段，有max，min<span class="punctuation">,</span>sum，avg<span class="punctuation">,</span>count<span class="punctuation">,</span>stats(前<span class="number">5</span>个都显示)</span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;size&quot;</span><span class="punctuation">:</span><span class="number">0</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<h4 id="深度分页问题"><a href="#深度分页问题" class="headerlink" title="深度分页问题"></a>深度分页问题</h4><ol>
+<li><p>数据存储在各个分片中，协调节点将查询请求转发给各个节点，当各个节点执行搜索后，将排序后的前N条数据返回给协调节点。</p>
+</li>
+<li><p>协调节点汇总各个分片返回的数据，再次排序，最终返回前N条数据给客户端。<strong>协调节点一共需要排序（from+size）*分片数的数据量，就导致很大的数据量，我的妈呀。</strong>（详见es的搜索过程。）</p>
+</li>
+<li><p>这个流程会导致一个深度分页的问题，也就是翻页越多，性能越差，甚至导致ES出现OOM。</p>
+</li>
+</ol>
+<ul>
+<li>scroll search：<strong>减少查询和排序的次数</strong><ul>
+<li>初始化时将所有符合条件的查询结果缓存起来，以后从快照中取数据。</li>
+<li>scroll滚动搜索是先搜索一批数据，然后下次再搜索下一批数据，以此类推，直到搜索出全部的数据来。scroll搜索会在第一次搜索的时候，保存一个当时的视图快照，之后只会基于该视图快照搜索数据，如果在搜索期间数据发生了变更，用户是看不到变更的数据的。因此，滚动查询不适合实时性要求高的搜索场景。</li>
+<li>适合一次性批量查询或非实时数据的分页查询。</li>
+</ul>
+</li>
+<li>search after：通过限定查询的条件，返回上一页最后一条数据，大于它的数据再排序。<strong>协调节点需要排序size*分片数的数据</strong><ul>
+<li>search_after参数通过提供一个活动光标来规避这个问题。这样可以使用上一页的结果来帮助检索下一页。</li>
+<li>使用 search_after 需要具有相同查询和排序值的多个搜索请求。如果在这些请求之间发生刷新，结果的顺序可能会发生变化，从而导致跨页面的结果不一致。为防止出现这种情况，可以创建一个时间点 (PIT) 以保留搜索中的当前索引状态。Point In Time（PIT）是 Elasticsearch 7.10 版本之后才有的新特性。根据pit查询的时候，不用指定索引的名词。</li>
+<li>search_after 需要指定一个唯一的排序字段，通常可以是文档的主键_id字段，同时也可以指定其他的多个字段</li>
+<li>它不适用于大幅度跳页查询，只能查询下一页，不能上翻页</li>
+</ul>
+</li>
+</ul>
+<h4 id="mysql深度分页问题"><a href="#mysql深度分页问题" class="headerlink" title="mysql深度分页问题"></a>mysql深度分页问题</h4><p>原理和上面差不多，都是因为要查询排序前面的很多条数据导致很慢</p>
+<ul>
+<li>关联查询：</li>
+<li>子查询：</li>
+<li>join连接：select * from table as a inner join (select id from table order by id limit m, n) as b on a.id &#x3D; b.id order by a.id;</li>
+<li>游标查询（返回上一次的id）</li>
+<li>select * from table where id &gt; (select id from table order by id limit m, 1) limit n;（不知道上页id时，最推荐写法）</li>
+</ul>
+<h3 id="聚合查询"><a href="#聚合查询" class="headerlink" title="聚合查询"></a>聚合查询</h3><h4 id="针对数值类型"><a href="#针对数值类型" class="headerlink" title="针对数值类型"></a>针对数值类型</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line"><span class="attr">&quot;aggs&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line"><span class="attr">&quot;min_age&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span>#聚合的名称</span><br><span class="line"><span class="attr">&quot;min&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;field&quot;</span><span class="punctuation">:</span><span class="string">&quot;age&quot;</span><span class="punctuation">&#125;</span> #聚合的方式和使用的字段，有max，min<span class="punctuation">,</span>sum，avg<span class="punctuation">,</span>count<span class="punctuation">,</span>stats(前<span class="number">5</span>个都显示)</span><br><span class="line"><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;size&quot;</span><span class="punctuation">:</span><span class="number">0</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
 <h4 id="桶聚合"><a href="#桶聚合" class="headerlink" title="桶聚合"></a>桶聚合</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line"><span class="attr">&quot;aggs&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line"><span class="attr">&quot;age_groupby&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line"><span class="attr">&quot;terms&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span><span class="attr">&quot;field&quot;</span><span class="punctuation">:</span><span class="string">&quot;age&quot;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span>#类似sql中的group by</span><br><span class="line"><span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;size&quot;</span><span class="punctuation">:</span><span class="number">0</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
 
@@ -355,6 +390,38 @@
 </ul>
 </li>
 </ul>
+<p><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240528091944544.png" alt="image-20240528091944544"></p>
+<h3 id="自动补全搜索"><a href="#自动补全搜索" class="headerlink" title="自动补全搜索"></a>自动补全搜索</h3><ol>
+<li>安装拼音分词器，<a target="_blank" rel="noopener" href="https://github.com/infinilabs/analysis-pinyin">https://github.com/infinilabs/analysis-pinyin</a></li>
+<li>自定义分词器（只针对当前索引test有效）</li>
+</ol>
+<p><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240528092412438.png" alt="image-20240528092412438"></p>
+<ol start="3">
+<li>创建索引是使用自定义的分词器，而搜索时，不宜用自定义的分词器（会按照拼音进行搜索，应该根据用户输入的内容进行搜索），故选择ik-smart分词器。</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240528092948080.png" alt="image-20240528092948080" style="zoom:67%;" />
+
+<ol start="4">
+<li><p>elasticsearch提供了<a target="_blank" rel="noopener" href="https://www.elastic.co/guide/en/elasticsearch/reference/7.6/search-suggesters.html">Completion Suggester</a>查询来实现自动补全功能。这个查询会匹配以用户输入内容开头的词条并返回。为了提高补全查询的效率，对于文档中字段的类型有一些约束：</p>
+<ul>
+<li><p>参与补全查询的字段必须是completion类型。且该字段也是用自定义分词器（方便后续查询补全功能，一般使用keyword分词器加py分词器,本身就是词条，没必要再分词了，故使用keyword）</p>
+<ul>
+<li><pre><code>&quot;completion_analyzer&quot;: &#123;
+          &quot;tokenizer&quot;: &quot;keyword&quot;,
+          &quot;filter&quot;: &quot;py&quot;
+        &#125;
+        
+&quot;suggestion&quot;:&#123;
+          &quot;type&quot;: &quot;completion&quot;,
+          &quot;analyzer&quot;: &quot;completion_analyzer&quot;
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">   - 字段的内容一般是用来补全的多个词条形成的数组。</span><br><span class="line"></span><br><span class="line">   - &lt;img src=&quot;https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240528093442419.png&quot; alt=&quot;image-20240528093442419&quot; style=&quot;zoom:67%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">5. 改造实体类对象，定义suggest字段用于存放对应的补全字段（可来自多个字段的String集合，具体由自己定义构造函数，由已有字段生成）</span><br><span class="line"></span><br><span class="line">6. &lt;img src=&quot;https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240528095636464.png&quot; alt=&quot;image-20240528095636464&quot; style=&quot;zoom:67%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">7. &lt;img src=&quot;https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240528100105275.png&quot; alt=&quot;image-20240528100105275&quot; style=&quot;zoom:67%;&quot; /&gt;</span><br><span class="line"></span><br><span class="line">8. 纠错查询，使用fuzzy来容忍模糊查询</span><br><span class="line"></span><br><span class="line">   - ```</span><br><span class="line">     POST /book/_search</span><br><span class="line">     &#123;</span><br><span class="line">       &quot;suggest&quot;: &#123;</span><br><span class="line">         &quot;book-suggest&quot;: &#123;</span><br><span class="line">           &quot;prefix&quot;: &quot;三国眼&quot;,</span><br><span class="line">           &quot;completion&quot;: &#123;</span><br><span class="line">             &quot;field&quot;: &quot;title.suggest&quot;,</span><br><span class="line">             &quot;size&quot;: 5,</span><br><span class="line">              &quot;fuzzy&quot;: &#123;</span><br><span class="line">               &quot;fuzziness&quot;: 2</span><br><span class="line">             &#125;</span><br><span class="line">           &#125;</span><br><span class="line">         &#125;</span><br><span class="line">       &#125;</span><br><span class="line">     &#125;</span><br><span class="line">     </span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
 <h3 id="Elasticsearch-的-master-选举流程？"><a href="#Elasticsearch-的-master-选举流程？" class="headerlink" title="Elasticsearch 的 master 选举流程？"></a>Elasticsearch 的 master 选举流程？</h3><ol>
 <li>Elasticsearch 的选主是 ZenDiscovery 模块负责的，主要包含 Ping （节点之间通过这个 RPC 来发现彼此）和 Unicast（单播模块包含一个主机列表以控制哪些节点需要 ping 通）这两部分</li>
 <li>对所有可以成为 master 的节点（node.master: true）根据 nodeId 字典排序，每次选举每个节点都把自己所知道节点排一次序，然后选出第一个（第 0 位）节点，暂且认为它是 master 节点。</li>
@@ -384,12 +451,15 @@
 </ul>
 </li>
 </ul>
-<h3 id="ES索引文档的流程"><a href="#ES索引文档的流程" class="headerlink" title="ES索引文档的流程"></a>ES索引文档的流程</h3><ul>
+<h3 id="ES索引文档的流程（保存文档）"><a href="#ES索引文档的流程（保存文档）" class="headerlink" title="ES索引文档的流程（保存文档）"></a>ES索引文档的流程（保存文档）</h3><ul>
 <li><p>协调节点默认使用文档 ID 参与计算（也支持通过 routing），以便为路由提供合适的分片：shard &#x3D; hash(document_id) % (num_of_primary_shards)</p>
 </li>
 <li><p>当分片所在的节点接收到来自协调节点的请求后，会将请求写入到 Memory Buffer，然后定时（默认是每隔 1 秒）写入到 Filesystem Cache，这个从 Memory Buffer 到Filesystem Cache 的过程就叫做 refresh；</p>
 </li>
 <li><p>当然在某些情况下，存在 Momery Buffer 和 Filesystem Cache 的数据可能会丢失，ES 是通过 translog的机制来保证数据的可靠性的。其实现机制是接收到请求后，同时也会写入到 translog 中，当 Filesystemcache 中的数据写入到磁盘中时，才会清除掉，这个过程叫做 flush；</p>
+<ul>
+<li>ES 数据丢失的问题：translog 也是先写入 Filesystem cache，然后默认每隔 5 秒刷一次到磁盘中，所以默认情况下，可能有 5 秒的数据会仅仅停留在 memory buffer 或者 translog 文件的 Filesystem cache中，而不在磁盘上，如果此时机器宕机，会丢失 5 秒钟的数据。也可以将 translog 设置成每次写操作必须是直接 fsync 到磁盘，但是性能会差很多。</li>
+</ul>
 </li>
 <li><p>在 flush 过程中，内存中的缓冲将被清除，内容被写入一个新段，段的 fsync 将创建一个新的提交点，并将内容刷新到磁盘，旧的 translog 将被删除并开始一个新的 translog。</p>
 </li>
@@ -450,6 +520,95 @@
 </ul>
 </li>
 </ul>
+<h3 id="字典树在es中的应用"><a href="#字典树在es中的应用" class="headerlink" title="字典树在es中的应用"></a>字典树在es中的应用</h3><ul>
+<li><p>倒排索引（Inverted Index）：ES使用倒排索引来快速查找包含特定词条的文档。在倒排索引中，每个词条都映射到包含该词条的文档列表。字典树可以用于构建这种倒排索引，其中每个节点代表一个词条的字符，从根节点开始，沿着路径可以得到包含该前缀的文档列表。</p>
+</li>
+<li><p>全文搜索（Full-Text Search）：ES支持全文搜索，允许用户搜索文本中的任意词条。字典树可以用于存储文档中的单词，使得搜索引擎可以快速地定位包含特定单词的文档。</p>
+</li>
+<li><p>前缀搜索（Prefix Search）：ES允许用户进行前缀搜索，即查找以特定前缀开头的词条。字典树是实现前缀搜索的理想数据结构，因为它可以有效地存储以相同前缀开头的词条，并且可以快速地找到满足特定前缀条件的所有词条。</p>
+</li>
+<li><p>自动补全（Autocomplete）：基于用户输入提供自动补全建议是许多应用中常见的需求。字典树可以用于实现自动补全功能，它可以快速地查找以用户输入的前缀开头的词条，并提供相应的建议。</p>
+</li>
+</ul>
+<h3 id="并发场景下数据一致性如何保证"><a href="#并发场景下数据一致性如何保证" class="headerlink" title="并发场景下数据一致性如何保证"></a>并发场景下数据一致性如何保证</h3><ul>
+<li><p>对于更新操作：</p>
+<p>Elasticsearch 使用乐观并发控制（Optimistic Concurrency Control）来处理并发更新场景。当多个客户端同时尝试更新同一个文档时，Elasticsearch 会比较文档的版本号，并且只允许具有最新版本号的客户端执行更新操作。这样可以避免并发更新导致的数据不一致问题。</p>
+<p>利用_version的这一优点确保数据不会因为修改冲突而丢失，比如指定文档的version来做更改，如果那个版本号不是现在的，我们的请求就失败了。</p>
+</li>
+<li><p>对于写操作</p>
+<p>一致性级别支持 quorum&#x2F;one&#x2F;all，默认为 quorum，即只有当大多数分片可用时才允许写操作。但即使大多数可用，也可能存在因为网络等原因导致写入副本失败，这样该副本被认为故障，副本将会在一个不同的节点上重建。</p>
+<p>one：写操作只要有一个primary shard是active活跃可用的，就可以执行<br> all：写操作必须所有的primary shard和replica shard都是活跃可用的，才可以执行<br> quorum：默认值，要求ES中大部分的shard是活跃可用的，才可以执行写操作</p>
+</li>
+<li><p>对于读操作</p>
+<p>可以设置 replication 为 sync(默认)</p>
+<p>这使得操作在主分片和副本分片都完成后才会返回；如果设置replication 为 async 时，也可以通过设置搜索请求参数 _preference 为 primary 来查询主分片，确保文档是最新版本</p>
+</li>
+</ul>
+<h3 id="ES的实时性"><a href="#ES的实时性" class="headerlink" title="ES的实时性"></a>ES的实时性</h3><p>ES近实时，Elasticsearch 支持实时刷新（Real-Time Refresh）功能，允许索引的变更立即可见。默认情况下，Elasticsearch 每秒钟会执行一次索引刷新操作，将内存中的索引数据刷新到磁盘上，从而使得新索引的文档对搜索可见</p>
+<h3 id="filter和query"><a href="#filter和query" class="headerlink" title="filter和query"></a>filter和query</h3><ul>
+<li>缓存机制：<ul>
+<li>filter 查询的结果可以被缓存，这意味着相同的 filter 查询可以被多次重用，从而提高了性能。</li>
+<li>query 查询的结果默认情况下不会被缓存，每次执行查询都会重新计算。</li>
+</ul>
+</li>
+<li>评分机制：<ul>
+<li>query 查询会根据文档与查询的匹配程度计算一个评分（score），并按照评分进行排序，默认情况下，查询结果会按照评分从高到低排序。</li>
+<li>filter 查询不会计算评分，它只是用来过滤文档，返回与查询匹配的文档，而不关心匹配程度。</li>
+</ul>
+</li>
+<li>语义：<ul>
+<li>query 查询用于描述文档与查询的匹配程度，它会考虑到查询中的全文检索、词条匹配、相似度等因素。</li>
+<li>filter 查询主要用于过滤文档，根据指定的条件来筛选文档，它主要关注于查询条件的匹配与否，而不关心匹配程度。（精确查询）</li>
+</ul>
+</li>
+<li>性能：<ul>
+<li>由于不涉及评分计算，filter 查询通常比 query 查询性能更好，特别是在过滤大量文档时。</li>
+<li>query 查询的性能通常会受到评分计算的影响，特别是当查询结果需要排序时，性能可能会受到更大的影响。</li>
+</ul>
+</li>
+</ul>
+<h3 id="elasticsearch-索引数据多了怎么办，如何调优，部署"><a href="#elasticsearch-索引数据多了怎么办，如何调优，部署" class="headerlink" title="elasticsearch 索引数据多了怎么办，如何调优，部署"></a>elasticsearch 索引数据多了怎么办，如何调优，部署</h3><ol>
+<li>在设计的时候可以基于模板+时间滚动方式创建索引，每天递增数据，避免单个索引很大的情况出现。</li>
+<li>在存储的时候，冷热数据分开存储,比如最近3天的数据作为热数据，其他的作为冷数据，冷数据的话，由于不会再写入新数据了，可以考虑定期force_merge（强制合并，段合并，释放.del标记的文档空间）和shrink（压缩）的方式进行处理，节约空间和检索效率</li>
+<li>由于es支持动态扩展，所有可以多加几台机器来缓解集群压力。</li>
+</ol>
+<h3 id="ES索引设计"><a href="#ES索引设计" class="headerlink" title="ES索引设计"></a>ES索引设计</h3><ol>
+<li>根据业务增量需求，采取基于日期模板创建索引，通过roll over API滚动索引；</li>
+<li>使用别名进行索引管理；</li>
+<li>每天凌晨定时对索引做force_merge(合并.del等文件)操作，以释放空间；</li>
+<li>采取冷热分离机制，热数据存储到SSD，提高检索效率；冷数据定期进行shrink（压缩，降低分片数量）操作，以缩减存储；</li>
+<li>采取curator进行索引的生命周期管理；</li>
+<li>仅针对需要分词的字段，合理的设置分词器；</li>
+<li>Mapping阶段充分结合各个字段的属性，是否需要检索、是否需要存储等。</li>
+</ol>
+<h3 id="ES插入大量文档。（批量写入-异步写入）"><a href="#ES插入大量文档。（批量写入-异步写入）" class="headerlink" title="ES插入大量文档。（批量写入&#x2F;异步写入）"></a>ES插入大量文档。（批量写入&#x2F;异步写入）</h3><ol>
+<li>写入前副本数设置为0；（**如果存在副本,则写完主分片以后,会将请求转发给所有的副本分片,等所有的分片写完成以后才算写入成功,**写入到副本分片的数据也需要索引的过程,批量写入的时间会比较长）</li>
+<li>写入前关闭refresh_interval设置为-1，禁用刷新机制；（以加快导入速度。导入结束后，再改回正数或手动刷新）</li>
+<li>写入过程中：采取bulk批量写入；</li>
+<li>写入后恢复副本数和刷新间隔；</li>
+<li>尽量使用自动生成的id。<ul>
+<li>从性能优化层面来讲，Elasticsearch自动生成的ID经过了专门的优化，旨在减少数据插入时的性能开销。</li>
+<li>分布式环境中的唯一性保证</li>
+<li>减少索引碎片化</li>
+<li>不用进行唯一性检查，直接生成新的id。（数据量大时能减少时间）</li>
+<li>简化应用程序设计采用Elasticsearch自动生成的ID可以简化应用程序的设计。不需要额外考虑ID生成的逻辑，开发者可以将更多的精力集中在核心业务逻辑上，从而提高开发效率和减少错误。</li>
+<li>缺点：相同文档的重复插入会生成不同的id；（有重复插入问题）</li>
+</ul>
+</li>
+<li>当写入数据时，<strong>确保bulk请求时轮询访问所有节点。</strong>不要发送所有请求到一个节点，导致这一个节点要在内存存储所有请求的数据去处理</li>
+</ol>
+<h3 id="自动生成id"><a href="#自动生成id" class="headerlink" title="自动生成id"></a>自动生成id</h3><p>虽然自动生成的 ID 在索引内是唯一的，但它们在集群中的所有索引中并不是全局唯一的。 如果<strong>两个文档在两个不同的索引中</strong>具有相同的自动生成 ID，则它们将<strong>被视为两个不同的文档</strong>。使用128为Base 64编码的uuid。</p>
+<h3 id="查询优化"><a href="#查询优化" class="headerlink" title="查询优化"></a>查询优化</h3><ol>
+<li>禁用 wildcard查询（导致cpu太高，（不是该类型的字段）（避免出现这种大字段的模糊匹配的查询，cpu干烧）；</li>
+<li>禁用批量 terms（成百上千的场景）；</li>
+<li>充分利用倒排索引机制，能 keyword 类型尽量 keyword；</li>
+<li>数据量大时候，可以先基于时间敲定索引再检索；</li>
+<li>设置合理的路由机制。</li>
+</ol>
+<h3 id="Doc-values"><a href="#Doc-values" class="headerlink" title="Doc values"></a>Doc values</h3><p>Elasticsearch除了强大的搜索功能外，还可以支持排序，聚合之类的操作。搜索需要用到倒排索引，而排序和聚合则需要使用 “正排索引”。说白了就是一句话，倒排索引的优势在于查找包含某个项的文档，而反过来确定哪些项在单个文档里并不高效。</p>
+<p>doc_values和fielddata就是用来给文档建立<strong>正排索引</strong>的。他俩一个很显著的区别是，前者的工作地盘主要在磁盘，而后者的工作地盘在内存。</p>
+<p>DocValues是在索引时与倒排索引同时生成的，并且是不可变的。与倒排一样，保存在lucene文件中（序列化到磁盘）。lucene文件操作依赖于操作系统的缓存来管理，而不是在 JVM 堆栈里驻留数据。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240608145940595.png" alt="image-20240608145940595" style="zoom:67%;" />
 
     </div>
 
@@ -488,6 +647,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2024/06/07/RabbitMq---%E9%9D%A2%E8%AF%95/" rel="next" title="RabbitMq---面试">
+                  RabbitMq---面试 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -520,14 +682,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">229k</span>
+    <span title="站点总字数">240k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">3:28</span>
+    <span title="站点阅读时长">3:38</span>
   </span>
 </div>
 <div class="busuanzi-count">

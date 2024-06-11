@@ -23,33 +23,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"hlhehe.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"show_result":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="接口测试基础接口：系统之间数据交互的通道。 接口测试：基于不同的输入参数，校验接口响应数据与预期数据是否一致。">
+    <meta name="description" content="blackholed(黑洞)blackholed 问题是指，向 exchange 投递了 message ，而由于各种原因导致该message 丢失，但发送者却不知道。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="接口自动化测试---基础">
-<meta property="og:url" content="https://hlhehe.github.io/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:title" content="RabbitMq---面试">
+<meta property="og:url" content="https://hlhehe.github.io/2024/06/07/RabbitMq---%E9%9D%A2%E8%AF%95/index.html">
 <meta property="og:site_name" content="Honor">
-<meta property="og:description" content="接口测试基础接口：系统之间数据交互的通道。 接口测试：基于不同的输入参数，校验接口响应数据与预期数据是否一致。">
+<meta property="og:description" content="blackholed(黑洞)blackholed 问题是指，向 exchange 投递了 message ，而由于各种原因导致该message 丢失，但发送者却不知道。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130192119149.png">
-<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130193147639.png">
-<meta property="article:published_time" content="2023-11-30T09:21:21.000Z">
-<meta property="article:modified_time" content="2023-12-16T01:33:09.725Z">
+<meta property="article:published_time" content="2024-06-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-06-11T06:04:20.380Z">
 <meta property="article:author" content="荷包蛋-溏心">
-<meta property="article:tag" content="接口测试">
-<meta property="article:tag" content="测试">
-<meta property="article:tag" content="python">
+<meta property="article:tag" content="MQ">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130192119149.png">
 
 
-<link rel="canonical" href="https://hlhehe.github.io/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/">
+<link rel="canonical" href="https://hlhehe.github.io/2024/06/07/RabbitMq---%E9%9D%A2%E8%AF%95/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hlhehe.github.io/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/","path":"2023/11/30/接口测试--基础/","title":"接口自动化测试---基础"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hlhehe.github.io/2024/06/07/RabbitMq---%E9%9D%A2%E8%AF%95/","path":"2024/06/07/RabbitMq---面试/","title":"RabbitMq---面试"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>接口自动化测试---基础 | Honor</title>
+<title>RabbitMq---面试 | Honor</title>
   
 
 
@@ -149,7 +144,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">接口测试基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-number">1.1.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL"><span class="nav-number">1.2.</span> <span class="nav-text">URL</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTTP%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.3.</span> <span class="nav-text">HTTP协议</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP%E8%AF%B7%E6%B1%82"><span class="nav-number">1.3.1.</span> <span class="nav-text">HTTP请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#HTTP%E5%93%8D%E5%BA%94"><span class="nav-number">1.3.2.</span> <span class="nav-text">HTTP响应</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95"><span class="nav-number">2.</span> <span class="nav-text">接口自动化测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Requests%E5%BA%93"><span class="nav-number">2.1.</span> <span class="nav-text">Requests库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Requests%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82"><span class="nav-number">2.1.1.</span> <span class="nav-text">Requests发送请求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Response%E5%93%8D%E5%BA%94"><span class="nav-number">2.1.2.</span> <span class="nav-text">Response响应</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8"><span class="nav-number">2.1.3.</span> <span class="nav-text">使用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%93%8D%E5%BA%94%E7%A0%81"><span class="nav-number">3.</span> <span class="nav-text">响应码</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#blackholed-%E9%BB%91%E6%B4%9E"><span class="nav-number">1.</span> <span class="nav-text">blackholed(黑洞)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mandatory"><span class="nav-number">2.</span> <span class="nav-text">mandatory</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vHost"><span class="nav-number">3.</span> <span class="nav-text">vHost</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Basic-Reject"><span class="nav-number">4.</span> <span class="nav-text">Basic.Reject</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Mirrored-queue%EF%BC%88%E9%95%9C%E5%83%8F%E9%98%9F%E5%88%97%EF%BC%89"><span class="nav-number">5.</span> <span class="nav-text">Mirrored queue（镜像队列）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Warrens"><span class="nav-number">6.</span> <span class="nav-text">Warrens</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E5%9F%BA%E4%BA%8E%E4%BB%80%E4%B9%88%E4%BC%A0%E8%BE%93"><span class="nav-number">7.</span> <span class="nav-text">消息基于什么传输</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E8%AE%A1MQ"><span class="nav-number">8.</span> <span class="nav-text">设计MQ</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%94%9F%E4%BA%A7%E8%80%85%E6%B6%88%E6%81%AF%E6%80%8E%E4%B9%88%E8%BF%90%E8%BD%AC"><span class="nav-number">9.</span> <span class="nav-text">生产者消息怎么运转</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%83%E6%95%B0%E6%8D%AE"><span class="nav-number">10.</span> <span class="nav-text">元数据</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RAM-node%E5%92%8Cdisk-node%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="nav-number">11.</span> <span class="nav-text">RAM node和disk node的区别？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%8D%E8%AF%8D"><span class="nav-number">12.</span> <span class="nav-text">名词</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E5%A0%86%E7%A7%AF"><span class="nav-number">13.</span> <span class="nav-text">消息堆积</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -226,7 +221,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://hlhehe.github.io/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/">
+    <link itemprop="mainEntityOfPage" href="https://hlhehe.github.io/2024/06/07/RabbitMq---%E9%9D%A2%E8%AF%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
@@ -239,12 +234,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="接口自动化测试---基础 | Honor">
+      <meta itemprop="name" content="RabbitMq---面试 | Honor">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          接口自动化测试---基础
+          RabbitMq---面试
         </h1>
 
         <div class="post-meta-container">
@@ -255,14 +250,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-11-30 17:21:21" itemprop="dateCreated datePublished" datetime="2023-11-30T17:21:21+08:00">2023-11-30</time>
+      <time title="创建时间：2024-06-07 00:00:00" itemprop="dateCreated datePublished" datetime="2024-06-07T00:00:00+08:00">2024-06-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-12-16 09:33:09" itemprop="dateModified" datetime="2023-12-16T09:33:09+08:00">2023-12-16</time>
+      <time title="修改时间：2024-06-11 14:04:20" itemprop="dateModified" datetime="2024-06-11T14:04:20+08:00">2024-06-11</time>
     </span>
 
   
@@ -274,8 +269,8 @@
     </span>
     <span class="post-meta-item-text">Waline：</span>
   
-    <a title="waline" href="/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/#waline" itemprop="discussionUrl">
-      <span class="post-comments-count waline-comment-count" data-path="/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/" itemprop="commentCount"></span>
+    <a title="waline" href="/2024/06/07/RabbitMq---%E9%9D%A2%E8%AF%95/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2024/06/07/RabbitMq---%E9%9D%A2%E8%AF%95/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -286,14 +281,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>2.6k</span>
+      <span>4.3k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>2 分钟</span>
+      <span>4 分钟</span>
     </span>
 </div>
 
@@ -303,134 +298,92 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h2 id="接口测试基础"><a href="#接口测试基础" class="headerlink" title="接口测试基础"></a>接口测试基础</h2><p>接口：系统之间数据交互的通道。</p>
-<p>接口测试：基于不同的输入参数，校验接口响应数据与预期数据是否一致。<span id="more"></span></p>
-<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><ul>
-<li>接口文档解析——一般都有对应得接口信息。如没有，则自行获取。对于web接口，可以采用开发者模式F12得到相应的接口信息。对于app接口，则采用抓包的方式获取接口信息，如Fidder</li>
-<li>设计测试用例</li>
-<li>脚本开发</li>
-<li>执行脚本</li>
-<li>缺陷跟踪</li>
-<li>测试报告</li>
-</ul>
-<h3 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h3><p>URL：是互联网上标准资源得地址，一般称为统一资源定位符</p>
-<p>组成：协议::&#x2F;&#x2F;hostname[:port]&#x2F;path&#x2F;[?查询参数1&amp;查询参数2]，即协议，服务器地址，端口号，资源路径，参数</p>
-<h3 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h3><p>HTTP：超文本传输协议，基于请求与响应的应用层协议</p>
+    <div class="post-body" itemprop="articleBody"><h4 id="blackholed-黑洞"><a href="#blackholed-黑洞" class="headerlink" title="blackholed(黑洞)"></a>blackholed(黑洞)</h4><p>blackholed 问题是指，向 exchange 投递了 message ，而由于各种原因导致该message 丢失，但发送者却不知道。<span id="more"></span></p>
 <ul>
-<li>HTTP请求（请求行，请求头，请求体）</li>
-<li>HTTP响应（响应行，响应头，响应体）</li>
+<li>声明 exchange 后未绑定任何 queue ，此时发送到该 exchange 上的 message 均被 blackholed ；</li>
+<li>声明 exchange 后绑定了 queue ，但发送到该 exchange 上的 message 所使用的 routing_key 不匹配任何 binding_key ，则 blackholed 。</li>
 </ul>
-<h4 id="HTTP请求"><a href="#HTTP请求" class="headerlink" title="HTTP请求"></a>HTTP请求</h4><ul>
-<li><p>请求行：<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130192119149.png" alt="image-20231130192119149"></p>
+<h4 id="mandatory"><a href="#mandatory" class="headerlink" title="mandatory"></a>mandatory</h4><p>交换器无法根据自身类型和路由键找到符合条件队列时, 决定 message 将被如何处理，是被 exchange 直接丢弃还是由其发回给 producer</p>
+<p>mandatory ：true 返回消息给生产者。<br>mandatory: false 直接丢弃。</p>
 <ul>
-<li><p>位置：第一行</p>
-</li>
-<li><p>作用：说明请求方法、访问的资源、协议版本</p>
-</li>
-<li><p>常用方法</p>
+<li>Publisher confirm 机制是用来确认 message 的可靠投递，</li>
+<li>mandatory 参数是用来确保在 queue 不存在的情况下，message 不会被 blackholed 。</li>
+</ul>
+<h4 id="vHost"><a href="#vHost" class="headerlink" title="vHost"></a>vHost</h4><p>vhost(虚拟主机)是一种逻辑隔离机制，用于将消息队列和相关资源隔离开来。虚拟主机允许您在单个RabbitMQ服务器上创建多个独立的消息队列环境，每个环境都有自己的队列、交换机、绑定和权限设置。vhost提供了逻辑上的隔离，允许不同的应用程序或不同的团队在同一个RabbitMQ服务器上使用相同的资源，而不会相互干扰。每个vhost都是独立的消息队列环境，具有自己的命名空间，消息队列和交换机只能在其所属的vhost内可见。</p>
+<h4 id="Basic-Reject"><a href="#Basic-Reject" class="headerlink" title="Basic.Reject"></a><strong>Basic.Reject</strong></h4><p>消费者手动拒绝响应，拒绝该消息。</p>
+<p>若在该信令中设置requeue&#x3D;true，则当 RabbitMQ server 收到该拒绝信令后，会将该 message 重新发送到下一个处于 consume 状态的 consumer 处（理论上仍可能将该消息发送给当前consumer）。若设置 requeue&#x3D;false ，则 RabbitMQ server 在收到拒绝信令后，将直接将该message 从 queue 中移除。</p>
 <ul>
-<li>Get</li>
-<li>Post</li>
-<li>Put</li>
-<li>Delect</li>
+<li>另外一种移除 queue 中 message 的小技巧是，consumer 回复 Basic.Ack 但不对获取到的message 做任何处理。而 <strong>Basic.Nack</strong> 是对 Basic.Reject 的扩展，以支持一次拒绝多条 message 的能力。</li>
 </ul>
-</li>
-</ul>
-</li>
-<li><p>请求头</p>
+<h4 id="Mirrored-queue（镜像队列）"><a href="#Mirrored-queue（镜像队列）" class="headerlink" title="Mirrored queue（镜像队列）"></a>Mirrored queue（镜像队列）</h4><p>Mirrored queue是为了解决使用cluster时所创建的queue的完整信息仅存在于单一node上的问题，从另一个角度增加可用性。</p>
+<h4 id="Warrens"><a href="#Warrens" class="headerlink" title="Warrens"></a>Warrens</h4><p>Warrens是为了解决cluster中message可能被blackholed的问题，即不能接受producer不停 republish message但RabbitMQ server 无回应的情况。</p>
+<h4 id="消息基于什么传输"><a href="#消息基于什么传输" class="headerlink" title="消息基于什么传输"></a>消息基于什么传输</h4><p>由于TCP连接的创建和销毁开销较大，且并发数受系统资源限制，会造成性能菰瓶颈。RabbitMQ使用信道的方式来传输数据。信道是建立在真实的TCP连接内的虚 拟连接，且每条TCP连接上的信道数量没有限制。</p>
+<h4 id="设计MQ"><a href="#设计MQ" class="headerlink" title="设计MQ"></a>设计MQ</h4><p>1.可伸缩性： 首先这个MQ得支持可伸缩性吧，就是需要的时候快速扩容，增加吞吐量和容量。</p>
+<p>那怎么搞呢？设计一个分布式的系统呗，参照kafka的设计理念，broker–&gt;topic–&gt;partition，每个partition放一个机器，存一部分数据。如果现在资源不够了，就给topic增加partition，然后做数据迁移，增加机器，这样就提供了更高的吞吐量。</p>
+<p>2.数据落盘： 其次得考虑这个MQ的数据要不要落盘？那肯定要了，落盘才能保证进程挂了数据不会丢失。</p>
+<p>那落盘的时候怎么落啊？顺序写，这样就没有落盘随机读写的寻址开销，磁盘顺序读写的性能是很高的，这就是kafka的思路。</p>
+<p>3.可用性： 再者得考虑MQ的可用性，像kafka的高可用保障机制，可以设置多副本方式，当leader挂了可以重新选举leader。</p>
+<p>4.可靠性： 设计MQ要想能不能支持数据0丢失？我们可以设置MQ的可靠性，保障数据不会丢失。 如何保证消息的可靠性，避免消息丢失</p>
 <ul>
-<li>位置：第二行到空白行之间</li>
-<li>作用：通知服务端请求信息</li>
-<li>特点：由键值对组成，每行一对</li>
-<li>Content-Type：请求体数据类型<ul>
-<li>text&#x2F;html：HTML格式</li>
-<li>image&#x2F;jpeg：jpg图片格式</li>
-<li><strong>application&#x2F;json</strong>：JSON数据格式</li>
-<li><strong>application&#x2F;x-www-form-urlencoded</strong>：表单默认的提交数据格式</li>
-<li>multipart&#x2F;form-data：表单中进行文件上传</li>
-</ul>
+<li><p>难点1：RPC 通信</p>
+<p>解决的是 Broker 与 Producer 以及 Consumer 之间的通信问题。如果不重复造轮子，直接利用成熟的 RPC 框架 Dubbo 或者 Thrift 实现即可，这样不需要考虑服务注册与发现、负载均衡、通信协议、序列化方式等一系列问题了。</p>
+<p>当然，你也可以基于 Netty 来做底层通信，用 Zookeeper、Euraka 等来做注册中心，然后自定义一套新的通信协议（类似 Kafka），也可以基于 AMQP 这种标准化的 MQ 协议来做实现（类似 RabbitMQ）。对比直接用 RPC 框架，这种方案的定制化能力和优化空间更大。</p>
+</li>
+<li><p>难点2：高可用设计</p>
+<p>高可用主要涉及两方面：Broker 服务的高可用、存储方案的高可用。可以拆开讨论。</p>
+<p>Broker 服务的高可用，只需要保证 Broker 可水平扩展进行集群部署即可，进一步通过服务自动注册与发现、负载均衡、超时重试机制、发送和消费消息时的 ack 机制来保证。</p>
+<p>存储方案的高可用有两个思路：1）参考 Kafka 的分区 + 多副本模式，但是需要考虑分布式场景下数据复制和一致性方案（类似 Zab、Raft等协议），并实现自动故障转移；2）还可以用主流的 DB、分布式文件系统、带持久化能力的 KV 系统，它们都有自己的高可用方案。</p>
+</li>
+<li><p>难点3：存储设计</p>
+<p>消息的存储方案是 MQ 的核心部分，可靠性保证已经在高可用设计中谈过了，可靠性要求不高的话直接用内存或者分布式缓存也可以。这里重点说一下存储的高性能如何保证？这个问题的决定因素在于存储结构的设计。</p>
+<p>目前主流的方案是：追加写日志文件（数据部分） + 索引文件的方式（很多主流的开源 MQ 都是这种方式），索引设计上可以考虑稠密索引或者稀疏索引，查找消息可以利用跳转表、二份查找等，还可以通过操作系统的页缓存、零拷贝等技术来提升磁盘文件的读写性能。</p>
+<p>如果不追求很高的性能，也可以考虑现成的分布式文件系统、KV 存储或者数据库方案。</p>
+</li>
+<li><p>难点4：消费关系管理</p>
+<p>为了支持发布-订阅的广播模式，Broker 需要知道每个主题都有哪些 Consumer 订阅了，基于这个关系进行消息投递。由于 Broker 是集群部署的，所以消费关系通常维护在公共存储上，可以基于 Zookeeper、Apollo 等配置中心来管理以及进行变更通知。</p>
+</li>
+<li><p>难点5：高性能设计</p>
+<p>存储的高性能前面已经谈过了，当然还可以从其他方面进一步优化性能。比如 Reactor 网络 IO 模型、业务线程池的设计、生产端的批量发送、Broker 端的异步刷盘、消费端的批量拉取等等。</p>
 </li>
 </ul>
+<h4 id="生产者消息怎么运转"><a href="#生产者消息怎么运转" class="headerlink" title="生产者消息怎么运转"></a>生产者消息怎么运转</h4><ol>
+<li>Producer先连接到Broker,建立连接Connection,开启一个信道(Channel)。</li>
+<li>Producer声明一个交换器并设置好相关属性。 </li>
+<li>Producer声明一个队列并设置好相关属性。</li>
+<li>Producer通过路由键将交换器和队列绑定起来。</li>
+<li>Producer发送消息到Broker,其中包含路由键、交换器等信息。</li>
+<li>相应的交换器根据接收到的路由键查找匹配的队列。</li>
+<li>如果找到，将消息存入对应的队列，如果没有找到，会根据生产者的配置丢弃或者退回给生产者。</li>
+<li>关闭信道。</li>
+</ol>
+<h4 id="元数据"><a href="#元数据" class="headerlink" title="元数据"></a>元数据</h4><p>在非cluster模式下，元数据主要分为Queue元数据（queue名字和属性 等）、Exchange元数据（exchange名字、类型和属性等）、Binding元数据 （存放路由关系的查找表）、Vhost元数据（vhost范围内针对前三者的名字空 间约束和安全属性设置）。</p>
+<p>在cluster模式下，还包括cluster中node位置信息和node关系信息。元数据按照erlang node 的类型确定是仅保存于RAM中，还是同时保存在RAM和disk上。元数据在cluster中是全 node 分布的。</p>
+<h4 id="RAM-node和disk-node的区别？"><a href="#RAM-node和disk-node的区别？" class="headerlink" title="RAM node和disk node的区别？"></a>RAM node和disk node的区别？</h4><p>RAM node仅将fabric（即queue、exchange和binding等RabbitMQ基础构件）相关元数据保存到内存中，但disk node会在内存和磁盘中均进行存储。RAM node上唯一会存储到磁盘上的元数据是cluster中使用的disk node的地址。要求在RabbitMQ cluster中至少存在一个disk node</p>
+<p>RabbitMQ要求集群中至少有一个磁盘节点，当节点加入和离开集群时，必须通知磁盘节点（如果集群中唯一的磁盘节点崩溃了，则不能进行创建队列、创建交换器、创建绑定、添加用户、更改权限、添加和删除集群节点）。总之如果唯一磁盘的磁盘节点崩溃，集群是可以保持运行的，但不能更改任何东西。因此建议在集群中设置两个磁盘节点，只要一个可以，就能正常操作。</p>
+<h4 id="名词"><a href="#名词" class="headerlink" title="名词"></a>名词</h4><p>Broker（RabbitMQ服务器）</p>
+<p>简单理解Broker就是RabbitMQ服务器，一个mq实例，他是接收和分发消息的应用。</p>
+<p>VHost（虚拟主机）</p>
+<p>每一个Broker可以开设多个虚拟主机，其中每一个vhost本质上是一个mini版的RabbitMQ服务器，拥有自己的Exchange（交换机）、Binding（绑定）、Queue（队列），也有自己的权限机制。</p>
+<p>Exchange（交换机 ）</p>
+<p>交换机的核心作用是接受消息，并把消息路由到对应的队列上。</p>
+<p>Routing key（路由键）</p>
+<p>路由键是供交换机查看，并根据其值能够能够决定如何分发消息的健，用来指定消息的路由规则。</p>
+<p>Queue（队列）</p>
+<p>用于存储生产者生产的消息。</p>
+<p>Binding（绑定）</p>
+<p>绑定时一个动词，他是指通过路由规则（Binding Key）把交换机和队列关联起来。</p>
+<p>Binding Key（绑定键）</p>
+<p>在生产者和消费者Binding时，一般会指定一个Binding Key。当生产者发送Message给Exchange时，消息头上会携带Routing Key，当Routing Key与Binding Key匹配时，消息会被路由到对应的Queue中去</p>
+<h4 id="消息堆积"><a href="#消息堆积" class="headerlink" title="消息堆积"></a>消息堆积</h4><ol>
+<li><p>增加更多消费者，提高消费速度。</p>
 </li>
-<li><p>请求体：<strong>（可以没有对应的请求体内容）</strong></p>
-<ul>
-<li>位置：空白行之后的内容</li>
-<li>作用：传输数据实体 </li>
-<li>注意：请求体常在<strong>POST、PUT</strong>方法中使用 </li>
-<li>常配合的请求头：<strong>Content-Type</strong>和<strong>Content-Length</strong></li>
-</ul>
+<li><p>在消费者内开启线程池加快消息处理速度。</p>
 </li>
-</ul>
-<h4 id="HTTP响应"><a href="#HTTP响应" class="headerlink" title="HTTP响应"></a>HTTP响应</h4><ul>
-<li>状态行 <img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130193147639.png" alt="image-20231130193147639" style="zoom:67%;" /><ul>
-<li>位置：响应数据第一行 </li>
-<li>作用：描述服务器处理结果 </li>
-<li>内容: 状态行由协议版本号、<strong>状态码</strong>、状态消息组成</li>
-<li>状态码：表示此次请求的响应状态，详细见最后的状态码表。<ul>
-<li>1XX：指示信息</li>
-<li><strong>2XX</strong>：成功 </li>
-<li>3XX：重定向 </li>
-<li><strong>4XX</strong>：客户端错误 </li>
-<li><strong>5XX</strong>：服务端错误</li>
-</ul>
+<li><p>扩大队列容积，提高堆积上限，采用惰性队列。</p>
 </li>
-</ul>
+<li><p>先消费消息（直接丢弃或存在db中），事后补偿，防止mq宕机。</p>
 </li>
-<li>响应头<ul>
-<li>位置：第二行开始到空白行之间 </li>
-<li>作用：描述客户端端要使用的一些附加信息 </li>
-<li>特点: 响应头由键值对组成，每行一对</li>
-<li>也有Content-Type与Content-Length，表明返回的数据类型与长度</li>
-</ul>
-</li>
-<li>响应体<ul>
-<li>位置：响应数据空白行之后</li>
-<li>作用：服务器返回的数据实体 </li>
-<li>特点：有图片、json、xml、html等多种类型</li>
-</ul>
-</li>
-</ul>
-<p>使用工具进行接口自动化测试将使用新的文章记录。</p>
-<hr>
-<p>使用Jmeter进行自动化测试，详见<a href="/2023/12/13/Jmeter---%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" title="Jmeter---接口测试">Jmeter---接口测试</a></p>
-<hr>
-<h2 id="接口自动化测试"><a href="#接口自动化测试" class="headerlink" title="接口自动化测试"></a>接口自动化测试</h2><ul>
-<li>选取自动化测试用例 </li>
-<li>搭建自动化测试环境 </li>
-<li>搭建自动化测试框架 </li>
-<li>代码实现自动化 </li>
-<li>输出测试报告 </li>
-<li>实现持续集成</li>
-</ul>
-<h3 id="Requests库"><a href="#Requests库" class="headerlink" title="Requests库"></a>Requests库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pip install requests  <span class="comment">#安装</span></span><br><span class="line">request --version 	<span class="comment">#验证</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="Requests发送请求"><a href="#Requests发送请求" class="headerlink" title="Requests发送请求"></a>Requests发送请求</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">requests.请求方法（url，params=<span class="literal">None</span>，data=<span class="literal">None</span>，json=<span class="literal">None</span>，headers=<span class="literal">None</span>，files=<span class="literal">None</span>）<span class="comment">#必须传入对应的url地址，其余参数非必须</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;说明：</span></span><br><span class="line"><span class="string">常见的请求方法： get/post/put/delete</span></span><br><span class="line"><span class="string">url：请求的url地址</span></span><br><span class="line"><span class="string">params：请求查询参数</span></span><br><span class="line"><span class="string">data：请求体为form表单参数</span></span><br><span class="line"><span class="string">json：请求体为json参数</span></span><br><span class="line"><span class="string">headers：请求头参数</span></span><br><span class="line"><span class="string">Files：文件参数</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="Response响应"><a href="#Response响应" class="headerlink" title="Response响应"></a>Response响应</h4><ul>
-<li>response.status_code ：状态码 </li>
-<li>response.json() ：JSON形式的响应内容</li>
-<li>response.text ：文本形式的响应内容 </li>
-<li>response.url ：请求url </li>
-<li>response.encoding：查看响应头部字符编码 </li>
-<li>response.headers ：头信息 </li>
-<li>response.cookies ：cookie信息</li>
-</ul>
-<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">&quot;accounts&quot;</span>:<span class="string">&quot;huace_xm&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pwd&quot;</span>:<span class="number">123456</span>,</span><br><span class="line">    <span class="string">&quot;type&quot;</span>:<span class="string">&quot;username&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">rs5 = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/region/index&quot;</span>,</span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,</span><br><span class="line">                 data=data)</span><br><span class="line"><span class="built_in">print</span>(rs5.json())</span><br><span class="line"><span class="comment">#使用对应的方法，参数，调用对应的方法或者request方法，得到响应结果</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="响应码"><a href="#响应码" class="headerlink" title="响应码"></a>响应码</h2><ul>
-<li>200 OK 服务器成功返回用户请求的数据 </li>
-<li>201 CREATED 用户新建或修改数据成功 </li>
-<li>204 NO CONTENT 用户删除数据成功 </li>
-<li>301 Moved Permanently 被请求的资源已永久移动到新位置 </li>
-<li>302 Move Temporarily 被请求的资源临时性移动到新位置 </li>
-<li>400 Bad Request 客户端请求有语法错误，不能被服务器所理解 </li>
-<li>401 Unauthorized 未授权的（未登录） </li>
-<li>403 Forbidden 表示用户得到授权，但是访问是被禁止的 </li>
-<li>404 Not Found 请求资源不存在 </li>
-<li>500 INTERNAL SERVER ERROR 服务器发生错误，用户将无法判断发出的请求是否成功 </li>
-<li>503 Server Unavailable 服务器当前不能处理客户端的请求，一段时间后可能恢复正常</li>
-</ul>
-<a href="/2023/12/02/2023-12-01-%E6%8E%A5%E5%8F%A3%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95---%E8%BF%9B%E9%98%B6/" title="接口自动化测试---进阶">接口自动化测试---进阶</a>
+</ol>
 
     </div>
 
@@ -448,7 +401,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://hlhehe.github.io/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/" title="接口自动化测试---基础">https://hlhehe.github.io/2023/11/30/接口测试--基础/</a>
+      <a href="https://hlhehe.github.io/2024/06/07/RabbitMq---%E9%9D%A2%E8%AF%95/" title="RabbitMq---面试">https://hlhehe.github.io/2024/06/07/RabbitMq---面试/</a>
   </li>
   <li class="post-copyright-license">
       <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -457,23 +410,18 @@
 </div>
 
           <div class="post-tags">
-              <a href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 接口测试</a>
-              <a href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag"><i class="fa fa-tag"></i> 测试</a>
-              <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
+              <a href="/tags/MQ/" rel="tag"><i class="fa fa-tag"></i> MQ</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2023/11/29/%E5%8A%9B%E6%89%A3%E6%AF%8F%E6%97%A5%E4%B8%80%E9%A2%98--394%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%A7%A3%E7%A0%81/" rel="prev" title="力扣--394">
-                  <i class="fa fa-angle-left"></i> 力扣--394
+                <a href="/2024/05/14/ElasticSearch---Search%E8%AF%AD%E6%B3%95/" rel="prev" title="ElasticSearch---Search语法">
+                  <i class="fa fa-angle-left"></i> ElasticSearch---Search语法
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2023/12/02/token%E9%89%B4%E6%9D%83---JWT%E4%BB%A4%E7%89%8C/" rel="next" title="token鉴权---JWT令牌">
-                  token鉴权---JWT令牌 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -640,7 +588,7 @@
     })
   </script>
 
-<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"waline-server-hlhehes-projects.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"泰酷辣！","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/"}</script>
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"waline-server-hlhehes-projects.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"泰酷辣！","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2024/06/07/RabbitMq---%E9%9D%A2%E8%AF%95/"}</script>
 <link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
 <script>
 document.addEventListener('page:loaded', () => {
