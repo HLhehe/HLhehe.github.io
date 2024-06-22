@@ -78,220 +78,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Elasticsearch</title>
-    <url>/2024/03/19/Elasticsearch/</url>
-    <content><![CDATA[<h2 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h2><h3 id="正排和倒排"><a href="#正排和倒排" class="headerlink" title="正排和倒排"></a>正排和倒排</h3><ul>
-<li><strong>正向索引</strong>是最传统的，根据id索引的方式。但根据词条查询时，必须先逐条获取每个文档，然后判断文档中是否包含所需要的词条，是<strong>根据文档找词条的过程</strong>。<span id="more"></span><ul>
-<li>优点：<ul>
-<li>可以给多个字段创建索引</li>
-<li>根据索引字段搜索、排序速度非常快</li>
-</ul>
-</li>
-<li>缺点：<ul>
-<li>根据非索引字段，或者索引字段中的部分词条查找时，只能全表扫描。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>而<strong>倒排索引</strong>则相反，是先找到用户要搜索的词条，根据词条得到保护词条的文档的id，然后根据id获取文档。是<strong>根据词条找文档的过程</strong>。<ul>
-<li>优点：<ul>
-<li>根据词条搜索、模糊搜索时，速度非常快</li>
-</ul>
-</li>
-<li>缺点：<ul>
-<li>只能给词条创建索引，而不是字段</li>
-<li>无法根据字段做排序</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="MySQL与ES"><a href="#MySQL与ES" class="headerlink" title="MySQL与ES"></a>MySQL与ES</h3><table>
-<thead>
-<tr>
-<th><strong>MySQL</strong></th>
-<th><strong>Elasticsearch</strong></th>
-<th><strong>说明</strong></th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Table</td>
-<td>Index</td>
-<td>索引(index)，就是文档的集合，类似数据库的表(table)</td>
-</tr>
-<tr>
-<td>Row</td>
-<td>Document</td>
-<td>文档（Document），就是一条条的数据，类似数据库中的行（Row），文档都是JSON格式</td>
-</tr>
-<tr>
-<td>Column</td>
-<td>Field</td>
-<td>字段（Field），就是JSON文档中的字段，类似数据库中的列（Column）</td>
-</tr>
-<tr>
-<td>Schema</td>
-<td>Mapping</td>
-<td>Mapping（映射）是索引中文档的约束，例如字段类型约束。类似数据库的表结构（Schema）</td>
-</tr>
-<tr>
-<td>SQL</td>
-<td>DSL</td>
-<td>DSL是elasticsearch提供的JSON风格的请求语句，用来操作elasticsearch，实现CRUD</td>
-</tr>
-</tbody></table>
-<h3 id="ik分词器"><a href="#ik分词器" class="headerlink" title="ik分词器"></a>ik分词器</h3><p>创建倒排索引时对文档分词。用户搜索时，对输入的内容分词</p>
-<p>IK分词器模式</p>
-<ul>
-<li><p>ik_smart：智能切分，粗粒度</p>
-</li>
-<li><p>ik_max_word：最细切分，细粒度</p>
-</li>
-</ul>
-<p>拓展词条，停用词条</p>
-<ul>
-<li>利用config目录的IkAnalyzer.cfg.xml文件添加拓展词典和停用词典</li>
-</ul>
-<h3 id="Mapping属性映射"><a href="#Mapping属性映射" class="headerlink" title="Mapping属性映射"></a>Mapping属性映射</h3><ul>
-<li>type：字段数据类型，常见的简单类型有：<ul>
-<li>字符串：text（可分词的文本）、keyword（精确值，例如：品牌、国家、ip地址）<ul>
-<li>不需要分词的就指定为keyword</li>
-</ul>
-</li>
-<li>数值：long、integer、short、byte、double、float、</li>
-<li>布尔：boolean</li>
-<li>日期：date</li>
-<li>对象：object</li>
-</ul>
-</li>
-<li>index：是否创建索引，默认为true（需要参与搜索的话，就创建索引，不参与搜索就不创建索引）</li>
-<li>analyzer：使用哪种分词器</li>
-<li>properties：该字段的子字段</li>
-</ul>
-<h3 id="CRUD索引"><a href="#CRUD索引" class="headerlink" title="CRUD索引"></a>CRUD索引</h3><ul>
-<li>put &#x2F;索引库名，参数为mapping映射规则，即json串</li>
-<li>get &#x2F;索引库名</li>
-<li>无法修改mapping中已有的字段，但是可以添加新的字段到mapping<ul>
-<li><pre><code class="text">PUT /索引库名/_mapping
-&#123;
-  &quot;properties&quot;: &#123;
-    &quot;新字段名&quot;:&#123;
-      &quot;type&quot;: &quot;integer&quot;
-    &#125;
-  &#125;
-&#125;
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">- delete /索引库名</span><br><span class="line"></span><br><span class="line">### CRUD文档</span><br><span class="line">- ```</span><br><span class="line">  POST /索引库名/_doc/文档id</span><br><span class="line">  &#123;</span><br><span class="line">      &quot;字段1&quot;: &quot;值1&quot;,</span><br><span class="line">      &quot;字段2&quot;: &quot;值2&quot;,</span><br><span class="line">      &quot;字段3&quot;: &#123;</span><br><span class="line">          &quot;子属性1&quot;: &quot;值3&quot;,</span><br><span class="line">          &quot;子属性2&quot;: &quot;值4&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      // ...</span><br><span class="line">  &#125;</span><br><span class="line">  //新增文档</span><br></pre></td></tr></table></figure>
-</code></pre>
-</li>
-</ul>
-</li>
-<li>GET &#x2F;{索引库名称}&#x2F;_doc&#x2F;{id}</li>
-<li>DELETE &#x2F;{索引库名}&#x2F;_doc&#x2F;id值</li>
-<li>全量修改—覆盖<ul>
-<li><pre><code>PUT /&#123;索引库名&#125;/_doc/文档id
-&#123;
-    &quot;字段1&quot;: &quot;值1&quot;,
-    &quot;字段2&quot;: &quot;值2&quot;,
-    // ... 略
-&#125;
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">- 增量修改---修改已有字段的值</span><br><span class="line">  - ```</span><br><span class="line">    POST /&#123;索引库名&#125;/_update/文档id</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;doc&quot;: &#123;</span><br><span class="line">             &quot;字段名&quot;: &quot;新的值&quot;,  //对应需要修改的字段</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-</code></pre>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="DSL查询"><a href="#DSL查询" class="headerlink" title="DSL查询"></a>DSL查询</h3><ul>
-<li><strong>查询所有</strong>：查询出所有数据，一般测试用。例如：match_all</li>
-<li><strong>全文检索（full text）查询</strong>：利用分词器对用户输入内容分词，然后去倒排索引库中匹配。例如：<ul>
-<li>match_query</li>
-<li>multi_match_query（一般不用，生成索引是时可选择合并索引，生成一个新的索引进行查询）<ul>
-<li>建议采用copy_to，然后单字段查询的方式。</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>精确查询</strong>：根据精确词条值查找数据，一般是查找keyword、数值、日期、boolean等类型字段。查询的条件也必须是<strong>不分词</strong>的词条。<ul>
-<li>range：根据值的范围查询</li>
-<li>term：根据词条精确值查询</li>
-</ul>
-</li>
-<li><strong>地理（geo）查询</strong>：根据经纬度查询。例如：<ul>
-<li>geo_distance:附近查询，也叫做距离查询（geo_distance）：查询到指定中心点小于某个距离值的所有文档。常用</li>
-<li>geo_bounding_box:矩形范围查询</li>
-</ul>
-</li>
-<li><strong>复合（compound）查询</strong>：复合查询可以将上述各种查询条件组合起来，合并查询条件。例如：<ul>
-<li>bool：布尔查询，利用逻辑关系组合多个其它的查询，实现复杂搜索</li>
-<li>function_score：算分函数查询，可以控制文档相关性算分，控制文档排名</li>
-</ul>
-</li>
-</ul>
-<h3 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET /indexName/_search</span><br><span class="line">&#123;//普通字段排序</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;sort&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;FIELD&quot;: &quot;desc&quot;  // 排序字段、排序方式ASC、DESC</span><br><span class="line">    &#125;</span><br><span class="line">    //多个花括号定义多个排序字段</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET /indexName/_search</span><br><span class="line">&#123;//地理坐标排序</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;sort&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;_geo_distance&quot; : &#123;</span><br><span class="line">          &quot;FIELD&quot; : &quot;纬度，经度&quot;, // 文档中geo_point类型的字段名、目标坐标点</span><br><span class="line">          &quot;order&quot; : &quot;asc&quot;, // 排序方式</span><br><span class="line">          &quot;unit&quot; : &quot;km&quot; // 排序的距离单位</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h3><p>elasticsearch 默认情况下只返回top10的数据。而如果要查询更多数据就需要修改分页参数了。elasticsearch中通过修改from、size参数来控制要返回的分页结果：类似于mysql中的<code>limit ?, ?</code></p>
-<ul>
-<li>from：从第几个文档开始</li>
-<li>size：总共查询几个文档</li>
-</ul>
-<h4 id="深度分页问题"><a href="#深度分页问题" class="headerlink" title="深度分页问题"></a>深度分页问题</h4><p>现在，我要查询990<del>1000的数据，这里是查询990开始的数据，也就是 第990</del>第1000条 数据。不过，elasticsearch内部分页时，必须先查询 0~1000条，然后截取其中的990 ~ 1000的这10条。查询TOP1000，如果es是单点模式，这并无太大影响。但是elasticsearch将来一定是集群，例如我集群有5个节点，我要查询TOP1000的数据，并不是每个节点查询200条就可以了。要想获取整个集群的TOP1000，必须先查询出每个节点的TOP1000，汇总结果后，重新排名，重新截取TOP1000。</p>
-<p><strong>因此elasticsearch会禁止from+ size 超过10000的请求。</strong><br>针对深度分页，ES提供了两种解决方案，<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html">官方文档</a>：</p>
-<ul>
-<li>search after：分页时需要排序，原理是从上一次的排序值开始，查询下一页数据。官方推荐使用的方式。</li>
-<li>scroll：原理将排序后的文档id形成快照，保存在内存。官方已经不推荐使用。</li>
-</ul>
-<h3 id="高亮"><a href="#高亮" class="headerlink" title="高亮"></a>高亮</h3><p>高亮显示的实现分为两步：</p>
-<ul>
-<li><p>1）给文档中的所有关键字都添加一个标签，例如<code>&lt;em&gt;</code>标签</p>
-</li>
-<li><p>2）<strong>页面给<code>&lt;em&gt;</code>标签编写CSS样式</strong></p>
-</li>
-<li><p>高亮是对关键字高亮，因此<strong>搜索条件必须带有关键字</strong>，而不能是范围这样的查询。</p>
-<ul>
-<li><p>默认情况下，<strong>高亮的字段，必须与搜索指定的字段一致</strong>，否则无法高亮</p>
-</li>
-<li><p>如果要对非搜索字段高亮，则需要添加一个属性：required_field_match&#x3D;false</p>
-</li>
-</ul>
-</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET /hotel/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;FIELD&quot;: &quot;TEXT&quot; // 查询条件，高亮一定要使用全文检索查询</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;highlight&quot;: &#123;</span><br><span class="line">    &quot;fields&quot;: &#123; // 指定要高亮的字段</span><br><span class="line">      &quot;FIELD&quot;: &#123;</span><br><span class="line">        &quot;pre_tags&quot;: &quot;&lt;em&gt;&quot;,  // 用来标记高亮字段的前置标签</span><br><span class="line">        &quot;post_tags&quot;: &quot;&lt;/em&gt;&quot; // 用来标记高亮字段的后置标签</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="数据聚合"><a href="#数据聚合" class="headerlink" title="数据聚合"></a>数据聚合</h3><p>参加聚合的字段必须是keyword、日期、数值、布尔类型</p>
-<ul>
-<li><strong>桶（Bucket）</strong>聚合：用来对文档做分组<ul>
-<li>TermAggregation：按照文档字段值分组，例如按照品牌值分组、按照国家分组</li>
-<li>Date Histogram：按照日期阶梯分组，例如一周为一组，或者一月为一组</li>
-</ul>
-</li>
-<li><strong>度量（Metric）</strong>聚合：用以计算一些值，比如：最大值、最小值、平均值等<ul>
-<li>Avg：求平均值</li>
-<li>Max：求最大值</li>
-<li>Min：求最小值</li>
-<li>Stats：同时求max、min、avg、sum等</li>
-</ul>
-</li>
-<li><strong>管道（pipeline）</strong>聚合：其它聚合的结果为基础做聚合</li>
-</ul>
-<p>aggs代表聚合，与query同级，此时query的作用是限定聚合的的文档范围<br>聚合必须的三要素：</p>
-<ul>
-<li>聚合名称</li>
-<li>聚合类型，terms还是states</li>
-<li>聚合字段</li>
-</ul>
-<p>聚合可配置属性有：</p>
-<ul>
-<li>size：指定聚合结果数量</li>
-<li>order：指定聚合结果排序方式</li>
-<li>field：指定聚合字段</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>ES</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ElasticSearch---Search语法</title>
     <url>/2024/05/14/ElasticSearch---Search%E8%AF%AD%E6%B3%95/</url>
     <content><![CDATA[<h2 id="ElasticSearch"><a href="#ElasticSearch" class="headerlink" title="ElasticSearch"></a>ElasticSearch</h2><h3 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h3><p>发送get请求，<a href="http://localhost/index/_search%EF%BC%8C%E6%A0%B9%E6%8D%AE%E8%AF%B7%E6%B1%82%E4%BD%93%E7%9A%84%E5%8F%98%E5%8C%96%E5%AE%9E%E7%8E%B0%E5%A4%8D%E6%9D%82%E7%9A%84%E6%9F%A5%E8%AF%A2%E5%8A%9F%E8%83%BD%E3%80%82">http://localhost/index/_search，根据请求体的变化实现复杂的查询功能。</a><span id="more"></span></p>
@@ -646,6 +432,317 @@
       </tags>
   </entry>
   <entry>
+    <title>Fidder抓包</title>
+    <url>/2023/11/28/Fidder/</url>
+    <content><![CDATA[<h3 id="Fidder"><a href="#Fidder" class="headerlink" title="Fidder"></a>Fidder</h3><p>Fiddler是位于客户端和服务器端的HTTP代理，也是目前最常用的http抓包工具之一 。 它能够记录客户端和服务器之间的所有 HTTP请求，可以针对特定的HTTP请求，分析请求数据、设置断点、调试web应用、修改请求的数据，甚至可以修改服务器返回的数据<span id="more"></span></p>
+<p>注意：使用Fiddler的话，需要先设置浏览器的代理地址，才可以抓取到浏览器的数据包。<strong>而很方便的是在你启动该工具后，它就已经自动帮你设置好了浏览器的代理了</strong>，当关闭后，它又将浏览器代理还原了。当然如果发现没有自动设置浏览器代理的话，那就得自己动手去浏览器进行设置代理操作了。（可自行百度每个浏览器是如何设置代理的）</p>
+<h3 id="Fidder设置"><a href="#Fidder设置" class="headerlink" title="Fidder设置"></a>Fidder设置</h3><h4 id="https设置"><a href="#https设置" class="headerlink" title="https设置"></a>https设置</h4><p>首先点击Tools—&gt;Options,之后在出现的页面选择HTTSPS，将其全部勾选。如下图所示。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128144508010.png" alt="image-20231128144508010" style="zoom: 67%;" />
+
+<p>之后，浏览器访问<a href="http://localhost:8888，点击download">http://localhost:8888，点击download</a> the FidderRoot certificate，安装对应证书。之后打开下载的内容，一直next即可。再次进入上图页面，点击Actions，选择reset all certificate，，先删除所有证书，再安装你下载的证书（按照提示来即可）点击yes，点击是，之后ok关闭即可。完成上述步骤就可以进行https请求的抓取了。</p>
+<h4 id="远程连接设置"><a href="#远程连接设置" class="headerlink" title="远程连接设置"></a>远程连接设置</h4><p>首先点击Tools—&gt;Options,然后点击Connections，勾选Allow remote computers to connect即可。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128150943183.png" alt="image-20231128150943183" style="zoom: 67%;" />
+
+<p>同时，此界面还可以更改fidder的默认端口8888。</p>
+<h3 id="Fidder请求"><a href="#Fidder请求" class="headerlink" title="Fidder请求"></a>Fidder请求</h3><p>1）各图标含义</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128151748732.png" alt="image-20231128151748732" style="zoom:67%;" />
+
+<p>2）工具栏</p>
+<p><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128152053892.png" alt="image-20231128152053892"></p>
+<p>从左到右表示的意义分别是：</p>
+<ul>
+<li>WinConfig：windows 使用了一种叫做“AppContainer”的隔离技术，使得一些流量无法正常捕获，在 fiddler中点击 WinConfig 按钮可以解除这个诅咒，这个与菜单栏 Tools→Win8 Loopback Exemptions 功能是一致的</li>
+<li>气泡：给请求添加备注说明。选中一条请求，点击气泡，即可添加对应的备注说明</li>
+<li>Replay：对请求进行回放。选择一条请求，点击replay，即再次发送该请求</li>
+<li>X：删除某些请求会话，可下拉选择。常用remove all</li>
+<li>Go：debug断点调试时，继续执行该请求</li>
+<li>Stream：流模式，实时通信模式，有请求就有返回。一般用不到</li>
+<li>Decode：将请求的东西解压出来，方便查阅</li>
+<li>Keep all Sessions：保存所有会话。注意，保存越多，占用内存越大。fidder默认保存所有，可下拉选择更改</li>
+<li>Any Process：过滤请求。将其按住拖到edge浏览器上即可屏蔽该浏览器发出的请求。只能屏蔽对应的进程，应用发出的会话请求</li>
+<li>Find：查找会话，使用黄色标记该会话。</li>
+<li>Save：保存选择的会话。保存为 .saz文件</li>
+<li>照相机&#x2F;截图：保存截图，5秒后将截图保存下来</li>
+<li>计时器：左击开始计时，再左击停止。右击清0</li>
+<li>Browse：快速启动浏览器，可下拉选择</li>
+<li>Clear cache：清除缓存</li>
+<li>TextWizard：编&#x2F;解码字符串</li>
+<li>Tearoff：将请求和响应单独独立为一个新窗口，方便查看</li>
+<li>MSDN：搜索功能</li>
+<li>？：fidder在线帮助网站</li>
+</ul>
+<p>3）选项卡</p>
+<p><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128154847828.png" alt="image-20231128154847828"></p>
+<p>下面将只介绍一些常用的选项卡。</p>
+<h4 id="Inspectors"><a href="#Inspectors" class="headerlink" title="Inspectors"></a>Inspectors</h4><p><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128155446293.png" alt="image-20231128155446293"></p>
+<p><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128155505246.png" alt="image-20231128155505246"></p>
+<p>包含请求和响应的一些信息。主要是对这些信息的多种格式展示。主要查看请求头，响应头重要信息。</p>
+<h4 id="Filters"><a href="#Filters" class="headerlink" title="Filters"></a>Filters</h4><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128155952719.png" alt="image-20231128155952719" style="zoom:67%;" />
+
+<p>设置完成后，点击Actions执行定义的过滤规则。</p>
+<p>1）Hosts过滤</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">No Zone Filter：不设置过滤；指定只显示内网（Intranet）或互联网（Internet）的内容(不常用)</span><br><span class="line">Show only Intranet Hosts：指定只显示内网（Intranet）的内容</span><br><span class="line">Show only Internet Hosts：指定只显示互联网（Internet）的内容</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">No Host Filter：不过滤</span><br><span class="line">Hide the following Hosts ： 隐藏文本框中的相关主机请求</span><br><span class="line">Show only the following Hosts ：显示文本框中相关的主机请求（多个用分号分开）</span><br><span class="line">Flag the following Hosts ：标记（高亮）显示文本框中的主机请求</span><br></pre></td></tr></table></figure>
+
+<p>2）Client Process过滤</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Show only traffic from：你可以指定只捕获哪个Windows进程中的请求；</span><br><span class="line">Show only Internet Explorer traffic：只显示IE发出的请求；</span><br><span class="line">Hide traffic from Service Host：隐藏来自Host发出的请求；</span><br></pre></td></tr></table></figure>
+
+<p>3）RequestHeader过滤</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">show only if URL contains: 只显示URL包含的，多个时空格分开</span><br><span class="line">Hide if URL contains: 隐藏URL包含的，多个时空格分开</span><br><span class="line">Flag requests with headers: 加粗显示HTTP请求头包含指定的HTTP请求头的类型名称</span><br><span class="line">Delete request headers: 删除HTTP请求头包含指定的HTTP请求头的类型名称</span><br><span class="line">Set request header : 创建一个指定名称和值的HTTP请求头,或更新HTTP请求头为指定值。</span><br><span class="line">Break request on POST: POST请求设置断点</span><br><span class="line">Break request on GET with query string: GET方法且URL中包含查询条件的请求设置断点（URL中包含参数params）</span><br><span class="line">Break on XMLHttpRequest: 通过 XMLHttpRequest对象发送的请求设置断点。通过查找请求头中是否含有X-Request-With 和X-Download-Initiator</span><br><span class="line">Break response on Content-Type: 响应头Content-Type 中包含了指定的文本设置断点</span><br></pre></td></tr></table></figure>
+
+<p>5）Response Status Code过滤</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Hide success(2XX): 隐藏状态码在200至299的响应</span><br><span class="line">Hide non-2xx: 隐藏非200至299的响应</span><br><span class="line">Hide Authentication demands(401,407): 隐藏状态码为401,407的响应.需要用户进一步确认证书的请求</span><br><span class="line">Hide redirects(300,301,302,303,307): 藏状态码为300,301,302,303,307重定向的响应</span><br><span class="line">Hide Not Modified(304):藏状态码为304的响应.缓存实体有效返回304</span><br></pre></td></tr></table></figure>
+
+<p>6）Response Type and Size过滤</p>
+<p>7）Response Headers过滤</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Flag responses that set cookies: 粗体显示和响应头包含Set-Cookie的响应</span><br><span class="line">Flag responses with headers: 粗体显示指定HTTP响应头。同Flag requests with headers</span><br><span class="line">Delete responses headers: 删除特定的HTTP响应头。只是从响应头中删除，不删除session</span><br><span class="line">Set response header；创建更新响应头。同Set Request header 用法一样</span><br></pre></td></tr></table></figure>
+
+<h4 id="Composer"><a href="#Composer" class="headerlink" title="Composer"></a>Composer</h4><p>Composer选项卡支持手动构建和发请求；也可以在session列表中拖拽Session放到Composer中，会直接把该session的请求复制到用户界面；</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128163002061.png" alt="image-20231128163002061" style="zoom:67%;" />
+
+<p>上面填写对应的请求路径，请求头信息等。下面填写请求体中对应的内容。即请求的参数</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">	Options标签：</span><br><span class="line">Inspect Session: 执行请求后，会自动打开Inspectors选项卡；</span><br><span class="line">Fix Content-Length header:控制Composer是否会自动添加或修改Content-Length请求头，表示请求体的大小；</span><br><span class="line">Follow Redirects:是否会自动使用响应的Location头；</span><br><span class="line">Automatically Authenticate: 是否会自动响应服务器的认证需求；</span><br><span class="line">Tear off 按钮：使Composer选项卡以独立的窗口悬浮；</span><br></pre></td></tr></table></figure>
+
+<h3 id="Fidder应用"><a href="#Fidder应用" class="headerlink" title="Fidder应用"></a>Fidder应用</h3><h4 id="错误排查"><a href="#错误排查" class="headerlink" title="错误排查"></a>错误排查</h4><p>根据对应的请求头，响应头信息，判断是前端错误还是后端错误。若请求有问题，则前端错误，若响应的数据有问题，则后端服务错误，若响应数据没问题，则前端渲染错误。（同时还要结合数据库数据进行判断）</p>
+<h4 id="Mock测试—查看页面布局"><a href="#Mock测试—查看页面布局" class="headerlink" title="Mock测试—查看页面布局"></a>Mock测试—查看页面布局</h4><p><strong>断点改数据：</strong></p>
+<p><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128170848085.png" alt="image-20231128170848085"></p>
+<p>点击第一下是请求前断点，可以修改对应的请求数据；点击第二下是响应后断点，可以修改对应的响应数据，点击第三下是取消断点。断点设置之后点击Run to completion执行断点后的操作，观察结果。</p>
+<p><strong>改数据库：</strong>优点，可以同时测多种环境下页面显示问题，如web页面，app页面，h5等。缺点：信息千人前面，每个人的推荐信息是不同的。</p>
+<p><strong>mock测试：</strong>先save对应的响应体数据，然后修改保存。后点击AutoResponder选项卡，拖动对应请求到其中，而后选择find a file替换响应结果，而后再次发送该请求去查看结果即可。如下图所示</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128165733545.png" alt="image-20231128165733545" style="zoom:67%;" />
+
+<h4 id="弱网测试"><a href="#弱网测试" class="headerlink" title="弱网测试"></a>弱网测试</h4><p>Rules-&gt;Performance -&gt; Simulate Modem Speeds</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128172259066.png" alt="image-20231128172259066" style="zoom:67%;" />
+
+<p>同时，可以点击Rules—&gt;Cutomize Rules，即</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128172415152.png" alt="image-20231128172415152" style="zoom:67%;" />
+
+<p>进去弱网设置代码里，找到m_SimulateModem，修改oSession[“request-trickle-delay”] &#x3D; “300”;（表示上传1kb需要300ms）和oSession[“response-trickle-delay”] &#x3D; “150”;，自定义弱网的网络条件。</p>
+<h4 id="app抓包"><a href="#app抓包" class="headerlink" title="app抓包"></a>app抓包</h4><p>首先打开fidder的远程连接，见上。其次，进行手机上的设置，保证手机网络和fidder所在电脑网络处于同一局域网下。然后设置手机的代理网络为fidder的服务地址。</p>
+<p>此外，手机上也需要下载安装fidder安全证书。访问http:&#x2F;&#x2F;电脑IP:8888，一路下载安装，按照提示干就完了。（不要干坏事哇）</p>
+]]></content>
+      <tags>
+        <tag>测试</tag>
+        <tag>抓包</tag>
+        <tag>Fidder</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Elasticsearch</title>
+    <url>/2024/03/19/Elasticsearch/</url>
+    <content><![CDATA[<h2 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h2><h3 id="正排和倒排"><a href="#正排和倒排" class="headerlink" title="正排和倒排"></a>正排和倒排</h3><ul>
+<li><strong>正向索引</strong>是最传统的，根据id索引的方式。但根据词条查询时，必须先逐条获取每个文档，然后判断文档中是否包含所需要的词条，是<strong>根据文档找词条的过程</strong>。<span id="more"></span><ul>
+<li>优点：<ul>
+<li>可以给多个字段创建索引</li>
+<li>根据索引字段搜索、排序速度非常快</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>根据非索引字段，或者索引字段中的部分词条查找时，只能全表扫描。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>而<strong>倒排索引</strong>则相反，是先找到用户要搜索的词条，根据词条得到保护词条的文档的id，然后根据id获取文档。是<strong>根据词条找文档的过程</strong>。<ul>
+<li>优点：<ul>
+<li>根据词条搜索、模糊搜索时，速度非常快</li>
+</ul>
+</li>
+<li>缺点：<ul>
+<li>只能给词条创建索引，而不是字段</li>
+<li>无法根据字段做排序</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="MySQL与ES"><a href="#MySQL与ES" class="headerlink" title="MySQL与ES"></a>MySQL与ES</h3><table>
+<thead>
+<tr>
+<th><strong>MySQL</strong></th>
+<th><strong>Elasticsearch</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Table</td>
+<td>Index</td>
+<td>索引(index)，就是文档的集合，类似数据库的表(table)</td>
+</tr>
+<tr>
+<td>Row</td>
+<td>Document</td>
+<td>文档（Document），就是一条条的数据，类似数据库中的行（Row），文档都是JSON格式</td>
+</tr>
+<tr>
+<td>Column</td>
+<td>Field</td>
+<td>字段（Field），就是JSON文档中的字段，类似数据库中的列（Column）</td>
+</tr>
+<tr>
+<td>Schema</td>
+<td>Mapping</td>
+<td>Mapping（映射）是索引中文档的约束，例如字段类型约束。类似数据库的表结构（Schema）</td>
+</tr>
+<tr>
+<td>SQL</td>
+<td>DSL</td>
+<td>DSL是elasticsearch提供的JSON风格的请求语句，用来操作elasticsearch，实现CRUD</td>
+</tr>
+</tbody></table>
+<h3 id="ik分词器"><a href="#ik分词器" class="headerlink" title="ik分词器"></a>ik分词器</h3><p>创建倒排索引时对文档分词。用户搜索时，对输入的内容分词</p>
+<p>IK分词器模式</p>
+<ul>
+<li><p>ik_smart：智能切分，粗粒度</p>
+</li>
+<li><p>ik_max_word：最细切分，细粒度</p>
+</li>
+</ul>
+<p>拓展词条，停用词条</p>
+<ul>
+<li>利用config目录的IkAnalyzer.cfg.xml文件添加拓展词典和停用词典</li>
+</ul>
+<h3 id="Mapping属性映射"><a href="#Mapping属性映射" class="headerlink" title="Mapping属性映射"></a>Mapping属性映射</h3><ul>
+<li>type：字段数据类型，常见的简单类型有：<ul>
+<li>字符串：text（可分词的文本）、keyword（精确值，例如：品牌、国家、ip地址）<ul>
+<li>不需要分词的就指定为keyword</li>
+</ul>
+</li>
+<li>数值：long、integer、short、byte、double、float、</li>
+<li>布尔：boolean</li>
+<li>日期：date</li>
+<li>对象：object</li>
+</ul>
+</li>
+<li>index：是否创建索引，默认为true（需要参与搜索的话，就创建索引，不参与搜索就不创建索引）</li>
+<li>analyzer：使用哪种分词器</li>
+<li>properties：该字段的子字段</li>
+</ul>
+<h3 id="CRUD索引"><a href="#CRUD索引" class="headerlink" title="CRUD索引"></a>CRUD索引</h3><ul>
+<li>put &#x2F;索引库名，参数为mapping映射规则，即json串</li>
+<li>get &#x2F;索引库名</li>
+<li>无法修改mapping中已有的字段，但是可以添加新的字段到mapping<ul>
+<li><pre><code class="text">PUT /索引库名/_mapping
+&#123;
+  &quot;properties&quot;: &#123;
+    &quot;新字段名&quot;:&#123;
+      &quot;type&quot;: &quot;integer&quot;
+    &#125;
+  &#125;
+&#125;
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">- delete /索引库名</span><br><span class="line"></span><br><span class="line">### CRUD文档</span><br><span class="line">- ```</span><br><span class="line">  POST /索引库名/_doc/文档id</span><br><span class="line">  &#123;</span><br><span class="line">      &quot;字段1&quot;: &quot;值1&quot;,</span><br><span class="line">      &quot;字段2&quot;: &quot;值2&quot;,</span><br><span class="line">      &quot;字段3&quot;: &#123;</span><br><span class="line">          &quot;子属性1&quot;: &quot;值3&quot;,</span><br><span class="line">          &quot;子属性2&quot;: &quot;值4&quot;</span><br><span class="line">      &#125;,</span><br><span class="line">      // ...</span><br><span class="line">  &#125;</span><br><span class="line">  //新增文档</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+<li>GET &#x2F;{索引库名称}&#x2F;_doc&#x2F;{id}</li>
+<li>DELETE &#x2F;{索引库名}&#x2F;_doc&#x2F;id值</li>
+<li>全量修改—覆盖<ul>
+<li><pre><code>PUT /&#123;索引库名&#125;/_doc/文档id
+&#123;
+    &quot;字段1&quot;: &quot;值1&quot;,
+    &quot;字段2&quot;: &quot;值2&quot;,
+    // ... 略
+&#125;
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">- 增量修改---修改已有字段的值</span><br><span class="line">  - ```</span><br><span class="line">    POST /&#123;索引库名&#125;/_update/文档id</span><br><span class="line">    &#123;</span><br><span class="line">        &quot;doc&quot;: &#123;</span><br><span class="line">             &quot;字段名&quot;: &quot;新的值&quot;,  //对应需要修改的字段</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="DSL查询"><a href="#DSL查询" class="headerlink" title="DSL查询"></a>DSL查询</h3><ul>
+<li><strong>查询所有</strong>：查询出所有数据，一般测试用。例如：match_all</li>
+<li><strong>全文检索（full text）查询</strong>：利用分词器对用户输入内容分词，然后去倒排索引库中匹配。例如：<ul>
+<li>match_query</li>
+<li>multi_match_query（一般不用，生成索引是时可选择合并索引，生成一个新的索引进行查询）<ul>
+<li>建议采用copy_to，然后单字段查询的方式。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>精确查询</strong>：根据精确词条值查找数据，一般是查找keyword、数值、日期、boolean等类型字段。查询的条件也必须是<strong>不分词</strong>的词条。<ul>
+<li>range：根据值的范围查询</li>
+<li>term：根据词条精确值查询</li>
+</ul>
+</li>
+<li><strong>地理（geo）查询</strong>：根据经纬度查询。例如：<ul>
+<li>geo_distance:附近查询，也叫做距离查询（geo_distance）：查询到指定中心点小于某个距离值的所有文档。常用</li>
+<li>geo_bounding_box:矩形范围查询</li>
+</ul>
+</li>
+<li><strong>复合（compound）查询</strong>：复合查询可以将上述各种查询条件组合起来，合并查询条件。例如：<ul>
+<li>bool：布尔查询，利用逻辑关系组合多个其它的查询，实现复杂搜索</li>
+<li>function_score：算分函数查询，可以控制文档相关性算分，控制文档排名</li>
+</ul>
+</li>
+</ul>
+<h3 id="排序"><a href="#排序" class="headerlink" title="排序"></a>排序</h3><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET /indexName/_search</span><br><span class="line">&#123;//普通字段排序</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;sort&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;FIELD&quot;: &quot;desc&quot;  // 排序字段、排序方式ASC、DESC</span><br><span class="line">    &#125;</span><br><span class="line">    //多个花括号定义多个排序字段</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET /indexName/_search</span><br><span class="line">&#123;//地理坐标排序</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;sort&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;_geo_distance&quot; : &#123;</span><br><span class="line">          &quot;FIELD&quot; : &quot;纬度，经度&quot;, // 文档中geo_point类型的字段名、目标坐标点</span><br><span class="line">          &quot;order&quot; : &quot;asc&quot;, // 排序方式</span><br><span class="line">          &quot;unit&quot; : &quot;km&quot; // 排序的距离单位</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="分页"><a href="#分页" class="headerlink" title="分页"></a>分页</h3><p>elasticsearch 默认情况下只返回top10的数据。而如果要查询更多数据就需要修改分页参数了。elasticsearch中通过修改from、size参数来控制要返回的分页结果：类似于mysql中的<code>limit ?, ?</code></p>
+<ul>
+<li>from：从第几个文档开始</li>
+<li>size：总共查询几个文档</li>
+</ul>
+<h4 id="深度分页问题"><a href="#深度分页问题" class="headerlink" title="深度分页问题"></a>深度分页问题</h4><p>现在，我要查询990<del>1000的数据，这里是查询990开始的数据，也就是 第990</del>第1000条 数据。不过，elasticsearch内部分页时，必须先查询 0~1000条，然后截取其中的990 ~ 1000的这10条。查询TOP1000，如果es是单点模式，这并无太大影响。但是elasticsearch将来一定是集群，例如我集群有5个节点，我要查询TOP1000的数据，并不是每个节点查询200条就可以了。要想获取整个集群的TOP1000，必须先查询出每个节点的TOP1000，汇总结果后，重新排名，重新截取TOP1000。</p>
+<p><strong>因此elasticsearch会禁止from+ size 超过10000的请求。</strong><br>针对深度分页，ES提供了两种解决方案，<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html">官方文档</a>：</p>
+<ul>
+<li>search after：分页时需要排序，原理是从上一次的排序值开始，查询下一页数据。官方推荐使用的方式。</li>
+<li>scroll：原理将排序后的文档id形成快照，保存在内存。官方已经不推荐使用。</li>
+</ul>
+<h3 id="高亮"><a href="#高亮" class="headerlink" title="高亮"></a>高亮</h3><p>高亮显示的实现分为两步：</p>
+<ul>
+<li><p>1）给文档中的所有关键字都添加一个标签，例如<code>&lt;em&gt;</code>标签</p>
+</li>
+<li><p>2）<strong>页面给<code>&lt;em&gt;</code>标签编写CSS样式</strong></p>
+</li>
+<li><p>高亮是对关键字高亮，因此<strong>搜索条件必须带有关键字</strong>，而不能是范围这样的查询。</p>
+<ul>
+<li><p>默认情况下，<strong>高亮的字段，必须与搜索指定的字段一致</strong>，否则无法高亮</p>
+</li>
+<li><p>如果要对非搜索字段高亮，则需要添加一个属性：required_field_match&#x3D;false</p>
+</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">GET /hotel/_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;FIELD&quot;: &quot;TEXT&quot; // 查询条件，高亮一定要使用全文检索查询</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;highlight&quot;: &#123;</span><br><span class="line">    &quot;fields&quot;: &#123; // 指定要高亮的字段</span><br><span class="line">      &quot;FIELD&quot;: &#123;</span><br><span class="line">        &quot;pre_tags&quot;: &quot;&lt;em&gt;&quot;,  // 用来标记高亮字段的前置标签</span><br><span class="line">        &quot;post_tags&quot;: &quot;&lt;/em&gt;&quot; // 用来标记高亮字段的后置标签</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="数据聚合"><a href="#数据聚合" class="headerlink" title="数据聚合"></a>数据聚合</h3><p>参加聚合的字段必须是keyword、日期、数值、布尔类型</p>
+<ul>
+<li><strong>桶（Bucket）</strong>聚合：用来对文档做分组<ul>
+<li>TermAggregation：按照文档字段值分组，例如按照品牌值分组、按照国家分组</li>
+<li>Date Histogram：按照日期阶梯分组，例如一周为一组，或者一月为一组</li>
+</ul>
+</li>
+<li><strong>度量（Metric）</strong>聚合：用以计算一些值，比如：最大值、最小值、平均值等<ul>
+<li>Avg：求平均值</li>
+<li>Max：求最大值</li>
+<li>Min：求最小值</li>
+<li>Stats：同时求max、min、avg、sum等</li>
+</ul>
+</li>
+<li><strong>管道（pipeline）</strong>聚合：其它聚合的结果为基础做聚合</li>
+</ul>
+<p>aggs代表聚合，与query同级，此时query的作用是限定聚合的的文档范围<br>聚合必须的三要素：</p>
+<ul>
+<li>聚合名称</li>
+<li>聚合类型，terms还是states</li>
+<li>聚合字段</li>
+</ul>
+<p>聚合可配置属性有：</p>
+<ul>
+<li>size：指定聚合结果数量</li>
+<li>order：指定聚合结果排序方式</li>
+<li>field：指定聚合字段</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>ES</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>JVM</title>
     <url>/2024/02/28/JVM/</url>
     <content><![CDATA[<h3 id="JVM"><a href="#JVM" class="headerlink" title="JVM"></a>JVM</h3><h4 id="什么是jvm？"><a href="#什么是jvm？" class="headerlink" title="什么是jvm？"></a>什么是jvm？</h4><p>JVM（Java虚拟机）是Java编程语言的关键组成部分之一，它是一个能够在不同平台上执行Java字节码的虚拟机。java程序首先被编译成Java字节码，然后由JVM解释执行或者编译执行。<span id="more"></span></p>
@@ -923,100 +1020,94 @@
       </tags>
   </entry>
   <entry>
-    <title>Fidder抓包</title>
-    <url>/2023/11/28/Fidder/</url>
-    <content><![CDATA[<h3 id="Fidder"><a href="#Fidder" class="headerlink" title="Fidder"></a>Fidder</h3><p>Fiddler是位于客户端和服务器端的HTTP代理，也是目前最常用的http抓包工具之一 。 它能够记录客户端和服务器之间的所有 HTTP请求，可以针对特定的HTTP请求，分析请求数据、设置断点、调试web应用、修改请求的数据，甚至可以修改服务器返回的数据<span id="more"></span></p>
-<p>注意：使用Fiddler的话，需要先设置浏览器的代理地址，才可以抓取到浏览器的数据包。<strong>而很方便的是在你启动该工具后，它就已经自动帮你设置好了浏览器的代理了</strong>，当关闭后，它又将浏览器代理还原了。当然如果发现没有自动设置浏览器代理的话，那就得自己动手去浏览器进行设置代理操作了。（可自行百度每个浏览器是如何设置代理的）</p>
-<h3 id="Fidder设置"><a href="#Fidder设置" class="headerlink" title="Fidder设置"></a>Fidder设置</h3><h4 id="https设置"><a href="#https设置" class="headerlink" title="https设置"></a>https设置</h4><p>首先点击Tools—&gt;Options,之后在出现的页面选择HTTSPS，将其全部勾选。如下图所示。</p>
-<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128144508010.png" alt="image-20231128144508010" style="zoom: 67%;" />
+    <title>Jmeter---压力测试</title>
+    <url>/2023/12/16/Jmeter---%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/</url>
+    <content><![CDATA[<h2 id="Jmeter压力测试"><a href="#Jmeter压力测试" class="headerlink" title="Jmeter压力测试"></a>Jmeter压力测试</h2><p>性能测试是一个系统化的过程，用于评估系统在不同负载条件下的表现。下面是使用Jmeter进行性能测试的一般流程。<span id="more"></span></p>
+<h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><ol>
+<li>首先新建对应的线程组，以及添加一个http cookie管理器。（某些请求之间存在cookie关联，故添加cookie管理器防止报错）。</li>
+<li>在测试计划右键添加，非测试元件，http代理服务器。</li>
+<li>基本信息填写</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216145015594.png" alt="image-20231216145015594" style="zoom:67%;" />
 
-<p>之后，浏览器访问<a href="http://localhost:8888，点击download">http://localhost:8888，点击download</a> the FidderRoot certificate，安装对应证书。之后打开下载的内容，一直next即可。再次进入上图页面，点击Actions，选择reset all certificate，，先删除所有证书，再安装你下载的证书（按照提示来即可）点击yes，点击是，之后ok关闭即可。完成上述步骤就可以进行https请求的抓取了。</p>
-<h4 id="远程连接设置"><a href="#远程连接设置" class="headerlink" title="远程连接设置"></a>远程连接设置</h4><p>首先点击Tools—&gt;Options,然后点击Connections，勾选Allow remote computers to connect即可。</p>
-<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128150943183.png" alt="image-20231128150943183" style="zoom: 67%;" />
+<ol start="4">
+<li>请求过滤，将一些请求过滤，如图片，音视频等数据。</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216145421637.png" alt="image-20231216145421637" style="zoom:67%;" />
 
-<p>同时，此界面还可以更改fidder的默认端口8888。</p>
-<h3 id="Fidder请求"><a href="#Fidder请求" class="headerlink" title="Fidder请求"></a>Fidder请求</h3><p>1）各图标含义</p>
-<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128151748732.png" alt="image-20231128151748732" style="zoom:67%;" />
+<ol start="5">
+<li>配置电脑代理。</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216150106985.png" alt="image-20231216150106985" style="zoom:67%;" />
 
-<p>2）工具栏</p>
-<p><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128152053892.png" alt="image-20231128152053892"></p>
-<p>从左到右表示的意义分别是：</p>
+<ol start="6">
+<li>开始录制。点击HTTP代理服务器中的绿色启动按钮。（shift+f5，去缓存刷新页面）</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216150325859.png" alt="image-20231216150325859" style="zoom:67%;" />
+
+<ol start="7">
+<li>完成整个事务流程后，自己修改相关逻辑。如接口关联中的值的修改，删除不必要的请求头信息，删除不必要的跳转请求等。</li>
+</ol>
+<h3 id="聚合报告"><a href="#聚合报告" class="headerlink" title="聚合报告"></a>聚合报告</h3><p>在线程组或请求上右键，添加，监听器，聚合报告。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216152211346.png" alt="image-20231216152211346" style="zoom:67%;" />
+
+<h3 id="逻辑控制器"><a href="#逻辑控制器" class="headerlink" title="逻辑控制器"></a>逻辑控制器</h3><p>常用的逻辑控制器有事务控制器，吞吐量控制器，仅一次控制器。均在线程组右键添加，逻辑控制器，选择对应的控制器即可，而后将响应的请求拖动到其下面即可。</p>
+<p>事务控制器：将几个请求聚合为一个事务，在聚合报告中可以只查看到聚合后的性能指标。</p>
+<p>仅一次控制器：常用于登录请求，一个虚拟用户的多次请求应当只登录一次。</p>
+<p>吞吐量控制器：例如博客发帖的测试，发帖的吞吐量应该远小于回帖的吞吐量，模拟真实的性能场景。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216154104793.png" alt="image-20231216154104793" style="zoom:67%;" />
+
+<p>（per user：对于percent模式不影响，对于total模式，单个虚拟用户单独计算其吞吐量，即取样器的次数）</p>
+<h3 id="同步定时器（集合点）"><a href="#同步定时器（集合点）" class="headerlink" title="同步定时器（集合点）"></a>同步定时器（集合点）</h3><p>用于实现并发。右键添加，定时器，同步定时器。在虚拟用户来了之后，不是立即发送请求，而是先集合，形成用户组。用户组达到规定的用户数量后，再统一的发送请求，模拟并发的场景。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216155251490.png" alt="image-20231216155251490" style="zoom:67%;" />
+
+<h3 id="Jmeter插件管理"><a href="#Jmeter插件管理" class="headerlink" title="Jmeter插件管理"></a>Jmeter插件管理</h3><ol>
+<li><p>首先下载对应的插件管理包。<a href="https://jmeter-plugins.org/install/Install/">jmeter-plugins-manager.jar</a>，<a href="https://jmeter-plugins.org/downloads/file/JMeterPlugins-Standard-1.4.0.zip">JMeterPlugins-Standard-1.4.0.zip</a>，<a href="https://jmeter-plugins.org/downloads/file/JMeterPlugins-Extras-1.4.0.zip">JMeterPlugins-Extras-1.4.0.zip</a>。(<a href="https://jmeter-plugins.org/downloads/old/">其余插件地址</a>)</p>
+</li>
+<li><p>将其中的对应名字的jar包放入jmeter安装位置下的lib&#x2F;ext文件夹中</p>
+</li>
+<li><p>重启Jmeter。</p>
+</li>
+<li><p>在监听器里面，就有了对应的TPS和RT的图形显示结果。</p>
+</li>
+</ol>
+<h3 id="实际性能压测"><a href="#实际性能压测" class="headerlink" title="实际性能压测"></a>实际性能压测</h3><p>一般使用简单线程组进行基准测试，得到性能拐点。再使用混合复杂压测得到性能分析。</p>
+<h4 id="jp-gc-Stepping-Thread-Group"><a href="#jp-gc-Stepping-Thread-Group" class="headerlink" title="jp@gc - Stepping Thread Group"></a>jp@gc - Stepping Thread Group</h4><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216163917889.png" alt="image-20231216163917889" style="zoom:67%;" />
+
+<h3 id="无界面指令"><a href="#无界面指令" class="headerlink" title="无界面指令"></a>无界面指令</h3><p>JMeter 是一个功能强大的性能测试工具，可以通过命令行进行许多操作。以下是一些常用的 JMeter 命令行参数：</p>
 <ul>
-<li>WinConfig：windows 使用了一种叫做“AppContainer”的隔离技术，使得一些流量无法正常捕获，在 fiddler中点击 WinConfig 按钮可以解除这个诅咒，这个与菜单栏 Tools→Win8 Loopback Exemptions 功能是一致的</li>
-<li>气泡：给请求添加备注说明。选中一条请求，点击气泡，即可添加对应的备注说明</li>
-<li>Replay：对请求进行回放。选择一条请求，点击replay，即再次发送该请求</li>
-<li>X：删除某些请求会话，可下拉选择。常用remove all</li>
-<li>Go：debug断点调试时，继续执行该请求</li>
-<li>Stream：流模式，实时通信模式，有请求就有返回。一般用不到</li>
-<li>Decode：将请求的东西解压出来，方便查阅</li>
-<li>Keep all Sessions：保存所有会话。注意，保存越多，占用内存越大。fidder默认保存所有，可下拉选择更改</li>
-<li>Any Process：过滤请求。将其按住拖到edge浏览器上即可屏蔽该浏览器发出的请求。只能屏蔽对应的进程，应用发出的会话请求</li>
-<li>Find：查找会话，使用黄色标记该会话。</li>
-<li>Save：保存选择的会话。保存为 .saz文件</li>
-<li>照相机&#x2F;截图：保存截图，5秒后将截图保存下来</li>
-<li>计时器：左击开始计时，再左击停止。右击清0</li>
-<li>Browse：快速启动浏览器，可下拉选择</li>
-<li>Clear cache：清除缓存</li>
-<li>TextWizard：编&#x2F;解码字符串</li>
-<li>Tearoff：将请求和响应单独独立为一个新窗口，方便查看</li>
-<li>MSDN：搜索功能</li>
-<li>？：fidder在线帮助网站</li>
+<li><p><code>-n</code>：非 GUI 模式，以无界面方式启动 JMeter。</p>
+</li>
+<li><p><code>-t [测试计划文件]</code>：指定要运行的 JMeter 测试计划文件。</p>
+</li>
+<li><p><code>-r</code>：启动 JMeter 远程服务器。</p>
+</li>
+<li><p><code>-R [远程服务器列表]</code>：指定要连接的远程服务器列表。</p>
+</li>
+<li><p><code>-e</code>：在测试运行结束后生成 HTML 报告。</p>
+</li>
+<li><p><code>-l [输出文件]</code>：将结果写入指定文件。</p>
+</li>
+<li><p><code>-J[prop_name]=[prop_value]</code>：设置 JMeter 属性值。</p>
+</li>
+<li><p><code>-j [日志文件]</code>：将日志写入指定文件。</p>
+</li>
+<li><p><code>-h</code>：显示命令行参数的帮助信息。</p>
+</li>
+<li><p><code>-v [变量名]</code>：输出指定变量的值。</p>
+</li>
+<li><p><code>-q [属性文件]</code>：指定要使用的属性文件。</p>
+</li>
 </ul>
-<p>3）选项卡</p>
-<p><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128154847828.png" alt="image-20231128154847828"></p>
-<p>下面将只介绍一些常用的选项卡。</p>
-<h4 id="Inspectors"><a href="#Inspectors" class="headerlink" title="Inspectors"></a>Inspectors</h4><p><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128155446293.png" alt="image-20231128155446293"></p>
-<p><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128155505246.png" alt="image-20231128155505246"></p>
-<p>包含请求和响应的一些信息。主要是对这些信息的多种格式展示。主要查看请求头，响应头重要信息。</p>
-<h4 id="Filters"><a href="#Filters" class="headerlink" title="Filters"></a>Filters</h4><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128155952719.png" alt="image-20231128155952719" style="zoom:67%;" />
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jmeter -n -t ./scripts/test.jmx -l resout.jtl</span><br><span class="line"><span class="comment">#./scripts/test.jmx为脚本的位置</span></span><br><span class="line"><span class="comment">#resout.jtl为生成的jtl报告。</span></span><br><span class="line"><span class="comment">#最后使用聚合报告打开jtl文件，即可得到对应的聚合报告</span></span><br><span class="line">jmeter -n -t ./scripts/test.jmx -l resout2.jtl -e -o reports</span><br><span class="line"><span class="comment">#-e： html报告</span></span><br><span class="line"><span class="comment">#-o： 文件夹的位置，reports</span></span><br></pre></td></tr></table></figure>
 
-<p>设置完成后，点击Actions执行定义的过滤规则。</p>
-<p>1）Hosts过滤</p>
-<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">No Zone Filter：不设置过滤；指定只显示内网（Intranet）或互联网（Internet）的内容(不常用)</span><br><span class="line">Show only Intranet Hosts：指定只显示内网（Intranet）的内容</span><br><span class="line">Show only Internet Hosts：指定只显示互联网（Internet）的内容</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">No Host Filter：不过滤</span><br><span class="line">Hide the following Hosts ： 隐藏文本框中的相关主机请求</span><br><span class="line">Show only the following Hosts ：显示文本框中相关的主机请求（多个用分号分开）</span><br><span class="line">Flag the following Hosts ：标记（高亮）显示文本框中的主机请求</span><br></pre></td></tr></table></figure>
 
-<p>2）Client Process过滤</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Show only traffic from：你可以指定只捕获哪个Windows进程中的请求；</span><br><span class="line">Show only Internet Explorer traffic：只显示IE发出的请求；</span><br><span class="line">Hide traffic from Service Host：隐藏来自Host发出的请求；</span><br></pre></td></tr></table></figure>
-
-<p>3）RequestHeader过滤</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">show only if URL contains: 只显示URL包含的，多个时空格分开</span><br><span class="line">Hide if URL contains: 隐藏URL包含的，多个时空格分开</span><br><span class="line">Flag requests with headers: 加粗显示HTTP请求头包含指定的HTTP请求头的类型名称</span><br><span class="line">Delete request headers: 删除HTTP请求头包含指定的HTTP请求头的类型名称</span><br><span class="line">Set request header : 创建一个指定名称和值的HTTP请求头,或更新HTTP请求头为指定值。</span><br><span class="line">Break request on POST: POST请求设置断点</span><br><span class="line">Break request on GET with query string: GET方法且URL中包含查询条件的请求设置断点（URL中包含参数params）</span><br><span class="line">Break on XMLHttpRequest: 通过 XMLHttpRequest对象发送的请求设置断点。通过查找请求头中是否含有X-Request-With 和X-Download-Initiator</span><br><span class="line">Break response on Content-Type: 响应头Content-Type 中包含了指定的文本设置断点</span><br></pre></td></tr></table></figure>
-
-<p>5）Response Status Code过滤</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Hide success(2XX): 隐藏状态码在200至299的响应</span><br><span class="line">Hide non-2xx: 隐藏非200至299的响应</span><br><span class="line">Hide Authentication demands(401,407): 隐藏状态码为401,407的响应.需要用户进一步确认证书的请求</span><br><span class="line">Hide redirects(300,301,302,303,307): 藏状态码为300,301,302,303,307重定向的响应</span><br><span class="line">Hide Not Modified(304):藏状态码为304的响应.缓存实体有效返回304</span><br></pre></td></tr></table></figure>
-
-<p>6）Response Type and Size过滤</p>
-<p>7）Response Headers过滤</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">Flag responses that set cookies: 粗体显示和响应头包含Set-Cookie的响应</span><br><span class="line">Flag responses with headers: 粗体显示指定HTTP响应头。同Flag requests with headers</span><br><span class="line">Delete responses headers: 删除特定的HTTP响应头。只是从响应头中删除，不删除session</span><br><span class="line">Set response header；创建更新响应头。同Set Request header 用法一样</span><br></pre></td></tr></table></figure>
-
-<h4 id="Composer"><a href="#Composer" class="headerlink" title="Composer"></a>Composer</h4><p>Composer选项卡支持手动构建和发请求；也可以在session列表中拖拽Session放到Composer中，会直接把该session的请求复制到用户界面；</p>
-<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128163002061.png" alt="image-20231128163002061" style="zoom:67%;" />
-
-<p>上面填写对应的请求路径，请求头信息等。下面填写请求体中对应的内容。即请求的参数</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">	Options标签：</span><br><span class="line">Inspect Session: 执行请求后，会自动打开Inspectors选项卡；</span><br><span class="line">Fix Content-Length header:控制Composer是否会自动添加或修改Content-Length请求头，表示请求体的大小；</span><br><span class="line">Follow Redirects:是否会自动使用响应的Location头；</span><br><span class="line">Automatically Authenticate: 是否会自动响应服务器的认证需求；</span><br><span class="line">Tear off 按钮：使Composer选项卡以独立的窗口悬浮；</span><br></pre></td></tr></table></figure>
-
-<h3 id="Fidder应用"><a href="#Fidder应用" class="headerlink" title="Fidder应用"></a>Fidder应用</h3><h4 id="错误排查"><a href="#错误排查" class="headerlink" title="错误排查"></a>错误排查</h4><p>根据对应的请求头，响应头信息，判断是前端错误还是后端错误。若请求有问题，则前端错误，若响应的数据有问题，则后端服务错误，若响应数据没问题，则前端渲染错误。（同时还要结合数据库数据进行判断）</p>
-<h4 id="Mock测试—查看页面布局"><a href="#Mock测试—查看页面布局" class="headerlink" title="Mock测试—查看页面布局"></a>Mock测试—查看页面布局</h4><p><strong>断点改数据：</strong></p>
-<p><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128170848085.png" alt="image-20231128170848085"></p>
-<p>点击第一下是请求前断点，可以修改对应的请求数据；点击第二下是响应后断点，可以修改对应的响应数据，点击第三下是取消断点。断点设置之后点击Run to completion执行断点后的操作，观察结果。</p>
-<p><strong>改数据库：</strong>优点，可以同时测多种环境下页面显示问题，如web页面，app页面，h5等。缺点：信息千人前面，每个人的推荐信息是不同的。</p>
-<p><strong>mock测试：</strong>先save对应的响应体数据，然后修改保存。后点击AutoResponder选项卡，拖动对应请求到其中，而后选择find a file替换响应结果，而后再次发送该请求去查看结果即可。如下图所示</p>
-<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128165733545.png" alt="image-20231128165733545" style="zoom:67%;" />
-
-<h4 id="弱网测试"><a href="#弱网测试" class="headerlink" title="弱网测试"></a>弱网测试</h4><p>Rules-&gt;Performance -&gt; Simulate Modem Speeds</p>
-<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128172259066.png" alt="image-20231128172259066" style="zoom:67%;" />
-
-<p>同时，可以点击Rules—&gt;Cutomize Rules，即</p>
-<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231128172415152.png" alt="image-20231128172415152" style="zoom:67%;" />
-
-<p>进去弱网设置代码里，找到m_SimulateModem，修改oSession[“request-trickle-delay”] &#x3D; “300”;（表示上传1kb需要300ms）和oSession[“response-trickle-delay”] &#x3D; “150”;，自定义弱网的网络条件。</p>
-<h4 id="app抓包"><a href="#app抓包" class="headerlink" title="app抓包"></a>app抓包</h4><p>首先打开fidder的远程连接，见上。其次，进行手机上的设置，保证手机网络和fidder所在电脑网络处于同一局域网下。然后设置手机的代理网络为fidder的服务地址。</p>
-<p>此外，手机上也需要下载安装fidder安全证书。访问http:&#x2F;&#x2F;电脑IP:8888，一路下载安装，按照提示干就完了。（不要干坏事哇）</p>
 ]]></content>
       <tags>
         <tag>测试</tag>
-        <tag>抓包</tag>
-        <tag>Fidder</tag>
+        <tag>Jmeter</tag>
+        <tag>性能测试</tag>
       </tags>
   </entry>
   <entry>
@@ -1249,97 +1340,6 @@
         <tag>接口测试</tag>
         <tag>测试</tag>
         <tag>Jmeter</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Jmeter---压力测试</title>
-    <url>/2023/12/16/Jmeter---%E5%8E%8B%E5%8A%9B%E6%B5%8B%E8%AF%95/</url>
-    <content><![CDATA[<h2 id="Jmeter压力测试"><a href="#Jmeter压力测试" class="headerlink" title="Jmeter压力测试"></a>Jmeter压力测试</h2><p>性能测试是一个系统化的过程，用于评估系统在不同负载条件下的表现。下面是使用Jmeter进行性能测试的一般流程。<span id="more"></span></p>
-<h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><ol>
-<li>首先新建对应的线程组，以及添加一个http cookie管理器。（某些请求之间存在cookie关联，故添加cookie管理器防止报错）。</li>
-<li>在测试计划右键添加，非测试元件，http代理服务器。</li>
-<li>基本信息填写</li>
-</ol>
-<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216145015594.png" alt="image-20231216145015594" style="zoom:67%;" />
-
-<ol start="4">
-<li>请求过滤，将一些请求过滤，如图片，音视频等数据。</li>
-</ol>
-<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216145421637.png" alt="image-20231216145421637" style="zoom:67%;" />
-
-<ol start="5">
-<li>配置电脑代理。</li>
-</ol>
-<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216150106985.png" alt="image-20231216150106985" style="zoom:67%;" />
-
-<ol start="6">
-<li>开始录制。点击HTTP代理服务器中的绿色启动按钮。（shift+f5，去缓存刷新页面）</li>
-</ol>
-<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216150325859.png" alt="image-20231216150325859" style="zoom:67%;" />
-
-<ol start="7">
-<li>完成整个事务流程后，自己修改相关逻辑。如接口关联中的值的修改，删除不必要的请求头信息，删除不必要的跳转请求等。</li>
-</ol>
-<h3 id="聚合报告"><a href="#聚合报告" class="headerlink" title="聚合报告"></a>聚合报告</h3><p>在线程组或请求上右键，添加，监听器，聚合报告。</p>
-<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216152211346.png" alt="image-20231216152211346" style="zoom:67%;" />
-
-<h3 id="逻辑控制器"><a href="#逻辑控制器" class="headerlink" title="逻辑控制器"></a>逻辑控制器</h3><p>常用的逻辑控制器有事务控制器，吞吐量控制器，仅一次控制器。均在线程组右键添加，逻辑控制器，选择对应的控制器即可，而后将响应的请求拖动到其下面即可。</p>
-<p>事务控制器：将几个请求聚合为一个事务，在聚合报告中可以只查看到聚合后的性能指标。</p>
-<p>仅一次控制器：常用于登录请求，一个虚拟用户的多次请求应当只登录一次。</p>
-<p>吞吐量控制器：例如博客发帖的测试，发帖的吞吐量应该远小于回帖的吞吐量，模拟真实的性能场景。</p>
-<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216154104793.png" alt="image-20231216154104793" style="zoom:67%;" />
-
-<p>（per user：对于percent模式不影响，对于total模式，单个虚拟用户单独计算其吞吐量，即取样器的次数）</p>
-<h3 id="同步定时器（集合点）"><a href="#同步定时器（集合点）" class="headerlink" title="同步定时器（集合点）"></a>同步定时器（集合点）</h3><p>用于实现并发。右键添加，定时器，同步定时器。在虚拟用户来了之后，不是立即发送请求，而是先集合，形成用户组。用户组达到规定的用户数量后，再统一的发送请求，模拟并发的场景。</p>
-<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216155251490.png" alt="image-20231216155251490" style="zoom:67%;" />
-
-<h3 id="Jmeter插件管理"><a href="#Jmeter插件管理" class="headerlink" title="Jmeter插件管理"></a>Jmeter插件管理</h3><ol>
-<li><p>首先下载对应的插件管理包。<a href="https://jmeter-plugins.org/install/Install/">jmeter-plugins-manager.jar</a>，<a href="https://jmeter-plugins.org/downloads/file/JMeterPlugins-Standard-1.4.0.zip">JMeterPlugins-Standard-1.4.0.zip</a>，<a href="https://jmeter-plugins.org/downloads/file/JMeterPlugins-Extras-1.4.0.zip">JMeterPlugins-Extras-1.4.0.zip</a>。(<a href="https://jmeter-plugins.org/downloads/old/">其余插件地址</a>)</p>
-</li>
-<li><p>将其中的对应名字的jar包放入jmeter安装位置下的lib&#x2F;ext文件夹中</p>
-</li>
-<li><p>重启Jmeter。</p>
-</li>
-<li><p>在监听器里面，就有了对应的TPS和RT的图形显示结果。</p>
-</li>
-</ol>
-<h3 id="实际性能压测"><a href="#实际性能压测" class="headerlink" title="实际性能压测"></a>实际性能压测</h3><p>一般使用简单线程组进行基准测试，得到性能拐点。再使用混合复杂压测得到性能分析。</p>
-<h4 id="jp-gc-Stepping-Thread-Group"><a href="#jp-gc-Stepping-Thread-Group" class="headerlink" title="jp@gc - Stepping Thread Group"></a>jp@gc - Stepping Thread Group</h4><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231216163917889.png" alt="image-20231216163917889" style="zoom:67%;" />
-
-<h3 id="无界面指令"><a href="#无界面指令" class="headerlink" title="无界面指令"></a>无界面指令</h3><p>JMeter 是一个功能强大的性能测试工具，可以通过命令行进行许多操作。以下是一些常用的 JMeter 命令行参数：</p>
-<ul>
-<li><p><code>-n</code>：非 GUI 模式，以无界面方式启动 JMeter。</p>
-</li>
-<li><p><code>-t [测试计划文件]</code>：指定要运行的 JMeter 测试计划文件。</p>
-</li>
-<li><p><code>-r</code>：启动 JMeter 远程服务器。</p>
-</li>
-<li><p><code>-R [远程服务器列表]</code>：指定要连接的远程服务器列表。</p>
-</li>
-<li><p><code>-e</code>：在测试运行结束后生成 HTML 报告。</p>
-</li>
-<li><p><code>-l [输出文件]</code>：将结果写入指定文件。</p>
-</li>
-<li><p><code>-J[prop_name]=[prop_value]</code>：设置 JMeter 属性值。</p>
-</li>
-<li><p><code>-j [日志文件]</code>：将日志写入指定文件。</p>
-</li>
-<li><p><code>-h</code>：显示命令行参数的帮助信息。</p>
-</li>
-<li><p><code>-v [变量名]</code>：输出指定变量的值。</p>
-</li>
-<li><p><code>-q [属性文件]</code>：指定要使用的属性文件。</p>
-</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">jmeter -n -t ./scripts/test.jmx -l resout.jtl</span><br><span class="line"><span class="comment">#./scripts/test.jmx为脚本的位置</span></span><br><span class="line"><span class="comment">#resout.jtl为生成的jtl报告。</span></span><br><span class="line"><span class="comment">#最后使用聚合报告打开jtl文件，即可得到对应的聚合报告</span></span><br><span class="line">jmeter -n -t ./scripts/test.jmx -l resout2.jtl -e -o reports</span><br><span class="line"><span class="comment">#-e： html报告</span></span><br><span class="line"><span class="comment">#-o： 文件夹的位置，reports</span></span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <tags>
-        <tag>测试</tag>
-        <tag>Jmeter</tag>
-        <tag>性能测试</tag>
       </tags>
   </entry>
   <entry>
@@ -1990,129 +1990,6 @@ public class ErrorMessageConfig &#123;
       </tags>
   </entry>
   <entry>
-    <title>Selenium元素定位和操作</title>
-    <url>/2023/12/03/Selenium%E5%85%83%E7%B4%A0%E5%AE%9A%E4%BD%8D%E5%92%8C%E6%93%8D%E4%BD%9C/</url>
-    <content><![CDATA[<h2 id="Selenium"><a href="#Selenium" class="headerlink" title="Selenium"></a>Selenium</h2><p>Selenium是一个用于Web应用程序的自动化测试工具；中文的意思（硒）。Web自动化测试：让程序代替人工自动验证Web项目功能的过程。功能测试完毕(手工测试)之后，再进行Web自动化测试。Web自动化测试属于黑盒测试(功能测试)。（接口测试属于灰盒测试）<span id="more"></span></p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install selenium   <span class="comment">###安装</span></span><br><span class="line">selenium --version     <span class="comment">###检查</span></span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">火狐浏览器</span><br><span class="line">1. Firefox 48 以上版本</span><br><span class="line">selenium 3.x + Firefox驱动(geckodriver)</span><br><span class="line">驱动下载地址：https://github.com/mozilla/geckodriver/releases</span><br><span class="line">2. Firefox 48 以下版本</span><br><span class="line">selenium 2.x + 内置驱动</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">谷歌浏览器</span><br><span class="line">selenium 2.x/3.x + Chrome驱动(chromedriver)</span><br><span class="line">驱动下载地址：https://sites.google.com/a/chromium.org/chromedriver/downloads</span><br><span class="line">chromedriver版本 支持的Chrome版本</span><br><span class="line">2.41 v67-69</span><br><span class="line">2.40 v66-68</span><br><span class="line">2.39 v66-68</span><br><span class="line">2.38 v65-67</span><br><span class="line">2.37 v64-66</span><br><span class="line">2.36 v63-65</span><br><span class="line">2.35 v62-64</span><br><span class="line">... ...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Edge浏览器(了解)</span><br><span class="line">selenium 3.x + Edge驱动(MicrosoftWebDriver)</span><br><span class="line">驱动下载地址：https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">安装浏览器驱动的步骤</span><br><span class="line">1. 下载浏览器驱动</span><br><span class="line">各个驱动下载地址： http://www.seleniumhq.org/download/</span><br><span class="line">浏览器的版本和驱动版本要一致！</span><br><span class="line">2. 把驱动文件所在目录添加到Path环境变量中</span><br><span class="line">或者直接放到Python安装目录，因为Python已添加到Path中</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> 科普path</span><br><span class="line">	说明：指定系统搜索的目录</span><br><span class="line">	dos命令默认搜索顺序：</span><br><span class="line">		1. 检测是否为内部命令</span><br><span class="line">		2. 检测是否为当前目录下可执行文件</span><br><span class="line">		3. 检测path环境变量指定的目录</span><br><span class="line">	提示：</span><br><span class="line">		如果以上搜索目录都检测不到输入的命令或可执行文件，系统会抛出不是内部或外部命令...</span><br><span class="line">		在web环境中，如果不将浏览器驱动添加到path中，selenium在运行的时候会提示浏览器驱动有误。</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#入门案例</span></span><br><span class="line"><span class="comment"># 导包</span></span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="comment"># 创建浏览器驱动对象</span></span><br><span class="line">driver = webdriver.Firefox()</span><br><span class="line"><span class="comment"># driver = webdriver.Chrome()</span></span><br><span class="line"><span class="comment"># driver = webdriver.Edge()</span></span><br><span class="line"><span class="comment"># 加载web页面</span></span><br><span class="line">driver.get(<span class="string">&quot;http://www.baidu.com/&quot;</span>)</span><br><span class="line"><span class="comment"># 暂停3秒</span></span><br><span class="line">time.sleep(<span class="number">3</span>)</span><br><span class="line"><span class="comment"># 关闭驱动对象</span></span><br><span class="line">driver.quit()</span><br></pre></td></tr></table></figure>
-
-<h3 id="元素定位"><a href="#元素定位" class="headerlink" title="元素定位"></a>元素定位</h3><p>为什么要学习元素定位？<br>让程序操作指定元素，就必须先找到它。元素定位就是通过元素的信息或元素层级结构来定位元素的。</p>
-<p>Selenium提供了八种定位元素方式</p>
-<ol>
-<li>id</li>
-<li>name</li>
-<li>class_name</li>
-<li>tag_name</li>
-<li>link_text</li>
-<li>partial_link_text</li>
-<li>XPath</li>
-<li>CSS</li>
-</ol>
-<h4 id="id定位"><a href="#id定位" class="headerlink" title="id定位"></a>id定位</h4><p>说明：id定位就是通过元素的id属性来定位元素，HTML<strong>规定</strong>id属性在整个HTML文档中必须是<strong>唯一</strong>的；（<strong>但实际不唯一也没有问题</strong>）<br>前提：元素有id属性</p>
-<p>方法：element &#x3D; driver.find_element_by_id(id)</p>
-<h4 id="name定位"><a href="#name定位" class="headerlink" title="name定位"></a>name定位</h4><p>说明：name定位就是根据元素name属性来定位。HTML文档中name的属性值是可以重复的。<br>前提：元素有name属性</p>
-<p>方法：element &#x3D; driver.find_element_by_name(name)</p>
-<h4 id="class-name定位"><a href="#class-name定位" class="headerlink" title="class_name定位"></a>class_name定位</h4><p>说明：class_name定位就是根据元素class属性值来定位元素。HTML通过使用class来定义元素的样式。<br>前提：元素有class属性<br>注意：如果class有多个属性值，只能使用其中的一个</p>
-<p>方法：element &#x3D; driver.find_element_by_class_name(class_name)</p>
-<h4 id="tag-name定位"><a href="#tag-name定位" class="headerlink" title="tag_name定位"></a>tag_name定位</h4><p>说明：tag_name定位就是通过标签名来定位；HTML本质就是由不同的tag组成，每一种标签一般在页面中会存在多个，所以不方便进行精确定位，一般很少使用</p>
-<p>方法：element &#x3D; driver.find_element_by_tag_name(tag_name)，如果存在多个相同标签，则返回符合条件的第一个标签</p>
-<h4 id="link-text定位"><a href="#link-text定位" class="headerlink" title="link_text定位"></a>link_text定位</h4><p>说明：link_text定位是专门用来定位超链接元素<a>标签</a>，并且是通过超链接的文本内容来定位元素。</p>
-<p>方法：element &#x3D; driver.find_element_by_link_text(link_text)，其中link_text：为超链接的全部文本内容，只能精确定位</p>
-<h4 id="partial-link-text定位"><a href="#partial-link-text定位" class="headerlink" title="partial_link_text定位"></a>partial_link_text定位</h4><p>说明：partial_link_text定位是对link_text定位的补充，link_text使用全部文本内容匹配元素，而partial_link_text可以使用局部来匹配元素，也可以使用全部文本内容匹配元素。</p>
-<p>方法：element &#x3D; driver.find_element_by_partial_link_text(partial_link_text)，其中partial_link_text：可以传入a标签局部文本-能表达唯一性的文本</p>
-<hr>
-<p><strong>以上方法若定位到多个元素，均返回定位到的第一个元素。</strong></p>
-<hr>
-<p>考虑以下问题，该如何定位元素？</p>
-<ol>
-<li>如果要定位的元素没有id、name、class属性，该如何进行定位？</li>
-<li>如果通过name、class、tag_name无法定位到唯一的元素，该如何进行定位？</li>
-</ol>
-<p>于是又提出了XPath定位和CSS定位。</p>
-<hr>
-<h4 id="XPath定位"><a href="#XPath定位" class="headerlink" title="XPath定位"></a>XPath定位</h4><ol>
-<li><strong>什么是XPath</strong></li>
-</ol>
-<p>XPath即为XML Path的简称，它是一门在 XML 文档中查找元素信息的语言。HTML可以看做是XML的一种实现，所以Selenium用户可以使用这种强大的语言在Web应用中定位元素。XML：一种标记语言，用于数据的存储和传递。 后缀.xml结尾</p>
-<ol start="2">
-<li><strong>定位方法</strong></li>
-</ol>
-<p>element &#x3D; driver.find_element_by_xpath(xpath)</p>
-<ol start="3">
-<li><strong>XPath定位策略</strong></li>
-</ol>
-<ul>
-<li>路径-定位</li>
-<li>利用元素属性-定位</li>
-<li>属性与逻辑结合-定位</li>
-<li>层级与属性结合-定位</li>
-</ul>
-<h5 id="路径定位"><a href="#路径定位" class="headerlink" title="路径定位"></a>路径定位</h5><p><strong>绝对路径</strong>：从最外层元素到指定元素之间所有经过元素层级的路径<br>1). 绝对路径以&#x2F;html根节点开始，使用 &#x2F; 来分隔元素层级；<br>如：&#x2F;html&#x2F;body&#x2F;div&#x2F;fieldset&#x2F;p[1]&#x2F;input<br>2). 绝对路径对页面结构要求比较严格，不建议使用</p>
-<p><strong>相对路径</strong>：匹配任意层级的元素，不限制元素的位置<br>1). 相对路径以&#x2F;&#x2F;开始<br>2). 格式：&#x2F;&#x2F;input 或者 &#x2F;&#x2F;*</p>
-<h5 id="利用元素属性定位"><a href="#利用元素属性定位" class="headerlink" title="利用元素属性定位"></a>利用元素属性定位</h5><p>说明：通过使用元素的属性信息来定位元素，解决上述定位多个标签元素问题<br>格式：&#x2F;&#x2F;input[@id&#x3D;’userA’] 或者 &#x2F;&#x2F;*[@id&#x3D;’userA’]</p>
-<h5 id="属性与逻辑结合"><a href="#属性与逻辑结合" class="headerlink" title="属性与逻辑结合"></a>属性与逻辑结合</h5><p>说明：解决元素之间个相同属性重名问题，使用多个属性间的关系，即逻辑与或非<br>格式：&#x2F;&#x2F;*[@name&#x3D;’tel’ and @class&#x3D;’tel’]</p>
-<h5 id="层级与属性结合"><a href="#层级与属性结合" class="headerlink" title="层级与属性结合"></a>层级与属性结合</h5><p>说明：如果通过元素自身的信息不方便直接定位到该元素，则可以先定位到其父级元素，然后再找到该元素<br>格式：&#x2F;&#x2F;*[@id&#x3D;’p1’]&#x2F;input</p>
-<ol start="4">
-<li><strong>XPath-延伸</strong></li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//*[text()=&quot;xxx&quot;] 文本内容是xxx的元素</span><br><span class="line">//*[contains(@attribute,&#x27;xxx&#x27;)] 属性中含有xxx的元素</span><br><span class="line">//*[starts-with(@attribute,&#x27;xxx&#x27;)] 属性以xxx开头的元素</span><br></pre></td></tr></table></figure>
-
-<h4 id="CSS定位"><a href="#CSS定位" class="headerlink" title="CSS定位"></a>CSS定位</h4><ol>
-<li><strong>什么是css定位？</strong></li>
-</ol>
-<p>CSS（Cascading Style Sheets）是一种语言，它用来描述HTML元素的显示样式；在CSS中，选择器是一种模式，用于选择需要添加样式的元素；在Selenium中也可以使用这种选择器来定位元素。在selenium中推荐<strong>使用CSS定位，因为它比XPath定位速度要快。</strong></p>
-<ol start="2">
-<li><strong>定位方法</strong></li>
-</ol>
-<p>element &#x3D; driver.find_element_by_css_selector(css_selector)</p>
-<ol start="3">
-<li><strong>CSS定位策略</strong></li>
-</ol>
-<ul>
-<li>id选择器</li>
-<li>class选择器</li>
-<li>元素选择器</li>
-<li>属性选择器</li>
-<li>层级选择器</li>
-</ul>
-<h5 id="id选择器"><a href="#id选择器" class="headerlink" title="id选择器"></a>id选择器</h5><p>说明：根据元素id属性来选择<br>格式：#id<br>例如：#userA &lt;选择id属性值为userA的元素&gt;</p>
-<h5 id="class选择器"><a href="#class选择器" class="headerlink" title="class选择器"></a>class选择器</h5><p>说明：根据元素class属性来选择<br>格式：.class<br>例如：.telA &lt;选择class属性值为telA的所有元素&gt;</p>
-<h5 id="元素选择器"><a href="#元素选择器" class="headerlink" title="元素选择器"></a>元素选择器</h5><p>说明：根据元素的标签名选择<br>格式：element<br>例如：input &lt;选择所有input元素&gt;</p>
-<h5 id="属性选择器"><a href="#属性选择器" class="headerlink" title="属性选择器"></a>属性选择器</h5><p>说明：根据元素的属性名和值来选择<br>格式：[attribute&#x3D;value]，element[attribute&#x3D;value]<br>例如：[type&#x3D;”password”]，选择type属性值为password的元素</p>
-<h5 id="层级选择器"><a href="#层级选择器" class="headerlink" title="层级选择器"></a>层级选择器</h5><p>说明：根据元素的父子关系来选择<br><strong>格式1</strong>：element1&gt;element2 ，通过element1来定位element2，并且element2必须为element1的直接子元素<br>例如1：p[id&#x3D;’p1’]&gt;input，定位指定p元素下的直接子元素input</p>
-<p><strong>格式2</strong>：element1 element2，通过element1来定位element2，并且element2为element1的后代元素<br>例如2：p[id&#x3D;’p1’] input，定位指定p元素下的后代元素input</p>
-<ol start="4">
-<li><strong>CSS延申</strong></li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">input[type^=&#x27;p&#x27;]，type属性以p字母开头的元素</span><br><span class="line">input[type$=&#x27;d&#x27;]，type属性以d字母结束的元素</span><br><span class="line">input[type*=&#x27;w&#x27;]，type属性包含w字母的元素</span><br></pre></td></tr></table></figure>
-
-<h4 id="定位一组元素"><a href="#定位一组元素" class="headerlink" title="定位一组元素"></a>定位一组元素</h4><p>作用： 查找定位所有符合条件的元素，返回的定位元素格式为数组(列表)格式；<br>说明： 列表数据格式的读取需要指定下标(下标从0开始)</p>
-<p>方法： element&#x3D;driver.find_elements_by_XXX()。</p>
-<h4 id="定位元素—延申写法"><a href="#定位元素—延申写法" class="headerlink" title="定位元素—延申写法"></a>定位元素—延申写法</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">导包：from selenium.webdriver.common.by import By</span><br><span class="line">方法：find_element(by=By.ID, value=None)</span><br><span class="line">备注：需要两个参数，第一个参数为定位的类型由By提供，第二个参数为定位的具体方式</span><br><span class="line">示例：</span><br><span class="line"> driver.find_element(By.CSS_SELECTOR, &#x27;#emailA&#x27;).send_keys(&quot;3113390285@qq.com&quot;)</span><br><span class="line"> driver.find_element(By.XPATH, &#x27;//*[@id=&quot;emailA&quot;]&#x27;).send_keys(&#x27;3113390285@qq.com&#x27;)</span><br><span class="line"> driver.find_element(By.ID, &quot;userA&quot;).send_keys(&quot;Honor HL&quot;)</span><br><span class="line"> driver.find_element(By.NAME, &quot;passwordA&quot;).send_keys(&quot;荷包蛋HL&quot;)</span><br><span class="line"> driver.find_element(By.CLASS_NAME, &quot;telA&quot;).send_keys(&quot;159837665**&quot;)</span><br><span class="line"> driver.find_element(By.TAG_NAME, &#x27;input&#x27;).send_keys(&quot;哪有小孩天天哭&quot;)</span><br><span class="line"> driver.find_element(By.LINK_TEXT, &#x27;访问 新浪 网站&#x27;).click()</span><br><span class="line"> driver.find_element(By.PARTIAL_LINK_TEXT, &#x27;访问&#x27;).click()</span><br><span class="line"></span><br><span class="line">说明：通过查看find_element_by_id底层实现方法，发现底层是调用find_element方法进行的封装；</span><br></pre></td></tr></table></figure>
-
-<h3 id="元素操作"><a href="#元素操作" class="headerlink" title="元素操作"></a>元素操作</h3><p>为什么学习操作的方法？</p>
-<ol>
-<li>需要让脚本模拟用户给指定元素输入值</li>
-<li>需要让脚本模拟人为删除元素的内容</li>
-<li>需要让脚本模拟点击操作</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">click()   <span class="comment">#单击元素</span></span><br><span class="line">send_keys(value)    <span class="comment">#模拟输入</span></span><br><span class="line">clear()   <span class="comment">#清除文本</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="获取元素信息"><a href="#获取元素信息" class="headerlink" title="获取元素信息"></a>获取元素信息</h3><p>如何获取元素的文本？如何获取元素属性值？如何让程序判断元素是否为可见状态？</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"> size <span class="comment">#返回元素大小</span></span><br><span class="line"> text     <span class="comment">#获取元素的文本</span></span><br><span class="line"> get_attribute(<span class="string">&quot;xxx&quot;</span>)    <span class="comment">#获取属性值，传递的参数为元素的属性名</span></span><br><span class="line"> is_displayed()       <span class="comment">#判断元素是否可见</span></span><br><span class="line"> is_enabled()     <span class="comment">#判断元素是否可用</span></span><br><span class="line"> is_selected()     <span class="comment">#判断元素是否选中，用来检查复选框或单选按钮是否被选中</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 提示： size、text：为属性，调用时无括号；如：xxx.size</span></span><br><span class="line"><span class="comment"># get_attribute一般应用场景：判断一组元素是否为想要的元素或者判断元素属性值是否正确</span></span><br><span class="line"><span class="comment"># is_displayed、is_enabled、is_selected，在特殊应用场景中使用。</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <tags>
-        <tag>测试</tag>
-        <tag>Web测试</tag>
-        <tag>爬虫</tag>
-        <tag>Selenium</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Web测试---PO模式</title>
     <url>/2023/12/18/Web%E6%B5%8B%E8%AF%95---PO%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<h2 id="Web测试"><a href="#Web测试" class="headerlink" title="Web测试"></a>Web测试</h2><p>Web UI测试是确保网站或应用程序用户界面的功能、外观和交互行为符合预期的测试过程。它包括以下方面：</p>
@@ -2254,6 +2131,129 @@ public class ErrorMessageConfig &#123;
       <tags>
         <tag>测试</tag>
         <tag>Web测试</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Selenium元素定位和操作</title>
+    <url>/2023/12/03/Selenium%E5%85%83%E7%B4%A0%E5%AE%9A%E4%BD%8D%E5%92%8C%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h2 id="Selenium"><a href="#Selenium" class="headerlink" title="Selenium"></a>Selenium</h2><p>Selenium是一个用于Web应用程序的自动化测试工具；中文的意思（硒）。Web自动化测试：让程序代替人工自动验证Web项目功能的过程。功能测试完毕(手工测试)之后，再进行Web自动化测试。Web自动化测试属于黑盒测试(功能测试)。（接口测试属于灰盒测试）<span id="more"></span></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install selenium   <span class="comment">###安装</span></span><br><span class="line">selenium --version     <span class="comment">###检查</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">火狐浏览器</span><br><span class="line">1. Firefox 48 以上版本</span><br><span class="line">selenium 3.x + Firefox驱动(geckodriver)</span><br><span class="line">驱动下载地址：https://github.com/mozilla/geckodriver/releases</span><br><span class="line">2. Firefox 48 以下版本</span><br><span class="line">selenium 2.x + 内置驱动</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">谷歌浏览器</span><br><span class="line">selenium 2.x/3.x + Chrome驱动(chromedriver)</span><br><span class="line">驱动下载地址：https://sites.google.com/a/chromium.org/chromedriver/downloads</span><br><span class="line">chromedriver版本 支持的Chrome版本</span><br><span class="line">2.41 v67-69</span><br><span class="line">2.40 v66-68</span><br><span class="line">2.39 v66-68</span><br><span class="line">2.38 v65-67</span><br><span class="line">2.37 v64-66</span><br><span class="line">2.36 v63-65</span><br><span class="line">2.35 v62-64</span><br><span class="line">... ...</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Edge浏览器(了解)</span><br><span class="line">selenium 3.x + Edge驱动(MicrosoftWebDriver)</span><br><span class="line">驱动下载地址：https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">安装浏览器驱动的步骤</span><br><span class="line">1. 下载浏览器驱动</span><br><span class="line">各个驱动下载地址： http://www.seleniumhq.org/download/</span><br><span class="line">浏览器的版本和驱动版本要一致！</span><br><span class="line">2. 把驱动文件所在目录添加到Path环境变量中</span><br><span class="line">或者直接放到Python安装目录，因为Python已添加到Path中</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"> 科普path</span><br><span class="line">	说明：指定系统搜索的目录</span><br><span class="line">	dos命令默认搜索顺序：</span><br><span class="line">		1. 检测是否为内部命令</span><br><span class="line">		2. 检测是否为当前目录下可执行文件</span><br><span class="line">		3. 检测path环境变量指定的目录</span><br><span class="line">	提示：</span><br><span class="line">		如果以上搜索目录都检测不到输入的命令或可执行文件，系统会抛出不是内部或外部命令...</span><br><span class="line">		在web环境中，如果不将浏览器驱动添加到path中，selenium在运行的时候会提示浏览器驱动有误。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#入门案例</span></span><br><span class="line"><span class="comment"># 导包</span></span><br><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="comment"># 创建浏览器驱动对象</span></span><br><span class="line">driver = webdriver.Firefox()</span><br><span class="line"><span class="comment"># driver = webdriver.Chrome()</span></span><br><span class="line"><span class="comment"># driver = webdriver.Edge()</span></span><br><span class="line"><span class="comment"># 加载web页面</span></span><br><span class="line">driver.get(<span class="string">&quot;http://www.baidu.com/&quot;</span>)</span><br><span class="line"><span class="comment"># 暂停3秒</span></span><br><span class="line">time.sleep(<span class="number">3</span>)</span><br><span class="line"><span class="comment"># 关闭驱动对象</span></span><br><span class="line">driver.quit()</span><br></pre></td></tr></table></figure>
+
+<h3 id="元素定位"><a href="#元素定位" class="headerlink" title="元素定位"></a>元素定位</h3><p>为什么要学习元素定位？<br>让程序操作指定元素，就必须先找到它。元素定位就是通过元素的信息或元素层级结构来定位元素的。</p>
+<p>Selenium提供了八种定位元素方式</p>
+<ol>
+<li>id</li>
+<li>name</li>
+<li>class_name</li>
+<li>tag_name</li>
+<li>link_text</li>
+<li>partial_link_text</li>
+<li>XPath</li>
+<li>CSS</li>
+</ol>
+<h4 id="id定位"><a href="#id定位" class="headerlink" title="id定位"></a>id定位</h4><p>说明：id定位就是通过元素的id属性来定位元素，HTML<strong>规定</strong>id属性在整个HTML文档中必须是<strong>唯一</strong>的；（<strong>但实际不唯一也没有问题</strong>）<br>前提：元素有id属性</p>
+<p>方法：element &#x3D; driver.find_element_by_id(id)</p>
+<h4 id="name定位"><a href="#name定位" class="headerlink" title="name定位"></a>name定位</h4><p>说明：name定位就是根据元素name属性来定位。HTML文档中name的属性值是可以重复的。<br>前提：元素有name属性</p>
+<p>方法：element &#x3D; driver.find_element_by_name(name)</p>
+<h4 id="class-name定位"><a href="#class-name定位" class="headerlink" title="class_name定位"></a>class_name定位</h4><p>说明：class_name定位就是根据元素class属性值来定位元素。HTML通过使用class来定义元素的样式。<br>前提：元素有class属性<br>注意：如果class有多个属性值，只能使用其中的一个</p>
+<p>方法：element &#x3D; driver.find_element_by_class_name(class_name)</p>
+<h4 id="tag-name定位"><a href="#tag-name定位" class="headerlink" title="tag_name定位"></a>tag_name定位</h4><p>说明：tag_name定位就是通过标签名来定位；HTML本质就是由不同的tag组成，每一种标签一般在页面中会存在多个，所以不方便进行精确定位，一般很少使用</p>
+<p>方法：element &#x3D; driver.find_element_by_tag_name(tag_name)，如果存在多个相同标签，则返回符合条件的第一个标签</p>
+<h4 id="link-text定位"><a href="#link-text定位" class="headerlink" title="link_text定位"></a>link_text定位</h4><p>说明：link_text定位是专门用来定位超链接元素<a>标签</a>，并且是通过超链接的文本内容来定位元素。</p>
+<p>方法：element &#x3D; driver.find_element_by_link_text(link_text)，其中link_text：为超链接的全部文本内容，只能精确定位</p>
+<h4 id="partial-link-text定位"><a href="#partial-link-text定位" class="headerlink" title="partial_link_text定位"></a>partial_link_text定位</h4><p>说明：partial_link_text定位是对link_text定位的补充，link_text使用全部文本内容匹配元素，而partial_link_text可以使用局部来匹配元素，也可以使用全部文本内容匹配元素。</p>
+<p>方法：element &#x3D; driver.find_element_by_partial_link_text(partial_link_text)，其中partial_link_text：可以传入a标签局部文本-能表达唯一性的文本</p>
+<hr>
+<p><strong>以上方法若定位到多个元素，均返回定位到的第一个元素。</strong></p>
+<hr>
+<p>考虑以下问题，该如何定位元素？</p>
+<ol>
+<li>如果要定位的元素没有id、name、class属性，该如何进行定位？</li>
+<li>如果通过name、class、tag_name无法定位到唯一的元素，该如何进行定位？</li>
+</ol>
+<p>于是又提出了XPath定位和CSS定位。</p>
+<hr>
+<h4 id="XPath定位"><a href="#XPath定位" class="headerlink" title="XPath定位"></a>XPath定位</h4><ol>
+<li><strong>什么是XPath</strong></li>
+</ol>
+<p>XPath即为XML Path的简称，它是一门在 XML 文档中查找元素信息的语言。HTML可以看做是XML的一种实现，所以Selenium用户可以使用这种强大的语言在Web应用中定位元素。XML：一种标记语言，用于数据的存储和传递。 后缀.xml结尾</p>
+<ol start="2">
+<li><strong>定位方法</strong></li>
+</ol>
+<p>element &#x3D; driver.find_element_by_xpath(xpath)</p>
+<ol start="3">
+<li><strong>XPath定位策略</strong></li>
+</ol>
+<ul>
+<li>路径-定位</li>
+<li>利用元素属性-定位</li>
+<li>属性与逻辑结合-定位</li>
+<li>层级与属性结合-定位</li>
+</ul>
+<h5 id="路径定位"><a href="#路径定位" class="headerlink" title="路径定位"></a>路径定位</h5><p><strong>绝对路径</strong>：从最外层元素到指定元素之间所有经过元素层级的路径<br>1). 绝对路径以&#x2F;html根节点开始，使用 &#x2F; 来分隔元素层级；<br>如：&#x2F;html&#x2F;body&#x2F;div&#x2F;fieldset&#x2F;p[1]&#x2F;input<br>2). 绝对路径对页面结构要求比较严格，不建议使用</p>
+<p><strong>相对路径</strong>：匹配任意层级的元素，不限制元素的位置<br>1). 相对路径以&#x2F;&#x2F;开始<br>2). 格式：&#x2F;&#x2F;input 或者 &#x2F;&#x2F;*</p>
+<h5 id="利用元素属性定位"><a href="#利用元素属性定位" class="headerlink" title="利用元素属性定位"></a>利用元素属性定位</h5><p>说明：通过使用元素的属性信息来定位元素，解决上述定位多个标签元素问题<br>格式：&#x2F;&#x2F;input[@id&#x3D;’userA’] 或者 &#x2F;&#x2F;*[@id&#x3D;’userA’]</p>
+<h5 id="属性与逻辑结合"><a href="#属性与逻辑结合" class="headerlink" title="属性与逻辑结合"></a>属性与逻辑结合</h5><p>说明：解决元素之间个相同属性重名问题，使用多个属性间的关系，即逻辑与或非<br>格式：&#x2F;&#x2F;*[@name&#x3D;’tel’ and @class&#x3D;’tel’]</p>
+<h5 id="层级与属性结合"><a href="#层级与属性结合" class="headerlink" title="层级与属性结合"></a>层级与属性结合</h5><p>说明：如果通过元素自身的信息不方便直接定位到该元素，则可以先定位到其父级元素，然后再找到该元素<br>格式：&#x2F;&#x2F;*[@id&#x3D;’p1’]&#x2F;input</p>
+<ol start="4">
+<li><strong>XPath-延伸</strong></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">//*[text()=&quot;xxx&quot;] 文本内容是xxx的元素</span><br><span class="line">//*[contains(@attribute,&#x27;xxx&#x27;)] 属性中含有xxx的元素</span><br><span class="line">//*[starts-with(@attribute,&#x27;xxx&#x27;)] 属性以xxx开头的元素</span><br></pre></td></tr></table></figure>
+
+<h4 id="CSS定位"><a href="#CSS定位" class="headerlink" title="CSS定位"></a>CSS定位</h4><ol>
+<li><strong>什么是css定位？</strong></li>
+</ol>
+<p>CSS（Cascading Style Sheets）是一种语言，它用来描述HTML元素的显示样式；在CSS中，选择器是一种模式，用于选择需要添加样式的元素；在Selenium中也可以使用这种选择器来定位元素。在selenium中推荐<strong>使用CSS定位，因为它比XPath定位速度要快。</strong></p>
+<ol start="2">
+<li><strong>定位方法</strong></li>
+</ol>
+<p>element &#x3D; driver.find_element_by_css_selector(css_selector)</p>
+<ol start="3">
+<li><strong>CSS定位策略</strong></li>
+</ol>
+<ul>
+<li>id选择器</li>
+<li>class选择器</li>
+<li>元素选择器</li>
+<li>属性选择器</li>
+<li>层级选择器</li>
+</ul>
+<h5 id="id选择器"><a href="#id选择器" class="headerlink" title="id选择器"></a>id选择器</h5><p>说明：根据元素id属性来选择<br>格式：#id<br>例如：#userA &lt;选择id属性值为userA的元素&gt;</p>
+<h5 id="class选择器"><a href="#class选择器" class="headerlink" title="class选择器"></a>class选择器</h5><p>说明：根据元素class属性来选择<br>格式：.class<br>例如：.telA &lt;选择class属性值为telA的所有元素&gt;</p>
+<h5 id="元素选择器"><a href="#元素选择器" class="headerlink" title="元素选择器"></a>元素选择器</h5><p>说明：根据元素的标签名选择<br>格式：element<br>例如：input &lt;选择所有input元素&gt;</p>
+<h5 id="属性选择器"><a href="#属性选择器" class="headerlink" title="属性选择器"></a>属性选择器</h5><p>说明：根据元素的属性名和值来选择<br>格式：[attribute&#x3D;value]，element[attribute&#x3D;value]<br>例如：[type&#x3D;”password”]，选择type属性值为password的元素</p>
+<h5 id="层级选择器"><a href="#层级选择器" class="headerlink" title="层级选择器"></a>层级选择器</h5><p>说明：根据元素的父子关系来选择<br><strong>格式1</strong>：element1&gt;element2 ，通过element1来定位element2，并且element2必须为element1的直接子元素<br>例如1：p[id&#x3D;’p1’]&gt;input，定位指定p元素下的直接子元素input</p>
+<p><strong>格式2</strong>：element1 element2，通过element1来定位element2，并且element2为element1的后代元素<br>例如2：p[id&#x3D;’p1’] input，定位指定p元素下的后代元素input</p>
+<ol start="4">
+<li><strong>CSS延申</strong></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">input[type^=&#x27;p&#x27;]，type属性以p字母开头的元素</span><br><span class="line">input[type$=&#x27;d&#x27;]，type属性以d字母结束的元素</span><br><span class="line">input[type*=&#x27;w&#x27;]，type属性包含w字母的元素</span><br></pre></td></tr></table></figure>
+
+<h4 id="定位一组元素"><a href="#定位一组元素" class="headerlink" title="定位一组元素"></a>定位一组元素</h4><p>作用： 查找定位所有符合条件的元素，返回的定位元素格式为数组(列表)格式；<br>说明： 列表数据格式的读取需要指定下标(下标从0开始)</p>
+<p>方法： element&#x3D;driver.find_elements_by_XXX()。</p>
+<h4 id="定位元素—延申写法"><a href="#定位元素—延申写法" class="headerlink" title="定位元素—延申写法"></a>定位元素—延申写法</h4><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">导包：from selenium.webdriver.common.by import By</span><br><span class="line">方法：find_element(by=By.ID, value=None)</span><br><span class="line">备注：需要两个参数，第一个参数为定位的类型由By提供，第二个参数为定位的具体方式</span><br><span class="line">示例：</span><br><span class="line"> driver.find_element(By.CSS_SELECTOR, &#x27;#emailA&#x27;).send_keys(&quot;3113390285@qq.com&quot;)</span><br><span class="line"> driver.find_element(By.XPATH, &#x27;//*[@id=&quot;emailA&quot;]&#x27;).send_keys(&#x27;3113390285@qq.com&#x27;)</span><br><span class="line"> driver.find_element(By.ID, &quot;userA&quot;).send_keys(&quot;Honor HL&quot;)</span><br><span class="line"> driver.find_element(By.NAME, &quot;passwordA&quot;).send_keys(&quot;荷包蛋HL&quot;)</span><br><span class="line"> driver.find_element(By.CLASS_NAME, &quot;telA&quot;).send_keys(&quot;159837665**&quot;)</span><br><span class="line"> driver.find_element(By.TAG_NAME, &#x27;input&#x27;).send_keys(&quot;哪有小孩天天哭&quot;)</span><br><span class="line"> driver.find_element(By.LINK_TEXT, &#x27;访问 新浪 网站&#x27;).click()</span><br><span class="line"> driver.find_element(By.PARTIAL_LINK_TEXT, &#x27;访问&#x27;).click()</span><br><span class="line"></span><br><span class="line">说明：通过查看find_element_by_id底层实现方法，发现底层是调用find_element方法进行的封装；</span><br></pre></td></tr></table></figure>
+
+<h3 id="元素操作"><a href="#元素操作" class="headerlink" title="元素操作"></a>元素操作</h3><p>为什么学习操作的方法？</p>
+<ol>
+<li>需要让脚本模拟用户给指定元素输入值</li>
+<li>需要让脚本模拟人为删除元素的内容</li>
+<li>需要让脚本模拟点击操作</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">click()   <span class="comment">#单击元素</span></span><br><span class="line">send_keys(value)    <span class="comment">#模拟输入</span></span><br><span class="line">clear()   <span class="comment">#清除文本</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="获取元素信息"><a href="#获取元素信息" class="headerlink" title="获取元素信息"></a>获取元素信息</h3><p>如何获取元素的文本？如何获取元素属性值？如何让程序判断元素是否为可见状态？</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"> size <span class="comment">#返回元素大小</span></span><br><span class="line"> text     <span class="comment">#获取元素的文本</span></span><br><span class="line"> get_attribute(<span class="string">&quot;xxx&quot;</span>)    <span class="comment">#获取属性值，传递的参数为元素的属性名</span></span><br><span class="line"> is_displayed()       <span class="comment">#判断元素是否可见</span></span><br><span class="line"> is_enabled()     <span class="comment">#判断元素是否可用</span></span><br><span class="line"> is_selected()     <span class="comment">#判断元素是否选中，用来检查复选框或单选按钮是否被选中</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 提示： size、text：为属性，调用时无括号；如：xxx.size</span></span><br><span class="line"><span class="comment"># get_attribute一般应用场景：判断一组元素是否为想要的元素或者判断元素属性值是否正确</span></span><br><span class="line"><span class="comment"># is_displayed、is_enabled、is_selected，在特殊应用场景中使用。</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <tags>
+        <tag>测试</tag>
+        <tag>Web测试</tag>
+        <tag>爬虫</tag>
+        <tag>Selenium</tag>
       </tags>
   </entry>
   <entry>
@@ -2571,102 +2571,402 @@ public class ErrorMessageConfig &#123;
       </tags>
   </entry>
   <entry>
-    <title>pytest单元测试框架（基础篇）</title>
-    <url>/2023/11/21/pytest%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h2 id="单元测试框架"><a href="#单元测试框架" class="headerlink" title="单元测试框架"></a>单元测试框架</h2><p>​		1）什么是单元测试框架</p>
-<p>​		单元测试框架是指在软件开发的过程种，针对软件的最小单位（函数、方法）进行正确性测试</p>
-<span id="more"></span>
-
-<p>​		2）常见的单元测试框架</p>
-<p>​		基于java的：junit和testng</p>
-<p>​		基于python的：unittest和<strong>pytest</strong></p>
-<p>​		3）单元测试流程</p>
-<p>​		1.测试发现：从多个文件中找到需要被测试的测试用例</p>
-<p>​		2.测试执行：按照一定的顺序执行测试用例，并生成结果</p>
-<p>​		3.测试判断：通过assert断言来自动判断结果与预期是否相符</p>
-<p>​		4.测试报告：生成这次测试的测试报告，包括耗时、通过率等</p>
-<h2 id="pytest"><a href="#pytest" class="headerlink" title="pytest"></a>pytest</h2><p>​		1）简介</p>
-<p>​		pytest是python的一种单元测试框架，与python自带的测试框架unittest类似，但比其更易上手，也更加的灵活。因此使用面也广于unittest。</p>
+    <title>java杂谈---3</title>
+    <url>/2024/06/17/java%E6%9D%82%E8%B0%883/</url>
+    <content><![CDATA[<h3 id="String的长度限制"><a href="#String的长度限制" class="headerlink" title="String的长度限制"></a>String的长度限制</h3><ul>
+<li>首先字符串的内容是由一个字符数组 char[] ，后为byte[]数组来存储的，由于数组的长度及索引是 整数，且String类中返回字符串长度的方法length() 的返回值也是int ，所以通过查看 java源码中的类Integer我们可以看到Integer的最大范围是2^31 -1,由于数组是从0开始 的，所以数组的最大长度可以使【0~2^31】通过计算是大概4GB。<span id="more"></span> </li>
+<li>根据对象头中的数组类型的长度也是用4字节表示，也阔以知道String的长度限制</li>
+<li>但是通过翻阅java虚拟机手册对class文件格式的定义以及常量池中对String类型的结构 体定义我们可以知道对于索引定义了u2，就是无符号占2个字节，2个字节可以表示的 最大范围是2^16 -1 &#x3D; 65535。</li>
+<li>其实是65535，但是由于JVM需要1个字节表示结束指令，所以这个范围就为65534 了。超出这个范围在编译时期是会报错的，但是运行时拼接或者赋值的话范围是在整 形的最大范围。</li>
+</ul>
+<h3 id="静态常量池，运行时常量池，字符串常量池"><a href="#静态常量池，运行时常量池，字符串常量池" class="headerlink" title="静态常量池，运行时常量池，字符串常量池"></a>静态常量池，运行时常量池，字符串常量池</h3><h4 id="1-静态常量池（Compile-time-Constant-Pool）"><a href="#1-静态常量池（Compile-time-Constant-Pool）" class="headerlink" title="1. 静态常量池（Compile-time Constant Pool）"></a>1. 静态常量池（Compile-time Constant Pool）</h4><p><strong>概念</strong>：</p>
 <ul>
-<li><p>pytest比unittest更加成熟，同时支持unittest编写的测试用例</p>
-</li>
-<li><p>pytest可以和selenium，request，appium等测试框架相结合，实现web ui自动化，web 接口自动化，app ui自动化</p>
-</li>
-<li><p>pytest可以实现测试用例的跳过以及失败用例重试</p>
-</li>
-<li><p>pytest支持参数化数据驱动方式</p>
-</li>
-<li><p>pytest可以和Jenkins持续集成</p>
-</li>
-<li><p>pytest具有很多第三方插件，且支持自定义扩展</p>
+<li>静态常量池指的是编译期间由编译器生成并存储在类文件中的常量池。它包含了类文件中的常量池表（Constant Pool Table），其中存放着字面量（如字符串、整数、浮点数等）和符号引用（如类和接口的全限定名、字段和方法的名称和描述符等）。</li>
+</ul>
+<p><strong>存储位置</strong>：</p>
 <ul>
-<li><p>pytest：单元测试框架</p>
-<p>pytest-xdist： 测试用例的分布式执行，即并发执行。可缩短总的用例的执行时间</p>
-<p>pytest-ordering： 可以指定测试用例的执行顺序，默认是从上到下依次执行</p>
-<p>pytest-rerunfailures： 用例失败后进行再次执行（多用于ui测试）</p>
-<p>pytest-html： 生成html格式的测试报告（不够美观）</p>
-<p>allure-pytest： 生成比上面美观的测试报告，且可进行测试报告的自定义</p>
+<li>静态常量池是 <code>.class</code> 文件的一部分，在类被加载到JVM时，这些常量会被载入到方法区（Method Area）或元空间（Metaspace）。</li>
+</ul>
+<h4 id="2-运行时常量池（Runtime-Constant-Pool）"><a href="#2-运行时常量池（Runtime-Constant-Pool）" class="headerlink" title="2. 运行时常量池（Runtime Constant Pool）"></a>2. 运行时常量池（Runtime Constant Pool）</h4><p><strong>概念</strong>：</p>
+<ul>
+<li>运行时常量池是每个类或接口的常量池，它是在类加载时由静态常量池创建并存储在内存中的一部分。运行时常量池包含类文件中的常量池表信息和在运行时解析得到的动态常量（如方法和字段引用）。</li>
+</ul>
+<p><strong>存储位置</strong>：</p>
+<ul>
+<li>在Java 8及之前版本，运行时常量池位于方法区（Method Area）。</li>
+<li>在Java 9及之后版本，运行时常量池位于元空间（Metaspace）。</li>
+</ul>
+<p><strong>作用</strong>：</p>
+<ul>
+<li>运行时常量池用于存储已解析的类、方法和字段的符号引用，并且可以动态地添加新的常量。</li>
+</ul>
+<h4 id="3-字符串常量池（String-Constant-Pool）"><a href="#3-字符串常量池（String-Constant-Pool）" class="headerlink" title="3. 字符串常量池（String Constant Pool）"></a>3. 字符串常量池（String Constant Pool）</h4><p><strong>概念</strong>：</p>
+<ul>
+<li>字符串常量池是一个特殊的常量池，用于存储字符串字面量（如 <code>&quot;Hello, World!&quot;</code>）和字符串常量表达式的结果。Java中字符串常量池的管理是由 <code>String</code> 类实现的。</li>
+</ul>
+<p><strong>存储位置</strong>：</p>
+<ul>
+<li>在Java 6及之前版本，字符串常量池位于永久代（PermGen）。</li>
+<li>在Java 7及之后版本，字符串常量池被移到Java堆（Heap）中。</li>
+</ul>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>当创建字符串字面量时，如果字符串常量池中已经存在相同值的字符串，则返回池中已有的字符串对象的引用，否则创建一个新的字符串并放入池中。</li>
+<li>这样可以节省内存，因为相同的字符串字面量只会存储一份。</li>
+</ul>
+<p><strong>区别与联系</strong></p>
+<ul>
+<li><strong>静态常量池</strong>和<strong>运行时常量池</strong>：<ul>
+<li>静态常量池是编译时生成并存储在类文件中的，运行时常量池是在类加载时创建并存储在内存中的。</li>
+<li>运行时常量池是静态常量池的运行时表现形式。</li>
+</ul>
 </li>
+<li><strong>字符串常量池</strong>和<strong>运行时常量池</strong>：<ul>
+<li>字符串常量池是运行时常量池的一部分，专门用于存储字符串字面量。</li>
+<li>运行时常量池存储的是类的常量，包括字符串、数值、方法引用等。</li>
 </ul>
 </li>
 </ul>
-<p>​		2）安装</p>
-<p>​		新建python项目———在本地虚拟终端中执行以下命令即可。（注意：使用以上插件也需要安装到本地环境中，语法类似）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip install pytest   <span class="comment">#安装命令</span></span><br><span class="line"></span><br><span class="line">pytest --version     <span class="comment">#检查命令</span></span><br></pre></td></tr></table></figure>
-
-<p>​		3）使用pytest</p>
-<p>​		pytest的默认测试用例发现规则</p>
-<ul>
-<li><p>模块名（简单理解为一个py文件）以test_ 开头或 _test结尾</p>
+<h3 id="threadloacal定义为static的"><a href="#threadloacal定义为static的" class="headerlink" title="threadloacal定义为static的"></a>threadloacal定义为static的</h3><ul>
+<li><p>这个变量是针对一个线程内所有操作共享的，所以设置为静态变量，所有此类实例共享该静态变量﹐也就是说在类第一次被使用时装载，只分配一块存储空间，所有此类的对象(只要是这个线程内定义的)都可以操控这个变量。当 <code>ThreadLocal</code> 被定义为 <code>static</code> 时，整个类只有一个 <code>ThreadLocal</code> 实例。这确保了所有线程都能通过这个唯一的实例访问自己的变量副本。</p>
 </li>
-<li><p>测试类以Test开头，并且不包含init()方法</p>
+<li><p>定义为 <code>static</code> 后，<code>ThreadLocal</code> 变量可以通过类名直接访问，而不需要实例化对象，这样可以在应用程序的任何地方方便地访问 <code>ThreadLocal</code> 变量。</p>
 </li>
-<li><p>测试方法以test开头</p>
-<p>4）运行pytest</p>
+<li><p><code>static</code> 变量的生命周期与类一致，而不是与某个对象实例一致。这样可以确保 <code>ThreadLocal</code> 在类加载时就初始化，并在类卸载时清理。</p>
 </li>
 </ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">         <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> <span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">     pytest.main()</span><br></pre></td></tr></table></figure>
-
-<h2 id="pytest运行方式"><a href="#pytest运行方式" class="headerlink" title="pytest运行方式"></a>pytest运行方式</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">参数详解:</span><br><span class="line">-s:输出调试信心，包括<span class="built_in">print</span>打印的信息</span><br><span class="line">-v:显示更详细的信息</span><br><span class="line">-vs:两个连用，效用就是两个相加</span><br><span class="line">-n NUM: 支持多线程或分布式运行测试用例，使用NUM个线程。需要导入pytest-xdist插件</span><br><span class="line">--<span class="built_in">return</span> NUM:失败用例重跑NUM次，失败用例总共运行NUM+1次</span><br><span class="line">-x:有一个用例失败报错，则停止测试，默认是不停止测试</span><br><span class="line">--maxfail=NUM:出现NUM个失败用例就停止测试</span><br><span class="line">-k String:根据String字符串匹配对应的测试用例</span><br><span class="line">--html 文件路径/文件名：生成html格式的测试报告</span><br></pre></td></tr></table></figure>
-
-<p>​		1）主函数方式</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#文件夹与python package的区别：python package下包含一个_init_.py文件</span></span><br><span class="line"><span class="comment"># ./  :表示当前文件路径下</span></span><br><span class="line"><span class="comment"># ../  :表示当前文件路径的父路径，即向上一层</span></span><br><span class="line">pytest.main()    <span class="comment">#运行所有的按条件写的测试用例</span></span><br><span class="line">pytest.main(<span class="string">&#x27;-vs&#x27;</span>,<span class="string">&#x27;./tasecase&#x27;</span>)   <span class="comment">#运行tasecase文件夹下的测试用例</span></span><br><span class="line">pytest.main(<span class="string">&#x27;-x&#x27;</span>,<span class="string">&#x27;test01.py&#x27;</span>)    <span class="comment">#运行test01模块下的测试用例,且出现错误就停止测试</span></span><br><span class="line">pytest.mian(<span class="string">&#x27;-n 2&#x27;</span>,<span class="string">&#x27;./tesecase/test01.py::TestName::testName&#x27;</span>)   <span class="comment">#运行testcase文件夹下test01模块里TsetName类里的testName方法,且使用两个线程</span></span><br></pre></td></tr></table></figure>
-
-<p>​		2）命令行模式</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#即在安装pytest的本地虚拟环境中运行</span></span><br><span class="line">pytest     <span class="comment">#运行所有满足条件的测试用例</span></span><br><span class="line">pytest -vs ./testcase   <span class="comment">#运行tasecase文件夹下的测试用例</span></span><br><span class="line">pytest -x ./testcase/test01.py    <span class="comment">#运行test01模块下的测试用例,且出现错误就停止测试</span></span><br><span class="line">pytest -n 2 ./tesecase/test01.py::TestName::testName    <span class="comment">#运行testcase文件夹下test01模块里TsetName类里的testName方法,且使用两个线程</span></span><br></pre></td></tr></table></figure>
-
-<p>​		3）全局配置模式</p>
-<p>​		通过读取pytest.ini文件得到对应的配置信息，最后在命令行输入pytest即可运行（名字不可变，只能为pytest.ini）</p>
+<h3 id="JVM类加载"><a href="#JVM类加载" class="headerlink" title="JVM类加载"></a>JVM类加载</h3><ul>
+<li><p>加载：加载class文件，方法区中生成class对象</p>
+</li>
+<li><p>链接</p>
 <ul>
-<li>文件位置：放在项目的根目录，即最外层即可</li>
-<li>编码格式：必须为ANSI格式，可使用notpad++修改格式</li>
-<li>运行规则：不论是主函数方式还是命令行方式，都会优先读取该配置文件</li>
+<li>验证：验证字节码文件的格式规范等</li>
+<li>准备：为类变量分配内存并初始化，为变量赋予 Java 语言中该数据类型的零值，而不是用户代码 里初始化的值。<ul>
+<li>若该类变量是被final修饰的，那么在准备阶段，属性便会被赋 予用户希望的值。</li>
+<li>final 关键字在 Java  中代表不可改变的意思，既然一旦赋值就不 会再改变，那么就必须一开始就给其赋予用户想要的值，因此被 final 修饰的类变量 在准备阶段就会被赋予想要的值。</li>
 </ul>
-<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#模板，前面的参数是不可变的，后面根据实际情况填写</span></span><br><span class="line"></span><br><span class="line">[<span class="string">pytest</span>]</span><br><span class="line"><span class="string">addopts</span> <span class="string">=</span> <span class="string">-vs</span> <span class="comment">#命令行的参数，用空格分隔</span></span><br><span class="line"><span class="string">testpaths</span> <span class="string">=</span> <span class="string">./testcase</span> <span class="comment">#测试用例的路径</span></span><br><span class="line"><span class="string">python_files</span> <span class="string">=</span> <span class="string">test_*.py</span> <span class="comment">#模块名的规则，可以更改默认规则</span></span><br><span class="line"><span class="string">python_classes</span> <span class="string">=</span> <span class="string">Test*</span> <span class="comment">#类名的规则</span></span><br><span class="line"><span class="string">python_functions</span> <span class="string">=</span> <span class="string">test</span> <span class="comment">#方法名的规则</span></span><br><span class="line"><span class="string">markers</span> <span class="string">=</span></span><br><span class="line">  <span class="string">smoke:冒烟用例</span>          <span class="comment">#设置独有的标记</span></span><br><span class="line">  <span class="string">usermanage:用户管理模块</span></span><br><span class="line">  <span class="string">productmanage:商品管理模块</span></span><br></pre></td></tr></table></figure>
+</li>
+<li>解析：解析阶段是虚拟机将常量池内的符号引用替换为直接引用的过程，解析动作主要针对 <strong>类或接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符</strong>7类符号 引用进行。</li>
+</ul>
+</li>
+<li><p>初始化，这个阶段就是执行类构造器&lt; clinit &gt;()方法的过程，为类的静态变量赋予正 确的初始值，JVM负责对类进行初始化，主要对类变量进行初始化。在Java中对类变 量进行初始值设定有两种方式： </p>
+<ul>
+<li>①声明类变量是指定初始值 </li>
+<li>②使用静态代码块为类变量指定初始值</li>
+</ul>
+</li>
+</ul>
+<h3 id="G1垃圾收集器"><a href="#G1垃圾收集器" class="headerlink" title="G1垃圾收集器"></a>G1垃圾收集器</h3><p>CMS默认老年代达到68%时就开始垃圾回收了。</p>
+<p>G1 GC 首先将堆分为大小相等的 Region(2048个)，避免全区域的垃圾收集，然后追 踪每个 Region 垃圾堆积的价值大小，在后台维护一个优先列表，根据允许的收集时 间优先回收价值最大的Region；同时 G1 GC 采用 <strong>Remembered Set</strong> 来存放 Region 之 间的对象引用以及其他回收器中的新生代与老年代之间的对象引用，从而避免全堆扫 描。</p>
+<ul>
+<li>并行性：G1在回收期间，可以有多个GC线程同时工作，有效利用多核计算能 力； </li>
+<li>并发性：G1拥有与应用程序交替执行的能力，部分工作可以和应用程序同时执 行，因此，一般来说，不会在整个回收阶段发生完全阻塞应用程序的情况； </li>
+<li>分代GC：G1依然是一个分代回收器，但是和之前的各类回收器不同，它同时兼 顾年轻代和老年代。对比其他回收器，或者工作在年轻代，或者工作在老年代； </li>
+<li>空间整理：G1在回收过程中，会进行适当的对象移动，不像CMS只是简单地标 记清理对象。在若干次GC后，CMS必须进行一次碎片整理。而G1不同，它每次 回收都会有效地复制对象，减少空间碎片，进而提升内部循环速度；</li>
+<li>可预见性：为了缩短停顿时间，G1建立可预存停顿的模型，这样在用户设置的停 顿时间范围内，G1会选择适当的区域进行收集，确保停顿时间不超过用户指定时 间。</li>
+</ul>
+<h4 id="RS"><a href="#RS" class="headerlink" title="RS"></a>RS</h4><p>记忆集（Remembered Set, RS）</p>
+<ol>
+<li><strong>定义</strong>： 记忆集是一个数据结构，用于记录哪些区域（Region）有指向其他区域的引用。特别地，它记录了老年代（Old Generation）中的对象引用年轻代（Young Generation）中的对象。</li>
+<li><strong>作用</strong>：<ul>
+<li><strong>优化GC效率</strong>：记忆集的主要作用是优化垃圾收集的效率。在进行年轻代的垃圾收集时（Minor GC），GC不需要扫描整个老年代，只需要扫描记忆集中记录的部分区域。这样可以显著减少需要扫描的对象数量，提高垃圾收集的效率。</li>
+<li><strong>处理跨代引用</strong>：在垃圾收集中，需要处理跨代引用（即老年代对象引用年轻代对象）。记忆集记录了这种跨代引用，使得垃圾收集器在收集年轻代时，只需扫描记忆集中的部分，而不必扫描整个老年代。</li>
+<li><strong>减少全堆扫描</strong>：通过使用记忆集，G1垃圾收集器能够避免全堆扫描，只需关注那些确实包含指向年轻代对象的老年代区域。</li>
+</ul>
+</li>
+</ol>
+<h3 id="最佳线程数"><a href="#最佳线程数" class="headerlink" title="最佳线程数"></a>最佳线程数</h3><ul>
+<li><p>cpu密集型：一般为1+cpu核心数</p>
+</li>
+<li><p>io密集型：cpu核心数*（1+io耗时&#x2F;cpu耗时），一般为2倍cpu核心数</p>
+</li>
+</ul>
+<h3 id="JVM参数"><a href="#JVM参数" class="headerlink" title="JVM参数"></a>JVM参数</h3><ul>
+<li>-Xms： 初始堆大小， 默认(MinHeapFreeRatio参数可以调整)空余堆内存小于40% 时，JVM就会增大堆直到-Xmx的最大限制。</li>
+<li>Xmx： 最大堆大小，默认(MaxHeapFreeRatio参数可以调整)空余堆内存大于70% 时，JVM会减少堆直到 -Xms的最小限制。 </li>
+<li>-Xmn： 年轻代大小(1.4or lator)， 此处的大小是（eden+ 2 survivor space).与jmap  heap中显示的New gen是不同的。  整个堆大小&#x3D;年轻代大小 + 年老代大小 + 持久代大小。  　增大年轻代后,将会减小年老代大小.此值对系统性能影响较大,Sun官方推荐 配置为整个堆的3&#x2F;8。 </li>
+<li>-XX:NewSize： 设置年轻代大小(for 1.3&#x2F;1.4)。 </li>
+<li>-XX:MaxNewSize： 年轻代最大值(for 1.3&#x2F;1.4)。 </li>
+<li>-XX:PermSize： 设置持久代(perm gen)初始值。</li>
+<li>-XX:MaxPermSize： 设置持久代最大值。</li>
+<li>-Xss： 每个线程的堆栈大小，JDK5.0以后每个线程堆栈大小为1M,以前每个线程 堆栈大小为256K.更具应用的线程所需内存大小进行 调整.在相同物理内存下,减小 这个值能生成更多的线程.但是操作系统对一个进程内的线程数还是有限制的,不能 无限生成,经验值在3000~5000左右。 </li>
+<li>-XX:NewRatio： 年轻代(包括Eden和两个Survivor区)与年老代的比值(除去持久 代)，-XX:NewRatio&#x3D;4表示年轻代与年老代所占比值为1:4,年轻代占整个堆栈的 1&#x2F;5。Xms&#x3D;Xmx并且设置了Xmn的情况下，该参数不需要进行设置。 </li>
+<li>-XX:SurvivorRatio： Eden区与Survivor区的大小比值，设置为8,则两个Survivor区 与一个Eden区的比值为2:8,一个Survivor区占整个年轻代的1&#x2F;10。 </li>
+<li>-XX:LargePageSizeInBytes： 内存页的大小不可设置过大， 会影响Perm的大小。 </li>
+<li>-XX:+DisableExplicitGC： 关闭System.gc() </li>
+<li>-XX:MaxTenuringThreshold： 垃圾最大年龄，如果设置为0的话,则年轻代对象不 经过Survivor区,直接进入年老代. 对于年老代比较多的应用,可以提高效率.如果将 此值设置为一个较大值,则年轻代对象会在Survivor区进行多次复制,这样可以增加 对象再年轻代的存活 时间,增加在年轻代即被回收的概率该参数只有在串行GC时 才有效。 </li>
+<li>-XX:PretenureSizeThreshold： 对象超过多大是直接在旧生代分配，单位字节 新生 代采用Parallel Scavenge GC时无效另一种直接在旧生代分配的情况是大的数组对 象,且数组中无外部引用对象。 </li>
+<li>-XX:TLABWasteTargetPercent： TLAB占eden区的百分比。</li>
+</ul>
+<h3 id="逃逸分析"><a href="#逃逸分析" class="headerlink" title="逃逸分析"></a>逃逸分析</h3><p>栈上分配、标量替换、锁消除</p>
+<p>如果不存在竞争，为什么还需要加锁呢？所以锁消除可以节省毫无意义的请求锁的时 间。变量是否逃逸，对于虚拟机来说需要使用数据流分析来确定，但是对于程序员来 说这还不清楚么？在明明知道不存在数据竞争的代码块前加上同步吗？但是有时候程 序并不是我们所想的那样？虽然没有显示使用锁，<strong>但是在使用一些JDK的内置API 时</strong>，如StringBuffer、Vector、HashTable等，这个时候<strong>会存在隐形的加锁操作</strong>。JVM可以明显检测到变量vector没有逃逸出方法vectorTest()之 外，所以JVM可以大胆地将vector内部的加锁操作消除。</p>
+<h3 id="countdownlatch，CyclicBarrier，Semaphore"><a href="#countdownlatch，CyclicBarrier，Semaphore" class="headerlink" title="countdownlatch，CyclicBarrier，Semaphore"></a>countdownlatch，CyclicBarrier，Semaphore</h3><ul>
+<li>CountDownLatch适用于在多线程的场景需要等待所有子线程全部执行完毕之后再做 操作的场景。<ul>
+<li>CountDownLatch通过构造函数初始化传入参数实际为AQS的state变量赋值，维持 计数器倒数状态 </li>
+<li>当主线程调用await()方法时，当前线程会被阻塞，当state不为0时进入AQS阻塞队 列等待。 </li>
+<li>其他线程调用countDown()时，state值原子性递减，当state值为0的时候，唤醒所 有调用await()方法阻塞的线程</li>
+</ul>
+</li>
+<li>CyclicBarrier叫做回环屏障，它的作用是让一组线程全部达到一个状态之后再全部 同时执行，而且他有一个特点就是所有线程执行完毕之后是<strong>可以重用的</strong>。<ul>
+<li>当子线程调用await()方法时，获取独占锁，同时对count递减，进入阻塞队列，然 后释放锁 </li>
+<li>当第一个线程被阻塞同时释放锁之后，其他子线程竞争获取锁，操作同1 </li>
+<li>直到最后count为0，执行CyclicBarrier构造函数中的任务，执行完毕之后子线程继 续向下执行</li>
+</ul>
+</li>
+<li>Semaphore叫做信号量，和前面两个不同的是，他的计数器是递增的。<ul>
+<li>主线程调用acquire()方法时，用当前信号量值 - 需要获取的值，如果小于0，则进 入同步阻塞队列，大于0则通过CAS设置当前信号量为剩余值，同时返回剩余值 </li>
+<li>子线程调用release()给当前信号量值计数器+1(增加的值数量由传参决定)，同时不 停的尝试因为调用acquire()进入阻塞的线程</li>
+</ul>
+</li>
+</ul>
+<h3 id="事务遇到三方api怎么处理？"><a href="#事务遇到三方api怎么处理？" class="headerlink" title="事务遇到三方api怎么处理？"></a>事务遇到三方api怎么处理？</h3><h4 id="api结果与事务关系不大（消息推送）"><a href="#api结果与事务关系不大（消息推送）" class="headerlink" title="api结果与事务关系不大（消息推送）"></a>api结果与事务关系不大（消息推送）</h4><p>处理方法: 把消息推送的方法摘出来，进行异步处理，避免请求出错影响主体业 务流程；</p>
+<p> 注意 ： 需把异步方法抽取到另一个类中，否则@Async不生效</p>
+<h4 id="api与业务不可分割（员工离职，等）"><a href="#api与业务不可分割（员工离职，等）" class="headerlink" title="api与业务不可分割（员工离职，等）"></a>api与业务不可分割（员工离职，等）</h4><ul>
+<li>先请求三方api，再进行数据库操作<ul>
+<li>当api请求成功时，进行业务逻辑处理时出错，导致数据库回滚，但api不可回滚，造成数据不一致</li>
+<li>不推荐使用</li>
+</ul>
+</li>
+<li>先进行数据库业务逻辑，再调用api<ul>
+<li>api请求时间过长，导致业务端认为api失败（但api仍再进行中），业务回滚，api执行成功，导致数据不一致<ul>
+<li>解决：为调用方提供回调或轮询查询接口</li>
+</ul>
+</li>
+<li>api请求时间过长，数据库资源一致被占用未提交<ul>
+<li>数据库直接提交事务，而后通过回调或轮询接口得到api的处理结果，若失败，执行相应的数据库回滚事务。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="提升后端接口查询性能"><a href="#提升后端接口查询性能" class="headerlink" title="提升后端接口查询性能"></a>提升后端接口查询性能</h3><ol>
+<li><p>索引</p>
+</li>
+<li><p>sql优化</p>
+</li>
+<li><p>远程调用</p>
+</li>
+<li><p>异步处理</p>
+</li>
+<li><p>避免大事务</p>
+</li>
+<li><p>锁粒度</p>
+</li>
+<li><p>缓存</p>
+</li>
+<li><p>分库分表</p>
+</li>
+<li><p>慢查询日志，监控</p>
+</li>
+</ol>
+<h3 id="redis-虚拟内存"><a href="#redis-虚拟内存" class="headerlink" title="redis 虚拟内存"></a>redis 虚拟内存</h3><p>redis 不会将Keys持久化到磁盘，</p>
+<p>在实际的应用中，大约只有10%的Keys属于相对比较常用的键，这样Redis就可以通 过虚拟内存将其余 不常用的Keys和Values<strong>持久化到磁盘上</strong>，而一旦这些被持久化的 Keys或Values需要被读取时，Redis则 将其再次读回到主内存中。</p>
+<p>如果你的数据库 中有大量的keys， 其中每个key仅仅关联很小的value，那么这种场景就不是非常适合 使用虚拟内存。如果恰恰相反，数据 库中只是包含少量的keys，而<strong>每一个key所关联 的value却非常大，那么这种场景对于使用虚拟内存就非 常合适了</strong>。</p>
+<ol>
+<li><p>在配置文件中添加以下配置项，以使当前Redis服务器在启动时打开虚拟内存功 能。 </p>
+<p><strong>vm-enabled yes</strong></p>
+</li>
+<li><p>在配置文件中设定Redis最大可用的虚拟内存字节数。如果内存中的数据大于该 值，则有部分对象 被持久化到磁盘中，其中被持久化对象所占用的内存将被释 放，直到已用内存小于该值时才停止持久化。 </p>
+<p><strong>vm-max-memory (bytes)</strong></p>
+</li>
+<li><p>在配置文件中设定页的数量及每一页所占用的字节数。为了将内存中的数据传送 到磁盘上，我们 需要使用交换文件。这些文件与数据持久性无关，Redis会在退 出前会将它们全部删除。由于对交换文 件的访问方式大多为随机访问，因此建 议将交换文件存储在固态磁盘上，这样可以大大提高系统的运行 效率。</p>
+<p><strong>vm-pages 134217728</strong> </p>
+<p><strong>vm-page-size 32</strong> </p>
+<p>在上面的配置中，Redis将需要持久化的文件划分为vm-pages个页，其中每个页所 占用的字节为vm page-size，那么Redis最终可用的交换文件大小为：vm-pages *  vm-page-size。由于一个value可以 存放在一个或多个页上，但是一个页不能持有 多个value，鉴于此，我们在设置vm-page-size时需要充 分考虑Redis的该特征。</p>
+</li>
+<li><p>在Redis的配置文件中有一个非常重要的配置参数，即：</p>
+<p>  <strong>vm-max-threads 4</strong> </p>
+<p> 该参数表示Redis在对交换文件执行IO操作时所应用的最大线程数量。通常而 言，我们推荐该值等于主 机的CPU cores。如果将该值设置为0，那么Redis在与 交换文件进行IO交互时，将以同步的方式执行此 操作。</p>
+</li>
+</ol>
+<h3 id="Mysql高效查找一条随机记录"><a href="#Mysql高效查找一条随机记录" class="headerlink" title="Mysql高效查找一条随机记录"></a>Mysql高效查找一条随机记录</h3><ul>
+<li><p>随机查找一个id在max和min之间的id即可，先查找出最大的id max，和最小的id min，生产随机id   X&#x3D;（max-min）*Rand（）+min，最后再用floor取整向下。</p>
+<ul>
+<li>但是可能有id空洞，导致轮空</li>
+</ul>
+</li>
+<li><p>先查找出行数C，得到一个随机的行数T&#x3D;floor（C*rand（）），然后使用limit函数，limit T，1</p>
+<ul>
+<li>扫描行数也听多的，但是limit索取数据是根据id进行选取，大于原生sql语句。</li>
+</ul>
+</li>
+<li><p>原生sql：select word from words order by rand() limit 3;</p>
+<ul>
+<li>使用临时表，性能较差。你的记录有多少 条，就必须首先对这些数据进行排序。而后在limit取数据。</li>
+</ul>
+</li>
+<li><p>SELECT * FROM testdb.test_tb1 wHERE  id &gt;&#x3D;</p>
+<p>(SELECT id FROM (SELECT id FROM testdb.test_tb1 ORDER BY RAND() LIMIT 1) As t)<br>LIMIT 1;</p>
+<ul>
+<li>加上主键范围，加快索引过程，类似分页</li>
+</ul>
+</li>
+</ul>
+<h3 id="读写分离下，如何保证每次读到最新的数据？"><a href="#读写分离下，如何保证每次读到最新的数据？" class="headerlink" title="读写分离下，如何保证每次读到最新的数据？"></a>读写分离下，如何保证每次读到最新的数据？</h3><ul>
+<li>直接强制读取主库</li>
+<li>缓存标记法<ul>
+<li>当数据在主库更新时，主库设置一个缓存，业务id，并设置过期时间，大概为从库同步的延迟时间。</li>
+<li>读取数据时，先查看缓存是否存在，如果存在则去主库查询数据，如果不存在去从库查询数据</li>
+</ul>
+</li>
+</ul>
+<h3 id="丝滑般数据库扩容"><a href="#丝滑般数据库扩容" class="headerlink" title="丝滑般数据库扩容"></a>丝滑般数据库扩容</h3><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240619154621740.png" alt="image-20240619154621740" style="zoom:67%;" />
 
-<p>​		4）改变执行顺序</p>
-<p>​		pytest默认的执行顺序是从上到下，改变默认执行顺序，使用mark标记。（需要引入pytest-ordering插件）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">99</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAge</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myage&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">100</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAddr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myaddr&quot;</span>)</span><br><span class="line">        </span><br><span class="line">   <span class="comment">#优先执行带注释的用例，且order值越小，优先执行</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>停机扩容：简单，高效率</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240619154709117.png" alt="image-20240619154709117" style="zoom:67%;" />
 
-<p>​		5）分组执行</p>
-<p>​		在实际的测试场景中，需要对一类的用例进行优先测试，如，冒烟测试、用户管理模块测试、商品管理模块测试等。（还记得上面pytest.ini文件中得makers标记吗？就是用来自定自己的分组的）</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@pytest.mark.somke</span></span><br><span class="line"><span class="comment">#在对应的方法上添加注解即可</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>服务停了，没无法保证高可用</li>
+</ul>
+</li>
+<li><p>在线双写</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240619154822676.png" alt="image-20240619154822676" style="zoom:67%;" />
 
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#执行</span></span><br><span class="line">pytest -m <span class="string">&quot;smoke&quot;</span> <span class="comment">#执行smoke模块测试用例</span></span><br><span class="line">pytest -m <span class="string">&quot;smoke or usermanage or productmanage&quot;</span>  <span class="comment">#执行这三个模块的测试用例</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>1.建立好新到数据库，然后接下来用户在写原有数据库到同时也写一份数据到我们 的新库中。 2. 数据迁移程序，实现旧库中的历史数据迁移到新库中。 3. 迁移过程中，每次插入数据时，需检测数据的更新情况。比如，如果新的表中没 有当前的数据，则直接新增；如果新表有数据并没有我们要迁移的数据新的话， 我们就更新为当前数据，只能允许新的数据覆盖旧的数据，推荐使用Canal这样到 中间件。 4. 经过一段时间后需要校验新库跟旧库两边数据是否一样。如果检查到一样了，则 直接切换即可。</li>
+<li>不够丝滑，数据来回挪动大</li>
+</ul>
+</li>
+<li><p>从机上位</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240619155025120.png" alt="image-20240619155025120" style="zoom:67%;" />
 
-<p>​		6）跳过测试用例</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line"></span><br><span class="line">    age=<span class="number">18</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">99</span></span>)</span></span><br><span class="line"><span class="meta">    @pytest.mark.skipif(<span class="params">age&gt;<span class="number">18</span>,reason=<span class="string">&quot;年龄已经大于18，不用测啦&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAge</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myage&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.skip(<span class="params">reas=<span class="string">&quot;不想测试这个啦&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAddr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myaddr&quot;</span>)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;  输出</span></span><br><span class="line"><span class="string">testcase/test_01.py::TestName::testAge myage PASSED testcase/test_01.py::TestName::testName hello,pytest PASSED testcase/test_01.py::TestName::testAddr SKIPPED (不想测试这个啦)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27; 当age=19时，输出</span></span><br><span class="line"><span class="string">testcase/test_01.py::TestName::testAge SKIPPED (年龄已经大于18，不用测啦) testcase/test_01.py::TestName::testName hello,pytest PASSED testcase/test_01.py::TestName::testAddr SKIPPED (不想测试这个啦)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>修改配置信息，注意旧库跟新库之间到映射关系。确保扩容后数据可以正确路由 到服务器。 Id % 2 &#x3D; 0 的库变为了  id % 4 &#x3D; 0 或  id % 4 &#x3D; 2 Id % 2 &#x3D; 1 的库变为了  id % 4 &#x3D; 1 或  id % 4 &#x3D; 3</li>
+<li>服务层reload配置，可以重启服务，也可以CLoud那样配置中心发送信号来实现重读 配置文件。</li>
+<li>删除冗余数据，比如id % 4 &#x3D; 0的机器中删除id % 4 &#x3D; 2的冗余数据，只为id % 4 &#x3D;  0的数据提供服务，其余三个类似操作。</li>
+<li>并且建立高可用，再为每个主库配置从库。</li>
+<li>完成丝滑般扩容。</li>
+</ul>
+</li>
+</ul>
+<h3 id="redis-字符串-底层"><a href="#redis-字符串-底层" class="headerlink" title="redis 字符串 底层"></a>redis 字符串 底层</h3><p>  SDS（简单动态字符串）：主要字段：len:已使用的长度，free：空闲未使用的长度，char[] buf：存放真的数据。</p>
+<h4 id="动态长度扩展（空间预分配）"><a href="#动态长度扩展（空间预分配）" class="headerlink" title="动态长度扩展（空间预分配）"></a>动态长度扩展（空间预分配）</h4><p>  当字符串长度为5时，可用长度只有4，咋办？每次追加字符串时，都会</p>
+<pre><code>1. 计算出大小是否足够
+2. 开辟空间至满足所需大小
+3. 开辟与已使用大小len相同长度的空闲free空间（如果len &lt; 1M），或开辟1M长度的空 闲free空间（如果len &gt;= 1M）
+</code></pre>
+<h4 id="惰性回收"><a href="#惰性回收" class="headerlink" title="惰性回收"></a>惰性回收</h4><p>与上面情况相反，惰性空间回收适用于字符串缩减操作。比如有个字符串s1&#x3D;”hello  world”，对s1进行sdstrim(s1,” world”)操作，执行完该操作之后Redis不会立即回收减 少的部分，而是会分配给下一个需要内存的程序。</p>
+<h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h4><ul>
+<li>快速获取字符串长度 </li>
+<li>避免缓冲区溢出 </li>
+<li>降低空间分配次数提升内存使用效率</li>
+<li>主要是为了快，以空间换时间。</li>
+</ul>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p><strong>inner join和left join都需要优化右表（为右表连接字段建立索引），right join需要优化左表。</strong></p>
+<p>SELECT COUNT(DISTINCT LEFT(lesson_code, 20)) &#x2F; COUNT(*)  FROM lesson;计算区分度</p>
+<h3 id="使用sql计算连续三天登录的用户id"><a href="#使用sql计算连续三天登录的用户id" class="headerlink" title="使用sql计算连续三天登录的用户id"></a>使用sql计算连续三天登录的用户id</h3><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240620150203283.png" alt="image-20240620150203283" style="zoom:67%;" />
 
-<a href="/2023/11/27/pytest%E8%BF%9B%E9%98%B6/" title="pytest单元测试框架（进阶篇）">pytest单元测试框架（进阶篇）</a>
+<h3 id="mysql-int-和String-互转"><a href="#mysql-int-和String-互转" class="headerlink" title="mysql int 和String 互转"></a>mysql int 和String 互转</h3><p>使用convert函数，convert（类型，值）</p>
+<p>则 convert(varchar(10),字段A)将返回A的varchar类型  </p>
+<p>同理 convert(int,字段B)将返回B的int型</p>
+<h3 id="数据库通用规则"><a href="#数据库通用规则" class="headerlink" title="数据库通用规则"></a>数据库通用规则</h3><ol>
+<li>存储引擎使用innodb。</li>
+<li>每张表必须设置一个主键ID，且这个主键ID使用自增主键（在满足 需要的情况下尽量短），除非在分库分表环境下。</li>
+<li>必须使用utf8mb4字符集</li>
+<li>数据库表、表字段必须加入中文注释</li>
+<li>库名、表名、字段名均小写，下划线风格，不超过32个字符，必须见 名知意，禁止拼音英文混用</li>
+<li>单表列数目必须小于30，若超过则应该考虑将表拆分</li>
+<li>禁止使用外键，如果有外键完整性约束，需要应用程序控制，逻辑外键</li>
+<li>必须把字段定义为 UPDATE 与 DELETE 操作都会涉及相关联的表， NOT NULL并且提供默认值</li>
+<li>禁用保留字，如 DESC、RANGE、MARCH 等，请参考 字。</li>
+<li>如果存储的字符串长度几乎相等，使用CHAR定长字符串类型。</li>
+<li>在一些场景下，考虑使用TIMESTAMP代替DATETIME。<ul>
+<li>TIMESTAMP只需要占用4个字节的长度，可以存储的范围为 个时区，所展示的时间是不一样的；b、而 (1970-2038) 年，在各 DATETIME 类型占用8个字节，对时区不敏 感，可以存储的范围为 (1001-9999) 年。</li>
+</ul>
+</li>
+</ol>
+<h3 id="SQL约束（通用规则）"><a href="#SQL约束（通用规则）" class="headerlink" title="SQL约束（通用规则）"></a>SQL约束（通用规则）</h3><ol>
+<li>为了充分利用缓存，不允许使用自定义函数、存储函数、用户变量。</li>
+<li>在查询中指定所需的列，而不是直接使用“ *”返回所有的列。使用覆盖索引。</li>
+<li>不允许使用属性隐式转换</li>
+<li>不允许在WHERE条件的属性上使用函数或者表达式</li>
+<li>禁止使用外键与级联，一切外键概念必须在应用层解决，逻辑外键</li>
+<li>应尽量避免在WHERE子句中使用or作为连接条件。（or两边有一边没有索引会导致索引失效），使用union all</li>
+<li>不允许使用%开头的模糊查询</li>
+</ol>
+<h3 id="如何解决redis集群异步复制，数据丢失问题？"><a href="#如何解决redis集群异步复制，数据丢失问题？" class="headerlink" title="如何解决redis集群异步复制，数据丢失问题？"></a>如何解决redis集群异步复制，数据丢失问题？</h3><ol>
+<li>异步复制丢失（全异步，主节点写入完成后就完成，从节点异步同步数据）<ul>
+<li>当主节点准备同步数据时，主节点宕机，从机上位，导致原主机变为从节点，数据同步导致数据丢失</li>
+<li>min-slaves-to-write 1 min-slaves-max-lag 10</li>
+<li>这两个参数表示至少有1个salve的与master的同步复制延迟不能超 过10s，一旦所有的slave复制和同步的延迟达到了10s，那么此时master就不会接受任何请求。</li>
+</ul>
+</li>
+<li>脑裂（两个master）<ul>
+<li>一个master没发现脑裂，继续进行数据写入，后面发现时，降级为从节点，与新的master进行同步，导致以前数据丢失。</li>
+<li>半数机制，只有半数的节点存活时，才能进行数据写入操作（master选举也是一样）。同时进行冗余通信，确保能快速的发现节点问题。</li>
+</ul>
+</li>
+</ol>
+<p>对于客户端，可以采取降级措施，将数据暂时写入本地缓存和磁盘中，在一 段时间后重新写入master来保证数据不丢失；也可以将数据写入kafka消息队列，隔一 段时间去消费kafka中的数据。</p>
+<h3 id="子线程中能否获取父线程的threadlocal值？"><a href="#子线程中能否获取父线程的threadlocal值？" class="headerlink" title="子线程中能否获取父线程的threadlocal值？"></a>子线程中能否获取父线程的threadlocal值？</h3><p>不能直接获取threadlocal的值，但是可以使用InheritableThreadLocal对象，子线程是可以获取到父线程的值的。</p>
+<p>当inheritThreadLocals的值为true并且其父线程的inheritableThreadLocals不为null时, 把其父线程inheritableThreadLocals 赋值给当前线程的inheritableThreadLocals</p>
+<h3 id="nacos如何解决并发读写冲突问题？"><a href="#nacos如何解决并发读写冲突问题？" class="headerlink" title="nacos如何解决并发读写冲突问题？"></a>nacos如何解决并发读写冲突问题？</h3><p>private final Map&lt;String, Map&lt;String, Service&gt;&gt; serviceMap &#x3D; new ConcurrentHashMap&lt;&gt;();这是因为Nacos在注册实例写入注册表的时候用的就是写时复制，可以很好地避免并发冲突。copyonwrite技术。</p>
+<p>异步执行的线程池里面要往里面新加就新加，想从里面删除就删除，想修改就修改，改的是拷贝过来的，改完再覆盖线上的实例对象，来替换旧的数据。也即是采用了copyOnWrite技术这样当有其他实例注册进来的时候，就不会有冲突，或者说脏读，读的永远都是最新的，如果直接在原注册表里修改，就会读到中间状态的数据，就会出现服务注册问题。</p>
+<p>如果是写的情况下，大家都拷贝完了，如果并发的多个实例都来拷贝，大家都各写个的，结果就会导致注册表不一致，出现服务更新的问题，这个问题其实是在加实例的时候有对服务资源进行加锁处理，因此一个服务的多个实例只能串行执行，不同服务之间当然是可以并行执行的，但是不同服务本身是不一样的，你拷贝你的，我拷贝我的，是不会对整体的服务列表有影响的。因为是同步代码块锁定了这个服务资源，它们是串行执行的，所以并发写是没有冲突的</p>
+<h3 id="菱形继承"><a href="#菱形继承" class="headerlink" title="菱形继承"></a>菱形继承</h3><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240621092158869.png" alt="image-20240621092158869" style="zoom:67%;" />
 
+<p>问题：冗余与二义性问题。</p>
+<p>虚拟继承解决上述问题。虚拟继承的话，可以保证person中的属性只保存一份，避免了冗余和二义性。（c++）。</p>
+<h3 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h3><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240621095537737.png" alt="image-20240621095537737" style="zoom:67%;" />
 
-
-
-
+<h3 id="jvm卡表"><a href="#jvm卡表" class="headerlink" title="jvm卡表"></a>jvm卡表</h3><p>使用卡表和写屏障加快GC roots的搜索过程。</p>
+<p>现代JVM，堆空间通常被划分为新生代和老年代。由于新生代的垃圾收集通常很频繁，如果<strong>老年代对象引用了新生代的对象，那么，需要跟踪从老年代到新生代的所有引用</strong>，从而避免每次YGC时扫描整个老年代，减少开销。</p>
+<p>基于卡表（Card Table）的设计，通常将堆空间划分为一系列2次幂大小的卡页（Card Page）。卡表（Card Table），用于标记卡页的状态，每个卡表项对应一个卡页。HotSpot JVM的卡页（Card Page）大小为512字节，卡表（Card Table）被实现为一个简单的字节数组，即卡表的每个标记项为1个字节。</p>
+<p>一个卡页的内存中通常包含不止一个对象，只要卡页内有一个（或更多）对象的字段存在着跨代 指针（老年代指向新生代），那就将对应卡表的数组元素的值标识为 1 ，称为这个 元素变脏 （ Dirty ），没有则标识为 0 。在垃圾收集发生时，只要 筛选出卡表中变脏的元素 ，就能轻易得出哪些卡页内存块中包含跨代指针，把它 们加入 GC Roots 中一并扫描</p>
+<h4 id="带来的2个问题"><a href="#带来的2个问题" class="headerlink" title="带来的2个问题"></a>带来的2个问题</h4><p><strong>1.无条件写屏障带来的性能开销</strong></p>
+<p>每次对引用的更新，无论是否更新了老年代对新生代对象的引用，都会进行一次写屏障操作。显然，这会增加一些额外的开销。但是，与YGC时扫描整个老年代相比较，这个开销就低得多了。</p>
+<p>不过，在高并发环境下，写屏障又带来了虚共享（false sharing）问题。</p>
+<p><strong>2.高并发下虚共享带来的性能开销</strong></p>
+<p>在高并发情况下，频繁的写屏障很容易发生虚共享（<code>false sharing</code>），从而带来性能开销。</p>
+<p>假设<code>CPU</code>缓存行大小为<code>64</code>字节，由于一个卡表项占<code>1</code>个字节，这意味着，<code>64</code>个卡表项将共享同一个缓存行。</p>
+<p><code>HotSpot</code>每个卡页为<code>512</code>字节，那么一个缓存行将对应<code>64</code>个卡页一共<code>64*512=32</code>KB。</p>
+<p>如果不同线程对对象引用的更新操作，恰好位于同一个<code>32KB</code>区域内，这将导致同时更新卡表的同一个缓存行，从而造成缓存行的写回、无效化或者同步操作，间接影响程序性能。</p>
+<p>一个简单的解决方案，就是不采用无条件的写屏障，而是先检查卡表标记，只有当该卡表项未被标记过才将其标记为<code>dirty</code>。</p>
+<p>这就是<code>JDK 7</code>中引入的解决方法，引入了一个新的<code>JVM</code>参数<code>-XX:+UseCondCardMark</code>，在执行写屏障之前，先简单的做一下判断。如果卡页已被标识过，则不再进行标识。</p>
+<h3 id="Spring-设计模式"><a href="#Spring-设计模式" class="headerlink" title="Spring 设计模式"></a>Spring 设计模式</h3><p>单例模式：Spring 中的 Bean 默认情况下都是单例的。无需多说。 </p>
+<p>工厂模式：工厂模式主要是通过 BeanFactory 和 ApplicationContext 来生产 Bean 对 象。 </p>
+<p>代理模式：最常见的 AOP 的实现方式就是通过代理来实现，Spring主要是使用 JDK  动态代理和 CGLIB 代理。 </p>
+<p>模板方法模式：主要是一些对数据库操作的类用到，比如 JdbcTemplate、 JpaTemplate，因为查询数据库的建立连接、执行查询、关闭连接几个过程，非常适用 于模板方法。</p>
+<h3 id="Spring-Boot自动装配原理"><a href="#Spring-Boot自动装配原理" class="headerlink" title="Spring Boot自动装配原理"></a>Spring Boot自动装配原理</h3><p>@SpringBootApplication是最常见的注解</p>
+<ul>
+<li>@SpringBootConfiguration<ul>
+<li>他是一个@Configuration，所以也就是对spring原生 注解的封装</li>
+</ul>
+</li>
+<li><strong>@EnableAutoConfiguration</strong></li>
+<li>@ComponentScan<ul>
+<li>默认扫描的是与该类同级的类或者同级包下的所有类，是spring的原生注解之 一</li>
+</ul>
+</li>
+</ul>
+<p>@EnableAutoConfiguration就是自动配置原理的核心。</p>
+<ul>
+<li><p>@Import(AutoConfigurationImportSelector.class) public @interface EnableAutoConfiguration {</p>
+</li>
+<li><p>@Import注解引入了一个AutoConfigurationImportSelector类型的bean。点击 AutoConfigurationImportSelector ，进入之后找到方法 getCandidateConfigurations().</p>
+</li>
+<li><p>spring将需要自动装配的类写在META INF&#x2F;spring.factories文件里面，再启动的时候去读取需要配置的类，并进行自动装配。</p>
+</li>
+<li><p>Spring Boot会在classpath中寻找符合条件的类，并根据这些类自动配置Bean。</p>
+</li>
+<li><p>Spring Boot启动时会加载<strong>META-INF&#x2F;spring.factories</strong>文件，该文件中配置了所有自动装配的类。</p>
+</li>
+<li><p>ConditionalOnClass 这是一个条件注解，代表如果没有RedisOperations这个类 就不 执行此配置，也就是说如果没有相关的redis依赖，那么redisTemplate就不会进行自动 注入。</p>
+</li>
+</ul>
+<h3 id="面向对象设计的原则"><a href="#面向对象设计的原则" class="headerlink" title="面向对象设计的原则"></a>面向对象设计的原则</h3><ol>
+<li>开闭原则：对扩展开放，对修改关闭。这意味着软件实体应能够适应变化，而无需修改其现有代码。</li>
+<li>里氏替换原则：子类必须能够替换其基类。这意味着在软件中，任何使用基类的地方都可以安全地使用子类，而不会破坏程序的功能。</li>
+<li>依赖倒置原则：抽象不应该依赖于细节，细节应该依赖于抽象。这强调了通过抽象类或接口来定义依赖关系，而不是直接依赖于具体实现。</li>
+<li>单一职责原则：一个类应只有一个引起变化的原因。这意味着每个类应该只有一个职责，避免功能过多导致难以维护。</li>
+<li>接口隔离原则：客户端不应该依赖于它不使用的接口方法。这要求接口设计应尽可能细化，只暴露客户端真正需要的部分。</li>
+<li>迪米特法则（最少知识原则）：一个对象应当对其他对象有尽可能少的了解。这有助于减少对象之间的耦合，提高系统的可维护性。</li>
+<li>合成复用原则：<strong>优先使用对象组合，而不是继承来达到复用的目的</strong>。这强调了通过组合或聚合关系复用代码，而不是通过继承。</li>
+</ol>
 ]]></content>
       <tags>
-        <tag>测试</tag>
-        <tag>pytest</tag>
+        <tag>java</tag>
       </tags>
   </entry>
   <entry>
@@ -3391,6 +3691,105 @@ public class ErrorMessageConfig &#123;
       </tags>
   </entry>
   <entry>
+    <title>pytest单元测试框架（基础篇）</title>
+    <url>/2023/11/21/pytest%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h2 id="单元测试框架"><a href="#单元测试框架" class="headerlink" title="单元测试框架"></a>单元测试框架</h2><p>​		1）什么是单元测试框架</p>
+<p>​		单元测试框架是指在软件开发的过程种，针对软件的最小单位（函数、方法）进行正确性测试</p>
+<span id="more"></span>
+
+<p>​		2）常见的单元测试框架</p>
+<p>​		基于java的：junit和testng</p>
+<p>​		基于python的：unittest和<strong>pytest</strong></p>
+<p>​		3）单元测试流程</p>
+<p>​		1.测试发现：从多个文件中找到需要被测试的测试用例</p>
+<p>​		2.测试执行：按照一定的顺序执行测试用例，并生成结果</p>
+<p>​		3.测试判断：通过assert断言来自动判断结果与预期是否相符</p>
+<p>​		4.测试报告：生成这次测试的测试报告，包括耗时、通过率等</p>
+<h2 id="pytest"><a href="#pytest" class="headerlink" title="pytest"></a>pytest</h2><p>​		1）简介</p>
+<p>​		pytest是python的一种单元测试框架，与python自带的测试框架unittest类似，但比其更易上手，也更加的灵活。因此使用面也广于unittest。</p>
+<ul>
+<li><p>pytest比unittest更加成熟，同时支持unittest编写的测试用例</p>
+</li>
+<li><p>pytest可以和selenium，request，appium等测试框架相结合，实现web ui自动化，web 接口自动化，app ui自动化</p>
+</li>
+<li><p>pytest可以实现测试用例的跳过以及失败用例重试</p>
+</li>
+<li><p>pytest支持参数化数据驱动方式</p>
+</li>
+<li><p>pytest可以和Jenkins持续集成</p>
+</li>
+<li><p>pytest具有很多第三方插件，且支持自定义扩展</p>
+<ul>
+<li><p>pytest：单元测试框架</p>
+<p>pytest-xdist： 测试用例的分布式执行，即并发执行。可缩短总的用例的执行时间</p>
+<p>pytest-ordering： 可以指定测试用例的执行顺序，默认是从上到下依次执行</p>
+<p>pytest-rerunfailures： 用例失败后进行再次执行（多用于ui测试）</p>
+<p>pytest-html： 生成html格式的测试报告（不够美观）</p>
+<p>allure-pytest： 生成比上面美观的测试报告，且可进行测试报告的自定义</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>​		2）安装</p>
+<p>​		新建python项目———在本地虚拟终端中执行以下命令即可。（注意：使用以上插件也需要安装到本地环境中，语法类似）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">pip install pytest   <span class="comment">#安装命令</span></span><br><span class="line"></span><br><span class="line">pytest --version     <span class="comment">#检查命令</span></span><br></pre></td></tr></table></figure>
+
+<p>​		3）使用pytest</p>
+<p>​		pytest的默认测试用例发现规则</p>
+<ul>
+<li><p>模块名（简单理解为一个py文件）以test_ 开头或 _test结尾</p>
+</li>
+<li><p>测试类以Test开头，并且不包含init()方法</p>
+</li>
+<li><p>测试方法以test开头</p>
+<p>4）运行pytest</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">     <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">         <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"> </span><br><span class="line"> </span><br><span class="line"> <span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">     pytest.main()</span><br></pre></td></tr></table></figure>
+
+<h2 id="pytest运行方式"><a href="#pytest运行方式" class="headerlink" title="pytest运行方式"></a>pytest运行方式</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">参数详解:</span><br><span class="line">-s:输出调试信心，包括<span class="built_in">print</span>打印的信息</span><br><span class="line">-v:显示更详细的信息</span><br><span class="line">-vs:两个连用，效用就是两个相加</span><br><span class="line">-n NUM: 支持多线程或分布式运行测试用例，使用NUM个线程。需要导入pytest-xdist插件</span><br><span class="line">--<span class="built_in">return</span> NUM:失败用例重跑NUM次，失败用例总共运行NUM+1次</span><br><span class="line">-x:有一个用例失败报错，则停止测试，默认是不停止测试</span><br><span class="line">--maxfail=NUM:出现NUM个失败用例就停止测试</span><br><span class="line">-k String:根据String字符串匹配对应的测试用例</span><br><span class="line">--html 文件路径/文件名：生成html格式的测试报告</span><br></pre></td></tr></table></figure>
+
+<p>​		1）主函数方式</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#文件夹与python package的区别：python package下包含一个_init_.py文件</span></span><br><span class="line"><span class="comment"># ./  :表示当前文件路径下</span></span><br><span class="line"><span class="comment"># ../  :表示当前文件路径的父路径，即向上一层</span></span><br><span class="line">pytest.main()    <span class="comment">#运行所有的按条件写的测试用例</span></span><br><span class="line">pytest.main(<span class="string">&#x27;-vs&#x27;</span>,<span class="string">&#x27;./tasecase&#x27;</span>)   <span class="comment">#运行tasecase文件夹下的测试用例</span></span><br><span class="line">pytest.main(<span class="string">&#x27;-x&#x27;</span>,<span class="string">&#x27;test01.py&#x27;</span>)    <span class="comment">#运行test01模块下的测试用例,且出现错误就停止测试</span></span><br><span class="line">pytest.mian(<span class="string">&#x27;-n 2&#x27;</span>,<span class="string">&#x27;./tesecase/test01.py::TestName::testName&#x27;</span>)   <span class="comment">#运行testcase文件夹下test01模块里TsetName类里的testName方法,且使用两个线程</span></span><br></pre></td></tr></table></figure>
+
+<p>​		2）命令行模式</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#即在安装pytest的本地虚拟环境中运行</span></span><br><span class="line">pytest     <span class="comment">#运行所有满足条件的测试用例</span></span><br><span class="line">pytest -vs ./testcase   <span class="comment">#运行tasecase文件夹下的测试用例</span></span><br><span class="line">pytest -x ./testcase/test01.py    <span class="comment">#运行test01模块下的测试用例,且出现错误就停止测试</span></span><br><span class="line">pytest -n 2 ./tesecase/test01.py::TestName::testName    <span class="comment">#运行testcase文件夹下test01模块里TsetName类里的testName方法,且使用两个线程</span></span><br></pre></td></tr></table></figure>
+
+<p>​		3）全局配置模式</p>
+<p>​		通过读取pytest.ini文件得到对应的配置信息，最后在命令行输入pytest即可运行（名字不可变，只能为pytest.ini）</p>
+<ul>
+<li>文件位置：放在项目的根目录，即最外层即可</li>
+<li>编码格式：必须为ANSI格式，可使用notpad++修改格式</li>
+<li>运行规则：不论是主函数方式还是命令行方式，都会优先读取该配置文件</li>
+</ul>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#模板，前面的参数是不可变的，后面根据实际情况填写</span></span><br><span class="line"></span><br><span class="line">[<span class="string">pytest</span>]</span><br><span class="line"><span class="string">addopts</span> <span class="string">=</span> <span class="string">-vs</span> <span class="comment">#命令行的参数，用空格分隔</span></span><br><span class="line"><span class="string">testpaths</span> <span class="string">=</span> <span class="string">./testcase</span> <span class="comment">#测试用例的路径</span></span><br><span class="line"><span class="string">python_files</span> <span class="string">=</span> <span class="string">test_*.py</span> <span class="comment">#模块名的规则，可以更改默认规则</span></span><br><span class="line"><span class="string">python_classes</span> <span class="string">=</span> <span class="string">Test*</span> <span class="comment">#类名的规则</span></span><br><span class="line"><span class="string">python_functions</span> <span class="string">=</span> <span class="string">test</span> <span class="comment">#方法名的规则</span></span><br><span class="line"><span class="string">markers</span> <span class="string">=</span></span><br><span class="line">  <span class="string">smoke:冒烟用例</span>          <span class="comment">#设置独有的标记</span></span><br><span class="line">  <span class="string">usermanage:用户管理模块</span></span><br><span class="line">  <span class="string">productmanage:商品管理模块</span></span><br></pre></td></tr></table></figure>
+
+<p>​		4）改变执行顺序</p>
+<p>​		pytest默认的执行顺序是从上到下，改变默认执行顺序，使用mark标记。（需要引入pytest-ordering插件）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">99</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAge</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myage&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">100</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAddr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myaddr&quot;</span>)</span><br><span class="line">        </span><br><span class="line">   <span class="comment">#优先执行带注释的用例，且order值越小，优先执行</span></span><br></pre></td></tr></table></figure>
+
+<p>​		5）分组执行</p>
+<p>​		在实际的测试场景中，需要对一类的用例进行优先测试，如，冒烟测试、用户管理模块测试、商品管理模块测试等。（还记得上面pytest.ini文件中得makers标记吗？就是用来自定自己的分组的）</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">@pytest.mark.somke</span></span><br><span class="line"><span class="comment">#在对应的方法上添加注解即可</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#执行</span></span><br><span class="line">pytest -m <span class="string">&quot;smoke&quot;</span> <span class="comment">#执行smoke模块测试用例</span></span><br><span class="line">pytest -m <span class="string">&quot;smoke or usermanage or productmanage&quot;</span>  <span class="comment">#执行这三个模块的测试用例</span></span><br></pre></td></tr></table></figure>
+
+<p>​		6）跳过测试用例</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> pytest</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestName</span>():</span><br><span class="line"></span><br><span class="line">    age=<span class="number">18</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testName</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;hello,pytest&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.run(<span class="params">order=<span class="number">99</span></span>)</span></span><br><span class="line"><span class="meta">    @pytest.mark.skipif(<span class="params">age&gt;<span class="number">18</span>,reason=<span class="string">&quot;年龄已经大于18，不用测啦&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAge</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myage&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">    @pytest.mark.skip(<span class="params">reas=<span class="string">&quot;不想测试这个啦&quot;</span></span>)</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">testAddr</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;myaddr&quot;</span>)</span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;  输出</span></span><br><span class="line"><span class="string">testcase/test_01.py::TestName::testAge myage PASSED testcase/test_01.py::TestName::testName hello,pytest PASSED testcase/test_01.py::TestName::testAddr SKIPPED (不想测试这个啦)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27; 当age=19时，输出</span></span><br><span class="line"><span class="string">testcase/test_01.py::TestName::testAge SKIPPED (年龄已经大于18，不用测啦) testcase/test_01.py::TestName::testName hello,pytest PASSED testcase/test_01.py::TestName::testAddr SKIPPED (不想测试这个啦)</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<a href="/2023/11/27/pytest%E8%BF%9B%E9%98%B6/" title="pytest单元测试框架（进阶篇）">pytest单元测试框架（进阶篇）</a>
+
+
+
+
+
+]]></content>
+      <tags>
+        <tag>测试</tag>
+        <tag>pytest</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>pytest单元测试框架（进阶篇）</title>
     <url>/2023/11/27/pytest%E8%BF%9B%E9%98%B6/</url>
     <content><![CDATA[<a href="/2023/11/21/pytest%E5%9F%BA%E7%A1%80/" title="pytest单元测试框架（基础篇）">pytest单元测试框架（基础篇）</a>讲解了pytest的基本运用，下面将继续介绍其的高阶用法。
@@ -3698,144 +4097,6 @@ public class ErrorMessageConfig &#123;
       </tags>
   </entry>
   <entry>
-    <title>接口自动化测试---基础</title>
-    <url>/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<h2 id="接口测试基础"><a href="#接口测试基础" class="headerlink" title="接口测试基础"></a>接口测试基础</h2><p>接口：系统之间数据交互的通道。</p>
-<p>接口测试：基于不同的输入参数，校验接口响应数据与预期数据是否一致。<span id="more"></span></p>
-<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><ul>
-<li>接口文档解析——一般都有对应得接口信息。如没有，则自行获取。对于web接口，可以采用开发者模式F12得到相应的接口信息。对于app接口，则采用抓包的方式获取接口信息，如Fidder</li>
-<li>设计测试用例</li>
-<li>脚本开发</li>
-<li>执行脚本</li>
-<li>缺陷跟踪</li>
-<li>测试报告</li>
-</ul>
-<h3 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h3><p>URL：是互联网上标准资源得地址，一般称为统一资源定位符</p>
-<p>组成：协议::&#x2F;&#x2F;hostname[:port]&#x2F;path&#x2F;[?查询参数1&amp;查询参数2]，即协议，服务器地址，端口号，资源路径，参数</p>
-<h3 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h3><p>HTTP：超文本传输协议，基于请求与响应的应用层协议</p>
-<ul>
-<li>HTTP请求（请求行，请求头，请求体）</li>
-<li>HTTP响应（响应行，响应头，响应体）</li>
-</ul>
-<h4 id="HTTP请求"><a href="#HTTP请求" class="headerlink" title="HTTP请求"></a>HTTP请求</h4><ul>
-<li><p>请求行：<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130192119149.png" alt="image-20231130192119149"></p>
-<ul>
-<li><p>位置：第一行</p>
-</li>
-<li><p>作用：说明请求方法、访问的资源、协议版本</p>
-</li>
-<li><p>常用方法</p>
-<ul>
-<li>Get</li>
-<li>Post</li>
-<li>Put</li>
-<li>Delect</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>请求头</p>
-<ul>
-<li>位置：第二行到空白行之间</li>
-<li>作用：通知服务端请求信息</li>
-<li>特点：由键值对组成，每行一对</li>
-<li>Content-Type：请求体数据类型<ul>
-<li>text&#x2F;html：HTML格式</li>
-<li>image&#x2F;jpeg：jpg图片格式</li>
-<li><strong>application&#x2F;json</strong>：JSON数据格式</li>
-<li><strong>application&#x2F;x-www-form-urlencoded</strong>：表单默认的提交数据格式</li>
-<li>multipart&#x2F;form-data：表单中进行文件上传</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>请求体：<strong>（可以没有对应的请求体内容）</strong></p>
-<ul>
-<li>位置：空白行之后的内容</li>
-<li>作用：传输数据实体 </li>
-<li>注意：请求体常在<strong>POST、PUT</strong>方法中使用 </li>
-<li>常配合的请求头：<strong>Content-Type</strong>和<strong>Content-Length</strong></li>
-</ul>
-</li>
-</ul>
-<h4 id="HTTP响应"><a href="#HTTP响应" class="headerlink" title="HTTP响应"></a>HTTP响应</h4><ul>
-<li>状态行 <img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130193147639.png" alt="image-20231130193147639" style="zoom:67%;" /><ul>
-<li>位置：响应数据第一行 </li>
-<li>作用：描述服务器处理结果 </li>
-<li>内容: 状态行由协议版本号、<strong>状态码</strong>、状态消息组成</li>
-<li>状态码：表示此次请求的响应状态，详细见最后的状态码表。<ul>
-<li>1XX：指示信息</li>
-<li><strong>2XX</strong>：成功 </li>
-<li>3XX：重定向 </li>
-<li><strong>4XX</strong>：客户端错误 </li>
-<li><strong>5XX</strong>：服务端错误</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>响应头<ul>
-<li>位置：第二行开始到空白行之间 </li>
-<li>作用：描述客户端端要使用的一些附加信息 </li>
-<li>特点: 响应头由键值对组成，每行一对</li>
-<li>也有Content-Type与Content-Length，表明返回的数据类型与长度</li>
-</ul>
-</li>
-<li>响应体<ul>
-<li>位置：响应数据空白行之后</li>
-<li>作用：服务器返回的数据实体 </li>
-<li>特点：有图片、json、xml、html等多种类型</li>
-</ul>
-</li>
-</ul>
-<p>使用工具进行接口自动化测试将使用新的文章记录。</p>
-<hr>
-<p>使用Jmeter进行自动化测试，详见<a href="/2023/12/13/Jmeter---%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" title="Jmeter---接口测试">Jmeter---接口测试</a></p>
-<hr>
-<h2 id="接口自动化测试"><a href="#接口自动化测试" class="headerlink" title="接口自动化测试"></a>接口自动化测试</h2><ul>
-<li>选取自动化测试用例 </li>
-<li>搭建自动化测试环境 </li>
-<li>搭建自动化测试框架 </li>
-<li>代码实现自动化 </li>
-<li>输出测试报告 </li>
-<li>实现持续集成</li>
-</ul>
-<h3 id="Requests库"><a href="#Requests库" class="headerlink" title="Requests库"></a>Requests库</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install requests  <span class="comment">#安装</span></span><br><span class="line">request --version 	<span class="comment">#验证</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="Requests发送请求"><a href="#Requests发送请求" class="headerlink" title="Requests发送请求"></a>Requests发送请求</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">requests.请求方法（url，params=<span class="literal">None</span>，data=<span class="literal">None</span>，json=<span class="literal">None</span>，headers=<span class="literal">None</span>，files=<span class="literal">None</span>）<span class="comment">#必须传入对应的url地址，其余参数非必须</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;说明：</span></span><br><span class="line"><span class="string">常见的请求方法： get/post/put/delete</span></span><br><span class="line"><span class="string">url：请求的url地址</span></span><br><span class="line"><span class="string">params：请求查询参数</span></span><br><span class="line"><span class="string">data：请求体为form表单参数</span></span><br><span class="line"><span class="string">json：请求体为json参数</span></span><br><span class="line"><span class="string">headers：请求头参数</span></span><br><span class="line"><span class="string">Files：文件参数</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="Response响应"><a href="#Response响应" class="headerlink" title="Response响应"></a>Response响应</h4><ul>
-<li>response.status_code ：状态码 </li>
-<li>response.json() ：JSON形式的响应内容</li>
-<li>response.text ：文本形式的响应内容 </li>
-<li>response.url ：请求url </li>
-<li>response.encoding：查看响应头部字符编码 </li>
-<li>response.headers ：头信息 </li>
-<li>response.cookies ：cookie信息</li>
-</ul>
-<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">&quot;accounts&quot;</span>:<span class="string">&quot;huace_xm&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pwd&quot;</span>:<span class="number">123456</span>,</span><br><span class="line">    <span class="string">&quot;type&quot;</span>:<span class="string">&quot;username&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">rs5 = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/region/index&quot;</span>,</span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,</span><br><span class="line">                 data=data)</span><br><span class="line"><span class="built_in">print</span>(rs5.json())</span><br><span class="line"><span class="comment">#使用对应的方法，参数，调用对应的方法或者request方法，得到响应结果</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="响应码"><a href="#响应码" class="headerlink" title="响应码"></a>响应码</h2><ul>
-<li>200 OK 服务器成功返回用户请求的数据 </li>
-<li>201 CREATED 用户新建或修改数据成功 </li>
-<li>204 NO CONTENT 用户删除数据成功 </li>
-<li>301 Moved Permanently 被请求的资源已永久移动到新位置 </li>
-<li>302 Move Temporarily 被请求的资源临时性移动到新位置 </li>
-<li>400 Bad Request 客户端请求有语法错误，不能被服务器所理解 </li>
-<li>401 Unauthorized 未授权的（未登录） </li>
-<li>403 Forbidden 表示用户得到授权，但是访问是被禁止的 </li>
-<li>404 Not Found 请求资源不存在 </li>
-<li>500 INTERNAL SERVER ERROR 服务器发生错误，用户将无法判断发出的请求是否成功 </li>
-<li>503 Server Unavailable 服务器当前不能处理客户端的请求，一段时间后可能恢复正常</li>
-</ul>
-<a href="/2023/12/02/2023-12-01-%E6%8E%A5%E5%8F%A3%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95---%E8%BF%9B%E9%98%B6/" title="接口自动化测试---进阶">接口自动化测试---进阶</a>
-]]></content>
-      <tags>
-        <tag>接口测试</tag>
-        <tag>测试</tag>
-        <tag>python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>日志logger</title>
     <url>/2023/11/25/%E6%97%A5%E5%BF%97logger/</url>
     <content><![CDATA[<h3 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h3><p>​		1）什么是日志</p>
@@ -4025,6 +4286,144 @@ public class ErrorMessageConfig &#123;
       <tags>
         <tag>日志</tag>
         <tag>logger</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>接口自动化测试---基础</title>
+    <url>/2023/11/30/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95--%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h2 id="接口测试基础"><a href="#接口测试基础" class="headerlink" title="接口测试基础"></a>接口测试基础</h2><p>接口：系统之间数据交互的通道。</p>
+<p>接口测试：基于不同的输入参数，校验接口响应数据与预期数据是否一致。<span id="more"></span></p>
+<h3 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h3><ul>
+<li>接口文档解析——一般都有对应得接口信息。如没有，则自行获取。对于web接口，可以采用开发者模式F12得到相应的接口信息。对于app接口，则采用抓包的方式获取接口信息，如Fidder</li>
+<li>设计测试用例</li>
+<li>脚本开发</li>
+<li>执行脚本</li>
+<li>缺陷跟踪</li>
+<li>测试报告</li>
+</ul>
+<h3 id="URL"><a href="#URL" class="headerlink" title="URL"></a>URL</h3><p>URL：是互联网上标准资源得地址，一般称为统一资源定位符</p>
+<p>组成：协议::&#x2F;&#x2F;hostname[:port]&#x2F;path&#x2F;[?查询参数1&amp;查询参数2]，即协议，服务器地址，端口号，资源路径，参数</p>
+<h3 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h3><p>HTTP：超文本传输协议，基于请求与响应的应用层协议</p>
+<ul>
+<li>HTTP请求（请求行，请求头，请求体）</li>
+<li>HTTP响应（响应行，响应头，响应体）</li>
+</ul>
+<h4 id="HTTP请求"><a href="#HTTP请求" class="headerlink" title="HTTP请求"></a>HTTP请求</h4><ul>
+<li><p>请求行：<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130192119149.png" alt="image-20231130192119149"></p>
+<ul>
+<li><p>位置：第一行</p>
+</li>
+<li><p>作用：说明请求方法、访问的资源、协议版本</p>
+</li>
+<li><p>常用方法</p>
+<ul>
+<li>Get</li>
+<li>Post</li>
+<li>Put</li>
+<li>Delect</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>请求头</p>
+<ul>
+<li>位置：第二行到空白行之间</li>
+<li>作用：通知服务端请求信息</li>
+<li>特点：由键值对组成，每行一对</li>
+<li>Content-Type：请求体数据类型<ul>
+<li>text&#x2F;html：HTML格式</li>
+<li>image&#x2F;jpeg：jpg图片格式</li>
+<li><strong>application&#x2F;json</strong>：JSON数据格式</li>
+<li><strong>application&#x2F;x-www-form-urlencoded</strong>：表单默认的提交数据格式</li>
+<li>multipart&#x2F;form-data：表单中进行文件上传</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>请求体：<strong>（可以没有对应的请求体内容）</strong></p>
+<ul>
+<li>位置：空白行之后的内容</li>
+<li>作用：传输数据实体 </li>
+<li>注意：请求体常在<strong>POST、PUT</strong>方法中使用 </li>
+<li>常配合的请求头：<strong>Content-Type</strong>和<strong>Content-Length</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="HTTP响应"><a href="#HTTP响应" class="headerlink" title="HTTP响应"></a>HTTP响应</h4><ul>
+<li>状态行 <img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20231130193147639.png" alt="image-20231130193147639" style="zoom:67%;" /><ul>
+<li>位置：响应数据第一行 </li>
+<li>作用：描述服务器处理结果 </li>
+<li>内容: 状态行由协议版本号、<strong>状态码</strong>、状态消息组成</li>
+<li>状态码：表示此次请求的响应状态，详细见最后的状态码表。<ul>
+<li>1XX：指示信息</li>
+<li><strong>2XX</strong>：成功 </li>
+<li>3XX：重定向 </li>
+<li><strong>4XX</strong>：客户端错误 </li>
+<li><strong>5XX</strong>：服务端错误</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>响应头<ul>
+<li>位置：第二行开始到空白行之间 </li>
+<li>作用：描述客户端端要使用的一些附加信息 </li>
+<li>特点: 响应头由键值对组成，每行一对</li>
+<li>也有Content-Type与Content-Length，表明返回的数据类型与长度</li>
+</ul>
+</li>
+<li>响应体<ul>
+<li>位置：响应数据空白行之后</li>
+<li>作用：服务器返回的数据实体 </li>
+<li>特点：有图片、json、xml、html等多种类型</li>
+</ul>
+</li>
+</ul>
+<p>使用工具进行接口自动化测试将使用新的文章记录。</p>
+<hr>
+<p>使用Jmeter进行自动化测试，详见<a href="/2023/12/13/Jmeter---%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" title="Jmeter---接口测试">Jmeter---接口测试</a></p>
+<hr>
+<h2 id="接口自动化测试"><a href="#接口自动化测试" class="headerlink" title="接口自动化测试"></a>接口自动化测试</h2><ul>
+<li>选取自动化测试用例 </li>
+<li>搭建自动化测试环境 </li>
+<li>搭建自动化测试框架 </li>
+<li>代码实现自动化 </li>
+<li>输出测试报告 </li>
+<li>实现持续集成</li>
+</ul>
+<h3 id="Requests库"><a href="#Requests库" class="headerlink" title="Requests库"></a>Requests库</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install requests  <span class="comment">#安装</span></span><br><span class="line">request --version 	<span class="comment">#验证</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Requests发送请求"><a href="#Requests发送请求" class="headerlink" title="Requests发送请求"></a>Requests发送请求</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">requests.请求方法（url，params=<span class="literal">None</span>，data=<span class="literal">None</span>，json=<span class="literal">None</span>，headers=<span class="literal">None</span>，files=<span class="literal">None</span>）<span class="comment">#必须传入对应的url地址，其余参数非必须</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;说明：</span></span><br><span class="line"><span class="string">常见的请求方法： get/post/put/delete</span></span><br><span class="line"><span class="string">url：请求的url地址</span></span><br><span class="line"><span class="string">params：请求查询参数</span></span><br><span class="line"><span class="string">data：请求体为form表单参数</span></span><br><span class="line"><span class="string">json：请求体为json参数</span></span><br><span class="line"><span class="string">headers：请求头参数</span></span><br><span class="line"><span class="string">Files：文件参数</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="Response响应"><a href="#Response响应" class="headerlink" title="Response响应"></a>Response响应</h4><ul>
+<li>response.status_code ：状态码 </li>
+<li>response.json() ：JSON形式的响应内容</li>
+<li>response.text ：文本形式的响应内容 </li>
+<li>response.url ：请求url </li>
+<li>response.encoding：查看响应头部字符编码 </li>
+<li>response.headers ：头信息 </li>
+<li>response.cookies ：cookie信息</li>
+</ul>
+<h4 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">params = &#123;</span><br><span class="line">    <span class="string">&quot;application&quot;</span>:<span class="string">&quot;app&quot;</span>,</span><br><span class="line">    <span class="string">&quot;applicaiton_client_type&quot;</span>:<span class="string">&quot;weixin&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">&quot;accounts&quot;</span>:<span class="string">&quot;huace_xm&quot;</span>,</span><br><span class="line">    <span class="string">&quot;pwd&quot;</span>:<span class="number">123456</span>,</span><br><span class="line">    <span class="string">&quot;type&quot;</span>:<span class="string">&quot;username&quot;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">rs5 = requests.request(url=<span class="string">&quot;http://shop-xo.hctestedu.com/index.php?s=api/region/index&quot;</span>,</span><br><span class="line">                 method=<span class="string">&quot;POST&quot;</span>,</span><br><span class="line">                 params=params,</span><br><span class="line">                 data=data)</span><br><span class="line"><span class="built_in">print</span>(rs5.json())</span><br><span class="line"><span class="comment">#使用对应的方法，参数，调用对应的方法或者request方法，得到响应结果</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="响应码"><a href="#响应码" class="headerlink" title="响应码"></a>响应码</h2><ul>
+<li>200 OK 服务器成功返回用户请求的数据 </li>
+<li>201 CREATED 用户新建或修改数据成功 </li>
+<li>204 NO CONTENT 用户删除数据成功 </li>
+<li>301 Moved Permanently 被请求的资源已永久移动到新位置 </li>
+<li>302 Move Temporarily 被请求的资源临时性移动到新位置 </li>
+<li>400 Bad Request 客户端请求有语法错误，不能被服务器所理解 </li>
+<li>401 Unauthorized 未授权的（未登录） </li>
+<li>403 Forbidden 表示用户得到授权，但是访问是被禁止的 </li>
+<li>404 Not Found 请求资源不存在 </li>
+<li>500 INTERNAL SERVER ERROR 服务器发生错误，用户将无法判断发出的请求是否成功 </li>
+<li>503 Server Unavailable 服务器当前不能处理客户端的请求，一段时间后可能恢复正常</li>
+</ul>
+<a href="/2023/12/02/2023-12-01-%E6%8E%A5%E5%8F%A3%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95---%E8%BF%9B%E9%98%B6/" title="接口自动化测试---进阶">接口自动化测试---进阶</a>
+]]></content>
+      <tags>
+        <tag>接口测试</tag>
+        <tag>测试</tag>
+        <tag>python</tag>
       </tags>
   </entry>
   <entry>

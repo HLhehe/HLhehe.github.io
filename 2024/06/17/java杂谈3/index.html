@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hlhehe.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"show_result":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="String的长度限制 首先字符串的内容是由一个字符数组 char[] ，后为byte[]数组来存储的，由于数组的长度及索引是 整数，且String类中返回字符串长度的方法length() 的返回值也是int ，所以通过查看 java源码中的类Integer我们可以看到Integer的最大范围是2^31 -1,由于数组是从0开始 的，所以数组的最大长度可以使【0~2^31】通过计算是大概4GB。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java杂谈---3">
+<meta property="og:url" content="https://hlhehe.github.io/2024/06/17/java%E6%9D%82%E8%B0%883/index.html">
+<meta property="og:site_name" content="Honor">
+<meta property="og:description" content="String的长度限制 首先字符串的内容是由一个字符数组 char[] ，后为byte[]数组来存储的，由于数组的长度及索引是 整数，且String类中返回字符串长度的方法length() 的返回值也是int ，所以通过查看 java源码中的类Integer我们可以看到Integer的最大范围是2^31 -1,由于数组是从0开始 的，所以数组的最大长度可以使【0~2^31】通过计算是大概4GB。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240619154621740.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240619154709117.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240619154822676.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240619155025120.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240620150203283.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240621092158869.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240621095537737.png">
+<meta property="article:published_time" content="2024-06-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-06-22T00:47:55.508Z">
+<meta property="article:author" content="荷包蛋-溏心">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240619154621740.png">
+
+
+<link rel="canonical" href="https://hlhehe.github.io/2024/06/17/java%E6%9D%82%E8%B0%883/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hlhehe.github.io/2024/06/17/java%E6%9D%82%E8%B0%883/","path":"2024/06/17/java杂谈3/","title":"java杂谈---3"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>java杂谈---3 | Honor</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="waline-server-hlhehes-projects.vercel.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Honor</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">荷包蛋的成长之路</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">26</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#String%E7%9A%84%E9%95%BF%E5%BA%A6%E9%99%90%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">String的长度限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%8C%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="nav-number">2.</span> <span class="nav-text">静态常量池，运行时常量池，字符串常量池</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E9%9D%99%E6%80%81%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%88Compile-time-Constant-Pool%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">1. 静态常量池（Compile-time Constant Pool）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%88Runtime-Constant-Pool%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">2. 运行时常量池（Runtime Constant Pool）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%88String-Constant-Pool%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">3. 字符串常量池（String Constant Pool）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#threadloacal%E5%AE%9A%E4%B9%89%E4%B8%BAstatic%E7%9A%84"><span class="nav-number">3.</span> <span class="nav-text">threadloacal定义为static的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-number">4.</span> <span class="nav-text">JVM类加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-number">5.</span> <span class="nav-text">G1垃圾收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RS"><span class="nav-number">5.1.</span> <span class="nav-text">RS</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E7%BA%BF%E7%A8%8B%E6%95%B0"><span class="nav-number">6.</span> <span class="nav-text">最佳线程数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E5%8F%82%E6%95%B0"><span class="nav-number">7.</span> <span class="nav-text">JVM参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90"><span class="nav-number">8.</span> <span class="nav-text">逃逸分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#countdownlatch%EF%BC%8CCyclicBarrier%EF%BC%8CSemaphore"><span class="nav-number">9.</span> <span class="nav-text">countdownlatch，CyclicBarrier，Semaphore</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E9%81%87%E5%88%B0%E4%B8%89%E6%96%B9api%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86%EF%BC%9F"><span class="nav-number">10.</span> <span class="nav-text">事务遇到三方api怎么处理？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#api%E7%BB%93%E6%9E%9C%E4%B8%8E%E4%BA%8B%E5%8A%A1%E5%85%B3%E7%B3%BB%E4%B8%8D%E5%A4%A7%EF%BC%88%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81%EF%BC%89"><span class="nav-number">10.1.</span> <span class="nav-text">api结果与事务关系不大（消息推送）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#api%E4%B8%8E%E4%B8%9A%E5%8A%A1%E4%B8%8D%E5%8F%AF%E5%88%86%E5%89%B2%EF%BC%88%E5%91%98%E5%B7%A5%E7%A6%BB%E8%81%8C%EF%BC%8C%E7%AD%89%EF%BC%89"><span class="nav-number">10.2.</span> <span class="nav-text">api与业务不可分割（员工离职，等）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8D%87%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD"><span class="nav-number">11.</span> <span class="nav-text">提升后端接口查询性能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="nav-number">12.</span> <span class="nav-text">redis 虚拟内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mysql%E9%AB%98%E6%95%88%E6%9F%A5%E6%89%BE%E4%B8%80%E6%9D%A1%E9%9A%8F%E6%9C%BA%E8%AE%B0%E5%BD%95"><span class="nav-number">13.</span> <span class="nav-text">Mysql高效查找一条随机记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E4%B8%8B%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%AF%8F%E6%AC%A1%E8%AF%BB%E5%88%B0%E6%9C%80%E6%96%B0%E7%9A%84%E6%95%B0%E6%8D%AE%EF%BC%9F"><span class="nav-number">14.</span> <span class="nav-text">读写分离下，如何保证每次读到最新的数据？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%9D%E6%BB%91%E8%88%AC%E6%95%B0%E6%8D%AE%E5%BA%93%E6%89%A9%E5%AE%B9"><span class="nav-number">15.</span> <span class="nav-text">丝滑般数据库扩容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis-%E5%AD%97%E7%AC%A6%E4%B8%B2-%E5%BA%95%E5%B1%82"><span class="nav-number">16.</span> <span class="nav-text">redis 字符串 底层</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%95%BF%E5%BA%A6%E6%89%A9%E5%B1%95%EF%BC%88%E7%A9%BA%E9%97%B4%E9%A2%84%E5%88%86%E9%85%8D%EF%BC%89"><span class="nav-number">16.1.</span> <span class="nav-text">动态长度扩展（空间预分配）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%83%B0%E6%80%A7%E5%9B%9E%E6%94%B6"><span class="nav-number">16.2.</span> <span class="nav-text">惰性回收</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF"><span class="nav-number">16.3.</span> <span class="nav-text">优势</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">17.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8sql%E8%AE%A1%E7%AE%97%E8%BF%9E%E7%BB%AD%E4%B8%89%E5%A4%A9%E7%99%BB%E5%BD%95%E7%9A%84%E7%94%A8%E6%88%B7id"><span class="nav-number">18.</span> <span class="nav-text">使用sql计算连续三天登录的用户id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-int-%E5%92%8CString-%E4%BA%92%E8%BD%AC"><span class="nav-number">19.</span> <span class="nav-text">mysql int 和String 互转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E9%80%9A%E7%94%A8%E8%A7%84%E5%88%99"><span class="nav-number">20.</span> <span class="nav-text">数据库通用规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL%E7%BA%A6%E6%9D%9F%EF%BC%88%E9%80%9A%E7%94%A8%E8%A7%84%E5%88%99%EF%BC%89"><span class="nav-number">21.</span> <span class="nav-text">SQL约束（通用规则）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3redis%E9%9B%86%E7%BE%A4%E5%BC%82%E6%AD%A5%E5%A4%8D%E5%88%B6%EF%BC%8C%E6%95%B0%E6%8D%AE%E4%B8%A2%E5%A4%B1%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">22.</span> <span class="nav-text">如何解决redis集群异步复制，数据丢失问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%90%E7%BA%BF%E7%A8%8B%E4%B8%AD%E8%83%BD%E5%90%A6%E8%8E%B7%E5%8F%96%E7%88%B6%E7%BA%BF%E7%A8%8B%E7%9A%84threadlocal%E5%80%BC%EF%BC%9F"><span class="nav-number">23.</span> <span class="nav-text">子线程中能否获取父线程的threadlocal值？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nacos%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%B9%B6%E5%8F%91%E8%AF%BB%E5%86%99%E5%86%B2%E7%AA%81%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">24.</span> <span class="nav-text">nacos如何解决并发读写冲突问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8F%B1%E5%BD%A2%E7%BB%A7%E6%89%BF"><span class="nav-number">25.</span> <span class="nav-text">菱形继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95"><span class="nav-number">26.</span> <span class="nav-text">排序算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jvm%E5%8D%A1%E8%A1%A8"><span class="nav-number">27.</span> <span class="nav-text">jvm卡表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%A6%E6%9D%A5%E7%9A%842%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="nav-number">27.1.</span> <span class="nav-text">带来的2个问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">28.</span> <span class="nav-text">Spring 设计模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Boot%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D%E5%8E%9F%E7%90%86"><span class="nav-number">29.</span> <span class="nav-text">Spring Boot自动装配原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%8E%9F%E5%88%99"><span class="nav-number">30.</span> <span class="nav-text">面向对象设计的原则</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="荷包蛋-溏心"
+      src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+  <p class="site-author-name" itemprop="name">荷包蛋-溏心</p>
+  <div class="site-description" itemprop="description">哪有赌徒天天输，哪有小孩天天哭</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Hlhehe" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Hlhehe" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3113390285@qq.com" title="E-Mail → mailto:3113390285@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+
+       
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="250" height="250" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES/" rel="tag">ES</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fidder/" rel="tag">Fidder</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MQ/" rel="tag">MQ</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Selenium/" rel="tag">Selenium</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E6%B5%8B%E8%AF%95/" rel="tag">Web测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/faker/" rel="tag">faker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logger/" rel="tag">logger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%9B%E6%89%A3/" rel="tag">力扣</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="tag">性能测试</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag">接口测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag">测试数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag">面经</a><span class="tag-list-count">1</span></li></ul>
+        </canvas>
+    </div>
+</div>
+
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+     
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hlhehe.github.io/2024/06/17/java%E6%9D%82%E8%B0%883/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+      <meta itemprop="name" content="荷包蛋-溏心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Honor">
+      <meta itemprop="description" content="哪有赌徒天天输，哪有小孩天天哭">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="java杂谈---3 | Honor">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          java杂谈---3
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-06-17 00:00:00" itemprop="dateCreated datePublished" datetime="2024-06-17T00:00:00+08:00">2024-06-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-06-22 08:47:55" itemprop="dateModified" datetime="2024-06-22T08:47:55+08:00">2024-06-22</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2024/06/17/java%E6%9D%82%E8%B0%883/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2024/06/17/java%E6%9D%82%E8%B0%883/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>13k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>12 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="String的长度限制"><a href="#String的长度限制" class="headerlink" title="String的长度限制"></a>String的长度限制</h3><ul>
+<li>首先字符串的内容是由一个字符数组 char[] ，后为byte[]数组来存储的，由于数组的长度及索引是 整数，且String类中返回字符串长度的方法length() 的返回值也是int ，所以通过查看 java源码中的类Integer我们可以看到Integer的最大范围是2^31 -1,由于数组是从0开始 的，所以数组的最大长度可以使【0~2^31】通过计算是大概4GB。<span id="more"></span> </li>
+<li>根据对象头中的数组类型的长度也是用4字节表示，也阔以知道String的长度限制</li>
+<li>但是通过翻阅java虚拟机手册对class文件格式的定义以及常量池中对String类型的结构 体定义我们可以知道对于索引定义了u2，就是无符号占2个字节，2个字节可以表示的 最大范围是2^16 -1 &#x3D; 65535。</li>
+<li>其实是65535，但是由于JVM需要1个字节表示结束指令，所以这个范围就为65534 了。超出这个范围在编译时期是会报错的，但是运行时拼接或者赋值的话范围是在整 形的最大范围。</li>
+</ul>
+<h3 id="静态常量池，运行时常量池，字符串常量池"><a href="#静态常量池，运行时常量池，字符串常量池" class="headerlink" title="静态常量池，运行时常量池，字符串常量池"></a>静态常量池，运行时常量池，字符串常量池</h3><h4 id="1-静态常量池（Compile-time-Constant-Pool）"><a href="#1-静态常量池（Compile-time-Constant-Pool）" class="headerlink" title="1. 静态常量池（Compile-time Constant Pool）"></a>1. 静态常量池（Compile-time Constant Pool）</h4><p><strong>概念</strong>：</p>
+<ul>
+<li>静态常量池指的是编译期间由编译器生成并存储在类文件中的常量池。它包含了类文件中的常量池表（Constant Pool Table），其中存放着字面量（如字符串、整数、浮点数等）和符号引用（如类和接口的全限定名、字段和方法的名称和描述符等）。</li>
+</ul>
+<p><strong>存储位置</strong>：</p>
+<ul>
+<li>静态常量池是 <code>.class</code> 文件的一部分，在类被加载到JVM时，这些常量会被载入到方法区（Method Area）或元空间（Metaspace）。</li>
+</ul>
+<h4 id="2-运行时常量池（Runtime-Constant-Pool）"><a href="#2-运行时常量池（Runtime-Constant-Pool）" class="headerlink" title="2. 运行时常量池（Runtime Constant Pool）"></a>2. 运行时常量池（Runtime Constant Pool）</h4><p><strong>概念</strong>：</p>
+<ul>
+<li>运行时常量池是每个类或接口的常量池，它是在类加载时由静态常量池创建并存储在内存中的一部分。运行时常量池包含类文件中的常量池表信息和在运行时解析得到的动态常量（如方法和字段引用）。</li>
+</ul>
+<p><strong>存储位置</strong>：</p>
+<ul>
+<li>在Java 8及之前版本，运行时常量池位于方法区（Method Area）。</li>
+<li>在Java 9及之后版本，运行时常量池位于元空间（Metaspace）。</li>
+</ul>
+<p><strong>作用</strong>：</p>
+<ul>
+<li>运行时常量池用于存储已解析的类、方法和字段的符号引用，并且可以动态地添加新的常量。</li>
+</ul>
+<h4 id="3-字符串常量池（String-Constant-Pool）"><a href="#3-字符串常量池（String-Constant-Pool）" class="headerlink" title="3. 字符串常量池（String Constant Pool）"></a>3. 字符串常量池（String Constant Pool）</h4><p><strong>概念</strong>：</p>
+<ul>
+<li>字符串常量池是一个特殊的常量池，用于存储字符串字面量（如 <code>&quot;Hello, World!&quot;</code>）和字符串常量表达式的结果。Java中字符串常量池的管理是由 <code>String</code> 类实现的。</li>
+</ul>
+<p><strong>存储位置</strong>：</p>
+<ul>
+<li>在Java 6及之前版本，字符串常量池位于永久代（PermGen）。</li>
+<li>在Java 7及之后版本，字符串常量池被移到Java堆（Heap）中。</li>
+</ul>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>当创建字符串字面量时，如果字符串常量池中已经存在相同值的字符串，则返回池中已有的字符串对象的引用，否则创建一个新的字符串并放入池中。</li>
+<li>这样可以节省内存，因为相同的字符串字面量只会存储一份。</li>
+</ul>
+<p><strong>区别与联系</strong></p>
+<ul>
+<li><strong>静态常量池</strong>和<strong>运行时常量池</strong>：<ul>
+<li>静态常量池是编译时生成并存储在类文件中的，运行时常量池是在类加载时创建并存储在内存中的。</li>
+<li>运行时常量池是静态常量池的运行时表现形式。</li>
+</ul>
+</li>
+<li><strong>字符串常量池</strong>和<strong>运行时常量池</strong>：<ul>
+<li>字符串常量池是运行时常量池的一部分，专门用于存储字符串字面量。</li>
+<li>运行时常量池存储的是类的常量，包括字符串、数值、方法引用等。</li>
+</ul>
+</li>
+</ul>
+<h3 id="threadloacal定义为static的"><a href="#threadloacal定义为static的" class="headerlink" title="threadloacal定义为static的"></a>threadloacal定义为static的</h3><ul>
+<li><p>这个变量是针对一个线程内所有操作共享的，所以设置为静态变量，所有此类实例共享该静态变量﹐也就是说在类第一次被使用时装载，只分配一块存储空间，所有此类的对象(只要是这个线程内定义的)都可以操控这个变量。当 <code>ThreadLocal</code> 被定义为 <code>static</code> 时，整个类只有一个 <code>ThreadLocal</code> 实例。这确保了所有线程都能通过这个唯一的实例访问自己的变量副本。</p>
+</li>
+<li><p>定义为 <code>static</code> 后，<code>ThreadLocal</code> 变量可以通过类名直接访问，而不需要实例化对象，这样可以在应用程序的任何地方方便地访问 <code>ThreadLocal</code> 变量。</p>
+</li>
+<li><p><code>static</code> 变量的生命周期与类一致，而不是与某个对象实例一致。这样可以确保 <code>ThreadLocal</code> 在类加载时就初始化，并在类卸载时清理。</p>
+</li>
+</ul>
+<h3 id="JVM类加载"><a href="#JVM类加载" class="headerlink" title="JVM类加载"></a>JVM类加载</h3><ul>
+<li><p>加载：加载class文件，方法区中生成class对象</p>
+</li>
+<li><p>链接</p>
+<ul>
+<li>验证：验证字节码文件的格式规范等</li>
+<li>准备：为类变量分配内存并初始化，为变量赋予 Java 语言中该数据类型的零值，而不是用户代码 里初始化的值。<ul>
+<li>若该类变量是被final修饰的，那么在准备阶段，属性便会被赋 予用户希望的值。</li>
+<li>final 关键字在 Java  中代表不可改变的意思，既然一旦赋值就不 会再改变，那么就必须一开始就给其赋予用户想要的值，因此被 final 修饰的类变量 在准备阶段就会被赋予想要的值。</li>
+</ul>
+</li>
+<li>解析：解析阶段是虚拟机将常量池内的符号引用替换为直接引用的过程，解析动作主要针对 <strong>类或接口、字段、类方法、接口方法、方法类型、方法句柄和调用点限定符</strong>7类符号 引用进行。</li>
+</ul>
+</li>
+<li><p>初始化，这个阶段就是执行类构造器&lt; clinit &gt;()方法的过程，为类的静态变量赋予正 确的初始值，JVM负责对类进行初始化，主要对类变量进行初始化。在Java中对类变 量进行初始值设定有两种方式： </p>
+<ul>
+<li>①声明类变量是指定初始值 </li>
+<li>②使用静态代码块为类变量指定初始值</li>
+</ul>
+</li>
+</ul>
+<h3 id="G1垃圾收集器"><a href="#G1垃圾收集器" class="headerlink" title="G1垃圾收集器"></a>G1垃圾收集器</h3><p>CMS默认老年代达到68%时就开始垃圾回收了。</p>
+<p>G1 GC 首先将堆分为大小相等的 Region(2048个)，避免全区域的垃圾收集，然后追 踪每个 Region 垃圾堆积的价值大小，在后台维护一个优先列表，根据允许的收集时 间优先回收价值最大的Region；同时 G1 GC 采用 <strong>Remembered Set</strong> 来存放 Region 之 间的对象引用以及其他回收器中的新生代与老年代之间的对象引用，从而避免全堆扫 描。</p>
+<ul>
+<li>并行性：G1在回收期间，可以有多个GC线程同时工作，有效利用多核计算能 力； </li>
+<li>并发性：G1拥有与应用程序交替执行的能力，部分工作可以和应用程序同时执 行，因此，一般来说，不会在整个回收阶段发生完全阻塞应用程序的情况； </li>
+<li>分代GC：G1依然是一个分代回收器，但是和之前的各类回收器不同，它同时兼 顾年轻代和老年代。对比其他回收器，或者工作在年轻代，或者工作在老年代； </li>
+<li>空间整理：G1在回收过程中，会进行适当的对象移动，不像CMS只是简单地标 记清理对象。在若干次GC后，CMS必须进行一次碎片整理。而G1不同，它每次 回收都会有效地复制对象，减少空间碎片，进而提升内部循环速度；</li>
+<li>可预见性：为了缩短停顿时间，G1建立可预存停顿的模型，这样在用户设置的停 顿时间范围内，G1会选择适当的区域进行收集，确保停顿时间不超过用户指定时 间。</li>
+</ul>
+<h4 id="RS"><a href="#RS" class="headerlink" title="RS"></a>RS</h4><p>记忆集（Remembered Set, RS）</p>
+<ol>
+<li><strong>定义</strong>： 记忆集是一个数据结构，用于记录哪些区域（Region）有指向其他区域的引用。特别地，它记录了老年代（Old Generation）中的对象引用年轻代（Young Generation）中的对象。</li>
+<li><strong>作用</strong>：<ul>
+<li><strong>优化GC效率</strong>：记忆集的主要作用是优化垃圾收集的效率。在进行年轻代的垃圾收集时（Minor GC），GC不需要扫描整个老年代，只需要扫描记忆集中记录的部分区域。这样可以显著减少需要扫描的对象数量，提高垃圾收集的效率。</li>
+<li><strong>处理跨代引用</strong>：在垃圾收集中，需要处理跨代引用（即老年代对象引用年轻代对象）。记忆集记录了这种跨代引用，使得垃圾收集器在收集年轻代时，只需扫描记忆集中的部分，而不必扫描整个老年代。</li>
+<li><strong>减少全堆扫描</strong>：通过使用记忆集，G1垃圾收集器能够避免全堆扫描，只需关注那些确实包含指向年轻代对象的老年代区域。</li>
+</ul>
+</li>
+</ol>
+<h3 id="最佳线程数"><a href="#最佳线程数" class="headerlink" title="最佳线程数"></a>最佳线程数</h3><ul>
+<li><p>cpu密集型：一般为1+cpu核心数</p>
+</li>
+<li><p>io密集型：cpu核心数*（1+io耗时&#x2F;cpu耗时），一般为2倍cpu核心数</p>
+</li>
+</ul>
+<h3 id="JVM参数"><a href="#JVM参数" class="headerlink" title="JVM参数"></a>JVM参数</h3><ul>
+<li>-Xms： 初始堆大小， 默认(MinHeapFreeRatio参数可以调整)空余堆内存小于40% 时，JVM就会增大堆直到-Xmx的最大限制。</li>
+<li>Xmx： 最大堆大小，默认(MaxHeapFreeRatio参数可以调整)空余堆内存大于70% 时，JVM会减少堆直到 -Xms的最小限制。 </li>
+<li>-Xmn： 年轻代大小(1.4or lator)， 此处的大小是（eden+ 2 survivor space).与jmap  heap中显示的New gen是不同的。  整个堆大小&#x3D;年轻代大小 + 年老代大小 + 持久代大小。  　增大年轻代后,将会减小年老代大小.此值对系统性能影响较大,Sun官方推荐 配置为整个堆的3&#x2F;8。 </li>
+<li>-XX:NewSize： 设置年轻代大小(for 1.3&#x2F;1.4)。 </li>
+<li>-XX:MaxNewSize： 年轻代最大值(for 1.3&#x2F;1.4)。 </li>
+<li>-XX:PermSize： 设置持久代(perm gen)初始值。</li>
+<li>-XX:MaxPermSize： 设置持久代最大值。</li>
+<li>-Xss： 每个线程的堆栈大小，JDK5.0以后每个线程堆栈大小为1M,以前每个线程 堆栈大小为256K.更具应用的线程所需内存大小进行 调整.在相同物理内存下,减小 这个值能生成更多的线程.但是操作系统对一个进程内的线程数还是有限制的,不能 无限生成,经验值在3000~5000左右。 </li>
+<li>-XX:NewRatio： 年轻代(包括Eden和两个Survivor区)与年老代的比值(除去持久 代)，-XX:NewRatio&#x3D;4表示年轻代与年老代所占比值为1:4,年轻代占整个堆栈的 1&#x2F;5。Xms&#x3D;Xmx并且设置了Xmn的情况下，该参数不需要进行设置。 </li>
+<li>-XX:SurvivorRatio： Eden区与Survivor区的大小比值，设置为8,则两个Survivor区 与一个Eden区的比值为2:8,一个Survivor区占整个年轻代的1&#x2F;10。 </li>
+<li>-XX:LargePageSizeInBytes： 内存页的大小不可设置过大， 会影响Perm的大小。 </li>
+<li>-XX:+DisableExplicitGC： 关闭System.gc() </li>
+<li>-XX:MaxTenuringThreshold： 垃圾最大年龄，如果设置为0的话,则年轻代对象不 经过Survivor区,直接进入年老代. 对于年老代比较多的应用,可以提高效率.如果将 此值设置为一个较大值,则年轻代对象会在Survivor区进行多次复制,这样可以增加 对象再年轻代的存活 时间,增加在年轻代即被回收的概率该参数只有在串行GC时 才有效。 </li>
+<li>-XX:PretenureSizeThreshold： 对象超过多大是直接在旧生代分配，单位字节 新生 代采用Parallel Scavenge GC时无效另一种直接在旧生代分配的情况是大的数组对 象,且数组中无外部引用对象。 </li>
+<li>-XX:TLABWasteTargetPercent： TLAB占eden区的百分比。</li>
+</ul>
+<h3 id="逃逸分析"><a href="#逃逸分析" class="headerlink" title="逃逸分析"></a>逃逸分析</h3><p>栈上分配、标量替换、锁消除</p>
+<p>如果不存在竞争，为什么还需要加锁呢？所以锁消除可以节省毫无意义的请求锁的时 间。变量是否逃逸，对于虚拟机来说需要使用数据流分析来确定，但是对于程序员来 说这还不清楚么？在明明知道不存在数据竞争的代码块前加上同步吗？但是有时候程 序并不是我们所想的那样？虽然没有显示使用锁，<strong>但是在使用一些JDK的内置API 时</strong>，如StringBuffer、Vector、HashTable等，这个时候<strong>会存在隐形的加锁操作</strong>。JVM可以明显检测到变量vector没有逃逸出方法vectorTest()之 外，所以JVM可以大胆地将vector内部的加锁操作消除。</p>
+<h3 id="countdownlatch，CyclicBarrier，Semaphore"><a href="#countdownlatch，CyclicBarrier，Semaphore" class="headerlink" title="countdownlatch，CyclicBarrier，Semaphore"></a>countdownlatch，CyclicBarrier，Semaphore</h3><ul>
+<li>CountDownLatch适用于在多线程的场景需要等待所有子线程全部执行完毕之后再做 操作的场景。<ul>
+<li>CountDownLatch通过构造函数初始化传入参数实际为AQS的state变量赋值，维持 计数器倒数状态 </li>
+<li>当主线程调用await()方法时，当前线程会被阻塞，当state不为0时进入AQS阻塞队 列等待。 </li>
+<li>其他线程调用countDown()时，state值原子性递减，当state值为0的时候，唤醒所 有调用await()方法阻塞的线程</li>
+</ul>
+</li>
+<li>CyclicBarrier叫做回环屏障，它的作用是让一组线程全部达到一个状态之后再全部 同时执行，而且他有一个特点就是所有线程执行完毕之后是<strong>可以重用的</strong>。<ul>
+<li>当子线程调用await()方法时，获取独占锁，同时对count递减，进入阻塞队列，然 后释放锁 </li>
+<li>当第一个线程被阻塞同时释放锁之后，其他子线程竞争获取锁，操作同1 </li>
+<li>直到最后count为0，执行CyclicBarrier构造函数中的任务，执行完毕之后子线程继 续向下执行</li>
+</ul>
+</li>
+<li>Semaphore叫做信号量，和前面两个不同的是，他的计数器是递增的。<ul>
+<li>主线程调用acquire()方法时，用当前信号量值 - 需要获取的值，如果小于0，则进 入同步阻塞队列，大于0则通过CAS设置当前信号量为剩余值，同时返回剩余值 </li>
+<li>子线程调用release()给当前信号量值计数器+1(增加的值数量由传参决定)，同时不 停的尝试因为调用acquire()进入阻塞的线程</li>
+</ul>
+</li>
+</ul>
+<h3 id="事务遇到三方api怎么处理？"><a href="#事务遇到三方api怎么处理？" class="headerlink" title="事务遇到三方api怎么处理？"></a>事务遇到三方api怎么处理？</h3><h4 id="api结果与事务关系不大（消息推送）"><a href="#api结果与事务关系不大（消息推送）" class="headerlink" title="api结果与事务关系不大（消息推送）"></a>api结果与事务关系不大（消息推送）</h4><p>处理方法: 把消息推送的方法摘出来，进行异步处理，避免请求出错影响主体业 务流程；</p>
+<p> 注意 ： 需把异步方法抽取到另一个类中，否则@Async不生效</p>
+<h4 id="api与业务不可分割（员工离职，等）"><a href="#api与业务不可分割（员工离职，等）" class="headerlink" title="api与业务不可分割（员工离职，等）"></a>api与业务不可分割（员工离职，等）</h4><ul>
+<li>先请求三方api，再进行数据库操作<ul>
+<li>当api请求成功时，进行业务逻辑处理时出错，导致数据库回滚，但api不可回滚，造成数据不一致</li>
+<li>不推荐使用</li>
+</ul>
+</li>
+<li>先进行数据库业务逻辑，再调用api<ul>
+<li>api请求时间过长，导致业务端认为api失败（但api仍再进行中），业务回滚，api执行成功，导致数据不一致<ul>
+<li>解决：为调用方提供回调或轮询查询接口</li>
+</ul>
+</li>
+<li>api请求时间过长，数据库资源一致被占用未提交<ul>
+<li>数据库直接提交事务，而后通过回调或轮询接口得到api的处理结果，若失败，执行相应的数据库回滚事务。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="提升后端接口查询性能"><a href="#提升后端接口查询性能" class="headerlink" title="提升后端接口查询性能"></a>提升后端接口查询性能</h3><ol>
+<li><p>索引</p>
+</li>
+<li><p>sql优化</p>
+</li>
+<li><p>远程调用</p>
+</li>
+<li><p>异步处理</p>
+</li>
+<li><p>避免大事务</p>
+</li>
+<li><p>锁粒度</p>
+</li>
+<li><p>缓存</p>
+</li>
+<li><p>分库分表</p>
+</li>
+<li><p>慢查询日志，监控</p>
+</li>
+</ol>
+<h3 id="redis-虚拟内存"><a href="#redis-虚拟内存" class="headerlink" title="redis 虚拟内存"></a>redis 虚拟内存</h3><p>redis 不会将Keys持久化到磁盘，</p>
+<p>在实际的应用中，大约只有10%的Keys属于相对比较常用的键，这样Redis就可以通 过虚拟内存将其余 不常用的Keys和Values<strong>持久化到磁盘上</strong>，而一旦这些被持久化的 Keys或Values需要被读取时，Redis则 将其再次读回到主内存中。</p>
+<p>如果你的数据库 中有大量的keys， 其中每个key仅仅关联很小的value，那么这种场景就不是非常适合 使用虚拟内存。如果恰恰相反，数据 库中只是包含少量的keys，而<strong>每一个key所关联 的value却非常大，那么这种场景对于使用虚拟内存就非 常合适了</strong>。</p>
+<ol>
+<li><p>在配置文件中添加以下配置项，以使当前Redis服务器在启动时打开虚拟内存功 能。 </p>
+<p><strong>vm-enabled yes</strong></p>
+</li>
+<li><p>在配置文件中设定Redis最大可用的虚拟内存字节数。如果内存中的数据大于该 值，则有部分对象 被持久化到磁盘中，其中被持久化对象所占用的内存将被释 放，直到已用内存小于该值时才停止持久化。 </p>
+<p><strong>vm-max-memory (bytes)</strong></p>
+</li>
+<li><p>在配置文件中设定页的数量及每一页所占用的字节数。为了将内存中的数据传送 到磁盘上，我们 需要使用交换文件。这些文件与数据持久性无关，Redis会在退 出前会将它们全部删除。由于对交换文 件的访问方式大多为随机访问，因此建 议将交换文件存储在固态磁盘上，这样可以大大提高系统的运行 效率。</p>
+<p><strong>vm-pages 134217728</strong> </p>
+<p><strong>vm-page-size 32</strong> </p>
+<p>在上面的配置中，Redis将需要持久化的文件划分为vm-pages个页，其中每个页所 占用的字节为vm page-size，那么Redis最终可用的交换文件大小为：vm-pages *  vm-page-size。由于一个value可以 存放在一个或多个页上，但是一个页不能持有 多个value，鉴于此，我们在设置vm-page-size时需要充 分考虑Redis的该特征。</p>
+</li>
+<li><p>在Redis的配置文件中有一个非常重要的配置参数，即：</p>
+<p>  <strong>vm-max-threads 4</strong> </p>
+<p> 该参数表示Redis在对交换文件执行IO操作时所应用的最大线程数量。通常而 言，我们推荐该值等于主 机的CPU cores。如果将该值设置为0，那么Redis在与 交换文件进行IO交互时，将以同步的方式执行此 操作。</p>
+</li>
+</ol>
+<h3 id="Mysql高效查找一条随机记录"><a href="#Mysql高效查找一条随机记录" class="headerlink" title="Mysql高效查找一条随机记录"></a>Mysql高效查找一条随机记录</h3><ul>
+<li><p>随机查找一个id在max和min之间的id即可，先查找出最大的id max，和最小的id min，生产随机id   X&#x3D;（max-min）*Rand（）+min，最后再用floor取整向下。</p>
+<ul>
+<li>但是可能有id空洞，导致轮空</li>
+</ul>
+</li>
+<li><p>先查找出行数C，得到一个随机的行数T&#x3D;floor（C*rand（）），然后使用limit函数，limit T，1</p>
+<ul>
+<li>扫描行数也听多的，但是limit索取数据是根据id进行选取，大于原生sql语句。</li>
+</ul>
+</li>
+<li><p>原生sql：select word from words order by rand() limit 3;</p>
+<ul>
+<li>使用临时表，性能较差。你的记录有多少 条，就必须首先对这些数据进行排序。而后在limit取数据。</li>
+</ul>
+</li>
+<li><p>SELECT * FROM testdb.test_tb1 wHERE  id &gt;&#x3D;</p>
+<p>(SELECT id FROM (SELECT id FROM testdb.test_tb1 ORDER BY RAND() LIMIT 1) As t)<br>LIMIT 1;</p>
+<ul>
+<li>加上主键范围，加快索引过程，类似分页</li>
+</ul>
+</li>
+</ul>
+<h3 id="读写分离下，如何保证每次读到最新的数据？"><a href="#读写分离下，如何保证每次读到最新的数据？" class="headerlink" title="读写分离下，如何保证每次读到最新的数据？"></a>读写分离下，如何保证每次读到最新的数据？</h3><ul>
+<li>直接强制读取主库</li>
+<li>缓存标记法<ul>
+<li>当数据在主库更新时，主库设置一个缓存，业务id，并设置过期时间，大概为从库同步的延迟时间。</li>
+<li>读取数据时，先查看缓存是否存在，如果存在则去主库查询数据，如果不存在去从库查询数据</li>
+</ul>
+</li>
+</ul>
+<h3 id="丝滑般数据库扩容"><a href="#丝滑般数据库扩容" class="headerlink" title="丝滑般数据库扩容"></a>丝滑般数据库扩容</h3><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240619154621740.png" alt="image-20240619154621740" style="zoom:67%;" />
+
+<ul>
+<li><p>停机扩容：简单，高效率</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240619154709117.png" alt="image-20240619154709117" style="zoom:67%;" />
+
+<ul>
+<li>服务停了，没无法保证高可用</li>
+</ul>
+</li>
+<li><p>在线双写</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240619154822676.png" alt="image-20240619154822676" style="zoom:67%;" />
+
+<ul>
+<li>1.建立好新到数据库，然后接下来用户在写原有数据库到同时也写一份数据到我们 的新库中。 2. 数据迁移程序，实现旧库中的历史数据迁移到新库中。 3. 迁移过程中，每次插入数据时，需检测数据的更新情况。比如，如果新的表中没 有当前的数据，则直接新增；如果新表有数据并没有我们要迁移的数据新的话， 我们就更新为当前数据，只能允许新的数据覆盖旧的数据，推荐使用Canal这样到 中间件。 4. 经过一段时间后需要校验新库跟旧库两边数据是否一样。如果检查到一样了，则 直接切换即可。</li>
+<li>不够丝滑，数据来回挪动大</li>
+</ul>
+</li>
+<li><p>从机上位</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240619155025120.png" alt="image-20240619155025120" style="zoom:67%;" />
+
+<ul>
+<li>修改配置信息，注意旧库跟新库之间到映射关系。确保扩容后数据可以正确路由 到服务器。 Id % 2 &#x3D; 0 的库变为了  id % 4 &#x3D; 0 或  id % 4 &#x3D; 2 Id % 2 &#x3D; 1 的库变为了  id % 4 &#x3D; 1 或  id % 4 &#x3D; 3</li>
+<li>服务层reload配置，可以重启服务，也可以CLoud那样配置中心发送信号来实现重读 配置文件。</li>
+<li>删除冗余数据，比如id % 4 &#x3D; 0的机器中删除id % 4 &#x3D; 2的冗余数据，只为id % 4 &#x3D;  0的数据提供服务，其余三个类似操作。</li>
+<li>并且建立高可用，再为每个主库配置从库。</li>
+<li>完成丝滑般扩容。</li>
+</ul>
+</li>
+</ul>
+<h3 id="redis-字符串-底层"><a href="#redis-字符串-底层" class="headerlink" title="redis 字符串 底层"></a>redis 字符串 底层</h3><p>  SDS（简单动态字符串）：主要字段：len:已使用的长度，free：空闲未使用的长度，char[] buf：存放真的数据。</p>
+<h4 id="动态长度扩展（空间预分配）"><a href="#动态长度扩展（空间预分配）" class="headerlink" title="动态长度扩展（空间预分配）"></a>动态长度扩展（空间预分配）</h4><p>  当字符串长度为5时，可用长度只有4，咋办？每次追加字符串时，都会</p>
+<pre><code>1. 计算出大小是否足够
+2. 开辟空间至满足所需大小
+3. 开辟与已使用大小len相同长度的空闲free空间（如果len &lt; 1M），或开辟1M长度的空 闲free空间（如果len &gt;= 1M）
+</code></pre>
+<h4 id="惰性回收"><a href="#惰性回收" class="headerlink" title="惰性回收"></a>惰性回收</h4><p>与上面情况相反，惰性空间回收适用于字符串缩减操作。比如有个字符串s1&#x3D;”hello  world”，对s1进行sdstrim(s1,” world”)操作，执行完该操作之后Redis不会立即回收减 少的部分，而是会分配给下一个需要内存的程序。</p>
+<h4 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h4><ul>
+<li>快速获取字符串长度 </li>
+<li>避免缓冲区溢出 </li>
+<li>降低空间分配次数提升内存使用效率</li>
+<li>主要是为了快，以空间换时间。</li>
+</ul>
+<h3 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h3><p><strong>inner join和left join都需要优化右表（为右表连接字段建立索引），right join需要优化左表。</strong></p>
+<p>SELECT COUNT(DISTINCT LEFT(lesson_code, 20)) &#x2F; COUNT(*)  FROM lesson;计算区分度</p>
+<h3 id="使用sql计算连续三天登录的用户id"><a href="#使用sql计算连续三天登录的用户id" class="headerlink" title="使用sql计算连续三天登录的用户id"></a>使用sql计算连续三天登录的用户id</h3><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240620150203283.png" alt="image-20240620150203283" style="zoom:67%;" />
+
+<h3 id="mysql-int-和String-互转"><a href="#mysql-int-和String-互转" class="headerlink" title="mysql int 和String 互转"></a>mysql int 和String 互转</h3><p>使用convert函数，convert（类型，值）</p>
+<p>则 convert(varchar(10),字段A)将返回A的varchar类型  </p>
+<p>同理 convert(int,字段B)将返回B的int型</p>
+<h3 id="数据库通用规则"><a href="#数据库通用规则" class="headerlink" title="数据库通用规则"></a>数据库通用规则</h3><ol>
+<li>存储引擎使用innodb。</li>
+<li>每张表必须设置一个主键ID，且这个主键ID使用自增主键（在满足 需要的情况下尽量短），除非在分库分表环境下。</li>
+<li>必须使用utf8mb4字符集</li>
+<li>数据库表、表字段必须加入中文注释</li>
+<li>库名、表名、字段名均小写，下划线风格，不超过32个字符，必须见 名知意，禁止拼音英文混用</li>
+<li>单表列数目必须小于30，若超过则应该考虑将表拆分</li>
+<li>禁止使用外键，如果有外键完整性约束，需要应用程序控制，逻辑外键</li>
+<li>必须把字段定义为 UPDATE 与 DELETE 操作都会涉及相关联的表， NOT NULL并且提供默认值</li>
+<li>禁用保留字，如 DESC、RANGE、MARCH 等，请参考 字。</li>
+<li>如果存储的字符串长度几乎相等，使用CHAR定长字符串类型。</li>
+<li>在一些场景下，考虑使用TIMESTAMP代替DATETIME。<ul>
+<li>TIMESTAMP只需要占用4个字节的长度，可以存储的范围为 个时区，所展示的时间是不一样的；b、而 (1970-2038) 年，在各 DATETIME 类型占用8个字节，对时区不敏 感，可以存储的范围为 (1001-9999) 年。</li>
+</ul>
+</li>
+</ol>
+<h3 id="SQL约束（通用规则）"><a href="#SQL约束（通用规则）" class="headerlink" title="SQL约束（通用规则）"></a>SQL约束（通用规则）</h3><ol>
+<li>为了充分利用缓存，不允许使用自定义函数、存储函数、用户变量。</li>
+<li>在查询中指定所需的列，而不是直接使用“ *”返回所有的列。使用覆盖索引。</li>
+<li>不允许使用属性隐式转换</li>
+<li>不允许在WHERE条件的属性上使用函数或者表达式</li>
+<li>禁止使用外键与级联，一切外键概念必须在应用层解决，逻辑外键</li>
+<li>应尽量避免在WHERE子句中使用or作为连接条件。（or两边有一边没有索引会导致索引失效），使用union all</li>
+<li>不允许使用%开头的模糊查询</li>
+</ol>
+<h3 id="如何解决redis集群异步复制，数据丢失问题？"><a href="#如何解决redis集群异步复制，数据丢失问题？" class="headerlink" title="如何解决redis集群异步复制，数据丢失问题？"></a>如何解决redis集群异步复制，数据丢失问题？</h3><ol>
+<li>异步复制丢失（全异步，主节点写入完成后就完成，从节点异步同步数据）<ul>
+<li>当主节点准备同步数据时，主节点宕机，从机上位，导致原主机变为从节点，数据同步导致数据丢失</li>
+<li>min-slaves-to-write 1 min-slaves-max-lag 10</li>
+<li>这两个参数表示至少有1个salve的与master的同步复制延迟不能超 过10s，一旦所有的slave复制和同步的延迟达到了10s，那么此时master就不会接受任何请求。</li>
+</ul>
+</li>
+<li>脑裂（两个master）<ul>
+<li>一个master没发现脑裂，继续进行数据写入，后面发现时，降级为从节点，与新的master进行同步，导致以前数据丢失。</li>
+<li>半数机制，只有半数的节点存活时，才能进行数据写入操作（master选举也是一样）。同时进行冗余通信，确保能快速的发现节点问题。</li>
+</ul>
+</li>
+</ol>
+<p>对于客户端，可以采取降级措施，将数据暂时写入本地缓存和磁盘中，在一 段时间后重新写入master来保证数据不丢失；也可以将数据写入kafka消息队列，隔一 段时间去消费kafka中的数据。</p>
+<h3 id="子线程中能否获取父线程的threadlocal值？"><a href="#子线程中能否获取父线程的threadlocal值？" class="headerlink" title="子线程中能否获取父线程的threadlocal值？"></a>子线程中能否获取父线程的threadlocal值？</h3><p>不能直接获取threadlocal的值，但是可以使用InheritableThreadLocal对象，子线程是可以获取到父线程的值的。</p>
+<p>当inheritThreadLocals的值为true并且其父线程的inheritableThreadLocals不为null时, 把其父线程inheritableThreadLocals 赋值给当前线程的inheritableThreadLocals</p>
+<h3 id="nacos如何解决并发读写冲突问题？"><a href="#nacos如何解决并发读写冲突问题？" class="headerlink" title="nacos如何解决并发读写冲突问题？"></a>nacos如何解决并发读写冲突问题？</h3><p>private final Map&lt;String, Map&lt;String, Service&gt;&gt; serviceMap &#x3D; new ConcurrentHashMap&lt;&gt;();这是因为Nacos在注册实例写入注册表的时候用的就是写时复制，可以很好地避免并发冲突。copyonwrite技术。</p>
+<p>异步执行的线程池里面要往里面新加就新加，想从里面删除就删除，想修改就修改，改的是拷贝过来的，改完再覆盖线上的实例对象，来替换旧的数据。也即是采用了copyOnWrite技术这样当有其他实例注册进来的时候，就不会有冲突，或者说脏读，读的永远都是最新的，如果直接在原注册表里修改，就会读到中间状态的数据，就会出现服务注册问题。</p>
+<p>如果是写的情况下，大家都拷贝完了，如果并发的多个实例都来拷贝，大家都各写个的，结果就会导致注册表不一致，出现服务更新的问题，这个问题其实是在加实例的时候有对服务资源进行加锁处理，因此一个服务的多个实例只能串行执行，不同服务之间当然是可以并行执行的，但是不同服务本身是不一样的，你拷贝你的，我拷贝我的，是不会对整体的服务列表有影响的。因为是同步代码块锁定了这个服务资源，它们是串行执行的，所以并发写是没有冲突的</p>
+<h3 id="菱形继承"><a href="#菱形继承" class="headerlink" title="菱形继承"></a>菱形继承</h3><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240621092158869.png" alt="image-20240621092158869" style="zoom:67%;" />
+
+<p>问题：冗余与二义性问题。</p>
+<p>虚拟继承解决上述问题。虚拟继承的话，可以保证person中的属性只保存一份，避免了冗余和二义性。（c++）。</p>
+<h3 id="排序算法"><a href="#排序算法" class="headerlink" title="排序算法"></a>排序算法</h3><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240621095537737.png" alt="image-20240621095537737" style="zoom:67%;" />
+
+<h3 id="jvm卡表"><a href="#jvm卡表" class="headerlink" title="jvm卡表"></a>jvm卡表</h3><p>使用卡表和写屏障加快GC roots的搜索过程。</p>
+<p>现代JVM，堆空间通常被划分为新生代和老年代。由于新生代的垃圾收集通常很频繁，如果<strong>老年代对象引用了新生代的对象，那么，需要跟踪从老年代到新生代的所有引用</strong>，从而避免每次YGC时扫描整个老年代，减少开销。</p>
+<p>基于卡表（Card Table）的设计，通常将堆空间划分为一系列2次幂大小的卡页（Card Page）。卡表（Card Table），用于标记卡页的状态，每个卡表项对应一个卡页。HotSpot JVM的卡页（Card Page）大小为512字节，卡表（Card Table）被实现为一个简单的字节数组，即卡表的每个标记项为1个字节。</p>
+<p>一个卡页的内存中通常包含不止一个对象，只要卡页内有一个（或更多）对象的字段存在着跨代 指针（老年代指向新生代），那就将对应卡表的数组元素的值标识为 1 ，称为这个 元素变脏 （ Dirty ），没有则标识为 0 。在垃圾收集发生时，只要 筛选出卡表中变脏的元素 ，就能轻易得出哪些卡页内存块中包含跨代指针，把它 们加入 GC Roots 中一并扫描</p>
+<h4 id="带来的2个问题"><a href="#带来的2个问题" class="headerlink" title="带来的2个问题"></a>带来的2个问题</h4><p><strong>1.无条件写屏障带来的性能开销</strong></p>
+<p>每次对引用的更新，无论是否更新了老年代对新生代对象的引用，都会进行一次写屏障操作。显然，这会增加一些额外的开销。但是，与YGC时扫描整个老年代相比较，这个开销就低得多了。</p>
+<p>不过，在高并发环境下，写屏障又带来了虚共享（false sharing）问题。</p>
+<p><strong>2.高并发下虚共享带来的性能开销</strong></p>
+<p>在高并发情况下，频繁的写屏障很容易发生虚共享（<code>false sharing</code>），从而带来性能开销。</p>
+<p>假设<code>CPU</code>缓存行大小为<code>64</code>字节，由于一个卡表项占<code>1</code>个字节，这意味着，<code>64</code>个卡表项将共享同一个缓存行。</p>
+<p><code>HotSpot</code>每个卡页为<code>512</code>字节，那么一个缓存行将对应<code>64</code>个卡页一共<code>64*512=32</code>KB。</p>
+<p>如果不同线程对对象引用的更新操作，恰好位于同一个<code>32KB</code>区域内，这将导致同时更新卡表的同一个缓存行，从而造成缓存行的写回、无效化或者同步操作，间接影响程序性能。</p>
+<p>一个简单的解决方案，就是不采用无条件的写屏障，而是先检查卡表标记，只有当该卡表项未被标记过才将其标记为<code>dirty</code>。</p>
+<p>这就是<code>JDK 7</code>中引入的解决方法，引入了一个新的<code>JVM</code>参数<code>-XX:+UseCondCardMark</code>，在执行写屏障之前，先简单的做一下判断。如果卡页已被标识过，则不再进行标识。</p>
+<h3 id="Spring-设计模式"><a href="#Spring-设计模式" class="headerlink" title="Spring 设计模式"></a>Spring 设计模式</h3><p>单例模式：Spring 中的 Bean 默认情况下都是单例的。无需多说。 </p>
+<p>工厂模式：工厂模式主要是通过 BeanFactory 和 ApplicationContext 来生产 Bean 对 象。 </p>
+<p>代理模式：最常见的 AOP 的实现方式就是通过代理来实现，Spring主要是使用 JDK  动态代理和 CGLIB 代理。 </p>
+<p>模板方法模式：主要是一些对数据库操作的类用到，比如 JdbcTemplate、 JpaTemplate，因为查询数据库的建立连接、执行查询、关闭连接几个过程，非常适用 于模板方法。</p>
+<h3 id="Spring-Boot自动装配原理"><a href="#Spring-Boot自动装配原理" class="headerlink" title="Spring Boot自动装配原理"></a>Spring Boot自动装配原理</h3><p>@SpringBootApplication是最常见的注解</p>
+<ul>
+<li>@SpringBootConfiguration<ul>
+<li>他是一个@Configuration，所以也就是对spring原生 注解的封装</li>
+</ul>
+</li>
+<li><strong>@EnableAutoConfiguration</strong></li>
+<li>@ComponentScan<ul>
+<li>默认扫描的是与该类同级的类或者同级包下的所有类，是spring的原生注解之 一</li>
+</ul>
+</li>
+</ul>
+<p>@EnableAutoConfiguration就是自动配置原理的核心。</p>
+<ul>
+<li><p>@Import(AutoConfigurationImportSelector.class) public @interface EnableAutoConfiguration {</p>
+</li>
+<li><p>@Import注解引入了一个AutoConfigurationImportSelector类型的bean。点击 AutoConfigurationImportSelector ，进入之后找到方法 getCandidateConfigurations().</p>
+</li>
+<li><p>spring将需要自动装配的类写在META INF&#x2F;spring.factories文件里面，再启动的时候去读取需要配置的类，并进行自动装配。</p>
+</li>
+<li><p>Spring Boot会在classpath中寻找符合条件的类，并根据这些类自动配置Bean。</p>
+</li>
+<li><p>Spring Boot启动时会加载<strong>META-INF&#x2F;spring.factories</strong>文件，该文件中配置了所有自动装配的类。</p>
+</li>
+<li><p>ConditionalOnClass 这是一个条件注解，代表如果没有RedisOperations这个类 就不 执行此配置，也就是说如果没有相关的redis依赖，那么redisTemplate就不会进行自动 注入。</p>
+</li>
+</ul>
+<h3 id="面向对象设计的原则"><a href="#面向对象设计的原则" class="headerlink" title="面向对象设计的原则"></a>面向对象设计的原则</h3><ol>
+<li>开闭原则：对扩展开放，对修改关闭。这意味着软件实体应能够适应变化，而无需修改其现有代码。</li>
+<li>里氏替换原则：子类必须能够替换其基类。这意味着在软件中，任何使用基类的地方都可以安全地使用子类，而不会破坏程序的功能。</li>
+<li>依赖倒置原则：抽象不应该依赖于细节，细节应该依赖于抽象。这强调了通过抽象类或接口来定义依赖关系，而不是直接依赖于具体实现。</li>
+<li>单一职责原则：一个类应只有一个引起变化的原因。这意味着每个类应该只有一个职责，避免功能过多导致难以维护。</li>
+<li>接口隔离原则：客户端不应该依赖于它不使用的接口方法。这要求接口设计应尽可能细化，只暴露客户端真正需要的部分。</li>
+<li>迪米特法则（最少知识原则）：一个对象应当对其他对象有尽可能少的了解。这有助于减少对象之间的耦合，提高系统的可维护性。</li>
+<li>合成复用原则：<strong>优先使用对象组合，而不是继承来达到复用的目的</strong>。这强调了通过组合或聚合关系复用代码，而不是通过继承。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>荷包蛋-溏心
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://hlhehe.github.io/2024/06/17/java%E6%9D%82%E8%B0%883/" title="java杂谈---3">https://hlhehe.github.io/2024/06/17/java杂谈3/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/06/07/RabbitMq---%E9%9D%A2%E8%AF%95/" rel="prev" title="RabbitMq---面试">
+                  <i class="fa fa-angle-left"></i> RabbitMq---面试
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">荷包蛋-溏心</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">253k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">3:50</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script size="200" alpha="0.3" zIndex="-1" src="https://cdnjs.cloudflare.com/ajax/libs/ribbon.js/1.0.2/ribbon.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #4D4D4C;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #F7F7F7;
+      background-image: linear-gradient(#F7F7F7, #F7F7F7);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"waline-server-hlhehes-projects.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"泰酷辣！","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2024/06/17/java%E6%9D%82%E8%B0%883/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+<script type="text/javascript" src="/js/clicklove.js"></script>
+
+</html>
