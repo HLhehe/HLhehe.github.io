@@ -25,7 +25,7 @@
 
     <meta name="description" content="String的长度限制 首先字符串的内容是由一个字符数组 char[] ，后为byte[]数组来存储的，由于数组的长度及索引是 整数，且String类中返回字符串长度的方法length() 的返回值也是int ，所以通过查看 java源码中的类Integer我们可以看到Integer的最大范围是2^31 -1,由于数组是从0开始 的，所以数组的最大长度可以使【0~2^31】通过计算是大概4GB。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java杂谈---3">
+<meta property="og:title" content="java杂谈3">
 <meta property="og:url" content="https://hlhehe.github.io/2024/06/17/java%E6%9D%82%E8%B0%883/index.html">
 <meta property="og:site_name" content="Honor">
 <meta property="og:description" content="String的长度限制 首先字符串的内容是由一个字符数组 char[] ，后为byte[]数组来存储的，由于数组的长度及索引是 整数，且String类中返回字符串长度的方法length() 的返回值也是int ，所以通过查看 java源码中的类Integer我们可以看到Integer的最大范围是2^31 -1,由于数组是从0开始 的，所以数组的最大长度可以使【0~2^31】通过计算是大概4GB。">
@@ -37,8 +37,10 @@
 <meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240620150203283.png">
 <meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240621092158869.png">
 <meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240621095537737.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240628191539215.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240628191822753.png">
 <meta property="article:published_time" content="2024-06-16T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-06-22T00:47:55.508Z">
+<meta property="article:modified_time" content="2024-07-03T07:29:09.580Z">
 <meta property="article:author" content="荷包蛋-溏心">
 <meta property="article:tag" content="java">
 <meta name="twitter:card" content="summary">
@@ -49,10 +51,10 @@
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hlhehe.github.io/2024/06/17/java%E6%9D%82%E8%B0%883/","path":"2024/06/17/java杂谈3/","title":"java杂谈---3"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hlhehe.github.io/2024/06/17/java%E6%9D%82%E8%B0%883/","path":"2024/06/17/java杂谈3/","title":"java杂谈3"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>java杂谈---3 | Honor</title>
+<title>java杂谈3 | Honor</title>
   
 
 
@@ -101,7 +103,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">23</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">26</span></a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">28</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">32</span></a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -152,7 +154,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#String%E7%9A%84%E9%95%BF%E5%BA%A6%E9%99%90%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">String的长度限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%8C%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="nav-number">2.</span> <span class="nav-text">静态常量池，运行时常量池，字符串常量池</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E9%9D%99%E6%80%81%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%88Compile-time-Constant-Pool%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">1. 静态常量池（Compile-time Constant Pool）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%88Runtime-Constant-Pool%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">2. 运行时常量池（Runtime Constant Pool）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%88String-Constant-Pool%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">3. 字符串常量池（String Constant Pool）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#threadloacal%E5%AE%9A%E4%B9%89%E4%B8%BAstatic%E7%9A%84"><span class="nav-number">3.</span> <span class="nav-text">threadloacal定义为static的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-number">4.</span> <span class="nav-text">JVM类加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-number">5.</span> <span class="nav-text">G1垃圾收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RS"><span class="nav-number">5.1.</span> <span class="nav-text">RS</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E7%BA%BF%E7%A8%8B%E6%95%B0"><span class="nav-number">6.</span> <span class="nav-text">最佳线程数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E5%8F%82%E6%95%B0"><span class="nav-number">7.</span> <span class="nav-text">JVM参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90"><span class="nav-number">8.</span> <span class="nav-text">逃逸分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#countdownlatch%EF%BC%8CCyclicBarrier%EF%BC%8CSemaphore"><span class="nav-number">9.</span> <span class="nav-text">countdownlatch，CyclicBarrier，Semaphore</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E9%81%87%E5%88%B0%E4%B8%89%E6%96%B9api%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86%EF%BC%9F"><span class="nav-number">10.</span> <span class="nav-text">事务遇到三方api怎么处理？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#api%E7%BB%93%E6%9E%9C%E4%B8%8E%E4%BA%8B%E5%8A%A1%E5%85%B3%E7%B3%BB%E4%B8%8D%E5%A4%A7%EF%BC%88%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81%EF%BC%89"><span class="nav-number">10.1.</span> <span class="nav-text">api结果与事务关系不大（消息推送）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#api%E4%B8%8E%E4%B8%9A%E5%8A%A1%E4%B8%8D%E5%8F%AF%E5%88%86%E5%89%B2%EF%BC%88%E5%91%98%E5%B7%A5%E7%A6%BB%E8%81%8C%EF%BC%8C%E7%AD%89%EF%BC%89"><span class="nav-number">10.2.</span> <span class="nav-text">api与业务不可分割（员工离职，等）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8D%87%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD"><span class="nav-number">11.</span> <span class="nav-text">提升后端接口查询性能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="nav-number">12.</span> <span class="nav-text">redis 虚拟内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mysql%E9%AB%98%E6%95%88%E6%9F%A5%E6%89%BE%E4%B8%80%E6%9D%A1%E9%9A%8F%E6%9C%BA%E8%AE%B0%E5%BD%95"><span class="nav-number">13.</span> <span class="nav-text">Mysql高效查找一条随机记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E4%B8%8B%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%AF%8F%E6%AC%A1%E8%AF%BB%E5%88%B0%E6%9C%80%E6%96%B0%E7%9A%84%E6%95%B0%E6%8D%AE%EF%BC%9F"><span class="nav-number">14.</span> <span class="nav-text">读写分离下，如何保证每次读到最新的数据？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%9D%E6%BB%91%E8%88%AC%E6%95%B0%E6%8D%AE%E5%BA%93%E6%89%A9%E5%AE%B9"><span class="nav-number">15.</span> <span class="nav-text">丝滑般数据库扩容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis-%E5%AD%97%E7%AC%A6%E4%B8%B2-%E5%BA%95%E5%B1%82"><span class="nav-number">16.</span> <span class="nav-text">redis 字符串 底层</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%95%BF%E5%BA%A6%E6%89%A9%E5%B1%95%EF%BC%88%E7%A9%BA%E9%97%B4%E9%A2%84%E5%88%86%E9%85%8D%EF%BC%89"><span class="nav-number">16.1.</span> <span class="nav-text">动态长度扩展（空间预分配）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%83%B0%E6%80%A7%E5%9B%9E%E6%94%B6"><span class="nav-number">16.2.</span> <span class="nav-text">惰性回收</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF"><span class="nav-number">16.3.</span> <span class="nav-text">优势</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">17.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8sql%E8%AE%A1%E7%AE%97%E8%BF%9E%E7%BB%AD%E4%B8%89%E5%A4%A9%E7%99%BB%E5%BD%95%E7%9A%84%E7%94%A8%E6%88%B7id"><span class="nav-number">18.</span> <span class="nav-text">使用sql计算连续三天登录的用户id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-int-%E5%92%8CString-%E4%BA%92%E8%BD%AC"><span class="nav-number">19.</span> <span class="nav-text">mysql int 和String 互转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E9%80%9A%E7%94%A8%E8%A7%84%E5%88%99"><span class="nav-number">20.</span> <span class="nav-text">数据库通用规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL%E7%BA%A6%E6%9D%9F%EF%BC%88%E9%80%9A%E7%94%A8%E8%A7%84%E5%88%99%EF%BC%89"><span class="nav-number">21.</span> <span class="nav-text">SQL约束（通用规则）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3redis%E9%9B%86%E7%BE%A4%E5%BC%82%E6%AD%A5%E5%A4%8D%E5%88%B6%EF%BC%8C%E6%95%B0%E6%8D%AE%E4%B8%A2%E5%A4%B1%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">22.</span> <span class="nav-text">如何解决redis集群异步复制，数据丢失问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%90%E7%BA%BF%E7%A8%8B%E4%B8%AD%E8%83%BD%E5%90%A6%E8%8E%B7%E5%8F%96%E7%88%B6%E7%BA%BF%E7%A8%8B%E7%9A%84threadlocal%E5%80%BC%EF%BC%9F"><span class="nav-number">23.</span> <span class="nav-text">子线程中能否获取父线程的threadlocal值？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nacos%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%B9%B6%E5%8F%91%E8%AF%BB%E5%86%99%E5%86%B2%E7%AA%81%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">24.</span> <span class="nav-text">nacos如何解决并发读写冲突问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8F%B1%E5%BD%A2%E7%BB%A7%E6%89%BF"><span class="nav-number">25.</span> <span class="nav-text">菱形继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95"><span class="nav-number">26.</span> <span class="nav-text">排序算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jvm%E5%8D%A1%E8%A1%A8"><span class="nav-number">27.</span> <span class="nav-text">jvm卡表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%A6%E6%9D%A5%E7%9A%842%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="nav-number">27.1.</span> <span class="nav-text">带来的2个问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">28.</span> <span class="nav-text">Spring 设计模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spring-Boot%E8%87%AA%E5%8A%A8%E8%A3%85%E9%85%8D%E5%8E%9F%E7%90%86"><span class="nav-number">29.</span> <span class="nav-text">Spring Boot自动装配原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%8E%9F%E5%88%99"><span class="nav-number">30.</span> <span class="nav-text">面向对象设计的原则</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#String%E7%9A%84%E9%95%BF%E5%BA%A6%E9%99%90%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">String的长度限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E6%80%81%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%8C%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%8C%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="nav-number">2.</span> <span class="nav-text">静态常量池，运行时常量池，字符串常量池</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E9%9D%99%E6%80%81%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%88Compile-time-Constant-Pool%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">1. 静态常量池（Compile-time Constant Pool）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%88Runtime-Constant-Pool%EF%BC%89"><span class="nav-number">2.2.</span> <span class="nav-text">2. 运行时常量池（Runtime Constant Pool）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%B8%B8%E9%87%8F%E6%B1%A0%EF%BC%88String-Constant-Pool%EF%BC%89"><span class="nav-number">2.3.</span> <span class="nav-text">3. 字符串常量池（String Constant Pool）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#threadloacal%E5%AE%9A%E4%B9%89%E4%B8%BAstatic%E7%9A%84"><span class="nav-number">3.</span> <span class="nav-text">threadloacal定义为static的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-number">4.</span> <span class="nav-text">JVM类加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#G1%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="nav-number">5.</span> <span class="nav-text">G1垃圾收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RS"><span class="nav-number">5.1.</span> <span class="nav-text">RS</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E7%BA%BF%E7%A8%8B%E6%95%B0"><span class="nav-number">6.</span> <span class="nav-text">最佳线程数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JVM%E5%8F%82%E6%95%B0"><span class="nav-number">7.</span> <span class="nav-text">JVM参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%83%E9%80%B8%E5%88%86%E6%9E%90"><span class="nav-number">8.</span> <span class="nav-text">逃逸分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#countdownlatch%EF%BC%8CCyclicBarrier%EF%BC%8CSemaphore"><span class="nav-number">9.</span> <span class="nav-text">countdownlatch，CyclicBarrier，Semaphore</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E9%81%87%E5%88%B0%E4%B8%89%E6%96%B9api%E6%80%8E%E4%B9%88%E5%A4%84%E7%90%86%EF%BC%9F"><span class="nav-number">10.</span> <span class="nav-text">事务遇到三方api怎么处理？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#api%E7%BB%93%E6%9E%9C%E4%B8%8E%E4%BA%8B%E5%8A%A1%E5%85%B3%E7%B3%BB%E4%B8%8D%E5%A4%A7%EF%BC%88%E6%B6%88%E6%81%AF%E6%8E%A8%E9%80%81%EF%BC%89"><span class="nav-number">10.1.</span> <span class="nav-text">api结果与事务关系不大（消息推送）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#api%E4%B8%8E%E4%B8%9A%E5%8A%A1%E4%B8%8D%E5%8F%AF%E5%88%86%E5%89%B2%EF%BC%88%E5%91%98%E5%B7%A5%E7%A6%BB%E8%81%8C%EF%BC%8C%E7%AD%89%EF%BC%89"><span class="nav-number">10.2.</span> <span class="nav-text">api与业务不可分割（员工离职，等）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%90%E5%8D%87%E5%90%8E%E7%AB%AF%E6%8E%A5%E5%8F%A3%E6%9F%A5%E8%AF%A2%E6%80%A7%E8%83%BD"><span class="nav-number">11.</span> <span class="nav-text">提升后端接口查询性能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis-%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98"><span class="nav-number">12.</span> <span class="nav-text">redis 虚拟内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mysql%E9%AB%98%E6%95%88%E6%9F%A5%E6%89%BE%E4%B8%80%E6%9D%A1%E9%9A%8F%E6%9C%BA%E8%AE%B0%E5%BD%95"><span class="nav-number">13.</span> <span class="nav-text">Mysql高效查找一条随机记录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%BB%E5%86%99%E5%88%86%E7%A6%BB%E4%B8%8B%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%AF%8F%E6%AC%A1%E8%AF%BB%E5%88%B0%E6%9C%80%E6%96%B0%E7%9A%84%E6%95%B0%E6%8D%AE%EF%BC%9F"><span class="nav-number">14.</span> <span class="nav-text">读写分离下，如何保证每次读到最新的数据？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%9D%E6%BB%91%E8%88%AC%E6%95%B0%E6%8D%AE%E5%BA%93%E6%89%A9%E5%AE%B9"><span class="nav-number">15.</span> <span class="nav-text">丝滑般数据库扩容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis-%E5%AD%97%E7%AC%A6%E4%B8%B2-%E5%BA%95%E5%B1%82"><span class="nav-number">16.</span> <span class="nav-text">redis 字符串 底层</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8A%A8%E6%80%81%E9%95%BF%E5%BA%A6%E6%89%A9%E5%B1%95%EF%BC%88%E7%A9%BA%E9%97%B4%E9%A2%84%E5%88%86%E9%85%8D%EF%BC%89"><span class="nav-number">16.1.</span> <span class="nav-text">动态长度扩展（空间预分配）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%83%B0%E6%80%A7%E5%9B%9E%E6%94%B6"><span class="nav-number">16.2.</span> <span class="nav-text">惰性回收</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BC%98%E5%8A%BF"><span class="nav-number">16.3.</span> <span class="nav-text">优势</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95"><span class="nav-number">17.</span> <span class="nav-text">索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8sql%E8%AE%A1%E7%AE%97%E8%BF%9E%E7%BB%AD%E4%B8%89%E5%A4%A9%E7%99%BB%E5%BD%95%E7%9A%84%E7%94%A8%E6%88%B7id"><span class="nav-number">18.</span> <span class="nav-text">使用sql计算连续三天登录的用户id</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#mysql-int-%E5%92%8CString-%E4%BA%92%E8%BD%AC"><span class="nav-number">19.</span> <span class="nav-text">mysql int 和String 互转</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E9%80%9A%E7%94%A8%E8%A7%84%E5%88%99"><span class="nav-number">20.</span> <span class="nav-text">数据库通用规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SQL%E7%BA%A6%E6%9D%9F%EF%BC%88%E9%80%9A%E7%94%A8%E8%A7%84%E5%88%99%EF%BC%89"><span class="nav-number">21.</span> <span class="nav-text">SQL约束（通用规则）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3redis%E9%9B%86%E7%BE%A4%E5%BC%82%E6%AD%A5%E5%A4%8D%E5%88%B6%EF%BC%8C%E6%95%B0%E6%8D%AE%E4%B8%A2%E5%A4%B1%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">22.</span> <span class="nav-text">如何解决redis集群异步复制，数据丢失问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%90%E7%BA%BF%E7%A8%8B%E4%B8%AD%E8%83%BD%E5%90%A6%E8%8E%B7%E5%8F%96%E7%88%B6%E7%BA%BF%E7%A8%8B%E7%9A%84threadlocal%E5%80%BC%EF%BC%9F"><span class="nav-number">23.</span> <span class="nav-text">子线程中能否获取父线程的threadlocal值？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nacos%E5%A6%82%E4%BD%95%E8%A7%A3%E5%86%B3%E5%B9%B6%E5%8F%91%E8%AF%BB%E5%86%99%E5%86%B2%E7%AA%81%E9%97%AE%E9%A2%98%EF%BC%9F"><span class="nav-number">24.</span> <span class="nav-text">nacos如何解决并发读写冲突问题？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8F%B1%E5%BD%A2%E7%BB%A7%E6%89%BF"><span class="nav-number">25.</span> <span class="nav-text">菱形继承</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95"><span class="nav-number">26.</span> <span class="nav-text">排序算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jvm%E5%8D%A1%E8%A1%A8"><span class="nav-number">27.</span> <span class="nav-text">jvm卡表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B8%A6%E6%9D%A5%E7%9A%842%E4%B8%AA%E9%97%AE%E9%A2%98"><span class="nav-number">27.1.</span> <span class="nav-text">带来的2个问题</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%8E%9F%E5%88%99"><span class="nav-number">28.</span> <span class="nav-text">面向对象设计的原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%AF%BB%E5%8F%96%E5%A4%A7%E9%87%8F%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9%E5%88%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%EF%BC%9F"><span class="nav-number">29.</span> <span class="nav-text">如何读取大量文件内容到数据库中？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#tps%E5%8E%8B%E4%B8%8D%E4%B8%8A%E5%8E%BB%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="nav-number">30.</span> <span class="nav-text">tps压不上去的原因</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E4%B8%8A%E6%9C%8D%E5%8A%A1%E7%9A%84%E5%B9%B3%E5%9D%87%E5%93%8D%E5%BA%94%E6%97%B6%E9%97%B4%E5%A4%AA%E9%95%BF%EF%BC%9F"><span class="nav-number">31.</span> <span class="nav-text">线上服务的平均响应时间太长？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%AB%98%E5%8F%AF%E7%94%A8%E5%BC%82%E5%9C%B0%E5%A4%9A%E6%B4%BB%E6%A1%88%E4%BE%8B"><span class="nav-number">32.</span> <span class="nav-text">高可用异地多活案例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-number">33.</span> <span class="nav-text">架构设计原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%ADURL"><span class="nav-number">34.</span> <span class="nav-text">短URL</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E5%AD%98%E5%82%A8%E5%9C%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%EF%BC%9F"><span class="nav-number">34.1.</span> <span class="nav-text">如何存储在数据库中？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%91%E5%8F%B7%E5%99%A8%E9%AB%98%E5%8F%AF%E7%94%A8"><span class="nav-number">34.2.</span> <span class="nav-text">发号器高可用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%BC%93%E5%AD%98"><span class="nav-number">34.3.</span> <span class="nav-text">缓存</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2pc%E5%92%8C3pc"><span class="nav-number">35.</span> <span class="nav-text">2pc和3pc</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -167,13 +169,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-count">28</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -199,7 +201,7 @@
       <div class="widget-wrap">
     <div id="myCanvasContainer" class="widget tagcloud">
         <canvas width="250" height="250" id="resCanvas" style="width=100%">
-            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES/" rel="tag">ES</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fidder/" rel="tag">Fidder</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MQ/" rel="tag">MQ</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Selenium/" rel="tag">Selenium</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E6%B5%8B%E8%AF%95/" rel="tag">Web测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/faker/" rel="tag">faker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logger/" rel="tag">logger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%9B%E6%89%A3/" rel="tag">力扣</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="tag">性能测试</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag">接口测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag">测试数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag">面经</a><span class="tag-list-count">1</span></li></ul>
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES/" rel="tag">ES</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fidder/" rel="tag">Fidder</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JUC/" rel="tag">JUC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MQ/" rel="tag">MQ</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Selenium/" rel="tag">Selenium</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E6%B5%8B%E8%AF%95/" rel="tag">Web测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Zookeeper/" rel="tag">Zookeeper</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/faker/" rel="tag">faker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logger/" rel="tag">logger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%9B%E6%89%A3/" rel="tag">力扣</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%89%E5%85%A8/" rel="tag">安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="tag">性能测试</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag">接口测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag">测试数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag">面经</a><span class="tag-list-count">1</span></li></ul>
         </canvas>
     </div>
 </div>
@@ -242,12 +244,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="java杂谈---3 | Honor">
+      <meta itemprop="name" content="java杂谈3 | Honor">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          java杂谈---3
+          java杂谈3
         </h1>
 
         <div class="post-meta-container">
@@ -265,7 +267,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-06-22 08:47:55" itemprop="dateModified" datetime="2024-06-22T08:47:55+08:00">2024-06-22</time>
+      <time title="修改时间：2024-07-03 15:29:09" itemprop="dateModified" datetime="2024-07-03T15:29:09+08:00">2024-07-03</time>
     </span>
 
   
@@ -289,14 +291,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>13k</span>
+      <span>15k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>12 分钟</span>
+      <span>14 分钟</span>
     </span>
 </div>
 
@@ -307,7 +309,7 @@
     
     
     <div class="post-body" itemprop="articleBody"><h3 id="String的长度限制"><a href="#String的长度限制" class="headerlink" title="String的长度限制"></a>String的长度限制</h3><ul>
-<li>首先字符串的内容是由一个字符数组 char[] ，后为byte[]数组来存储的，由于数组的长度及索引是 整数，且String类中返回字符串长度的方法length() 的返回值也是int ，所以通过查看 java源码中的类Integer我们可以看到Integer的最大范围是2^31 -1,由于数组是从0开始 的，所以数组的最大长度可以使【0~2^31】通过计算是大概4GB。<span id="more"></span> </li>
+<li>首先字符串的内容是由一个字符数组 char[] ，后为byte[]数组来存储的，由于数组的长度及索引是 整数，且String类中返回字符串长度的方法length() 的返回值也是int ，所以通过查看 java源码中的类Integer我们可以看到Integer的最大范围是2^31 -1,由于数组是从0开始 的，所以数组的最大长度可以使【0~2^31】通过计算是大概4GB。 <span id="more"></span></li>
 <li>根据对象头中的数组类型的长度也是用4字节表示，也阔以知道String的长度限制</li>
 <li>但是通过翻阅java虚拟机手册对class文件格式的定义以及常量池中对String类型的结构 体定义我们可以知道对于索引定义了u2，就是无符号占2个字节，2个字节可以表示的 最大范围是2^16 -1 &#x3D; 65535。</li>
 <li>其实是65535，但是由于JVM需要1个字节表示结束指令，所以这个范围就为65534 了。超出这个范围在编译时期是会报错的，但是运行时拼接或者赋值的话范围是在整 形的最大范围。</li>
@@ -657,37 +659,6 @@
 <p>如果不同线程对对象引用的更新操作，恰好位于同一个<code>32KB</code>区域内，这将导致同时更新卡表的同一个缓存行，从而造成缓存行的写回、无效化或者同步操作，间接影响程序性能。</p>
 <p>一个简单的解决方案，就是不采用无条件的写屏障，而是先检查卡表标记，只有当该卡表项未被标记过才将其标记为<code>dirty</code>。</p>
 <p>这就是<code>JDK 7</code>中引入的解决方法，引入了一个新的<code>JVM</code>参数<code>-XX:+UseCondCardMark</code>，在执行写屏障之前，先简单的做一下判断。如果卡页已被标识过，则不再进行标识。</p>
-<h3 id="Spring-设计模式"><a href="#Spring-设计模式" class="headerlink" title="Spring 设计模式"></a>Spring 设计模式</h3><p>单例模式：Spring 中的 Bean 默认情况下都是单例的。无需多说。 </p>
-<p>工厂模式：工厂模式主要是通过 BeanFactory 和 ApplicationContext 来生产 Bean 对 象。 </p>
-<p>代理模式：最常见的 AOP 的实现方式就是通过代理来实现，Spring主要是使用 JDK  动态代理和 CGLIB 代理。 </p>
-<p>模板方法模式：主要是一些对数据库操作的类用到，比如 JdbcTemplate、 JpaTemplate，因为查询数据库的建立连接、执行查询、关闭连接几个过程，非常适用 于模板方法。</p>
-<h3 id="Spring-Boot自动装配原理"><a href="#Spring-Boot自动装配原理" class="headerlink" title="Spring Boot自动装配原理"></a>Spring Boot自动装配原理</h3><p>@SpringBootApplication是最常见的注解</p>
-<ul>
-<li>@SpringBootConfiguration<ul>
-<li>他是一个@Configuration，所以也就是对spring原生 注解的封装</li>
-</ul>
-</li>
-<li><strong>@EnableAutoConfiguration</strong></li>
-<li>@ComponentScan<ul>
-<li>默认扫描的是与该类同级的类或者同级包下的所有类，是spring的原生注解之 一</li>
-</ul>
-</li>
-</ul>
-<p>@EnableAutoConfiguration就是自动配置原理的核心。</p>
-<ul>
-<li><p>@Import(AutoConfigurationImportSelector.class) public @interface EnableAutoConfiguration {</p>
-</li>
-<li><p>@Import注解引入了一个AutoConfigurationImportSelector类型的bean。点击 AutoConfigurationImportSelector ，进入之后找到方法 getCandidateConfigurations().</p>
-</li>
-<li><p>spring将需要自动装配的类写在META INF&#x2F;spring.factories文件里面，再启动的时候去读取需要配置的类，并进行自动装配。</p>
-</li>
-<li><p>Spring Boot会在classpath中寻找符合条件的类，并根据这些类自动配置Bean。</p>
-</li>
-<li><p>Spring Boot启动时会加载<strong>META-INF&#x2F;spring.factories</strong>文件，该文件中配置了所有自动装配的类。</p>
-</li>
-<li><p>ConditionalOnClass 这是一个条件注解，代表如果没有RedisOperations这个类 就不 执行此配置，也就是说如果没有相关的redis依赖，那么redisTemplate就不会进行自动 注入。</p>
-</li>
-</ul>
 <h3 id="面向对象设计的原则"><a href="#面向对象设计的原则" class="headerlink" title="面向对象设计的原则"></a>面向对象设计的原则</h3><ol>
 <li>开闭原则：对扩展开放，对修改关闭。这意味着软件实体应能够适应变化，而无需修改其现有代码。</li>
 <li>里氏替换原则：子类必须能够替换其基类。这意味着在软件中，任何使用基类的地方都可以安全地使用子类，而不会破坏程序的功能。</li>
@@ -697,6 +668,141 @@
 <li>迪米特法则（最少知识原则）：一个对象应当对其他对象有尽可能少的了解。这有助于减少对象之间的耦合，提高系统的可维护性。</li>
 <li>合成复用原则：<strong>优先使用对象组合，而不是继承来达到复用的目的</strong>。这强调了通过组合或聚合关系复用代码，而不是通过继承。</li>
 </ol>
+<h3 id="如何读取大量文件内容到数据库中？"><a href="#如何读取大量文件内容到数据库中？" class="headerlink" title="如何读取大量文件内容到数据库中？"></a>如何读取大量文件内容到数据库中？</h3><ol>
+<li><p>首先将大文件拆分为若干个小文件</p>
+<ul>
+<li>避免导入一个大文件一半时宕机，重新导入</li>
+<li>多个小文件可以同时导入</li>
+</ul>
+</li>
+<li><p>且避免直接读取整个文件到内存导致full gc，故一行行的读取数据写入数据库。</p>
+</li>
+<li><p>同时加快速度，读取时采用多线程读取，写入数据库中。</p>
+<ul>
+<li><p>多线程使用线程池，未处理的任务会放入缓冲队列。但不能无线的扩大队列的容量或增加线程的数量。</p>
+</li>
+<li><p>若最大线程数太大或缓冲队列太大会导致oom或full gc性能问题。</p>
+</li>
+</ul>
+</li>
+<li><p>故采用countdownlanch。</p>
+<ul>
+<li>主线程等子线程（10个线程，每个线程执行1000行）执行完毕，写入数据库后，再读取文件内容到内存，再由子线程写入数据库。</li>
+<li>仍然不够”资本家“！！！</li>
+<li>子线程需要累计1000行任务才能进行入库操作，且主线程需要等子线程处理完毕才能继续读取任务。线程存在空闲时间，没有完全压榨性能。</li>
+</ul>
+</li>
+<li><p>核心就是生产者消费者模型。生产者读取文件数据，放入队列中。消费者消费数据，写入数据库。</p>
+<ul>
+<li>故只要保证主线程队列满了之后，阻塞不读取文件数据即可。</li>
+<li>于是自定义线程池的拒绝策略，当队列满了之后，调用BlockingQueue.put 来实现生产者的阻塞。</li>
+</ul>
+</li>
+</ol>
+<h3 id="tps压不上去的原因"><a href="#tps压不上去的原因" class="headerlink" title="tps压不上去的原因"></a>tps压不上去的原因</h3><ol>
+<li>首先是压力机压力不够，比如用我们笔记本基本压不到那么高TPS， 分布式集群压测。 </li>
+<li>网络带宽，单位时间内网络传输数据量过大，超过带宽处理能力 </li>
+<li>数据库连接数太少，最大连接数不够 </li>
+<li>Cpu，内存，磁盘硬件资源达到瓶颈 </li>
+<li>中间件redis也有可能存在瓶颈比如缓存穿透，缓存过期等等 </li>
+<li>存在大量线程阻塞，线程死锁等</li>
+<li>中间件消息队列拥堵</li>
+</ol>
+<h3 id="线上服务的平均响应时间太长？"><a href="#线上服务的平均响应时间太长？" class="headerlink" title="线上服务的平均响应时间太长？"></a>线上服务的平均响应时间太长？</h3><ol>
+<li>添加详细的日志信息<ul>
+<li>不推荐，消耗服务器的性能和磁盘空间，且线上环境不能随意更改。</li>
+</ul>
+</li>
+<li>搭建模拟环境进行排查<ul>
+<li>麻烦，费时，不推荐</li>
+</ul>
+</li>
+<li>Arthas，阿里开源神奇。</li>
+</ol>
+<h3 id="高可用异地多活案例"><a href="#高可用异地多活案例" class="headerlink" title="高可用异地多活案例"></a>高可用异地多活案例</h3><ul>
+<li>冷备:通过停止数据库对外服务的能力，通过文件拷贝的方式将数据快速进行备份归 档的操作方式。<ul>
+<li>优点：简单、快速备份、快速恢复、按照时间点恢复</li>
+<li>缺点：服务器停机、备份点到恢复点数据丢失。</li>
+</ul>
+</li>
+<li>双机热备：一边备份一边提供服务。但还原的时候还是需要停机的。<ul>
+<li>主从模式</li>
+<li>互为主从</li>
+</ul>
+</li>
+<li>同城双活：不信任的粒度从机器转为了机房。<ul>
+<li>同城双活其实和前文提到的双机热备没有本质的区别，只是“距离”更远了，基本上还 是一样（同城专线网速还是很快的）。双机热备提供了灾备能力，双机互备避免了过 多的资源浪费。</li>
+</ul>
+</li>
+<li>异地双活</li>
+<li>异地多活</li>
+<li><a target="_blank" rel="noopener" href="https://baijiahao.baidu.com/s?id=1714292603624190772&wfr=spider&for=pc">干货｜搞懂「异地多活」，看这篇就够了 (baidu.com)</a></li>
+</ul>
+<h3 id="架构设计原则"><a href="#架构设计原则" class="headerlink" title="架构设计原则"></a>架构设计原则</h3><ol>
+<li>N+1设计。系统中的每个组件都应做到没有单点故障； </li>
+<li>回滚设计。确保系统可以向前兼容，在系统升级时应能有办法回滚版本； </li>
+<li>禁用设计。应该提供控制具体功能是否可用的配置，在系统出现故障时能够快速 下线功能；</li>
+<li>监控设计。在设计阶段就要考虑监控的手段； </li>
+<li>多活数据中心设计。若系统需要极高的高可用，应考虑在多地实施数据中心进行 多活，至少在一个机房断电的情况下系统依然可用； </li>
+<li>采用成熟的技术。刚开发的或开源的技术往往存在很多隐藏的bug，出了问题没 有商业支持可能会是一个灾难； </li>
+<li>资源隔离设计。应避免单一业务占用全部资源； </li>
+<li>架构应能水平扩展。系统只有做到能水平扩展，才能有效避免瓶颈问题；</li>
+<li>非核心则购买。非核心功能若需要占用大量的研发资源才能解决，则考虑购买成 熟的产品； </li>
+<li>使用商用硬件。商用硬件能有效降低硬件故障的机率； </li>
+<li>快速迭代。系统应该快速开发小功能模块，尽快上线进行验证，早日发现问题大 大降低系统交付的风险； </li>
+<li>无状态设计。服务接口应该做成无状态的，当前接口的访问不依赖于接口上次访 问的状态。</li>
+</ol>
+<h3 id="短URL"><a href="#短URL" class="headerlink" title="短URL"></a>短URL</h3><p>在短信、博客中，有文字限制，使用连接时，常常使用短链接，也就是短URL。</p>
+<p>原理：前端输入长链接，后端查询该长链接对应的短链接，否则根据一定的规则生成短链接。返回短链接给用户，用户访问短链接，重定向到长链接，完成访问。</p>
+<p>核心：长短链接的对应关系。</p>
+<p>一个短地址对应一个长地址才是合理的，那这里我们需要自己封装或者寻找一个可以实现长短地址一一映射的函数，最好还能有从还能保持反向转换的能力。但是很遗憾，这样的算法不存在。</p>
+<p>思路：<em><strong>建立一个发号器,每次有一个新的长URL进来,我们就增加一</strong></em>。其实数字是一对一的，只要一个地址不存在，就给他一个自增的数字，如下图所示，那这么就实现了长地址与短地址的一一对应关系。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240628191539215.png" alt="image-20240628191539215" style="zoom:67%;" />
+
+<h4 id="如何存储在数据库中？"><a href="#如何存储在数据库中？" class="headerlink" title="如何存储在数据库中？"></a>如何存储在数据库中？</h4><p>我们返回的短URL一般是将数字转换成32进制，这样子可以更加有效的缩短URL长度。但是32进制的数字对计算机来说只是字符串,怎么存储呢?直接存储字符串对等值查找好找,对范围查找等太不友好了。 其实可以<em><strong>直接存储10进制的数字</strong></em>,只需要在业务逻辑层加一个进制转换的函数即可。这样不仅<em><strong>占用空间少,对查找的支持较好,同时还可以更加方便的转换到更多&#x2F;更少的进制来进一步缩短URL</strong></em>。如下图所示。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240628191822753.png" alt="image-20240628191822753" style="zoom:67%;" />
+
+<p>当浏览器中访问<a target="_blank" rel="noopener" href="http://www.yuming.cn/3oi0%E6%97%B6%EF%BC%8C%E6%88%91%E4%BB%AC%E6%98%AF%E5%8F%AF%E4%BB%A5%E8%8E%B7%E5%8F%963oi0%E5%8F%82%E6%95%B0%E7%9A%84%EF%BC%8C%E7%84%B6%E5%90%8E%E5%AF%B9%E8%AF%A5%E5%8F%82%E6%95%B0%E8%BF%9B%E8%A1%8C%E8%A7%A3%E6%9E%9010%E8%BF%9B%E5%88%B6%E4%B8%BA123456%EF%BC%8C%E5%8E%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E6%9F%A5%E8%AF%A2123456%E7%9A%84%E8%AE%B0%E5%BD%95%EF%BC%8C%E5%B0%B1%E8%8E%B7%E5%8F%96%E5%88%B0%E5%8E%9F%E9%95%BF%E5%9C%B0%E5%9D%80URL%EF%BC%8C%E9%82%A3%E8%BF%99%E6%A0%B7%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%AD%E4%B9%9F%E5%B0%B1%E4%B8%8D%E7%94%A8%E5%8E%BB%E5%AD%98%E7%9F%AD%E5%9C%B0%E5%9D%80%E4%BA%86%E3%80%82">www.yuming.cn/3oi0时，我们是可以获取3oi0参数的，然后对该参数进行解析10进制为123456，去数据库中查询123456的记录，就获取到原长地址URL，那这样数据库中也就不用去存短地址了。</a></p>
+<h4 id="发号器高可用"><a href="#发号器高可用" class="headerlink" title="发号器高可用"></a>发号器高可用</h4><ul>
+<li>Mysql作为发号器<ul>
+<li>高并发下的性能瓶颈，频繁的io。</li>
+<li>批量发号，一次申请1000个号段在内存中，使用完了再去mysql申请，且内容在号段使用完毕时再进行批量写入数据库。</li>
+<li>同理，根据分布式id的生产方法，申请号段使用了50%时，就可以再去申请下一个号段了，进一步减少了申请号段的等待时间。</li>
+<li>集群模式，一个发单号，一个发双号。</li>
+</ul>
+</li>
+<li>redis作为发号器，incR命令。<ul>
+<li>引入了新的中间件，增加了系统复杂度</li>
+<li>集群模式。</li>
+</ul>
+</li>
+</ul>
+<h4 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h4><p>将热点的长链接和短链接的k v关系缓存在redis中，方便直接使用以及判断。</p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2374347">短URL服务的设计以及实现-腾讯云开发者社区-腾讯云 (tencent.com)</a></p>
+<h3 id="2pc和3pc"><a href="#2pc和3pc" class="headerlink" title="2pc和3pc"></a>2pc和3pc</h3><ul>
+<li>2pc：<ul>
+<li>性能问题：执行过程中，所有参与节点都是事务阻塞性的，当参与者占用公共资源时，其他第三方节点访问公共资源就不得不处于阻塞状态，为了数据一致性而牺牲了可用性，对性能影响比较大，不适合高并发高性能场景。</li>
+<li>可靠性问题：2PC非常依赖协调者，当协调者发生故障时，尤其是第二阶段，那么所有参与者就会处于锁定事务资源的状态中，导致无法继续完成事务操作。如果是协调者挂掉了，可以重新选举一个协调者，但是无法解决因为协调者当即导致的参与者处于阻塞状态的问题。</li>
+<li>数据一致性：当二阶段中的协调者向参与者发起了commit请求操作之后，发生了局部网络异常或者在发送commit请求过程中，协调者发生了故障，这会导致只有一部分参与者接受到了commit请求。 而在这部分参与者接受到commit请求之后就会执行commit操作。但是其他部分内接到commit请求的机器则无法执行事务操作。于是整个分布式系统中，就会出现数据不一致的问题。</li>
+<li>二阶段无法解决的问题：协调者在发出commit消息之后宕机，而唯一接受到这条消息的参与者同时也宕机了，那么即使协调者通过选举协议产生了新的协调者，这条事务的状态也是不确定的，没有人知道这个事务是否已经提交。</li>
+<li>解决：使用log日志判断事务的状态，一切以事务为准。</li>
+</ul>
+</li>
+<li>3pc<ul>
+<li>优点<ul>
+<li>降低了阻塞的范围：增加了一个准备阶段，先判断每个RM是否能执行该事务</li>
+<li>阶段三中协调者出现问题时，参与者会继续提交事务。</li>
+<li>引入超时机制，避免长时间的资源锁定，浪费资源。</li>
+</ul>
+</li>
+<li>缺点<ul>
+<li>较于2pc多了一层，更为复杂。</li>
+<li>数据不一致：阶段三中协调者出现问题时，参与者会继续提交事务。但协调者本意是想中断事务，造成数据不一致。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
     </div>
 
@@ -714,7 +820,7 @@
   </li>
   <li class="post-copyright-link">
       <strong>本文链接：</strong>
-      <a href="https://hlhehe.github.io/2024/06/17/java%E6%9D%82%E8%B0%883/" title="java杂谈---3">https://hlhehe.github.io/2024/06/17/java杂谈3/</a>
+      <a href="https://hlhehe.github.io/2024/06/17/java%E6%9D%82%E8%B0%883/" title="java杂谈3">https://hlhehe.github.io/2024/06/17/java杂谈3/</a>
   </li>
   <li class="post-copyright-license">
       <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -730,11 +836,14 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2024/06/07/RabbitMq---%E9%9D%A2%E8%AF%95/" rel="prev" title="RabbitMq---面试">
-                  <i class="fa fa-angle-left"></i> RabbitMq---面试
+                <a href="/2024/06/09/Zookeeper/" rel="prev" title="Zookeeper">
+                  <i class="fa fa-angle-left"></i> Zookeeper
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/2024/06/26/%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95/" rel="next" title="软件测试">
+                  软件测试 <i class="fa fa-angle-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -767,14 +876,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">253k</span>
+    <span title="站点总字数">283k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">3:50</span>
+    <span title="站点阅读时长">4:18</span>
   </span>
 </div>
 <div class="busuanzi-count">

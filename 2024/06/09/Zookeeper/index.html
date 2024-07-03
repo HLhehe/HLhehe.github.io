@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha256-CTSx/A06dm1B063156EVh15m6Y67pAjZZaQc89LLSrU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.css" integrity="sha256-vQkngPS8jiHHH0I6ABTZroZk8NPZ7b+MUReOFE9UsXQ=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hlhehe.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.18.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":true,"show_result":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="ZookeeperZookeeper是一个开源的分布式协调服务，提供了一些基本的分布式服务，如配置管理、分布式锁、分布式队列等。其主要作用是帮助分布式应用程序进行协调和管理，确保分布式环境下的数据一致性。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zookeeper">
+<meta property="og:url" content="https://hlhehe.github.io/2024/06/09/Zookeeper/index.html">
+<meta property="og:site_name" content="Honor">
+<meta property="og:description" content="ZookeeperZookeeper是一个开源的分布式协调服务，提供了一些基本的分布式服务，如配置管理、分布式锁、分布式队列等。其主要作用是帮助分布式应用程序进行协调和管理，确保分布式环境下的数据一致性。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240609094803839.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240609094949370.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240609104313490.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240609104655498.png">
+<meta property="article:published_time" content="2024-06-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-07-03T07:31:38.847Z">
+<meta property="article:author" content="荷包蛋-溏心">
+<meta property="article:tag" content="Zookeeper">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240609094803839.png">
+
+
+<link rel="canonical" href="https://hlhehe.github.io/2024/06/09/Zookeeper/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hlhehe.github.io/2024/06/09/Zookeeper/","path":"2024/06/09/Zookeeper/","title":"Zookeeper"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Zookeeper | Honor</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="waline-server-hlhehes-projects.vercel.app">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Honor</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">荷包蛋的成长之路</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签<span class="badge">28</span></a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档<span class="badge">32</span></a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Zookeeper"><span class="nav-number">1.</span> <span class="nav-text">Zookeeper</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZK%E7%9A%84session%E7%AE%A1%E7%90%86"><span class="nav-number">2.</span> <span class="nav-text">ZK的session管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZK%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5%E8%BF%87%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">ZK数据同步过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZK%E6%8C%81%E4%B9%85%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">ZK持久化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZAB%E5%8D%8F%E8%AE%AE%E7%9A%84%E9%98%B6%E6%AE%B5"><span class="nav-number">5.</span> <span class="nav-text">ZAB协议的阶段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZK%E8%84%91%E8%A3%82"><span class="nav-number">6.</span> <span class="nav-text">ZK脑裂</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZK%E7%89%B9%E6%80%A7"><span class="nav-number">7.</span> <span class="nav-text">ZK特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZK%E5%91%BD%E5%90%8D%E6%9C%8D%E5%8A%A1%EF%BC%8C%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="nav-number">8.</span> <span class="nav-text">ZK命名服务，配置管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZNode"><span class="nav-number">9.</span> <span class="nav-text">ZNode</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Watcher"><span class="nav-number">10.</span> <span class="nav-text">Watcher</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Chroot"><span class="nav-number">11.</span> <span class="nav-text">Chroot</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E9%A1%BA%E5%BA%8F%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-number">12.</span> <span class="nav-text">事务顺序一致性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%B4%E8%AF%B4-Zookeeper-%E7%9A%84-CAP-%E9%97%AE%E9%A2%98%E4%B8%8A%E5%81%9A%E7%9A%84%E5%8F%96%E8%88%8D%EF%BC%9F"><span class="nav-number">13.</span> <span class="nav-text">说说 Zookeeper 的 CAP 问题上做的取舍？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81"><span class="nav-number">14.</span> <span class="nav-text">分布式锁</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="荷包蛋-溏心"
+      src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+  <p class="site-author-name" itemprop="name">荷包蛋-溏心</p>
+  <div class="site-description" itemprop="description">哪有赌徒天天输，哪有小孩天天哭</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">32</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Hlhehe" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Hlhehe" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:3113390285@qq.com" title="E-Mail → mailto:3113390285@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+
+       
+      <script type="text/javascript" charset="utf-8" src="/js/tagcloud.js"></script>
+      <script type="text/javascript" charset="utf-8" src="/js/tagcanvas.js"></script>
+      <div class="widget-wrap">
+    <div id="myCanvasContainer" class="widget tagcloud">
+        <canvas width="250" height="250" id="resCanvas" style="width=100%">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/ES/" rel="tag">ES</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Fidder/" rel="tag">Fidder</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JUC/" rel="tag">JUC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/" rel="tag">JVM</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JWT/" rel="tag">JWT</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jmeter/" rel="tag">Jmeter</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MQ/" rel="tag">MQ</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MySQL/" rel="tag">MySQL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Selenium/" rel="tag">Selenium</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/" rel="tag">Spring</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web%E6%B5%8B%E8%AF%95/" rel="tag">Web测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Zookeeper/" rel="tag">Zookeeper</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/faker/" rel="tag">faker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logger/" rel="tag">logger</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/pytest/" rel="tag">pytest</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%9B%E6%89%A3/" rel="tag">力扣</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%89%E5%85%A8/" rel="tag">安全</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BC%80%E5%8F%91/" rel="tag">开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95/" rel="tag">性能测试</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8A%93%E5%8C%85/" rel="tag">抓包</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%8E%A5%E5%8F%A3%E6%B5%8B%E8%AF%95/" rel="tag">接口测试</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%97%A5%E5%BF%97/" rel="tag">日志</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">13</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE/" rel="tag">测试数据</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%88%AC%E8%99%AB/" rel="tag">爬虫</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9D%A2%E7%BB%8F/" rel="tag">面经</a><span class="tag-list-count">1</span></li></ul>
+        </canvas>
+    </div>
+</div>
+
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+     
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hlhehe.github.io/2024/06/09/Zookeeper/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/mmexport1701329239203.png">
+      <meta itemprop="name" content="荷包蛋-溏心">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Honor">
+      <meta itemprop="description" content="哪有赌徒天天输，哪有小孩天天哭">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Zookeeper | Honor">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Zookeeper
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-06-09 00:00:00" itemprop="dateCreated datePublished" datetime="2024-06-09T00:00:00+08:00">2024-06-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-07-03 15:31:38" itemprop="dateModified" datetime="2024-07-03T15:31:38+08:00">2024-07-03</time>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2024/06/09/Zookeeper/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2024/06/09/Zookeeper/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>5.6k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>5 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="Zookeeper"><a href="#Zookeeper" class="headerlink" title="Zookeeper"></a>Zookeeper</h3><p>Zookeeper是一个开源的分布式协调服务，提供了一些基本的分布式服务，如配置管理、分布式锁、分布式队列等。其主要作用是帮助分布式应用程序进行协调和管理，确保分布式环境下的数据一致性。<span id="more"></span></p>
+<p>分布式应用程序可以基于Zookeeper实现诸如数据发布&#x2F;订阅、负载均衡、命名服务、分布式协调&#x2F;通知、集群管理、Master选举、分布式锁和分布式队列等功能</p>
+<h3 id="ZK的session管理"><a href="#ZK的session管理" class="headerlink" title="ZK的session管理"></a>ZK的session管理</h3><p>心跳检测机制：client隔一段时间就会发送一个心跳报文给服务端，告诉zookeeper自己还活着，别把我连接关了。sessionId是zookeeper为每一个连接分配的唯一id。故zk端如何存储与检测过期session就是session管理。</p>
+<ol>
+<li>通过expiryMap存储过期时间与session集合的对应关系。</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240609094803839.png" alt="image-20240609094803839" style="zoom:67%;" />
+
+<ol start="2">
+<li>当收到某条连接的报文时，更新expiryMap。</li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240609094949370.png" alt="image-20240609094949370" style="zoom:67%;" />
+
+<ol start="3">
+<li>循环检测ExpiryMap。</li>
+</ol>
+<p>有个SessionTracker线程会循环检测这个expiryMap，找到最近的那个key对应的session集合，把他们全部都过期掉。</p>
+<ul>
+<li>注意：expiryMap的第一个特征，它的key并不是随意一个时间。它会间隔一个固定的时间叫做expirationInterval，数值上它等于zookeeper的配置tickTime（默认配的2秒）。（故上图没有03秒的key）</li>
+<li>timeout时间最小是ticktime的两倍时间，最长是20倍。当客户端设置timeout值小于两倍ticktime时，zookeeper server实际返回的是ticktime的两倍时间。（即默认的最短超时时间为4秒）</li>
+</ul>
+<h3 id="ZK数据同步过程"><a href="#ZK数据同步过程" class="headerlink" title="ZK数据同步过程"></a>ZK数据同步过程</h3><p>在注册Learner的最后阶段，Learner服务器会发送给Leader服务器一个ACKEPOCH数据包，Leader会从这个数据包中解析出该Learner的 currentEpoch和<strong>lastZxid</strong>。</p>
+<p>在开始数据同步之前，Leader服务器会进行数据同步初始化，首先会从Zookeeper的内存数据库中提取出事务请求对应的提议缓存队列proposals，同时完成以下三个ZXID值的初始化：</p>
+<p>peerLastZxid：该<strong>Learner</strong>服务器最后处理的ZXID<br>minCommittedLog：<strong>Leader</strong>服务器提议缓存队列committedLog中的最小ZXID<br>maxCommittedLog：<strong>Leader</strong>服务器提议缓存队列committedLog中的最大ZXID</p>
+<ol>
+<li>直接差异化同步（DIFF同步）<ul>
+<li>peerLastZxid介于minCommittedLog和maxCommittedLog之间。</li>
+<li>原因：learner服务器宕机了一段时间，而后恢复与leader的通信，完成差异化事务的同步即可。</li>
+</ul>
+</li>
+<li>先回滚再差异化同步（TRUNC+DIFF）<ul>
+<li>peerLastZxid介于minCommittedLog和maxCommittedLog之间。但leader服务器中的提议缓存队列中不包含该peerLastZxid。</li>
+<li>原因：假如有A、B、C三台机器，B是Leader，此时的Leader_epoch为5，当前已经被集群中大部分机器都提交的ZXID包括：0x500000001和0x500000002。此时，Leader正要处理0x500000003，并且已经将该事务写入到了Leader本地的事务日志中，就在Leader要将该Proposal发送给其他Follower机器进行投票的时候，Leader服务器挂了，开始新一轮选举，同时Leader_epoch变更为6，之后A和C继续对外进行服务，又提交了0x600000001和0x600000002两个事务，此时B再次启动，并开始数据同步。</li>
+<li>即leader服务器发生宕机，且包含一个未发起提议的Zxid。而后选举新的leader，进行新一轮的事务，而后老leader恢复通信，就存在新leader不含有的Zxid，且还有一些未处理的新事物。</li>
+</ul>
+</li>
+<li>仅回滚同步（TRUNC）<ul>
+<li>peerLastZxid大于maxCommittedLog。</li>
+<li>原因：与上面类似，learner服务器含有未提议的Zxid，但新的leader还未提交新的事务，故仅将learner回滚即可。</li>
+</ul>
+</li>
+<li>全量同步(SNAP)<ul>
+<li>Learner上的peerLastZxid的值，比minCommittedLog还要小。</li>
+<li>宕机太久时间恢复后，进行全量同步。</li>
+</ul>
+</li>
+</ol>
+<h3 id="ZK持久化"><a href="#ZK持久化" class="headerlink" title="ZK持久化"></a>ZK持久化</h3><ul>
+<li><p>SnapShot 快照，记录内存中的全量数据</p>
+</li>
+<li><p>TxnLog 增量事务日志，记录每一条增删改记录（查不是事务日志，不会引起数据变化）</p>
+</li>
+</ul>
+<p>快照的缺点，文件太大，而且快照文件不会是最新的数据。增量事务日志的缺点，运行时间长了，日志太多了，加载太慢。二者结合最好。先运行快照文件得到备份，而后读取增量日志，恢复数据状态。</p>
+<h3 id="ZAB协议的阶段"><a href="#ZAB协议的阶段" class="headerlink" title="ZAB协议的阶段"></a>ZAB协议的阶段</h3><ol>
+<li>Leader election(选举阶段)<ul>
+<li>节点在一开始都处于选举阶段，只要有一个节点得到超过半数节点的票数，它就可以当选准 Leader。</li>
+</ul>
+</li>
+<li>Discovery(发现阶段)<ul>
+<li>在这个阶段，Followers跟准Leader进行通信，同步Followers最近接收的事务提议。</li>
+</ul>
+</li>
+<li>Synchronization(同步阶段)<ul>
+<li>同步阶段主要是利用Leader前一阶段获得的最新提议历史，同步集群中所有的副本。同步完成之后准Leader才会成为真正的Leader。</li>
+</ul>
+</li>
+<li>Broadcast(广播阶段)<ul>
+<li>到了这个阶段，Zookeeper集群才能正式对外提供事务服务，并且Leader 可以进行消息广播。同时如果有新的节点加入，还需要对新节点进行同步。</li>
+</ul>
+</li>
+</ol>
+<h3 id="ZK脑裂"><a href="#ZK脑裂" class="headerlink" title="ZK脑裂"></a>ZK脑裂</h3><p>主要原因是Zookeeper集群和Zookeeper client判断超时并不能做到完全同步，也就是说可能一前一后，如果是集群先于client发现，那就会出现上面的情况。同时，在发现并切换后通知各个客户端也有先后快慢。一般出现这种情况的几率很小，需要leader节点与Zookeeper集群网络断开，但是与其他集群角色之间的网络没有问题，还要满足上面那些情况，但是一旦出现就会引起很严重的后果，数据不一致。</p>
+<ul>
+<li>Quorums (法定人数) 方式:超过半数的投票才能当选为leader</li>
+<li>(冗余通信)方式：添加冗余的心跳线，例如双线条线，尽量减少“脑裂”发生机会。</li>
+</ul>
+<h3 id="ZK特性"><a href="#ZK特性" class="headerlink" title="ZK特性"></a>ZK特性</h3><ul>
+<li><strong>顺序一致性</strong>：从同一客户端发起的事务请求，最终将会严格地按照顺序被应用到Zookeeper 中去。</li>
+<li><strong>原子性</strong>：所有事务请求的处理结果在整个集群中所有机器上的应用情况是一致的，也就是说，要么整个集群中所有的机器都成功应用了某一个事务，要么都没有应用。</li>
+<li><strong>单一视图</strong>：无论客户端连接到哪一个的Zookeeper服务器上，其看到的服务端数据模型都是一致的。</li>
+<li><strong>实时性（最终一致性）</strong>：Zookeeper仅仅能保证在一段时间内，客户端最终一定能够从服务端上读取到最新的数据状态。</li>
+</ul>
+<h3 id="ZK命名服务，配置管理"><a href="#ZK命名服务，配置管理" class="headerlink" title="ZK命名服务，配置管理"></a>ZK命名服务，配置管理</h3><ul>
+<li>命名服务<ul>
+<li>命名服务是指通过<strong>指定的名字</strong>来获取资源或者服务器地址。</li>
+<li>zookeeper可以创建一个<strong>全局唯一的路径</strong>，这个路径就可以作为一个名字，被命名的实体可以是<strong>集群中的地址，服务的地址，或者是远程的对象等</strong>。</li>
+<li>一些分布式服务框架（RPC、RMI）中的服务地址列表，通过使用命名服务，客户端应用能够根据特定的名字来获取资源的实体，服务地址和提供者信息等。</li>
+</ul>
+</li>
+<li>配置管理<ul>
+<li>实际项目开发中，我们经常使用<code>.properties</code>或者<code>xml</code>需要配置很多信息，如数据库连接信息、fps地址端口等等。</li>
+<li>因为你的程序一般是分布式部署在不同的机器上（如果你是单机应用当我没说），如果把程序的这些配置信息<strong>保存在zk的znode节点</strong>下，</li>
+<li>当你要修改配置，即znode会发生变化时，可以通过改变zk中某个目录节点的内容，利用<strong>watcher通知给各个客户端</strong>，从而更改配置。</li>
+</ul>
+</li>
+</ul>
+<h3 id="ZNode"><a href="#ZNode" class="headerlink" title="ZNode"></a>ZNode</h3><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240609104313490.png" alt="image-20240609104313490" style="zoom:67%;" />
+
+<h3 id="Watcher"><a href="#Watcher" class="headerlink" title="Watcher"></a>Watcher</h3><p>ZooKeeper的通知机制是指客户端可以注册对指定ZNode的事件监听器，并在该ZNode的状态发生变化时接收通知。这种机制使得客户端能够实时地获取ZooKeeper中数据的变化情况，并根据需要采取相应的行动。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240609104655498.png" alt="image-20240609104655498" style="zoom:67%;" />
+
+<ul>
+<li><p>原理：</p>
+<ul>
+<li>注册监听器： 客户端可以通过ZooKeeper API向指定的ZNode注册监听器。监听器可以注册在节点的数据变化、子节点变化或节点状态变化等事件上。<ul>
+<li>客户端向ZooKeeper服务器注册Watcher的同时，会将Watcher对象存储在客户端的WatcherManager中。</li>
+<li>当ZooKeeper服务器触发watcher事件后，会向客户端发送通知，客户端线程从WatcherManager中取出对应的Watcher对象来执行回调逻辑。</li>
+</ul>
+</li>
+<li>监听器回调： 当所关注的ZNode发生相应的变化时，ZooKeeper服务会向客户端发送通知。客户端注册的监听器将触发相应的回调函数，通知客户端发生了什么变化。</li>
+<li>事件类型： ZooKeeper的通知机制支持不同类型的事件，包括节点数据的变化、子节点的增加或删除、连接状态的变化等。客户端可以根据需要注册对应类型的监听器。</li>
+<li>实时性和一致性： ZooKeeper的通知机制保证了通知的实时性和一致性。一旦ZNode的状态发生变化，ZooKeeper会立即通知所有注册了相应监听器的客户端，并确保所有客户端收到相同的通知。</li>
+</ul>
+</li>
+<li><p>特性</p>
+<ul>
+<li><strong>一次性</strong>：一个Watcher事件是一个一次性的触发器，一次性触发，客户端只会收到一次这样的信息。</li>
+<li><strong>异步的</strong>：ZooKeeper服务器发送watcher的通知事件到客户端是异步的，不能期望能够监控到节点的每次变化，ZooKeeper只能保证最终的一致性，而无法保证强一致性。</li>
+<li><strong>轻量级</strong>：Watcher通知非常简单，他只是通知发生了事件，而不会传递事件对象内容。</li>
+<li><strong>客户端串行</strong>：执行客户端Watcher回调的过程是一个串行同步的过程。</li>
+<li>注册 watcher用getData、exists、getChildren方法</li>
+<li>触发 watcher用create、delete、setData方法</li>
+</ul>
+</li>
+</ul>
+<h3 id="Chroot"><a href="#Chroot" class="headerlink" title="Chroot"></a>Chroot</h3><p>3.2.0 版本后，添加了 Chroot 特性，该特性允许每个客户端为自己设置一个命名空间。如果一个客户端设置了 Chroot，那么该客户端对服务器的任何操作，都将会被限制在其自己的命名空间下。通过设置 Chroot，能够将一个客户端应用于 Zookeeper 服务端的一颗子树相对应，在那些多个应用公用一个 Zookeeper 进群的场景下，对实现不同应用间的<strong>相互隔离</strong>非常有帮助。</p>
+<h3 id="事务顺序一致性"><a href="#事务顺序一致性" class="headerlink" title="事务顺序一致性"></a>事务顺序一致性</h3><p>zookeeper 采用了全局递增的事务 Id 来标识，所有的 proposal（提议）都在被提出的时候加上了 zxid，zxid 实际上是一个 64 位的数字，高 32 位是 epoch（ 时期; 纪元; 世; 新时代）用来标识 leader 周期，如果有新的 leader 产生出来，epoch会自增，低 32 位用来递增计数。当新产生 proposal 的时候，会依据数据库的两阶段过程，首先会向其他的 server 发出事务执行请求，如果超过半数的机器都能执行并且能够成功，那么就会开始执行。</p>
+<h3 id="说说-Zookeeper-的-CAP-问题上做的取舍？"><a href="#说说-Zookeeper-的-CAP-问题上做的取舍？" class="headerlink" title="说说 Zookeeper 的 CAP 问题上做的取舍？"></a>说说 Zookeeper 的 CAP 问题上做的取舍？</h3><p>一致性 C：Zookeeper 是强一致性系统，为了保证较强的可用性，“一半以上成功即成功”的数据同 步方式可能会导致部分节点的数据不一致。所以 Zookeeper 还提供了 sync() 操作来做所有节点的 数据同步，这就关于 C 和 A 的选择问题交给了用户，因为使用 sync()势必会延长同步时间，可用性 会有一些损失。 </p>
+<p>可用性 A：Zookeeper 数据存储在内存中，且各个节点都可以相应读请求，具有好的响应性能。 Zookeeper 保证了数据总是可用的，没有锁。并且有一大半的节点所拥有的数据是最新的。 </p>
+<p>分区容忍性 P：Follower 节点过多会导致增大数据同步的延时（需要半数以上 follower 写完提 交）。同时选举过程的收敛速度会变慢，可用性降低。Zookeeper 通过引入 observer 节点缓解了 这个问题，增加 observer 节点后集群可接受 client 请求的节点多了，而且 observer 不参与投票， 可以提高可用性和扩展性，但是节点多数据同步总归是个问题，所以一致性会有所降低。</p>
+<h3 id="分布式锁"><a href="#分布式锁" class="headerlink" title="分布式锁"></a>分布式锁</h3><p>使用临时顺序节点+watcher机制实现。判断自己是否为最小的节点，是即为加锁成功。</p>
+<p><strong>如何实现阻塞？</strong>：判断自己是否是最小的节点，是则加锁成功，不是则加锁失败。同时监听它的上一个节点，之后调用wait（）阻塞。（可传入时间参数，实现只阻塞等待一段时间）。</p>
+<p><strong>可重入锁</strong>：使用threadlocal计数，当客户端加锁时，判断是否创建了节点，之后直接将本地的计数器加1即可。本地封装Lockdate对象，包含加锁的线程，加锁的次数，加锁的节点。</p>
+<p><strong>读写锁：</strong>写锁时，判断自己是否是最小的节点，是则加锁成功。读锁：锁有标志位。判断自己前面的是否存在写锁，存在则加锁失败）</p>
+<p><strong>释放锁：</strong></p>
+<p>释放锁其实很简单，就是拿出当前线程对应的LockData，如果没有，就说明当前线程没有加过锁，就会抛出异常，所以Curator就是通过这个判断来防止其它线程释放了自己线程加的锁。</p>
+<p>如果加锁了，那么LockData就不会为null，然后将加锁次数递减1，得到newLockCount，代表了剩下的加锁次数。</p>
+<ul>
+<li>如果newLockCount &gt; 0，说明锁没释放完，有可重入加锁，然后什么事都不干，直接返回了。</li>
+<li>如果newLockCount &lt; 0，就抛异常，但是一般不会出现。</li>
+<li>剩下的一种情况就是newLockCount &#x3D;&#x3D; 0 ，说明锁已经完完全全释放完了，然后通过internals.releaseLock删除加锁的节点。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>荷包蛋-溏心
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://hlhehe.github.io/2024/06/09/Zookeeper/" title="Zookeeper">https://hlhehe.github.io/2024/06/09/Zookeeper/</a>
+  </li>
+  <li class="post-copyright-license">
+      <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Zookeeper/" rel="tag"><i class="fa fa-tag"></i> Zookeeper</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/06/07/RabbitMq---%E9%9D%A2%E8%AF%95/" rel="prev" title="RabbitMq---面试">
+                  <i class="fa fa-angle-left"></i> RabbitMq---面试
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/06/17/java%E6%9D%82%E8%B0%883/" rel="next" title="java杂谈3">
+                  java杂谈3 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">荷包蛋-溏心</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+      <span>站点总字数：</span>
+    <span title="站点总字数">283k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+      <span>站点阅读时长 &asymp;</span>
+    <span title="站点阅读时长">4:18</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+    </div>
+  </footer>
+
+  
+  <div class="reading-progress-bar"></div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script size="200" alpha="0.3" zIndex="-1" src="https://cdnjs.cloudflare.com/ajax/libs/ribbon.js/1.0.2/ribbon.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancyapps-ui/5.0.24/fancybox/fancybox.umd.js" integrity="sha256-oyhjPiYRWGXaAt+ny/mTMWOnN1GBoZDUQnzzgC7FRI4=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+  <style>
+    .copy-btn {
+      display: inline-block;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 20px;
+      color: #4D4D4C;
+      white-space: nowrap;
+      vertical-align: middle;
+      cursor: pointer;
+      background-color: #F7F7F7;
+      background-image: linear-gradient(#F7F7F7, #F7F7F7);
+      border: 1px solid #d5d5d5;
+      border-radius: 3px;
+      user-select: none;
+      outline: 0;
+    }
+
+    .highlight-wrap .copy-btn {
+      transition: opacity .3s ease-in-out;
+      opacity: 0;
+      padding: 2px 6px;
+      position: absolute;
+      right: 4px;
+      top: 8px;
+    }
+
+    .highlight-wrap:hover .copy-btn,
+    .highlight-wrap .copy-btn:focus {
+      opacity: 1
+    }
+
+    .highlight-wrap {
+      position: relative;
+    }
+  </style>
+
+  <script>
+    $('.highlight').each(function (i, e) {
+      var $wrap = $('<div>').addClass('highlight-wrap')
+      $(e).after($wrap)
+      $wrap.append($('<button>').addClass('copy-btn').append('复制').on('click', function (e) {
+        var code = $(this).parent().find('.code').find('.line').map(function (i, e) {
+          return $(e).text()
+        }).toArray().join('\n')
+        var ta = document.createElement('textarea')
+        document.body.appendChild(ta)
+        ta.style.position = 'absolute'
+        ta.style.top = '0px'
+        ta.style.left = '0px'
+        ta.value = code
+        ta.select()
+        ta.focus()
+        var result = document.execCommand('copy')
+        document.body.removeChild(ta)
+        
+          if(result)$(this).text('复制成功')
+          else $(this).text('复制失败')
+        
+        $(this).blur()
+      })).on('mouseleave', function (e) {
+        var $b = $(this).find('.copy-btn')
+        setTimeout(function () {
+          $b.text('复制')
+        }, 300)
+      }).append(e)
+    })
+  </script>
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-cn","enable":true,"serverURL":"waline-server-hlhehes-projects.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"placeholder":"泰酷辣！","avatar":"mm","meta":["nick","mail","link"],"pageSize":10,"visitor":false,"comment_count":true,"requiredFields":[],"libUrl":"//unpkg.com/@waline/client@v2/dist/waline.js","el":"#waline","comment":true,"path":"/2024/06/09/Zookeeper/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"model":{"jsonPath":"/live2dw/assets/haruto.model.json"},"display":{"position":"right","width":150,"height":300},"mobile":{"show":false},"log":false});</script></body>
+<script type="text/javascript" src="/js/clicklove.js"></script>
+
+</html>
