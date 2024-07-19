@@ -33,7 +33,7 @@
 <meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240301203937549.png">
 <meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240301185619021.png">
 <meta property="article:published_time" content="2024-02-29T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-07-03T07:31:25.095Z">
+<meta property="article:modified_time" content="2024-07-18T02:42:56.624Z">
 <meta property="article:author" content="荷包蛋-溏心">
 <meta property="article:tag" content="MySQL">
 <meta name="twitter:card" content="summary">
@@ -147,7 +147,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL"><span class="nav-number">1.</span> <span class="nav-text">MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-number">1.1.</span> <span class="nav-text">存储引擎</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-%E6%A0%91"><span class="nav-number">1.2.</span> <span class="nav-text">B+树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-%E6%A0%91%E7%B4%A2%E5%BC%95%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.</span> <span class="nav-text">B+树索引实现原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E4%B8%8E%E4%BA%8C%E7%BA%A7%E7%B4%A2%E5%BC%95"><span class="nav-number">1.4.</span> <span class="nav-text">聚簇索引与二级索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%87%AA%E9%80%82%E5%BA%94%E5%93%88%E5%B8%8C%E7%B4%A2%E5%BC%95%EF%BC%9F"><span class="nav-number">1.5.</span> <span class="nav-text">什么是自适应哈希索引？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88"><span class="nav-number">1.6.</span> <span class="nav-text">索引失效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-number">1.7.</span> <span class="nav-text">关联查询优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F%E4%BC%98%E5%8C%96"><span class="nav-number">1.8.</span> <span class="nav-text">排序优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL%E4%BC%98%E5%8C%96"><span class="nav-number">1.9.</span> <span class="nav-text">SQL优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%8E%9F%E5%88%99"><span class="nav-number">1.10.</span> <span class="nav-text">索引原则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1"><span class="nav-number">1.11.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98"><span class="nav-number">1.12.</span> <span class="nav-text">一致性问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-number">1.13.</span> <span class="nav-text">隔离级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MVCC"><span class="nav-number">1.14.</span> <span class="nav-text">MVCC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-number">1.15.</span> <span class="nav-text">主从复制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%81"><span class="nav-number">1.16.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL%E5%91%BD%E4%BB%A4"><span class="nav-number">1.17.</span> <span class="nav-text">SQL命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#count"><span class="nav-number">1.18.</span> <span class="nav-text">count</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NULL-%E5%92%8C-%E2%80%9D"><span class="nav-number">1.19.</span> <span class="nav-text">NULL 和 ”</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL"><span class="nav-number">1.</span> <span class="nav-text">MySQL</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E"><span class="nav-number">1.1.</span> <span class="nav-text">存储引擎</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-%E6%A0%91"><span class="nav-number">1.2.</span> <span class="nav-text">B+树</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-%E6%A0%91%E7%B4%A2%E5%BC%95%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.</span> <span class="nav-text">B+树索引实现原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%81%9A%E7%B0%87%E7%B4%A2%E5%BC%95%E4%B8%8E%E4%BA%8C%E7%BA%A7%E7%B4%A2%E5%BC%95"><span class="nav-number">1.4.</span> <span class="nav-text">聚簇索引与二级索引</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%87%AA%E9%80%82%E5%BA%94%E5%93%88%E5%B8%8C%E7%B4%A2%E5%BC%95%EF%BC%9F"><span class="nav-number">1.5.</span> <span class="nav-text">什么是自适应哈希索引？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%A4%B1%E6%95%88"><span class="nav-number">1.6.</span> <span class="nav-text">索引失效</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E8%81%94%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96"><span class="nav-number">1.7.</span> <span class="nav-text">关联查询优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%92%E5%BA%8F%E4%BC%98%E5%8C%96"><span class="nav-number">1.8.</span> <span class="nav-text">排序优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL%E4%BC%98%E5%8C%96"><span class="nav-number">1.9.</span> <span class="nav-text">SQL优化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%8E%9F%E5%88%99"><span class="nav-number">1.10.</span> <span class="nav-text">索引原则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1"><span class="nav-number">1.11.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%80%E8%87%B4%E6%80%A7%E9%97%AE%E9%A2%98"><span class="nav-number">1.12.</span> <span class="nav-text">一致性问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="nav-number">1.13.</span> <span class="nav-text">隔离级别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#MVCC"><span class="nav-number">1.14.</span> <span class="nav-text">MVCC</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-number">1.15.</span> <span class="nav-text">主从复制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%81"><span class="nav-number">1.16.</span> <span class="nav-text">锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SQL%E5%91%BD%E4%BB%A4"><span class="nav-number">1.17.</span> <span class="nav-text">SQL命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#count"><span class="nav-number">1.18.</span> <span class="nav-text">count</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#NULL-%E5%92%8C-%E2%80%9D"><span class="nav-number">1.19.</span> <span class="nav-text">NULL 和 ”</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#in%E5%92%8C-exists"><span class="nav-number">2.</span> <span class="nav-text">in和 exists</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MySQL-MVCC%E6%9C%BA%E5%88%B6%E5%BD%BB%E5%BA%95%E8%A7%A3%E5%86%B3%E4%BA%86%E5%B9%BB%E8%AF%BB%E5%90%97"><span class="nav-number">3.</span> <span class="nav-text">MySQL MVCC机制彻底解决了幻读吗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MYsql-%E4%B8%BB%E9%94%AE%E8%87%AA%E5%A2%9E%E4%B8%8D%E8%BF%9E%E7%BB%AD"><span class="nav-number">4.</span> <span class="nav-text">MYsql 主键自增不连续</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B4%A2%E5%BC%95%E5%8A%A0%E9%94%81%E5%8E%9F%E5%88%99"><span class="nav-number">5.</span> <span class="nav-text">索引加锁原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#double-write-buffer"><span class="nav-number">6.</span> <span class="nav-text">double write buffer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E5%BD%B1%E5%93%8D"><span class="nav-number">6.1.</span> <span class="nav-text">性能影响</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redolog"><span class="nav-number">6.2.</span> <span class="nav-text">redolog</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -260,7 +260,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-07-03 15:31:25" itemprop="dateModified" datetime="2024-07-03T15:31:25+08:00">2024-07-03</time>
+      <time title="修改时间：2024-07-18 10:42:56" itemprop="dateModified" datetime="2024-07-18T10:42:56+08:00">2024-07-18</time>
     </span>
 
   
@@ -284,14 +284,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>8.6k</span>
+      <span>12k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>8 分钟</span>
+      <span>11 分钟</span>
     </span>
 </div>
 
@@ -398,7 +398,11 @@
 <li>like也是范围条件</li>
 </ul>
 </li>
-<li>!&#x3D;和&lt;&gt;索引失效</li>
+<li>!&#x3D;和&lt;&gt;索引失效<ul>
+<li>5.0版本是这样</li>
+<li>8.0版本可以走索引，但是属于范围查询条件，会导致后面的列索引失效。</li>
+</ul>
+</li>
 <li>is not null 导致索引失效<ul>
 <li>is null可以使用索引</li>
 <li><strong>如果表中的数据都是null，则索引失效的情况相反。</strong></li>
@@ -610,6 +614,80 @@ terminated by &#39;,&#39; lines terminated by &#39;\n&#39; ;
 <li>在进行count()统计某列的记录数的时候，如果采用的NULL值，会别系统自动忽略掉，但是空值(’’)是会进行统计到其中的。</li>
 <li>实际到底是使用NULL值还是空值(‘’)，根据实际业务来进行区分。int类型尽量默认为’0’</li>
 </ol>
+<h3 id="in和-exists"><a href="#in和-exists" class="headerlink" title="in和 exists"></a>in和 exists</h3><p>（1）查询顺序：使用in会先进行内表查询获取结果集，再把内表结果与外表匹配，返回数据。使用exists会先进行外表查询，将查询到的每行数据带入到内表查询，看是否满足条件。</p>
+<p>（2）索引使用：in在内表查询或者外表查询过程中都会用到索引。<strong>exists仅在内表查询时会用到索引</strong>。</p>
+<p>（3）使用场景：一般来说，当子查询的结果集较小，外表较大时，使用in效率更高。当子查询的结果集较大，外表较小时，使用exists效率更高。</p>
+<p>（4）对于not in和not exists来说，<strong>not exists效率比not in的效率高，与子查询的结果集无关</strong>，因为not in对内外表都进行了全表扫描，没有使用到索引。<strong>not exists的子查询中可以用到表上的索引</strong>。</p>
+<p>IN 用于在 WHERE 子句中<strong>进行多个值的匹配</strong>，用于检查某个字段的值是否属于指定的一组值。</p>
+<p>EXISTS 用于检查子查询是否返回结果，通常用于判断外部查询与子查询之间是否存在关联。<strong>当子查询返回为true时，就会停止子查询。</strong></p>
+<h3 id="MySQL-MVCC机制彻底解决了幻读吗"><a href="#MySQL-MVCC机制彻底解决了幻读吗" class="headerlink" title="MySQL MVCC机制彻底解决了幻读吗"></a>MySQL MVCC机制彻底解决了幻读吗</h3><p>答案是显而易见的，太肯定的东西一般都是错的。解决了大部分场景下的幻读问题。</p>
+<p>当事务A开启事务，查询数据库的数据，5条，此时b开始事务，插入一条新的id&#x3D;6的数据，并提交了数据。若此时A正常时看不到新插入的id&#x3D;6的数据，但若此时A修改了id&#x3D;6这条数据，（A是无感的，但是确实可能有这种情况）。这时，隐藏字段事务id就变成了a的事务id。这条数据就对a可见了，就产生了幻读。</p>
+<p>第二种情况：第二个发生幻读现象的场景 除了上面这一种场景会发生幻读现象之外，还有下面这个场景也会发生幻读现象。 </p>
+<p>T1 时刻：事务 A 先执行「快照读语句」： select * from t_test where id &gt; 100 得到了 3 条记录。</p>
+<p>T2 时刻：事务 B 往插入一个 id&#x3D; 200 的记录并提交； </p>
+<p>T3 时刻：事务 A 再执行「当前读语句」 select * from t_test where id &gt; 100 <strong>for update</strong> 就会得到 4 条记录，此时也发生了幻读现象。</p>
+<p>（严格来说也不是幻读，还好）</p>
+<p>要避免这类特殊场景下发生幻读的现象的话，就是尽量在开启事务之后，马上执行 select … for update 这类当前读的语句，因为它会对记录加 <strong>next-key lock</strong>，从而避免其他事务插入一条新记录。</p>
+<h3 id="MYsql-主键自增不连续"><a href="#MYsql-主键自增不连续" class="headerlink" title="MYsql 主键自增不连续"></a>MYsql 主键自增不连续</h3><ol>
+<li>自增初始值和自增步长设置不为 1</li>
+<li>唯一键冲突（别的列设置了唯一性，插入时导致冲突，但是主键已经自增）</li>
+<li>事务回滚（事务插入后，主键自增，回滚不会导致主键回滚）</li>
+<li>批量插入（如 <code>insert...select</code> 语句）（不是指insert   values多行的情况）</li>
+</ol>
+<h3 id="索引加锁原则"><a href="#索引加锁原则" class="headerlink" title="索引加锁原则"></a>索引加锁原则</h3><p>默认情况下，InnoDB在 REPEATABLE READ事务隔离级别运行，InnoDB使用 next-key 锁进行搜索和索 引扫描，以防止幻读。 </p>
+<ul>
+<li><p>针对唯一索引进行检索时，对已存在的记录进行等值匹配时，将会自动优化为行锁。</p>
+<p>数据为 …, 16, 25, 29, 33, … 查询条件为 id &#x3D; 16，给 16 加上记录锁。 [16] 索引上的等值查询(唯一索引)，</p>
+</li>
+<li><p>给不存在的记录加锁时， 优化为间隙锁。 </p>
+<p>数据为 …, 16, 25, 29, 33, … 查询条件为 id &#x3D; 19，此时会给 25加上间隙锁。 (16, 25) </p>
+</li>
+<li><p>索引上的等值查询(非唯一普通索引)，向右遍历时最后一个值不满足查询需求时，next-key lock 退 化为间隙锁。</p>
+<p> 数据为 …, 16, 18, 29, 33, …. 查询的条件为 age &#x3D; 18，此时给 18加上临间锁，给29加上间隙锁，数据分为两个部分。 (16, 18] (18, 29) </p>
+</li>
+<li><p>索引上的范围查询(唯一索引) ，会访问到不满足条件的第一个值为止。 查询的条件为 id&gt;&#x3D;19，并添加共享锁。 此时我们可以根据数据库表中现有的数据，将数据分 为三个部分： [19] (19,25] (25,+∞] </p>
+<hr>
+</li>
+<li><p>注意：间隙锁唯一目的是防止其他事务插入间隙。间隙锁可以共存，一个事务采用的间隙锁不会阻止另 一个事务在同一间隙上采用间隙锁。 </p>
+</li>
+<li><p>原则1：加锁的基本单位是next-key lock。希望你还记得，next-key lock是前开后闭区间。 </p>
+</li>
+<li><p>原则2：查找过程中访问到的对象才会加锁 </p>
+</li>
+<li><p>优化1：索引上的等值查询，给唯一索引加锁的时候，next-key lock退化为行锁 </p>
+</li>
+<li><p>优化2：索引上的等值查询，向右遍历时且最后一个值不满足等值条件的时候，next-key lock退化 为间隙锁。 </p>
+</li>
+<li><p>一个bug：唯一索引上的范围查询会访问到不满足条件的第一个值为止</p>
+</li>
+</ul>
+<h3 id="double-write-buffer"><a href="#double-write-buffer" class="headerlink" title="double write buffer"></a>double write buffer</h3><p>数据页：16k；linux页大小：4k（导致写的位置可能很分散）</p>
+<p>InnoDB用double write buffer（双写缓冲区）来避免页没写完整所导致的数据损坏。当一个磁盘写操作不能完整地完成时，不完整的页写入就可能发生，16KB的页可能只有一部分被写到磁盘上。有多种多样的原因（崩溃、Bug，等等）可能导致页没有写完整。double write buffer在这种情况发生时可以保证数据完整性。</p>
+<p>本质上是一个最近写回的页面的<strong>备份拷贝</strong>。当InnoDB从缓冲池刷新页面到磁盘时，首先把它们写（或者刷新）到double write buffer，然后再把它们写到其所属的数据区域中。这可以保证每个页面的写人都是原子并且持久化的。</p>
+<ol>
+<li><p>buffer数据页先copy到double write buffer的内存里；</p>
+</li>
+<li><p>double write buffer的内存数据刷到double w b的磁盘上（dwb落盘）；</p>
+</li>
+<li><p>double write buffer的内存再刷到数据磁盘上（真正的数据落盘）；</p>
+</li>
+</ol>
+<p>情况一：步骤1前宕机，刷盘未开始，数据在redo log，后期可以恢复</p>
+<p>情况二：步骤1后，步骤2前宕机，因为是在内存中，宕机清空内存，和情况1一样</p>
+<p>情况三：步骤2后，步骤3前宕机，因为DWB的磁盘有完整的数据，可以修复损坏的页数据</p>
+<p>由此我们可以得出结论，double write buffer是针对实际的buffer数据页的原子性保证，就是避免MySQL异常崩溃时，写的那几个data page不会出错，要么都写了，要么什么都没有做。</p>
+<h4 id="性能影响"><a href="#性能影响" class="headerlink" title="性能影响"></a>性能影响</h4><ul>
+<li><p>页数据memcopy到DWB的内存，速度很快；</p>
+</li>
+<li><p>DWB的内存fsync刷到DWB的磁盘，<strong>属于顺序追加写，</strong>速度也很快；</p>
+</li>
+<li><p>刷磁盘（真正的数据落盘），随机写，本来就需要进行，不属于额外操作；</p>
+</li>
+<li><p>另外，128页（每页16K）2M的DWB，会分两次刷入磁盘，<strong>每次最多64页</strong>，即1M的数据（所以图中我们的DWB磁盘结构分为了两部分），执行也是非常之快的。综上，性能会有所影响，但影响并不大</p>
+</li>
+</ul>
+<h4 id="redolog"><a href="#redolog" class="headerlink" title="redolog"></a>redolog</h4><p>redolog的设计之初，是“账本的作用”，是一种操作日志，用于MySQL异常崩溃恢复使用，是InnoDB引 擎特有的日志，本质上是物理日志，记录的是 “ 在某个数据页上做了什么修改 ” ，但如果数据页本身已 经发生了损坏，redolog来恢复已经损坏的数据块是无效的，数据块的本身已经损坏，再次重做依然是一 个坏块。 </p>
+<p>所以此时需要一个数据块的副本来还原该损坏的数据块，再利用重做日志进行其他数据块的重做操作， 这就是double write buffer的原因作用。</p>
 
     </div>
 
@@ -683,14 +761,14 @@ terminated by &#39;,&#39; lines terminated by &#39;\n&#39; ;
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">283k</span>
+    <span title="站点总字数">299k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:18</span>
+    <span title="站点阅读时长">4:32</span>
   </span>
 </div>
 <div class="busuanzi-count">

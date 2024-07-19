@@ -31,8 +31,10 @@
 <meta property="og:description" content="synchronized 和 volatile 的区别是什么？synchronized 表示只有一个线程可以获取作用对象的锁，执行代码，阻塞其他线程。 volatile 表示变量在 CPU 的寄存器中是不确定的，必须从主存中读取。保证多线程环 境下变量的可见性；禁止指令重排序。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240701105807810.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240719104559216.png">
+<meta property="og:image" content="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240719105102205.png">
 <meta property="article:published_time" content="2024-06-30T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-07-03T07:29:57.797Z">
+<meta property="article:modified_time" content="2024-07-19T03:15:36.499Z">
 <meta property="article:author" content="荷包蛋-溏心">
 <meta property="article:tag" content="JUC">
 <meta name="twitter:card" content="summary">
@@ -146,7 +148,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized-%E5%92%8C-volatile-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">synchronized 和 volatile 的区别是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AQS"><span class="nav-number">2.</span> <span class="nav-text">AQS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AQS%E8%B5%84%E6%BA%90%E5%85%B1%E4%BA%AB%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">AQS资源共享方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E5%A4%B1%E8%B4%A5%E5%92%8C%E5%AE%89%E5%85%A8%E5%A4%B1%E8%B4%A5"><span class="nav-number">3.</span> <span class="nav-text">快速失败和安全失败</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#atomic%E5%8E%9F%E7%90%86"><span class="nav-number">4.</span> <span class="nav-text">atomic原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Exchanger"><span class="nav-number">5.</span> <span class="nav-text">Exchanger</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E4%B8%AA%E7%BA%BF%E7%A8%8B%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%EF%BC%9F"><span class="nav-number">6.</span> <span class="nav-text">三个线程顺序执行？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E4%B8%AD%E9%98%9F%E5%88%97%E5%B8%B8%E7%94%A8%E7%B1%BB%E5%9E%8B%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">7.</span> <span class="nav-text">Java线程池中队列常用类型有哪些？</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized-%E5%92%8C-volatile-%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">synchronized 和 volatile 的区别是什么？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AQS"><span class="nav-number">2.</span> <span class="nav-text">AQS</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#AQS%E8%B5%84%E6%BA%90%E5%85%B1%E4%BA%AB%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">AQS资源共享方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized"><span class="nav-number">3.</span> <span class="nav-text">synchronized</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#monitorenter%E3%80%81monitorexit%E3%80%81ACC-SYNCHRONIZED"><span class="nav-number">3.1.</span> <span class="nav-text">monitorenter、monitorexit、ACC_SYNCHRONIZED</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#monitor%E7%9B%91%E8%A7%86%E5%99%A8"><span class="nav-number">3.2.</span> <span class="nav-text">monitor监视器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#monitor%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">3.3.</span> <span class="nav-text">monitor工作原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AF%B9%E8%B1%A1%E4%B8%8Emonitor%E5%85%B3%E8%81%94"><span class="nav-number">3.4.</span> <span class="nav-text">对象与monitor关联</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E5%A4%B1%E8%B4%A5%E5%92%8C%E5%AE%89%E5%85%A8%E5%A4%B1%E8%B4%A5"><span class="nav-number">4.</span> <span class="nav-text">快速失败和安全失败</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#atomic%E5%8E%9F%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">atomic原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Exchanger"><span class="nav-number">6.</span> <span class="nav-text">Exchanger</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E4%B8%AA%E7%BA%BF%E7%A8%8B%E9%A1%BA%E5%BA%8F%E6%89%A7%E8%A1%8C%EF%BC%9F"><span class="nav-number">7.</span> <span class="nav-text">三个线程顺序执行？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java%E7%BA%BF%E7%A8%8B%E6%B1%A0%E4%B8%AD%E9%98%9F%E5%88%97%E5%B8%B8%E7%94%A8%E7%B1%BB%E5%9E%8B%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">8.</span> <span class="nav-text">Java线程池中队列常用类型有哪些？</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -259,7 +261,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-07-03 15:29:57" itemprop="dateModified" datetime="2024-07-03T15:29:57+08:00">2024-07-03</time>
+      <time title="修改时间：2024-07-19 11:15:36" itemprop="dateModified" datetime="2024-07-19T11:15:36+08:00">2024-07-19</time>
     </span>
 
   
@@ -283,14 +285,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>3.3k</span>
+      <span>4.4k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
+      <span>4 分钟</span>
     </span>
 </div>
 
@@ -306,10 +308,9 @@
 <li>volatile 是变量修饰符；synchronized 可以修饰类、方法、变量。 </li>
 <li>volatile 仅能实现变量的修改可见性，不能保证原子性；而 synchronized 则可以保 证变量的修改可见性和原子性。</li>
 <li>volatile 不会造成线程的阻塞；synchronized 可能会造成线程的阻塞。 </li>
-<li>volatile标记的变量不会被编译器优化；synchronized标记的变量可以被编译器优 化。</li>
 <li>volatile关键字 是线程同步的 轻量级实现 ，所以 volatile性能肯定比synchronized 关键字要好 </li>
 <li>synchronized关键字在JavaSE1.6之后进行了主要包括为了减少获 得锁和释放锁带来的性能消耗而引入的偏向锁和轻量级锁以及其它各种优化之后 执行效率有了显著提升， 实际开发中使用 synchronized 关键字的场景还是更多一 些 。</li>
-<li>volatile标记的变量不会被编译器优化；synchronized标记的变量可以被编译器优化。（锁消除）</li>
+<li><strong>volatile标记的变量不会被编译器优化；synchronized标记的变量可以被编译器优化。（锁消除）</strong></li>
 </ul>
 <h3 id="AQS"><a href="#AQS" class="headerlink" title="AQS"></a>AQS</h3><p>AQS核心思想是，如果被请求的共享资源空闲，则将当前请求资源的线程设置 为有效的工作线程，并且将共享资源设置为锁定状态。如果被请求的共享资源 被占用，那么就需要一套线程阻塞等待以及被唤醒时锁分配的机制，这个机制 AQS是用CLH队列锁实现的，即将暂时获取不到锁的线程加入到队列中。</p>
 <img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240701105807810.png" alt="image-20240701105807810" style="zoom:67%;" />
@@ -323,6 +324,27 @@
 <li><p>再以CountDownLatch以例，任务分为N个子线程去执行，state也初始化为N（注意N 要与线程个数一致）。这N个子线程是并行执行的，每个子线程执行完后countDown() 一次，state会CAS(Compare and Swap)减1。等到所有子线程都执行完后(即state&#x3D;0)， 会unpark()主调用线程，然后主调用线程就会从await()函数返回，继续后余动作。</p>
 </li>
 </ul>
+<h3 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h3><p>synchronized是Java中的关键字，是一种同步锁。synchronized关键字可以作用于方法 或者代码块。 </p>
+<p><strong>可以这么回答：</strong> </p>
+<p>反编译后，monitorenter、monitorexit、ACC_SYNCHRONIZED</p>
+<p> monitor监视器</p>
+<p> Java Monitor 的工作机理 </p>
+<p>对象与monitor关联</p>
+<h4 id="monitorenter、monitorexit、ACC-SYNCHRONIZED"><a href="#monitorenter、monitorexit、ACC-SYNCHRONIZED" class="headerlink" title="monitorenter、monitorexit、ACC_SYNCHRONIZED"></a>monitorenter、monitorexit、ACC_SYNCHRONIZED</h4><p>同步代码块是通过 monitorenter和monitorexit 来实现，当线程执行到 monitorenter的时候要先获得monitor锁，才能执行后面的方法。当线程执行到 monitorexit的时候则要释放锁。 </p>
+<p>同步方法是通过中设置 ACCSYNCHRONIZED 标志来实现，当线程执行有 ACCSYNCHRONIZED标志的方法，需要获得monitor锁。每个对象都与一个 monitor相关联，线程可以占有或者释放monitor。</p>
+<h4 id="monitor监视器"><a href="#monitor监视器" class="headerlink" title="monitor监视器"></a>monitor监视器</h4><p>monitor是什么呢？操作系统的管程（monitors）是概念原理，ObjectMonitor是它的原 理实现。</p>
+<p>在Java虚拟机（HotSpot）中，Monitor（管程）是由ObjectMonitor实现的。主要字段为：</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240719104559216.png" alt="image-20240719104559216" style="zoom:67%;" />
+
+<h4 id="monitor工作原理"><a href="#monitor工作原理" class="headerlink" title="monitor工作原理"></a>monitor工作原理</h4><p>想要获取monitor的线程,首先会进入_EntryList队列。 </p>
+<p>当某个线程获取到对象的monitor后,进入Owner区域，设置为当前线程,同时计数 器count加1。 </p>
+<p>如果线程调用了wait()方法，则会进入WaitSet队列。它会释放monitor锁，即将 owner赋值为null,count自减1,进入WaitSet队列阻塞等待。 </p>
+<p>如果其他线程调用 notify() &#x2F; notifyAll() ，会唤醒WaitSet中的某个线程，该线程再 次尝试获取monitor锁，成功即进入Owner区域。</p>
+<p>同步方法执行完毕了，线程退出临界区，会将monitor的owner设为null，并释放监 视锁。</p>
+<h4 id="对象与monitor关联"><a href="#对象与monitor关联" class="headerlink" title="对象与monitor关联"></a>对象与monitor关联</h4><p>对象头中的标记字段（Mark Word ）是用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年 龄、锁状态标志、线程持有的锁、偏向线程 ID、偏向时间戳等。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240719105102205.png" alt="image-20240719105102205" style="zoom:67%;" />
+
+<p><strong>重量级锁，指向互斥量的指针。其实synchronized是重量级锁，也就是说 Synchronized的对象锁，Mark Word锁标识位为10，其中指针指向的是Monitor对 象的起始地址。</strong></p>
 <h3 id="快速失败和安全失败"><a href="#快速失败和安全失败" class="headerlink" title="快速失败和安全失败"></a>快速失败和安全失败</h3><p>快速失败机制是指集合在迭代遍历过程中，其他多线程或者当前线程对该集合进行增加或者删除元素等操作，当前线程迭代器读取集合时会立马抛出一个ConcurrentModificationException异常，避免数据不一致。实现原理是迭代器在创建时，会获取集合的计数变量当作一个标记，迭代过程中，若发现该标记大小与计数变量不一致了，就以为集合做了新增或者删除等操作，就会抛出快速失败的异常。在ArrayList默认启用该机制。 <strong>判断modCount是否等于expectedModCount，若不等于，就抛出快速失败异常。</strong><strong><strong>modCount是可以变的。</strong></strong>迭代器创建时，变量expectedModCount是被modCount赋值，在整个迭代器等生命周期中，变量expectedModCount值是固定的了****</p>
 <p>安全失败机制是指集合在迭代遍历过程中，若其他多线程或者当前线程对该集合进行修改（增加、删除等元素）操作，当前线程迭代器仍然可以正常继续读取集合遍历，而不会抛出异常。该机制的实现，是通过迭代器在创建时，对集合进行了快照操作，即迭代器遍历的是原集合的数组快照副本，若在这个过程，集合进行修改操作，会将原有的数组内容复制到新数组上，并在新数组上进行修改，修改完成后，再将集合数组的引用指向新数组，，而读取操作仍然是访问旧的快照副本，故而实现读写分离，保证读取操作的线程安全性。在CopyOnWriteArrayList默认启用该机制。</p>
 <h3 id="atomic原理"><a href="#atomic原理" class="headerlink" title="atomic原理"></a>atomic原理</h3><p>AtomicInteger 类主要利用 CAS (compare and swap) + volatile 和 native 方法来保证原 子操作，从而避免 synchronized 的高开销，执行效率大为提升。</p>
@@ -420,14 +442,14 @@
       <i class="fa fa-chart-line"></i>
     </span>
       <span>站点总字数：</span>
-    <span title="站点总字数">283k</span>
+    <span title="站点总字数">299k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
       <span>站点阅读时长 &asymp;</span>
-    <span title="站点阅读时长">4:18</span>
+    <span title="站点阅读时长">4:32</span>
   </span>
 </div>
 <div class="busuanzi-count">

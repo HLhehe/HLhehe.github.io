@@ -184,7 +184,7 @@
 </ul>
 </li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;completion_analyzer&quot;: &#123;</span><br><span class="line">          &quot;tokenizer&quot;: &quot;keyword&quot;,</span><br><span class="line">          &quot;filter&quot;: &quot;py&quot;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">&quot;suggestion&quot;:&#123;</span><br><span class="line">          &quot;type&quot;: &quot;completion&quot;,</span><br><span class="line">          &quot;analyzer&quot;: &quot;completion_analyzer&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="attr">&quot;completion_analyzer&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;tokenizer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keyword&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;filter&quot;</span><span class="punctuation">:</span> <span class="string">&quot;py&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">        </span><br><span class="line"><span class="attr">&quot;suggestion&quot;</span><span class="punctuation">:</span><span class="punctuation">&#123;</span></span><br><span class="line">          <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;completion&quot;</span><span class="punctuation">,</span></span><br><span class="line">          <span class="attr">&quot;analyzer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;completion_analyzer&quot;</span></span><br></pre></td></tr></table></figure>
 
 <ul>
 <li><p>字段的内容一般是用来补全的多个词条形成的数组。</p>
@@ -274,7 +274,7 @@
 </ol>
 <h3 id="在GC时，需要注意啥"><a href="#在GC时，需要注意啥" class="headerlink" title="在GC时，需要注意啥"></a>在GC时，需要注意啥</h3><ul>
 <li>倒排词典的索引需要常驻内存，无法 GC，需要监控 data node 上 segment memory 增长趋势。</li>
-<li>各类缓存，field cache, filter cache, indexing cache, bulk queue 等等，要设置合理的大小，并且要应该根<br>据最坏的情况来看 heap 是否够用，也就是各类缓存全部占满的时候，还有 heap 空间可以分配给其他<br>任务吗？避免采用 clear cache 等“自欺欺人”的方式来释放内存。</li>
+<li>各类缓存，field cache, filter cache, indexing cache, bulk queue 等等，要设置合理的大小，并且要应该根据最坏的情况来看 heap 是否够用，也就是各类缓存全部占满的时候，还有 heap 空间可以分配给其他任务吗？避免采用 clear cache 等“自欺欺人”的方式来释放内存。</li>
 <li>避免返回大量结果集的搜索与聚合。确实需要大量拉取数据的场景，可以采用 scan &amp; scroll api 来实现。</li>
 <li>cluster stats 驻留内存并无法水平扩展，超大规模集群可以考虑分拆成多个集群通过 tribe node 连接。</li>
 <li>想知道 heap 够不够，必须结合实际应用场景，并对集群的 heap 使用情况做持续的监控。</li>
@@ -424,6 +424,8 @@
 </ul>
 </li>
 </ol>
+<h3 id="倒排索引"><a href="#倒排索引" class="headerlink" title="倒排索引"></a>倒排索引</h3><p><strong>词典（Term Dictionary）</strong><br>① 包含所有在文档集合中出现的词汇，是一个按字母顺序排序的列表，其中每个词条（term）都指向一个倒排列表。<br>② 词典的作用是快速查找词汇对应的倒排列表。</p>
+<p><strong>倒排列表（Posting List）</strong><br>① 记录包含某个词的所有文档 ID 以及词在文档中的位置。<br>② 每个词在倒排列表中的条目称为一个文档条目（posting），一个文档条目通常包含以下信息：<br>文档 ID：文档的唯一标识符<br>词频（Term Frequency, TF）：词在文档中出现的次数<br>位置列表（Position List）：词在文档中的位置（可选）<br>其它信息：例如词在标题或正文中的位置，词在文档中的重要性等</p>
 ]]></content>
       <tags>
         <tag>ES</tag>
@@ -790,10 +792,9 @@
 <li>volatile 是变量修饰符；synchronized 可以修饰类、方法、变量。 </li>
 <li>volatile 仅能实现变量的修改可见性，不能保证原子性；而 synchronized 则可以保 证变量的修改可见性和原子性。</li>
 <li>volatile 不会造成线程的阻塞；synchronized 可能会造成线程的阻塞。 </li>
-<li>volatile标记的变量不会被编译器优化；synchronized标记的变量可以被编译器优 化。</li>
 <li>volatile关键字 是线程同步的 轻量级实现 ，所以 volatile性能肯定比synchronized 关键字要好 </li>
 <li>synchronized关键字在JavaSE1.6之后进行了主要包括为了减少获 得锁和释放锁带来的性能消耗而引入的偏向锁和轻量级锁以及其它各种优化之后 执行效率有了显著提升， 实际开发中使用 synchronized 关键字的场景还是更多一 些 。</li>
-<li>volatile标记的变量不会被编译器优化；synchronized标记的变量可以被编译器优化。（锁消除）</li>
+<li><strong>volatile标记的变量不会被编译器优化；synchronized标记的变量可以被编译器优化。（锁消除）</strong></li>
 </ul>
 <h3 id="AQS"><a href="#AQS" class="headerlink" title="AQS"></a>AQS</h3><p>AQS核心思想是，如果被请求的共享资源空闲，则将当前请求资源的线程设置 为有效的工作线程，并且将共享资源设置为锁定状态。如果被请求的共享资源 被占用，那么就需要一套线程阻塞等待以及被唤醒时锁分配的机制，这个机制 AQS是用CLH队列锁实现的，即将暂时获取不到锁的线程加入到队列中。</p>
 <img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240701105807810.png" alt="image-20240701105807810" style="zoom:67%;" />
@@ -807,6 +808,27 @@
 <li><p>再以CountDownLatch以例，任务分为N个子线程去执行，state也初始化为N（注意N 要与线程个数一致）。这N个子线程是并行执行的，每个子线程执行完后countDown() 一次，state会CAS(Compare and Swap)减1。等到所有子线程都执行完后(即state&#x3D;0)， 会unpark()主调用线程，然后主调用线程就会从await()函数返回，继续后余动作。</p>
 </li>
 </ul>
+<h3 id="synchronized"><a href="#synchronized" class="headerlink" title="synchronized"></a>synchronized</h3><p>synchronized是Java中的关键字，是一种同步锁。synchronized关键字可以作用于方法 或者代码块。 </p>
+<p><strong>可以这么回答：</strong> </p>
+<p>反编译后，monitorenter、monitorexit、ACC_SYNCHRONIZED</p>
+<p> monitor监视器</p>
+<p> Java Monitor 的工作机理 </p>
+<p>对象与monitor关联</p>
+<h4 id="monitorenter、monitorexit、ACC-SYNCHRONIZED"><a href="#monitorenter、monitorexit、ACC-SYNCHRONIZED" class="headerlink" title="monitorenter、monitorexit、ACC_SYNCHRONIZED"></a>monitorenter、monitorexit、ACC_SYNCHRONIZED</h4><p>同步代码块是通过 monitorenter和monitorexit 来实现，当线程执行到 monitorenter的时候要先获得monitor锁，才能执行后面的方法。当线程执行到 monitorexit的时候则要释放锁。 </p>
+<p>同步方法是通过中设置 ACCSYNCHRONIZED 标志来实现，当线程执行有 ACCSYNCHRONIZED标志的方法，需要获得monitor锁。每个对象都与一个 monitor相关联，线程可以占有或者释放monitor。</p>
+<h4 id="monitor监视器"><a href="#monitor监视器" class="headerlink" title="monitor监视器"></a>monitor监视器</h4><p>monitor是什么呢？操作系统的管程（monitors）是概念原理，ObjectMonitor是它的原 理实现。</p>
+<p>在Java虚拟机（HotSpot）中，Monitor（管程）是由ObjectMonitor实现的。主要字段为：</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240719104559216.png" alt="image-20240719104559216" style="zoom:67%;" />
+
+<h4 id="monitor工作原理"><a href="#monitor工作原理" class="headerlink" title="monitor工作原理"></a>monitor工作原理</h4><p>想要获取monitor的线程,首先会进入_EntryList队列。 </p>
+<p>当某个线程获取到对象的monitor后,进入Owner区域，设置为当前线程,同时计数 器count加1。 </p>
+<p>如果线程调用了wait()方法，则会进入WaitSet队列。它会释放monitor锁，即将 owner赋值为null,count自减1,进入WaitSet队列阻塞等待。 </p>
+<p>如果其他线程调用 notify() &#x2F; notifyAll() ，会唤醒WaitSet中的某个线程，该线程再 次尝试获取monitor锁，成功即进入Owner区域。</p>
+<p>同步方法执行完毕了，线程退出临界区，会将monitor的owner设为null，并释放监 视锁。</p>
+<h4 id="对象与monitor关联"><a href="#对象与monitor关联" class="headerlink" title="对象与monitor关联"></a>对象与monitor关联</h4><p>对象头中的标记字段（Mark Word ）是用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年 龄、锁状态标志、线程持有的锁、偏向线程 ID、偏向时间戳等。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240719105102205.png" alt="image-20240719105102205" style="zoom:67%;" />
+
+<p><strong>重量级锁，指向互斥量的指针。其实synchronized是重量级锁，也就是说 Synchronized的对象锁，Mark Word锁标识位为10，其中指针指向的是Monitor对 象的起始地址。</strong></p>
 <h3 id="快速失败和安全失败"><a href="#快速失败和安全失败" class="headerlink" title="快速失败和安全失败"></a>快速失败和安全失败</h3><p>快速失败机制是指集合在迭代遍历过程中，其他多线程或者当前线程对该集合进行增加或者删除元素等操作，当前线程迭代器读取集合时会立马抛出一个ConcurrentModificationException异常，避免数据不一致。实现原理是迭代器在创建时，会获取集合的计数变量当作一个标记，迭代过程中，若发现该标记大小与计数变量不一致了，就以为集合做了新增或者删除等操作，就会抛出快速失败的异常。在ArrayList默认启用该机制。 <strong>判断modCount是否等于expectedModCount，若不等于，就抛出快速失败异常。</strong><strong><strong>modCount是可以变的。</strong></strong>迭代器创建时，变量expectedModCount是被modCount赋值，在整个迭代器等生命周期中，变量expectedModCount值是固定的了****</p>
 <p>安全失败机制是指集合在迭代遍历过程中，若其他多线程或者当前线程对该集合进行修改（增加、删除等元素）操作，当前线程迭代器仍然可以正常继续读取集合遍历，而不会抛出异常。该机制的实现，是通过迭代器在创建时，对集合进行了快照操作，即迭代器遍历的是原集合的数组快照副本，若在这个过程，集合进行修改操作，会将原有的数组内容复制到新数组上，并在新数组上进行修改，修改完成后，再将集合数组的引用指向新数组，，而读取操作仍然是访问旧的快照副本，故而实现读写分离，保证读取操作的线程安全性。在CopyOnWriteArrayList默认启用该机制。</p>
 <h3 id="atomic原理"><a href="#atomic原理" class="headerlink" title="atomic原理"></a>atomic原理</h3><p>AtomicInteger 类主要利用 CAS (compare and swap) + volatile 和 native 方法来保证原 子操作，从而避免 synchronized 的高开销，执行效率大为提升。</p>
@@ -1153,7 +1175,7 @@
 </li>
 <li><p>添加参数 <code>-XX:-UseGCOverheadLimit</code> 禁用这个检查，其实这个参数解决不了内存问题，只是把错误的信息延后，最终出现 java.lang.OutOfMemoryError: Java heap space。</p>
 </li>
-<li><p>dump内存，检查是否存在内存泄漏，如果没有，加大内存。</p>
+<li><p>dump内存，检查是否存在内 存泄漏，如果没有，加大内存。</p>
 </li>
 </ol>
 <h3 id="线程溢出"><a href="#线程溢出" class="headerlink" title="线程溢出"></a>线程溢出</h3><p>java.lang.OutOfMemoryError : unable to create new native Thread</p>
@@ -1174,7 +1196,7 @@
 <li>通过jps查看进程的启动pid，</li>
 <li>然后根据jstat-gc pid 1000 10000命令查看出现问题的时间点，以及当前FullGC的频率。（每隔1秒执行命令，执行10000次）</li>
 <li>了解该时间段之前有没有新的程序上线，基础组件升级等情况，如果是程序上线的话，<strong>查看代码中是否有内存泄漏，显式的调用gc方法等进行排查</strong></li>
-<li>如果没有的话，用<strong>Jinfo</strong>命令查看运行java应用程序的扩展参数，包括:堆空间各个区域的大小设置，新生代和老年代使用了那些垃圾回收器，然后<strong>分析这些参数配置是否合理</strong></li>
+<li>如果没有的话，用<strong>Jinfo</strong>命令查看运行java应用程序的扩展参数，包括:堆空间各个区域的大小设置，新生代和老年代使用了那些垃圾回收器，然后<strong>分析这些参数配置是否合理</strong>（<strong>jinfo -flags</strong>）</li>
 <li>通过<strong>jmap-histo</strong>进程id导出日志信息，定位到可疑对象，看一下是不是有<strong>大对象或者是长生命周期的对象导致的FullGC的发生</strong></li>
 <li>根据具体的对象，定位到具体的代码再次分析，这时候要结合GC原理和jvm参数设置，弄清楚可疑的对象是否满足了进入老年代的条件，然后进行调试处理问题。</li>
 </ol>
@@ -1606,7 +1628,11 @@
 <li>like也是范围条件</li>
 </ul>
 </li>
-<li>!&#x3D;和&lt;&gt;索引失效</li>
+<li>!&#x3D;和&lt;&gt;索引失效<ul>
+<li>5.0版本是这样</li>
+<li>8.0版本可以走索引，但是属于范围查询条件，会导致后面的列索引失效。</li>
+</ul>
+</li>
 <li>is not null 导致索引失效<ul>
 <li>is null可以使用索引</li>
 <li><strong>如果表中的数据都是null，则索引失效的情况相反。</strong></li>
@@ -1818,6 +1844,80 @@ terminated by &#39;,&#39; lines terminated by &#39;\n&#39; ;
 <li>在进行count()统计某列的记录数的时候，如果采用的NULL值，会别系统自动忽略掉，但是空值(’’)是会进行统计到其中的。</li>
 <li>实际到底是使用NULL值还是空值(‘’)，根据实际业务来进行区分。int类型尽量默认为’0’</li>
 </ol>
+<h3 id="in和-exists"><a href="#in和-exists" class="headerlink" title="in和 exists"></a>in和 exists</h3><p>（1）查询顺序：使用in会先进行内表查询获取结果集，再把内表结果与外表匹配，返回数据。使用exists会先进行外表查询，将查询到的每行数据带入到内表查询，看是否满足条件。</p>
+<p>（2）索引使用：in在内表查询或者外表查询过程中都会用到索引。<strong>exists仅在内表查询时会用到索引</strong>。</p>
+<p>（3）使用场景：一般来说，当子查询的结果集较小，外表较大时，使用in效率更高。当子查询的结果集较大，外表较小时，使用exists效率更高。</p>
+<p>（4）对于not in和not exists来说，<strong>not exists效率比not in的效率高，与子查询的结果集无关</strong>，因为not in对内外表都进行了全表扫描，没有使用到索引。<strong>not exists的子查询中可以用到表上的索引</strong>。</p>
+<p>IN 用于在 WHERE 子句中<strong>进行多个值的匹配</strong>，用于检查某个字段的值是否属于指定的一组值。</p>
+<p>EXISTS 用于检查子查询是否返回结果，通常用于判断外部查询与子查询之间是否存在关联。<strong>当子查询返回为true时，就会停止子查询。</strong></p>
+<h3 id="MySQL-MVCC机制彻底解决了幻读吗"><a href="#MySQL-MVCC机制彻底解决了幻读吗" class="headerlink" title="MySQL MVCC机制彻底解决了幻读吗"></a>MySQL MVCC机制彻底解决了幻读吗</h3><p>答案是显而易见的，太肯定的东西一般都是错的。解决了大部分场景下的幻读问题。</p>
+<p>当事务A开启事务，查询数据库的数据，5条，此时b开始事务，插入一条新的id&#x3D;6的数据，并提交了数据。若此时A正常时看不到新插入的id&#x3D;6的数据，但若此时A修改了id&#x3D;6这条数据，（A是无感的，但是确实可能有这种情况）。这时，隐藏字段事务id就变成了a的事务id。这条数据就对a可见了，就产生了幻读。</p>
+<p>第二种情况：第二个发生幻读现象的场景 除了上面这一种场景会发生幻读现象之外，还有下面这个场景也会发生幻读现象。 </p>
+<p>T1 时刻：事务 A 先执行「快照读语句」： select * from t_test where id &gt; 100 得到了 3 条记录。</p>
+<p>T2 时刻：事务 B 往插入一个 id&#x3D; 200 的记录并提交； </p>
+<p>T3 时刻：事务 A 再执行「当前读语句」 select * from t_test where id &gt; 100 <strong>for update</strong> 就会得到 4 条记录，此时也发生了幻读现象。</p>
+<p>（严格来说也不是幻读，还好）</p>
+<p>要避免这类特殊场景下发生幻读的现象的话，就是尽量在开启事务之后，马上执行 select … for update 这类当前读的语句，因为它会对记录加 <strong>next-key lock</strong>，从而避免其他事务插入一条新记录。</p>
+<h3 id="MYsql-主键自增不连续"><a href="#MYsql-主键自增不连续" class="headerlink" title="MYsql 主键自增不连续"></a>MYsql 主键自增不连续</h3><ol>
+<li>自增初始值和自增步长设置不为 1</li>
+<li>唯一键冲突（别的列设置了唯一性，插入时导致冲突，但是主键已经自增）</li>
+<li>事务回滚（事务插入后，主键自增，回滚不会导致主键回滚）</li>
+<li>批量插入（如 <code>insert...select</code> 语句）（不是指insert   values多行的情况）</li>
+</ol>
+<h3 id="索引加锁原则"><a href="#索引加锁原则" class="headerlink" title="索引加锁原则"></a>索引加锁原则</h3><p>默认情况下，InnoDB在 REPEATABLE READ事务隔离级别运行，InnoDB使用 next-key 锁进行搜索和索 引扫描，以防止幻读。 </p>
+<ul>
+<li><p>针对唯一索引进行检索时，对已存在的记录进行等值匹配时，将会自动优化为行锁。</p>
+<p>数据为 …, 16, 25, 29, 33, … 查询条件为 id &#x3D; 16，给 16 加上记录锁。 [16] 索引上的等值查询(唯一索引)，</p>
+</li>
+<li><p>给不存在的记录加锁时， 优化为间隙锁。 </p>
+<p>数据为 …, 16, 25, 29, 33, … 查询条件为 id &#x3D; 19，此时会给 25加上间隙锁。 (16, 25) </p>
+</li>
+<li><p>索引上的等值查询(非唯一普通索引)，向右遍历时最后一个值不满足查询需求时，next-key lock 退 化为间隙锁。</p>
+<p> 数据为 …, 16, 18, 29, 33, …. 查询的条件为 age &#x3D; 18，此时给 18加上临间锁，给29加上间隙锁，数据分为两个部分。 (16, 18] (18, 29) </p>
+</li>
+<li><p>索引上的范围查询(唯一索引) ，会访问到不满足条件的第一个值为止。 查询的条件为 id&gt;&#x3D;19，并添加共享锁。 此时我们可以根据数据库表中现有的数据，将数据分 为三个部分： [19] (19,25] (25,+∞] </p>
+<hr>
+</li>
+<li><p>注意：间隙锁唯一目的是防止其他事务插入间隙。间隙锁可以共存，一个事务采用的间隙锁不会阻止另 一个事务在同一间隙上采用间隙锁。 </p>
+</li>
+<li><p>原则1：加锁的基本单位是next-key lock。希望你还记得，next-key lock是前开后闭区间。 </p>
+</li>
+<li><p>原则2：查找过程中访问到的对象才会加锁 </p>
+</li>
+<li><p>优化1：索引上的等值查询，给唯一索引加锁的时候，next-key lock退化为行锁 </p>
+</li>
+<li><p>优化2：索引上的等值查询，向右遍历时且最后一个值不满足等值条件的时候，next-key lock退化 为间隙锁。 </p>
+</li>
+<li><p>一个bug：唯一索引上的范围查询会访问到不满足条件的第一个值为止</p>
+</li>
+</ul>
+<h3 id="double-write-buffer"><a href="#double-write-buffer" class="headerlink" title="double write buffer"></a>double write buffer</h3><p>数据页：16k；linux页大小：4k（导致写的位置可能很分散）</p>
+<p>InnoDB用double write buffer（双写缓冲区）来避免页没写完整所导致的数据损坏。当一个磁盘写操作不能完整地完成时，不完整的页写入就可能发生，16KB的页可能只有一部分被写到磁盘上。有多种多样的原因（崩溃、Bug，等等）可能导致页没有写完整。double write buffer在这种情况发生时可以保证数据完整性。</p>
+<p>本质上是一个最近写回的页面的<strong>备份拷贝</strong>。当InnoDB从缓冲池刷新页面到磁盘时，首先把它们写（或者刷新）到double write buffer，然后再把它们写到其所属的数据区域中。这可以保证每个页面的写人都是原子并且持久化的。</p>
+<ol>
+<li><p>buffer数据页先copy到double write buffer的内存里；</p>
+</li>
+<li><p>double write buffer的内存数据刷到double w b的磁盘上（dwb落盘）；</p>
+</li>
+<li><p>double write buffer的内存再刷到数据磁盘上（真正的数据落盘）；</p>
+</li>
+</ol>
+<p>情况一：步骤1前宕机，刷盘未开始，数据在redo log，后期可以恢复</p>
+<p>情况二：步骤1后，步骤2前宕机，因为是在内存中，宕机清空内存，和情况1一样</p>
+<p>情况三：步骤2后，步骤3前宕机，因为DWB的磁盘有完整的数据，可以修复损坏的页数据</p>
+<p>由此我们可以得出结论，double write buffer是针对实际的buffer数据页的原子性保证，就是避免MySQL异常崩溃时，写的那几个data page不会出错，要么都写了，要么什么都没有做。</p>
+<h4 id="性能影响"><a href="#性能影响" class="headerlink" title="性能影响"></a>性能影响</h4><ul>
+<li><p>页数据memcopy到DWB的内存，速度很快；</p>
+</li>
+<li><p>DWB的内存fsync刷到DWB的磁盘，<strong>属于顺序追加写，</strong>速度也很快；</p>
+</li>
+<li><p>刷磁盘（真正的数据落盘），随机写，本来就需要进行，不属于额外操作；</p>
+</li>
+<li><p>另外，128页（每页16K）2M的DWB，会分两次刷入磁盘，<strong>每次最多64页</strong>，即1M的数据（所以图中我们的DWB磁盘结构分为了两部分），执行也是非常之快的。综上，性能会有所影响，但影响并不大</p>
+</li>
+</ul>
+<h4 id="redolog"><a href="#redolog" class="headerlink" title="redolog"></a>redolog</h4><p>redolog的设计之初，是“账本的作用”，是一种操作日志，用于MySQL异常崩溃恢复使用，是InnoDB引 擎特有的日志，本质上是物理日志，记录的是 “ 在某个数据页上做了什么修改 ” ，但如果数据页本身已 经发生了损坏，redolog来恢复已经损坏的数据块是无效的，数据块的本身已经损坏，再次重做依然是一 个坏块。 </p>
+<p>所以此时需要一个数据块的副本来还原该损坏的数据块，再利用重做日志进行其他数据块的重做操作， 这就是double write buffer的原因作用。</p>
 ]]></content>
       <tags>
         <tag>MySQL</tag>
@@ -1845,6 +1945,7 @@ terminated by &#39;,&#39; lines terminated by &#39;\n&#39; ;
 </ul>
 </li>
 <li>有几个消息队列，就有几份对应的一样的消息，就可以被不同的应用程序消费。</li>
+<li>key长度最大为255字节</li>
 </ul>
 </li>
 <li><strong>Exchange（交换机）只负责转发消息，不具备存储消息的能力</strong>，因此如果没有任何队列与Exchange绑定，或者没有符合路由规则的队列，那么消息会丢失！</li>
@@ -1938,7 +2039,7 @@ public class ErrorMessageConfig &#123;
 <li>当队列、消息都设置了TTL时，任意一个到期就会成为死信。</li>
 <li>可设置超时时间，完成延迟队列。</li>
 </ul>
-<h4 id="延迟队列"><a href="#延迟队列" class="headerlink" title="延迟队列"></a>延迟队列</h4><p>可利用死信交换机和ttl的设置完成延迟队列的效果。同时，官方也实现了延迟队列。<br>DelayExchange需要将一个交换机声明为delayed类型。当我们发送消息到delayExchange时，流程如下：</p>
+<h4 id="延迟队列"><a href="#延迟队列" class="headerlink" title="延迟队列"></a>延迟队列</h4><p>可利用死信交换机和ttl的设置完成延迟队列的效果。同时，官方也实现了延迟队列。<br><strong>DelayExchange需要将一个交换机声明为delayed类型</strong>。当我们发送消息到delayExchange时，流程如下：</p>
 <ul>
 <li><p>接收消息</p>
 </li>
@@ -1971,7 +2072,7 @@ public class ErrorMessageConfig &#123;
 <li>交换机、队列、队列中的消息会在各个mq的镜像节点之间同步备份。</li>
 <li>创建队列的节点被称为该队列的<strong>主节点，</strong>备份到的其它节点叫做该队列的<strong>镜像</strong>节点。</li>
 <li>一个队列的主节点可能是另一个队列的镜像节点</li>
-<li>所有操作都是主节点完成，然后同步给镜像节点</li>
+<li><strong>所有操作都是主节点完成</strong>，然后同步给镜像节点</li>
 <li>主宕机后，镜像节点会替代成新的主</li>
 <li><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20210718221039542.png" alt="image-20210718221039542" style="zoom:67%;" /></li>
 </ul>
@@ -2151,8 +2252,8 @@ public class ErrorMessageConfig &#123;
 <p>也就是说单例对象此时已经被创建 出来(调用了构造器)。这个对象已经被生产出来了，虽然还不完美（还没有进行初始 化的第二步和第三步），但是已经能被人认出来了（根据对 象引用能定位到堆中的 对象），所以Spring此时将这个对象提前曝光出来让大家认识，让大家使用。</p>
 <h4 id="为啥不能解决构造器循环依赖？"><a href="#为啥不能解决构造器循环依赖？" class="headerlink" title="为啥不能解决构造器循环依赖？"></a>为啥不能解决构造器循环依赖？</h4><p>因为加入 singletonFactories三级缓存的<strong>前提是执行了构造 器</strong>，所以构造器的循环依赖没法解 决。</p>
 <h4 id="为什么是三级缓存？二级缓存作用？"><a href="#为什么是三级缓存？二级缓存作用？" class="headerlink" title="为什么是三级缓存？二级缓存作用？"></a>为什么是三级缓存？二级缓存作用？</h4><p>因为AService是单例的，每次执行singleFactory.getObject()方法又会产生新的代理对象，假设这里只有一级和三级缓存的话，我每次从三级缓存中拿到singleFactory对象，执行getObject()方法又会产生新的代理对象，这是不行的，因为AService是单例的，所有这里我们要借助二级缓存来解决这个问题，将执行了singleFactory.getObject()产生的对象放到二级缓存中去，后面去二级缓存中拿，没必要再执行一遍。</p>
-<h3 id="BeanFactory和ApplicationContext"><a href="#BeanFactory和ApplicationContext" class="headerlink" title="BeanFactory和ApplicationContext"></a>BeanFactory和ApplicationContext</h3><p>BeanFactory 简单粗暴，可以理解为就是个 HashMap，Key 是 BeanName，Value 是 Bean 实例。通常只提供注册（put），获取（get）这两个功能。我们可以称之为 “低 级容器”。加载bean，获取bean。</p>
-<p> ApplicationContext 可以称之为 “高级容器”。因为他比 BeanFactory 多了更多的 功能。他继承了多个接口。因此具备了更多的功能。例如资源的获取，支持多种消息 （例如 JSP tag 的支持），对 BeanFactory 多了工具级别的支持等待。所以你看他的 名字，已经不是 BeanFactory 之类的工厂了，而是 “应用上下文”， 代表着整个大容 器的所有功能。该接口定义了一个 refresh 方法，此方法是所有阅读 Spring 源码的人 的最熟悉的方法，用于刷新整个容器，即重新加载&#x2F;刷新所有的 bean。而高级容器有更多的 功能：支持不同的信息源头，可以访问文件资源，支持应用事件（Observer 模式）。 </p>
+<h3 id="BeanFactory和ApplicationContext"><a href="#BeanFactory和ApplicationContext" class="headerlink" title="BeanFactory和ApplicationContext"></a>BeanFactory和ApplicationContext</h3><p>BeanFactory 简单粗暴，可以理解为就是个 HashMap，Key 是 BeanName，Value 是 Bean 实例。通常只提供注册（put），获取（get）这两个功能。我们可以称之为 “低 级容器”。加载bean，获取bean。 懒加载</p>
+<p> ApplicationContext 可以称之为 “高级容器”。因为他比 BeanFactory 多了更多的 功能。他继承了多个接口。因此具备了更多的功能。例如资源的获取，支持多种消息 （例如 JSP tag 的支持），对 BeanFactory 多了工具级别的支持等待。所以你看他的 名字，已经不是 BeanFactory 之类的工厂了，而是 “应用上下文”， 代表着整个大容 器的所有功能。该接口定义了一个 refresh 方法，此方法是所有阅读 Spring 源码的人 的最熟悉的方法，用于刷新整个容器，即重新加载&#x2F;刷新所有的 bean。而高级容器有更多的 功能：支持不同的信息源头，可以访问文件资源，支持应用事件（Observer 模式）。  饿加载</p>
 <h3 id="Bean生命周期"><a href="#Bean生命周期" class="headerlink" title="Bean生命周期"></a>Bean生命周期</h3><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240629163421806.png" alt="image-20240629163421806" style="zoom:67%;" />
 
 <p>Spring对bean进行实例化；</p>
@@ -2230,6 +2331,11 @@ public class ErrorMessageConfig &#123;
 <li><p><strong>ConditionalOnClass 这是一个条件注解</strong>，代表如果没有RedisOperations这个类 就不 执行此配置，也就是说如果没有相关的redis依赖，那么redisTemplate就不会进行自动 注入。</p>
 </li>
 </ul>
+<p>答：</p>
+<p>启动类的@SpringBootApplication注解由@SpringBootConfiguration， @EnableAutoConfiguration，@ComponentScan三个注解组成，三个注解共同完成自动配置；</p>
+<p> @SpringBootConfiguration 注解标记启动类为配置类</p>
+<p> @ComponentScan 注解实现启动时扫描启动类所在的包以及子包下所有标记为bean的类由IOC容 器注册为bean </p>
+<p>@EnableAutoConfiguration通过 @Import 注解导入 AutoConfigurationImportSelector类，然 后通过该类的 selectImports() 方法去读取需要被自动装配的组件依赖下的METAINF&#x2F;spring.factories文件配置的组件的<strong>类全名</strong>，并按照一定的规则过滤掉不符合要求的组件的类 全名，将剩余读取到的各个组件的类全名集合返回给IOC容器并将这些组件注册为bean。</p>
 <h3 id="Spring-MVC执行原理"><a href="#Spring-MVC执行原理" class="headerlink" title="Spring MVC执行原理"></a>Spring MVC执行原理</h3><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240630093159414.png" alt="image-20240630093159414" style="zoom:67%;" />
 
 <ol>
@@ -2258,7 +2364,7 @@ public class ErrorMessageConfig &#123;
 
 <h4 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lijie;</span><br><span class="line"><span class="comment">// 静态内部类方式</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo3</span> &#123;</span><br><span class="line">   <span class="keyword">private</span> <span class="title function_">Demo3</span><span class="params">()</span> &#123;</span><br><span class="line">       System.out.println(<span class="string">&quot;私有Demo3构造参数初始化&quot;</span>);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">SingletonClassInstance</span> &#123;</span><br><span class="line">       <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Demo3</span> <span class="variable">DEMO_3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Demo3</span>();</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// 方法没有同步</span></span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> Demo3 <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">       <span class="keyword">return</span> SingletonClassInstance.DEMO_3;</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">       <span class="type">Demo3</span> <span class="variable">s1</span> <span class="operator">=</span> Demo3.getInstance();</span><br><span class="line">       <span class="type">Demo3</span> <span class="variable">s2</span> <span class="operator">=</span> Demo3.getInstance();</span><br><span class="line">       System.out.println(s1 == s2);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h4 id="枚举单例"><a href="#枚举单例" class="headerlink" title="枚举单例"></a>枚举单例</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lijie;</span><br><span class="line"><span class="comment">//使用枚举实现单例模式 优点:实现简单、枚举本身就是单例，由jvm从根本上提供保</span></span><br><span class="line">障!避免通过反射和反序列化的漏洞 缺点没有延迟加载</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo4</span> &#123;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> Demo4 <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">       <span class="keyword">return</span> Demo.INSTANCE.getInstance();</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">       <span class="type">Demo4</span> <span class="variable">s1</span> <span class="operator">=</span> Demo4.getInstance();</span><br><span class="line">       <span class="type">Demo4</span> <span class="variable">s2</span> <span class="operator">=</span> Demo4.getInstance();</span><br><span class="line">       System.out.println(s1 == s2);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//定义枚举</span></span><br><span class="line"> <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">enum</span> <span class="title class_">Demo</span> &#123;</span><br><span class="line"> INSTANCE;</span><br><span class="line"> <span class="comment">// 枚举元素为单例</span></span><br><span class="line"> <span class="keyword">private</span> Demo4 demo4;</span><br><span class="line"> <span class="keyword">private</span> <span class="title function_">Demo</span><span class="params">()</span> &#123;</span><br><span class="line"> System.out.println(<span class="string">&quot;枚举Demo私有构造参数&quot;</span>);</span><br><span class="line"> demo4 = <span class="keyword">new</span> <span class="title class_">Demo4</span>();</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">public</span> Demo4 <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line"> <span class="keyword">return</span> demo4;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="枚举单例"><a href="#枚举单例" class="headerlink" title="枚举单例"></a>枚举单例</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lijie;</span><br><span class="line"><span class="comment">//使用枚举实现单例模式 优点:实现简单、枚举本身就是单例，由jvm从根本上提供保障!避免通过反射和反序列化的漏洞 缺点没有延迟加载</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo4</span> &#123;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> Demo4 <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line">       <span class="keyword">return</span> Demo.INSTANCE.getInstance();</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">       <span class="type">Demo4</span> <span class="variable">s1</span> <span class="operator">=</span> Demo4.getInstance();</span><br><span class="line">       <span class="type">Demo4</span> <span class="variable">s2</span> <span class="operator">=</span> Demo4.getInstance();</span><br><span class="line">       System.out.println(s1 == s2);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">//定义枚举</span></span><br><span class="line"> <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">enum</span> <span class="title class_">Demo</span> &#123;</span><br><span class="line"> INSTANCE;</span><br><span class="line"> <span class="comment">// 枚举元素为单例</span></span><br><span class="line"> <span class="keyword">private</span> Demo4 demo4;</span><br><span class="line"> <span class="keyword">private</span> <span class="title function_">Demo</span><span class="params">()</span> &#123;</span><br><span class="line"> System.out.println(<span class="string">&quot;枚举Demo私有构造参数&quot;</span>);</span><br><span class="line"> demo4 = <span class="keyword">new</span> <span class="title class_">Demo4</span>();</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">public</span> Demo4 <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line"> <span class="keyword">return</span> demo4;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
 <h4 id="双检加锁"><a href="#双检加锁" class="headerlink" title="双检加锁"></a>双检加锁</h4><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> com.lijie;</span><br><span class="line"><span class="comment">//双重检测锁方式</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo5</span> &#123;</span><br><span class="line"> <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span>  Demo5 demo5;</span><br><span class="line"> <span class="keyword">private</span> <span class="title function_">Demo5</span><span class="params">()</span> &#123;</span><br><span class="line"> System.out.println(<span class="string">&quot;私有Demo4构造参数初始化&quot;</span>);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">static</span> Demo5 <span class="title function_">getInstance</span><span class="params">()</span> &#123;</span><br><span class="line"> <span class="keyword">if</span> (demo5 == <span class="literal">null</span>) &#123;</span><br><span class="line"> <span class="keyword">synchronized</span> (Demo5.class) &#123;</span><br><span class="line"> <span class="keyword">if</span> (demo5 == <span class="literal">null</span>) &#123;</span><br><span class="line"> demo5 = <span class="keyword">new</span> <span class="title class_">Demo5</span>();</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">return</span> demo5;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line"> <span class="type">Demo5</span> <span class="variable">s1</span> <span class="operator">=</span> Demo5.getInstance();</span><br><span class="line"> <span class="type">Demo5</span> <span class="variable">s2</span> <span class="operator">=</span> Demo5.getInstance();</span><br><span class="line"> System.out.println(s1 == s2);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -2268,11 +2374,15 @@ public class ErrorMessageConfig &#123;
 <li>枚举单例</li>
 </ul>
 <h4 id="防止序列化"><a href="#防止序列化" class="headerlink" title="防止序列化"></a>防止序列化</h4><ul>
-<li>在对应的单例类中实现readResolve方法，返回原instance对象即可。(readObject方法会调用readResolve()方法)</li>
-<li>枚举单例</li>
+<li><p>反序列化会重新new（）一个对象。</p>
+</li>
+<li><p>在对应的单例类中实现<strong>readResolve</strong>方法，返回原instance对象即可。(readObject方法会调用readResolve()方法)</p>
+</li>
+<li><p>枚举单例</p>
+</li>
 </ul>
 <h3 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h3><p>顾名思义就是被共享的单元。享元模式的意图是复用对象，节省内存，前提是享元对象是不可 变对象。</p>
-<p>当一个系统中存在大量重复对象的时候，如果这些重复的对象是不可变对象，我们就可 以利用享元模式将对象设计成享元，在内存中只保留一份实例，供多处代码引用。这样可以减少内 存中对象的数量，起到节省内存的目的。 典型的使用场景：Integer中cache，就是享元模式很经典的实现。</p>
+<p>当一个系统中存在大量重复对象的时候，如果这些重复的对象是不可变对象，我们就可 以利用享元模式将对象设计成享元，在内存中只保留一份实例，供多处代码引用。这样可以减少内 存中对象的数量，起到节省内存的目的。 典型的使用场景：<strong>Integer中cache</strong>，就是享元模式很经典的实现。</p>
 <h4 id="和单例的区别"><a href="#和单例的区别" class="headerlink" title="和单例的区别"></a>和单例的区别</h4><p>单例模式是创建型模式，重在只能有一个对象。而享元模式是结构型模式，重在节约内存使 用，提升程序性能。 享元模式解决的是如何高效地复用对象以节省内存，</p>
 <p>享元模式：把一个或者多可对象缓存起来，用的时候，直接从缓存里获取。也就是说享元模式不一 定只有一个对象。单例模式解决的是如何确保全局只有一个实例以控制资源的访问。</p>
 <h3 id="工厂模式"><a href="#工厂模式" class="headerlink" title="工厂模式"></a>工厂模式</h3><p>简单工厂模式又叫静态工厂方法模式，就是建立一个工厂类，对实现了同一接口的一些类进行 实例的创建。比如，一台咖啡机就可以理解为一个工厂模式，你只需要按下想喝的咖啡品类的按钮 （摩卡或拿铁），它就会给你生产一杯相应的咖啡，你不需要管它内部的具体实现，只要告诉它你 的需求即可。</p>
@@ -2285,14 +2395,82 @@ public class ErrorMessageConfig &#123;
 <p>不易拓展，一旦添加新的产品类型，就不得不修改工厂的创建逻辑；</p>
 <p> 产品类型较多时，工厂的创建逻辑可能过于复杂，一旦出错可能造成所有产品的创建失败，不 利于系统的维护。</p>
 <h3 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h3><p>抽象工厂模式是在简单工厂的基础上将未来可能需要修改的代码抽象出来，通过继承的方式让 子类去做决定。 比如，以上面的咖啡工厂为例，某天我的口味突然变了，不想喝咖啡了想喝啤酒，这个时候如果直 接修改简单工厂里面的代码，这种做法不但不够优雅，也不符合软件设计的“开闭原则”，因为每次 新增品类都要修改原来的代码。这个时候就可以使用抽象工厂类了，抽象工厂里只声明方法，具体 的实现交给子类（子工厂）去实现，这个时候再有新增品类的需求，只需要新创建代码即可。</p>
-<h3 id="模板方法"><a href="#模板方法" class="headerlink" title="模板方法"></a>模板方法</h3><p>模板方法模式是指定义一个算法骨架，将具体内容延迟到子类去实现。 </p>
-<p><strong>优点：</strong> </p>
-<p>提高代码复用性：将相同部分的代码放在抽象的父类中，而将不同的代码放入不同的子类中； </p>
-<p>实现了反向控制：通过一个父类调用其子类的操作，通过对子类的具体实现扩展不同的行为， 实现了反向控制并且符合开闭原则。 </p>
+<h3 id="策略模式和模板方法"><a href="#策略模式和模板方法" class="headerlink" title="策略模式和模板方法"></a>策略模式和模板方法</h3><p><strong>策略模式</strong>定义了一系列算法，并将每一个算法封装起来，使它们可以互相替换。策略模式让算法的变化独立于使用算法的客户。（本项目使用策略模式）</p>
+<p>一般为接口，定义抽象方法，实现类实现具体的算法流程。</p>
+<p><strong>模板方法</strong>：模板方法模式定义了<strong>一个操作中的算法骨架</strong>（某一些步骤），而将一些步骤延迟到子类中实现。模板方法使得子类可以在不改变算法结构的情况下，重新定义算法中的某些步骤。</p>
 <p>喝茶茶：烧水—-放入茶叶—喝茶。放入的茶叶每个人自己的喜好不一样，有的是普洱、有的是铁观 音等。 每日工作：上班打卡—-工作—下班打卡。每个人工作的内容不一样，后端开发的、前端开发、测 试、产品每个人的工作内容不一样。</p>
-<h3 id="代理模式和装饰器模式"><a href="#代理模式和装饰器模式" class="headerlink" title="代理模式和装饰器模式"></a>代理模式和装饰器模式</h3><p><strong>装饰器模式</strong>：主要用于动态地为对象添加新功能。多个装饰器可以递归地组合在一起，形成更复杂的行为。</p>
-<p><strong>代理模式</strong>：主要用于控制对对象的访问。代理对象和目标对象具有相同的接口，代理对象在调用目标对象之前可以进行一些额外的操作。</p>
-<p>装饰器模式强调的是增强功能，而代理模式强调的是控制访问。</p>
+<p>一般为抽象类，定义抽象方法，还有一些共有的方法，以及整个方法的执行逻辑，子类实现方法中的核心步骤。</p>
+<p><strong>目的不同：</strong></p>
+<ul>
+<li><strong>策略模式：</strong>旨在定义一系列算法并将它们封装，使得它们可以互换。通过组合而非继承来实现不同算法的切换。</li>
+<li><strong>模板方法模式：</strong>旨在定义一个算法的骨架，并将一些步骤延迟到子类中实现。通过继承来扩展和修改算法的步骤。</li>
+</ul>
+<p><strong>实现方式不同：</strong></p>
+<ul>
+<li><strong>策略模式：</strong>使用组合和委托。上下文对象持有策略接口的引用，可以在运行时动态更换策略。</li>
+<li><strong>模板方法模式：</strong>使用继承。抽象类定义了算法骨架，具体类通过实现抽象方法来定义具体的步骤。</li>
+</ul>
+<p><strong>灵活性不同：</strong></p>
+<ul>
+<li><strong>策略模式：</strong>更灵活，因为可以在运行时动态更换不同的策略。</li>
+<li><strong>模板方法模式：</strong>在编译时确定算法骨架，通过继承来修改具体步骤，灵活性较低。</li>
+</ul>
+<p><strong>使用场景不同：</strong></p>
+<ul>
+<li><strong>策略模式：</strong>适用于需要在运行时选择不同算法或行为的场景。</li>
+<li><strong>模板方法模式：</strong>适用于算法固定，但某些步骤需要在不同子类中有不同实现的场景。</li>
+</ul>
+<h3 id="代理模式和装饰器模式"><a href="#代理模式和装饰器模式" class="headerlink" title="代理模式和装饰器模式"></a>代理模式和装饰器模式</h3><p><strong>装饰器模式</strong>：主要用于动态地为对象添加新功能。多个装饰器可以递归地组合在一起，形成更复杂的行为。还是原来的对象</p>
+<p><strong>代理模式</strong>：主要用于控制对对象的访问。代理对象和目标对象具有相同的接口，代理对象在调用目标对象之前可以进行一些额外的操作。新对象增强</p>
+<p><strong>装饰器模式强调的是增强功能，而代理模式强调的是控制访问。</strong></p>
+<h3 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h3><p>适配器模式（Adapter Pattern）充当两个不兼容接口之间的桥梁，属于结构型设计模式。它通过一个中间件（适配器）将一个类的接口转换成客户期望的另一个接口，使原本不能一起工作的类能够协同工作。</p>
+<p>这种模式涉及到一个单一的类，该类负责加入独立的或不兼容的接口功能。</p>
+<ul>
+<li><strong>目标接口</strong>：定义一个可以播放多种格式文件的音频播放器接口。</li>
+<li><strong>适配者类</strong>：现有的音频播放器，只能播放 MP3 文件。</li>
+<li><strong>适配器类</strong>：创建一个新的类，实现目标接口，并在内部使用适配者类来播放 MP3 文件，同时添加对 VLC 和 MP4 文件的支持。</li>
+<li><strong>继承或依赖</strong>：推荐使用依赖关系，而不是继承，以保持灵活性。</li>
+</ul>
+<h3 id="Spring事务的实现原理"><a href="#Spring事务的实现原理" class="headerlink" title="Spring事务的实现原理"></a>Spring事务的实现原理</h3><ol>
+<li>Spring事务底层是基于数据库事务和AOP机制的</li>
+<li>首先对于使用了@Transactional注解的Bean, Spring会创建一个代理对象作为Bean</li>
+<li>当调用代理对象的方法时, 会先判断该方法上是否加了@Transactional注解</li>
+<li>如果加了，那么则利用事务管理器创建一个数据库连接</li>
+<li><strong>并且修改数据库连接的autocommit属性为false, 禁止此连接的自动提交, 这是实现Spring事务非常重要的一步</strong></li>
+<li>然后执行当前方法, 方法中会执行sql</li>
+<li>执行完当前方法后, 如果没有出现异常就直接提交事务</li>
+<li>如果出现了异常, 并且这个异常是需要回滚的就会回滚事务, 否则仍然提交事务</li>
+<li>Spring事务的隔离级别对应的就是数据库的隔离级别</li>
+<li>Spring事务的传播机制是Spring事务自己实现的, 也是Spring事务中最复杂的</li>
+<li>Spring事务的传播机制是基于数据库连接来做的, 一个数据库连接一个事务, 如果传播机制配置为需要新开一个事务, 那么实际上就是先建立一个数据库连接, 在此新数据库连接上执行sql</li>
+</ol>
+<h4 id="在整个事务操作中，如何保证是同一个数据库连接？"><a href="#在整个事务操作中，如何保证是同一个数据库连接？" class="headerlink" title="在整个事务操作中，如何保证是同一个数据库连接？"></a>在整个事务操作中，如何保证是同一个数据库连接？</h4><p>在开启事务时，首先会从数据库连接池中获得一个connection，然后将这个连接与一个ThradLocal对象绑定起来，以后需要操作数据库时都通过该ThradLocal对象来获取connection，最后在事务提交或回滚后释放绑定关系，并将connection归还到数据库连接池中。这样，通过ThradLocal对象，就保证了操作的是同一个connection。</p>
+<h3 id="maven依赖冲突怎么办"><a href="#maven依赖冲突怎么办" class="headerlink" title="maven依赖冲突怎么办"></a>maven依赖冲突怎么办</h3><ol>
+<li>使用 <code>dependency:tree</code> 检查依赖，显示依赖树</li>
+<li>排除依赖 <exclusions></li>
+<li>强制指定依赖版本</li>
+<li>版本范围，Maven允许你定义版本范围，以便在一定范围内选择合适的版本。</li>
+<li>在父工程中管理所有的依赖，子工程不用指定版本</li>
+<li>使用 <code>maven-enforcer-plugin</code>：Maven Enforcer插件可以帮助你确保项目中只使用了特定版本的依赖，并且可以检测依赖冲突。</li>
+<li>依赖解析顺序：Maven解析依赖时遵循深度优先、先声明先解析的原则。可以通过调整 <code>pom.xml</code> 中依赖声明的顺序来影响依赖解析的结果。尽量把更重要的依赖放在前面声明，以便优先解析。</li>
+</ol>
+<h4 id="依赖原则"><a href="#依赖原则" class="headerlink" title="依赖原则"></a>依赖原则</h4><ul>
+<li><p>最短路径优先</p>
+<ul>
+<li>Maven 依赖遵循最短路径优先原则，当项目直接依赖一个 C-api-1.0 和 A-api-2.1 包，并且 C-api-1.0 有如下间接依赖关系：C-api-1.0 —&gt;  A-api-1.1 这时候项目里包含了 A-api 的 1.1 和 2.1 两个版本，由于存在最短路径原则明显 Project —&gt; A-api-2.1 短于 Project —&gt; C-api-1.0 —&gt; B-api-1.0 —&gt; A-api-1.1 故 Project 项目里会使用 <strong>A-api-2.1</strong></li>
+</ul>
+</li>
+<li><p>POM 文件中申明顺序优先原则</p>
+<ul>
+<li>Maven 依赖遵循 POM 文件中申明顺序优先原则，当项目里存在直接依赖 C-api-1.0 和 B-api-1.0 其中存在如下间接依赖关系：C-api-1.0 —&gt; A-api-2.1， B-api-1.0 —&gt; A-api-1.1 这时项目间接依赖了 A-api 的 2.1 和 1.1 两个版本，由于存在 POM 文件中申明顺序优先原则，故项目中会使用 <strong>A-api-2.1</strong></li>
+</ul>
+</li>
+<li><p>覆盖优先原则</p>
+<ul>
+<li>Maven 依赖遵循覆盖优先原则，项目父 POM 中直接依赖包 A-api-1.1 ，子模块 Module A 的 parent 直接依赖了项目的 POM ，但是同时也直接依赖了 A-api-1.2 。由于存在覆盖优先原则子模块 Module A 中会优先使用 <strong>A-api-1.2</strong> 而不是父POM的 A-api-1.1</li>
+</ul>
+</li>
+</ul>
 ]]></content>
       <tags>
         <tag>Spring</tag>
@@ -2578,6 +2756,7 @@ public class ErrorMessageConfig &#123;
 <p>（1）前端生成token时，在payload里增加当前时间戳；</p>
 <p>（2）后端接收后，对解析出来的时间戳和当前时间进行判断，</p>
 <p>（3）如果相差特定时间内（比如5秒），允许请求，否则判定为重复攻击</p>
+<p>（4）使用redis存储该token的上次处理时间。（时间搓判断）</p>
 ]]></content>
       <tags>
         <tag>安全</tag>
@@ -2873,6 +3052,43 @@ public class ErrorMessageConfig &#123;
 <li>如果newLockCount &lt; 0，就抛异常，但是一般不会出现。</li>
 <li>剩下的一种情况就是newLockCount &#x3D;&#x3D; 0 ，说明锁已经完完全全释放完了，然后通过internals.releaseLock删除加锁的节点。</li>
 </ul>
+<h3 id="ZK作为服务注册发现的具体流程"><a href="#ZK作为服务注册发现的具体流程" class="headerlink" title="ZK作为服务注册发现的具体流程"></a>ZK作为服务注册发现的具体流程</h3><ol>
+<li><p>搭建ZooKeeper集群</p>
+<p>首先需要搭建一个ZooKeeper集群，确保ZooKeeper能够提供高可用性和稳定的服务。通常至少需要3台或以上的ZooKeeper节点来构建一个可靠的集群。</p>
+</li>
+<li><p>服务端注册</p>
+<p>服务端在启动时，将自己的服务信息注册到ZooKeeper中：</p>
+</li>
+</ol>
+<ul>
+<li><strong>创建持久节点</strong>：服务端将自己的服务信息（如IP地址、端口号、服务名称等）存储为ZooKeeper的一个持久节点（Persistent Node）或临时节点（Ephemeral Node）。</li>
+<li><strong>路径结构</strong>：可以使用类似<code>/services/&#123;service-name&#125;/instances/&#123;instance-id&#125;</code>的路径结构来存储服务实例的信息，其中<code>service-name</code>是服务名称，<code>instance-id</code>是服务实例的唯一标识。</li>
+<li><strong>临时节点</strong>：使用临时节点可以实现当服务异常退出时，ZooKeeper会自动删除该节点，从而实现动态的服务注册和发现。</li>
+</ul>
+<ol start="3">
+<li><p>客户端发现</p>
+<p>客户端需要从ZooKeeper中发现可用的服务实例，以便调用：</p>
+</li>
+</ol>
+<ul>
+<li><strong>监听节点变化</strong>：客户端可以注册Watcher来监听服务节点的变化，当服务注册或下线时及时感知变化。</li>
+<li><strong>查询节点</strong>：客户端可以通过ZooKeeper提供的API查询指定路径下的节点信息，获取所有存活的服务实例列表。</li>
+<li><strong>负载均衡</strong>：客户端可以根据需要选择合适的负载均衡策略（如随机选择、轮询等），从获取到的服务实例列表中选择一个实例进行调用。</li>
+</ul>
+<ol start="4">
+<li><p>心跳机制和健康检查</p>
+<p>为了确保服务的可用性，通常还需要实现心跳机制和健康检查：</p>
+</li>
+</ol>
+<ul>
+<li><strong>心跳机制</strong>：服务端定期向ZooKeeper更新自己的状态，表明服务仍然处于活跃状态。</li>
+<li><strong>健康检查</strong>：客户端在选择服务实例时，可以结合健康检查的结果来决定是否调用该实例，避免调用已经下线或者不可用的服务。</li>
+</ul>
+<ol start="5">
+<li><p>故障处理和恢复</p>
+<p>在实际应用中，需要考虑各种故障情况的处理和恢复策略，例如网络分区、ZooKeeper集群不可用等情况下的处理方式，以保证服务的高可用性和稳定性。</p>
+</li>
+</ol>
 ]]></content>
       <tags>
         <tag>Zookeeper</tag>
@@ -3645,6 +3861,11 @@ public class ErrorMessageConfig &#123;
 <p>如果不同线程对对象引用的更新操作，恰好位于同一个<code>32KB</code>区域内，这将导致同时更新卡表的同一个缓存行，从而造成缓存行的写回、无效化或者同步操作，间接影响程序性能。</p>
 <p>一个简单的解决方案，就是不采用无条件的写屏障，而是先检查卡表标记，只有当该卡表项未被标记过才将其标记为<code>dirty</code>。</p>
 <p>这就是<code>JDK 7</code>中引入的解决方法，引入了一个新的<code>JVM</code>参数<code>-XX:+UseCondCardMark</code>，在执行写屏障之前，先简单的做一下判断。如果卡页已被标识过，则不再进行标识。</p>
+<p>虚共享：</p>
+<ul>
+<li>占位（缓存行填充）：把无关变量挤入下一个缓存行</li>
+<li>使用connect注解，@sun.misc.Contended。且在虚拟机中使用-XX:-RestrictContended启动。</li>
+</ul>
 <h3 id="面向对象设计的原则"><a href="#面向对象设计的原则" class="headerlink" title="面向对象设计的原则"></a>面向对象设计的原则</h3><ol>
 <li>开闭原则：对扩展开放，对修改关闭。这意味着软件实体应能够适应变化，而无需修改其现有代码。</li>
 <li>里氏替换原则：子类必须能够替换其基类。这意味着在软件中，任何使用基类的地方都可以安全地使用子类，而不会破坏程序的功能。</li>
@@ -3789,6 +4010,178 @@ public class ErrorMessageConfig &#123;
 </ul>
 </li>
 </ul>
+<h3 id="跳表"><a href="#跳表" class="headerlink" title="跳表"></a>跳表</h3><p>最高层数为32层</p>
+<ol>
+<li>跳表是多层（level）链表结构；</li>
+<li>跳表中的每一层都是一个有序链表，并且按照元素升序（默认）排列；</li>
+<li>跳表中的元素会在哪一层出现是随机决定的，但是只要元素出现在了第k层，那么层以下的链表也会出现这个元素；</li>
+<li>跳表的底层的链表包含所有元素；</li>
+<li>跳表头节点和尾节点不存储元素，且头节点和尾节点的层数就是跳表的最大层数；</li>
+<li>跳表中的节点包含两个指针，一个指针指向同层链表的后一节点，一个指针指向下层链表的同元素节点。</li>
+</ol>
+<p>搜索方法：在跳表中搜索一个元素时，需要从顶层开始，逐层向下搜索。搜索时遵循如下规则。</p>
+<ul>
+<li>目标值大于当前节点的后一节点值时，继续在本层链表上向后搜索；</li>
+<li>目标值小于当前节点的后一节点值时，向下移动一层，从下层链表的同节点位置向后搜索；</li>
+<li>目标值等于当前节点值，搜索结束。</li>
+</ul>
+<hr>
+<p>跳跃表（Skip list）是有序链表的扩展，简称跳表，它在原有的有序链表上增加了多级索引，通过索引来实现快速查找，实质上是一种可以进行二分查找的有序链表。</p>
+<p>实际上，跳跃表并不是简单地通过奇偶次序建立索引的，而是<strong>通过随机技术实现的</strong>（每个节点的索引层数是随机出来的），因此也可以说它是一种随机化的数据结构。假如跳跃表每一层的晋升概率都是 1&#x2F;2，则最理想的索引就是在原始链表中每隔一个元素抽取一个元素作为一级索引。其实在原始链表中随机选择 n&#x2F;2 个元素作为一级索引也可以，因为随机选择的元素相对均匀，对查找效率来讲影响不大。当原始链表中元素数量足够大且抽取足够随机时，得到的索引是均匀的。因此随机选择 n&#x2F;2 个元素作为一级索引，随机选择 n&#x2F;4 个元素作为二级索引，随机选择 n&#x2F;8 个元素作为三级索引，以此类推，一直到顶层索引。我们可以通过索引来提升跳跃表的查找效率。</p>
+<p>跳跃表不仅可以提高搜索性能，还可以提高插入和删除操作的性能。平衡二叉查找树在进行插入、删除操作后需要多次调整平衡，而跳跃表完全依靠随机技术，其性能和平衡二叉查找树不相上下，但是原理非常简单。跳跃表是一种性能比较优秀的动态数据结构，Redis 中的有序集合 Sorted Set 和 LevelDB 中的 MemTable 都是采用跳跃表实现的。</p>
+<h4 id="Redis-Zset的实现为什么用跳表，而不用平衡树？"><a href="#Redis-Zset的实现为什么用跳表，而不用平衡树？" class="headerlink" title="Redis Zset的实现为什么用跳表，而不用平衡树？"></a>Redis Zset的实现为什么用跳表，而不用平衡树？</h4><p><strong>从内存占用上来比较，跳表比平衡树更灵活一些。</strong>平衡树每个节点包含 2 个指针(分别指向左右子 树)，而跳表每个节点包含的指针数目平均为 1&#x2F;(1-p)，具体取决于参数 p 的大小。如果像 Redis里 的实现一样，取 p&#x3D;1&#x2F;4，那么平均每个节点包含 1.33 个指针，比平衡树更有优势。 </p>
+<p><strong>在做范围查找的时候，跳表比平衡树操作要简单。</strong>在平衡树上，我们找到指定范围的小值之后，还 需要以中序遍历的顺序继续寻找其它不超过大值的节点。如果不对平衡树进行一定的改造，这里的 中序遍历并不容易实现。而在跳表上进行范围查找就非常简单，只需要在找到小值之后，对第 1 层 链表进行若干步的遍历就可以实现。 </p>
+<p><strong>从算法实现难度上来比较，跳表比平衡树要简单得多。</strong>平衡树的插入和删除操作可能引发子树的调 整，逻辑复杂，而跳表的插入和删除只需要修改相邻节点的指针，操作简单又快速。</p>
+<h3 id="Socket通信流程"><a href="#Socket通信流程" class="headerlink" title="Socket通信流程"></a>Socket通信流程</h3><p>服务端：</p>
+<ol>
+<li>创建socket对象，指定监听的端口号。</li>
+<li>等待客户端的连接</li>
+<li>从socket对象中获取输入输出流</li>
+<li>处理客户端请求，发送响应</li>
+<li>关闭连接。</li>
+</ol>
+<p>客户端：</p>
+<ol>
+<li>创建socket对象，指定服务器的IP地址，和端口号</li>
+<li>从socket对象中获取输入流输出流</li>
+<li>发送请求数据</li>
+<li>接受响应数据</li>
+<li>关闭连接</li>
+</ol>
+<h3 id="thread-threadlocal-threadlocalmap"><a href="#thread-threadlocal-threadlocalmap" class="headerlink" title="thread,threadlocal,threadlocalmap"></a>thread,threadlocal,threadlocalmap</h3><img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240708162712955.png" alt="image-20240708162712955" style="zoom:67%;" />
+
+<ul>
+<li><p>ThreadLocal的作用有两个</p>
+<ul>
+<li><p>工具类，提供一系列方法操作ThreadLocalMap，比如get&#x2F;set&#x2F;remove</p>
+</li>
+<li><p>隔离Thread和ThreadLocalMap，防止程序员直接创建ThreadLocalMap。自身的get&#x2F;set内部会判断当前线程是否已经绑定一个ThreadLocalMap，有就继续用，没有就为其绑定。</p>
+</li>
+</ul>
+</li>
+<li><p>虽然ThreadLocalMap是ThreadLocal的静态内部类，但它们的实例对象并不存在继承或者包裹关系。完全可以当成两个独立的实例。</p>
+</li>
+<li><p>一个Thread只能有一个ThreadLocalMap。</p>
+</li>
+<li><p>ThreadLocalMap以ThreadLocal为键存储数据。</p>
+</li>
+</ul>
+<h4 id="set"><a href="#set" class="headerlink" title="set()"></a>set()</h4><p>先获取当前线程，然后获取当前线程中的ThreadLocalMap（即threadLocals变量指向的），如果不为空，则把当前对象ThreadLocal作为键，外界传过来的参数作为值，保存ThreadLocalMap中。如果为空，则创建一个新的ThreadLocalMap。</p>
+<h4 id="get"><a href="#get" class="headerlink" title="get()"></a>get()</h4><p>先获取当前线程对象，然后拿到当前线程对象的ThreadLocalMap，在根据键（即当前对象ThreadLocal）找到值。</p>
+<p>如果我们在获取的时候当前线程对象的ThreadLocalMap为null时，则会执行setInitialValue（）方法。<br>做了三件事：<br>1.创建map<br>2.给map设置一个键值对{threadLocal : initialValue}<br>3.返回initialValue，默认null</p>
+<h3 id="标记接口"><a href="#标记接口" class="headerlink" title="标记接口"></a>标记接口</h3><p>标记接口是一些没有属性和方法的接口，也是一种设计思想。Java中的一个标记接口表示的的是一种类的特性，实现了该标记接口的类则具有该特性。如实现了Serializable接口的类，表示这个类的对象是可以进行序列化和反序列化的。Java中常见的标记接口还有Cloneable接口、RandomAccess接口和Remote接口。可以用 if（对象名 instanceof 标记接口名）检测一个类是否实现某个标记接口。</p>
+<p>标记接口（Marker Interface）是一种特殊的接口，没有任何方法定义，其作用主要是用于给类提供某种标记或标识，使得某些工具或框架能够根据这些标记执行特定的逻辑或操作。在Java中，标记接口通常不包含任何方法，仅用于标记类的类型或属性。</p>
+<h3 id="C10k问题"><a href="#C10k问题" class="headerlink" title="C10k问题"></a>C10k问题</h3><p>服务器如何处理并发的10K个客户端请求。</p>
+<ul>
+<li>io多路复用。</li>
+<li>服务器集群与负载均衡</li>
+<li>多线程和线程池</li>
+<li>优秀的网络框架，Reactors，ngnix，netty。</li>
+<li>事件驱动</li>
+</ul>
+<h3 id="过多time-wait"><a href="#过多time-wait" class="headerlink" title="过多time-wait"></a>过多time-wait</h3><p>（主动关闭方会进行的状态）</p>
+<p>资源浪费：过多的 TIME_WAIT 状态会导致服务器上的资源被大量占用，如端口资源、内存等，进而影响服务器的性能。</p>
+<p>C10K 问题：如果服务器需要处理大量的并发连接，过多的 TIME_WAIT 状态会导致应用程序无法通过连接请求，从而出现 C10K 问题。</p>
+<p><strong>解决：</strong></p>
+<p><strong>调整 TCP 系统参数：</strong></p>
+<p>在 Linux 系统中，可以调整 tcp_tw_recycle、tcp_tw_reuse、tcp_fin_timeout 等 TCP 系统参数来减少 TIME_WAIT 状态的数量。但是需要注意的是，这些参数需要谨慎调整，因为不当的参数设置可能会引起其他问题，如数据包丢失或超时。</p>
+<p><strong>调整应用程序：</strong></p>
+<p>可以调整应用程序的功能，避免大量细小的 TCP 连接，可以采用长连接、 HTTP&#x2F;2 或其他协议，或者开发连接复用机制，避免频繁创建和关闭连接。</p>
+<p><strong>加入负载均衡：</strong></p>
+<p>负载均衡能够将请求分发到多个服务器上，可以分散服务器上 TIME_WAIT 状态的数量，从而减轻单个服务器的压力。</p>
+<p><strong>使用 TCP 快速回收：</strong></p>
+<p>TCP 快速回收是一种新的 TCP 资源回收方式，可以尽快地回收处于 TIME_WAIT 状态的连接，从而减少 TIME_WAIT 状态的数量，提高服务器的性能。</p>
+<h3 id="连接一个不存在的ip"><a href="#连接一个不存在的ip" class="headerlink" title="连接一个不存在的ip"></a>连接一个不存在的ip</h3><ul>
+<li>在一个局域网中，不能发出syn报文。（查询目标ip机器的mac地址时查询不到，导致直接发不出报文）</li>
+<li>不在一个局域网中，发送报文到路由器中，（查询目标ip，发现不在一个局域网，故交由路由器转发），一值转发，但是找不到，最终报文消失。</li>
+</ul>
+<h4 id="不存在的端口"><a href="#不存在的端口" class="headerlink" title="不存在的端口"></a>不存在的端口</h4><p>目标设备收到 SYN 报 文后，发现端口号并没有被进程监听，这时候目标设备的内核就会回 RST 报文。客户端收到 RST 报文 后，就会释放连接。</p>
+<h3 id="评论系统"><a href="#评论系统" class="headerlink" title="评论系统"></a>评论系统</h3><h4 id="平铺式评论结构"><a href="#平铺式评论结构" class="headerlink" title="平铺式评论结构"></a>平铺式评论结构</h4><p>线性结构，也被称为平面结构或直线式结构，是一种最简单也最常见的评论展示方式。在这种结构中，评论按照时间顺序排列，最新的评论可以放在最上面，也可以放在最下面，这取决于网站的设计。每条评论都是独立的，不与其他评论形成层级关系。这种结构简单明了，易于实现和理解。</p>
+<p>线性结构的主要特点是：结构简单，易于浏览；不支持深度对话，因为回复无法直接关联到特定的评论；适合对话较少或者对话不重要的场景。</p>
+<p>线性结构的评论系统适用于对话不是主要目的，或者用户更关注新鲜内容的场景。例如<strong>新闻网站、博客网站等，用户通常更</strong>关注文章本身，而不是其他用户的评论。他们可能会浏览一下最新的评论，但不太可能深入到评论的对话中。<strong>（朋友圈式评论）</strong></p>
+<p>另一个例子是<strong>电商网站的商品评价</strong>，用户通常会浏览最新的评价或者最有帮助的评价，而不会关注评价之间的对话。因此，线性结构的评论系统就足够满足需求。</p>
+<p><strong>表设计：</strong></p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240713094528820.png" alt="image-20240713094528820" style="zoom:67%;" />
+
+<h4 id="嵌套式评论结构"><a href="#嵌套式评论结构" class="headerlink" title="嵌套式评论结构"></a>嵌套式评论结构</h4><p>嵌套式（树形）评论结构是一种常见的在线评论组织方式，它允许用户在其他用户的评论下面进行回复，形成一种层次分明的对话结构。这种结构通常被可视化为一棵树，其中根节点是原始帖子，每个子节点是对父节点的回复。</p>
+<p>嵌套式评论结构的特点包括：</p>
+<ol>
+<li>层次性：每个评论都可以有一个或多个子评论，形成一个层次分明的对话结构。这种层次性使得用户可以轻松地追踪和参与特定的讨论线程。</li>
+<li>上下文相关性：由于每个评论都是对特定评论的回复，因此它们通常在上下文中有明确的关联性。这使得读者可以更好地理解每个评论的含义和目的。</li>
+<li>动态性：嵌套式评论结构允许新的评论在任何位置插入，无论是作为新的顶级评论，还是作为现有评论的回复。这种动态性使得讨论可以随着时间的推移而发展和演变。</li>
+<li>可扩展性：嵌套式评论结构可以容纳任意数量的评论和回复，使得它可以轻松地扩展以适应大规模的在线讨论。</li>
+<li>交互性：嵌套式评论结构鼓励用户参与讨论，因为他们可以直接回复其他用户的评论，而不仅仅是对原始帖子进行评论。这种交互性可以增加用户的参与度和满意度。</li>
+</ol>
+<p><strong>表设计</strong>：</p>
+<ol>
+<li><strong>邻接列表模型：</strong> 在这种模型中，每个评论都有一个父评论ID字段。顶级评论的父评论ID通常设置为null或特定的值。这种方法的优点是数据结构简单，易于理解和实现。但是，查询特定评论的所有子评论或者查询特定评论的所有祖先评论可能需要多次查询数据库，效率较低。    字段名 数据类型 描述     id int 评论的唯一标识   parent_id int 父评论的id，顶级评论的父评论id可以为null或特定的值   content text     </li>
+<li><strong>路径枚举模型：</strong> 在这种模型中，每个评论都有一个路径字段，记录了从顶级评论到当前评论的路径。例如，如果评论B是评论A的子评论，评论C是评论B的子评论，那么评论A的路径可能是”A”，评论B的路径可能是”A&#x2F;B”，评论C的路径可能是”A&#x2F;B&#x2F;C”。这种方法的优点是查询特定评论的所有子评论或者查询特定评论的所有祖先评论只需要一次查询数据库，效率较高。但是，插入新的评论或者移动评论可能需要更新多条记录的路径，效率较低。    字段名 数据类型 描述     id int 评论的唯一标识   path text 从顶级评论到当前评论的路径，例如”A&#x2F;B&#x2F;C”   content text 评论的内容</li>
+</ol>
+<h4 id="混合式评论结构（二层嵌套结构）"><a href="#混合式评论结构（二层嵌套结构）" class="headerlink" title="混合式评论结构（二层嵌套结构）"></a>混合式评论结构（二层嵌套结构）</h4><p>二层嵌套评论结构是一种常见的在线评论组织方式，它允许用户对一个主题进行评论，同时也可以对其他用户的评论进行回复。</p>
+<p>这种结构通常表现为一个主评论（也称为根评论或顶级评论）下面跟随着一系列子评论。对子评论的回复更多是引用关系、而非父子关系，他们的父节点都是主评论。</p>
+<p>这种结构的主要优点是它可以方便地跟踪和组织讨论的线索，使得用户可以更容易地理解和参与到讨论中。同时限制评论层级，又不至于让用户过度沉浸在评论的交互中，回归主题。</p>
+<p>大多数国内的社区、论坛、视频站点都采用这种二层嵌套的评论结构。</p>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240713095048022.png" alt="image-20240713095048022" style="zoom:67%;" />
+
+<h3 id="如果客户端访问的-key所属的槽正在迁移怎么办"><a href="#如果客户端访问的-key所属的槽正在迁移怎么办" class="headerlink" title="如果客户端访问的 key所属的槽正在迁移怎么办?"></a>如果客户端访问的 key所属的槽正在迁移怎么办?</h3><p><strong>CLUSTER DELSLOTS，CLUSTER ADDSLOTS</strong></p>
+<ol>
+<li>客户端发送请求命令，如果请求的 key 对应的哈希槽还在当前节点的话，就直接响应客户端的请求 </li>
+<li>如果客户端请求的 key 对应的哈希槽当前正在迁移至新的节点，就会返回 <strong>ASK 重定向错误</strong>，告知 客户端要将请求发送到哈希槽被迁移到的目标节点。并且携带目标节点的ip和端口。</li>
+<li>客户端收到 -ASK 重定向错误后，将会临时 (一次性)重定向，<strong>自动向目标节点发送一条 ASKING 命 令</strong>。也就是说，接收到 ASKING 命令的节点会强制执行一次请求，下次再来需要重新提前发送 ASKING 命令.（因为执行一次后就清楚了这个状态了）</li>
+<li>ASKING命令唯一要做的就是打开发送该命令的客户端的REDIS_ASKING标识。如果大打开这个标识，那么客户端转向目标节点再次发送命令时，<strong>如果这个节点是正在导入这个槽的话，并且发送命令的客户端带有REDIS_ASKING标识，那么虽然这个槽还没有指派给目标节点，但是目标节点会破例执行关于这个槽的命令一次，执行一次完了之后就会移除这个REDIS_ASKING标识。</strong></li>
+<li><strong>若没有执行ASKing命令，打开标识，则会响应move错误，返回原槽的ip和端口，导致循环，相互帅锅。</strong></li>
+</ol>
+<img src="https://oss-hl.oss-cn-chengdu.aliyuncs.com/img/image-20240713105759874.png" alt="image-20240713105759874" style="zoom:67%;" />
+
+<h4 id="集群中的节点数据转发"><a href="#集群中的节点数据转发" class="headerlink" title="集群中的节点数据转发"></a>集群中的节点数据转发</h4><p>当前接收到命令的节点首先会通过算法计算出当前key所属的槽i，计算完后当前节点会判断clusterState的槽i是否由自己负责，如果恰好由自己负责那么当前节点就会之间响应客户端的请求，如果不由当前节点负责，则会经历如下步骤：</p>
+<ol>
+<li><p>节点向客户端返回MOVED重定向错误，MOVED重定向错误中会将计算好的正确处理该key的clusterNode的ip和port返回给客户端</p>
+</li>
+<li><p>客户端接收到节点返回的MOVED重定向错误时，会根据ip和port将命令转发给正确的节点，整个处理过程对程序员来说透明，由Redis集群的服务端和客户端共同负责完成。</p>
+</li>
+</ol>
+<h4 id="move和ack"><a href="#move和ack" class="headerlink" title="move和ack"></a>move和ack</h4><p>这两个错误都会导致客户端转向，那他们区别如下：</p>
+<ul>
+<li><code>MOVED</code>错误代表槽的所属节点已经从一个节点转移到另一个节点，客户端每次收到<code>MOVED</code>时都会直接将请求发送给指向的节点</li>
+<li><code>ASKING</code>错误只是两个节点在迁移槽的过程中使用的一种零时措施。</li>
+</ul>
+<h3 id="RedLOCK"><a href="#RedLOCK" class="headerlink" title="RedLOCK"></a>RedLOCK</h3><p><a href="https://mp.weixin.qq.com/s?__biz=Mzg3NjU3NTkwMQ==&mid=2247505097&idx=1&sn=5c03cb769c4458350f4d4a321ad51f5a&source=41#wechat_redirect">【求锤得锤的故事】Redis锁从面试连环炮聊到神仙打架。 (qq.com)</a></p>
+<p>一起来看看大佬对于分布式锁的看法吧。</p>
+<h3 id="孤儿进程和僵尸进程"><a href="#孤儿进程和僵尸进程" class="headerlink" title="孤儿进程和僵尸进程"></a>孤儿进程和僵尸进程</h3><p>一般进程 正常情况下：子进程由父进程创建，子进程再创建新的进程。父子进程是一个异步过程，父进程永 远无法预测子进程的结束，所以，当子进程结束后，它的父进程会调用wait()或waitpid()取得子进程的终 止状态，回收掉子进程的资源。</p>
+<p><strong>孤儿进程 孤儿进程</strong>：父进程结束了，而它的一个或多个子进程还在运行，那么这些子进程就成为孤儿进程 (father died)。子进程的资源由init进程(进程号PID &#x3D; 1)回收。</p>
+<p><strong>僵尸进程 僵尸进程</strong>：子进程退出了，但是父进程没有用<strong>wait或waitpid去</strong>获取子进程的状态信息，那么子进程 的进程描述符仍然保存在系统中，这种进程称为僵死进程。</p>
+<p>在每个进程退出的时候，<strong>内核会释放所有的资源，包括打开的文件，占用的内存等</strong>。但是 仍<strong>保留一部分信息(进程号PID，</strong>退出状态，运行时间等)。直到父进程通过wait或waitpid来取时才释放。 但是这样就会产生问题：如果父进程不调用wait或waitpid的话，那么保留的信息就不会被释放，其<strong>进程 号</strong>就会被一直占用，但是<strong>系统所能使用的进程号是有限的</strong>，如果大量产生僵死进程，将因没有可用的进 程号而导<strong>致系统无法产生新的进</strong>程，这就是僵尸进程的危害。</p>
+<p>孤儿进程是没有父进程的进程，它由init进程循环的wait()回收资源，init进程充当父进程。<strong>因此孤儿进程 并没有什么危害。</strong></p>
+<p>解决方案：</p>
+<ol>
+<li>kill杀死元凶父进程(一般不用），将僵尸进程编程孤儿进程</li>
+</ol>
+<ul>
+<li><strong>注意：僵尸进程无法用kill直接杀死</strong></li>
+</ul>
+<ol start="2">
+<li>父进程用wait或waitpid去回收资源<ul>
+<li>父进程通过wait或waitpid等函数去等待子进程结束，但是不好，会导致父进程一直等待被挂起，相 当于一个进程在干活，没有起到多进程的作用。</li>
+</ul>
+</li>
+<li>通过信号机制，在处理函数中调用wait，回收资源<ul>
+<li>通过信号机制，子进程退出时向父进程发送SIGCHLD信号，父进程调用signal(SIGCHLD,sig_child) 去处理SIGCHLD信号，在信号处理函数sig_child()中调用wait进行处理僵尸进程。什么时候得到子进程 信号，什么时候进行信号处理，父进程可以继续干其他活，不用去阻塞等待。</li>
+</ul>
+</li>
+</ol>
+<h3 id="多级负反馈队列"><a href="#多级负反馈队列" class="headerlink" title="多级负反馈队列"></a>多级负反馈队列</h3><ol>
+<li>设有N个队列（Q1,Q2….QN），其中各个队列对于处理机的优先级是不一样的，也就是说位于各个 队列中的作业(进程)的优先级也是不一样的。一般来说，优先级Priority(Q1) &gt; Priority(Q2) &gt; … &gt; Priority(QN)。<strong>位于Q1中的任何一个作业(进程)都要比Q2中的任何一个作业(进程)相对于CPU的 优先级要高（也就是说，Q1中的作业一定要比Q2中的作业先被处理机调度）</strong>，依次类推其它的队列。</li>
+<li><strong>对于优先级最低的队列来说，里面是遵循时间片轮转法。对于其他队列，遵循的是先来先服务算法。 每一进程分配一定的时间片，若时间片运行完时进程未结束，则进入下一优先级队列的末尾。</strong></li>
+<li>各个队列的时间片是随着优 先级的增加而减少的，也就是说，<strong>优先级越高的队列中它的时间片就越短</strong>。</li>
+</ol>
+<p>具体流程：</p>
+<ol>
+<li>进程在进入待调度的队列等待时，首先进入优先级最高的Q1等待。</li>
+<li>首先调度优先级高的队列中的进程。若高优先级中队列中已没有调度的进程，则调度次优先级队列中的进程。例如：Q1,Q2,Q3三个队列，当且仅当在Q1中没有进程等待时才去调度Q2，同理，只有Q1,Q2都为空时才会去调度Q3。</li>
+<li>对于同一个队列中的各个进程，按照FCFS分配时间片调度。比如Q1队列的时间片为N，那么Q1中的作业在经历了N个时间片后若还没有完成，则进入Q2队列等待，若Q2的时间片用完后作业还不能完成，一直进入下一级队列末尾，直至完成。</li>
+<li>在最后一个队列QN中的各个进程，按照时间片轮转分配时间片调度。</li>
+<li><strong>在低优先级的队列中的进程在运行时，又有新到达的作业，此时须立即把正在运行的进程放回当前队列的队尾，然后把处理机分给高优先级进程</strong>。换而言之，任何时刻，只有当第1~i-1队列全部为空时，才会去执行第i队列的进程<strong>（抢占式）</strong>。特别说明，当再度运行到当前队列的该进程时，<strong>仅分配上次还未完成的时间片</strong>，不再分配该队列对应的完整时间片。</li>
+</ol>
 ]]></content>
       <tags>
         <tag>java</tag>
